@@ -4,6 +4,8 @@
 --  2) scarta la copia per la casella condivisa (l'indirizzo «Amministratore» di GLPI, config admin_email) per
 --     aggiornamenti, soluzione e chiusura quando il ticket ha un TECNICO assegnato: cosi' le mail vanno al tecnico
 --     e al richiedente; se il ticket e' assegnato solo a un gruppo (o a nessuno) arrivano alla casella condivisa;
+--  2b) scarta la mail «Chiusura della chiamata» quando la chiusura e' quella AUTOMATICA di GLPI (azione closeticket):
+--     le chiusure manuali, compresa la conferma «Risolto, grazie» dal portale, la inviano normalmente;
 --  3) riscrive l'oggetto: "Richiesta n. 23 · Nuova · titolo" (stati: Nuova, Aggiornamento, Risolta, Chiusa),
 --     senza il prefisso "[GLPI #0000023]" (che GLPI aggiunge sempre) e senza la "[categoria]" iniziale del titolo.
 --
@@ -41,6 +43,15 @@ BEGIN
     IF NEW.name NOT LIKE '%Nuova chiamata%'
        AND NEW.recipient = (SELECT value FROM glpi_configs WHERE context = 'core' AND name = 'admin_email')
        AND EXISTS (SELECT 1 FROM glpi_tickets_users tu WHERE tu.tickets_id = NEW.items_id AND tu.type = 2) THEN
+      SET NEW.is_deleted = 1;
+    END IF;
+    -- 2b) niente mail «Chiusura» quando il ticket e' chiuso dalla chiusura automatica di GLPI (azione automatica
+    --     closeticket): nella cronologia la chiusura risulta fatta da "cron_closeticket". Chiusure manuali (tecnico,
+    --     o conferma del richiedente dal portale) restano.
+    IF NEW.name LIKE '%Chiusura della chiamata%'
+       AND (SELECT l.user_name FROM glpi_logs l
+            WHERE l.itemtype = 'Ticket' AND l.items_id = NEW.items_id AND l.id_search_option = 12 AND l.new_value = '6'
+            ORDER BY l.id DESC LIMIT 1) LIKE 'cron%' THEN
       SET NEW.is_deleted = 1;
     END IF;
     -- 3) oggetto "Richiesta n. N · Stato · titolo senza [categoria]"

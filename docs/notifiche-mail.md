@@ -53,5 +53,6 @@ GLPI aggiunge sempre all'oggetto il prefisso `[GLPI #0000023]` (si può cambiare
 - riscrive l'oggetto in **`Richiesta n. 23 · Nuova · titolo`** (stati: Nuova, Aggiornamento, Risolta, Chiusa; la categoria resta nel corpo della mail e nel ticket);
 - scarta la mail «Aggiornamento» generata subito dopo la «Nuova chiamata» quando il ticket viene assegnato alla creazione;
 - toglie la casella condivisa dai destinatari quando c'è un tecnico assegnato (vedi tabella sopra).
+- non invia la mail «Chiusura della chiamata» quando il ticket viene chiuso dalla **chiusura automatica** di GLPI (azione automatica `closeticket`, dopo il tempo impostato nell'entità): la riconosce perché nella cronologia del ticket la chiusura risulta fatta da `cron_closeticket`. Le chiusure manuali, compresa la conferma «Risolto, grazie» dal portale, inviano la mail normalmente. Se non usi il trigger e non vuoi questa mail, disattiva la notifica «Chiusura della chiamata».
 
 Le risposte alle mail, se usi un collettore di posta, sono collegate al ticket tramite le intestazioni `Message-ID`/`In-Reply-To`, non tramite l'oggetto. È una modifica al solo database: leggi i commenti del file e ricontrollala dopo ogni aggiornamento di GLPI.
