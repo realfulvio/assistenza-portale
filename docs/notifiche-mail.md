@@ -18,11 +18,20 @@ Imposta mittente (es. `assistenza@tuoente.it`) e **Reply-To** su un indirizzo ch
 
 Ricorda di attivare il **cron** di GLPI (su Debian 13 il pacchetto `cron` potrebbe mancare: `sudo apt install cron`) e di impostare le azioni automatiche `queuednotification` in modalità **CLI/esterna** (*Configurazione > Azioni automatiche*), altrimenti la coda delle mail si svuota solo quando qualcuno usa l'interfaccia di GLPI.
 
-## 2. Quali notifiche attivare
+## 2. Quali notifiche attivare e a chi
 
-Consigliate (le altre si possono disattivare per non riempire le caselle): **Nuova chiamata**, **Aggiornamento** (comprende l'assegnazione), **Chiamata risolta**, con destinatari *Richiedente* e *Gruppo assegnato*.
+Destinatari che GLPI 11 offre davvero (*Configurazione > Notifiche > Notifiche > (notifica) > Destinatari*): **Amministratore** (l'indirizzo `admin_email` di *Configurazione > Notifiche > Configurazione delle notifiche e-mail*), **Richiedente**, **Tecnico assegnato**, **Gruppo assegnato**, singoli **Gruppi** o **Profili**, osservatori e altri. Non esiste un campo «indirizzo e-mail libero»: per una casella condivisa (es. `assistenza@tuoente.it`) usala come indirizzo **Amministratore**, oppure crea un utente GLPI dedicato con quell'e-mail.
 
-Se i ticket nascono «Nuova» senza assegnatario (vedi [glpi.md](glpi.md), sezione 6), il gruppo assegnato alla creazione non c'è: aggiungi alla notifica **Nuova chiamata** il destinatario fisso **Gruppo: (il tuo gruppo tecnico)**, così i tecnici ricevono la mail. GLPI non invia due volte la stessa mail allo stesso indirizzo nello stesso evento.
+Configurazione consigliata (provata dall'autore):
+
+| Notifica | Destinatari |
+|---|---|
+| Nuova chiamata | Amministratore (casella condivisa) + Richiedente |
+| Aggiornamento di una chiamata (comprende la presa in carico) | Amministratore + Tecnico assegnato + Richiedente |
+| Chiamata risolta | Amministratore + Tecnico assegnato + Richiedente |
+| Chiusura della chiamata | Amministratore + Tecnico assegnato + Richiedente |
+
+Le altre notifiche si possono disattivare. Con il trigger del punto 4 la casella condivisa riceve aggiornamenti, soluzione e chiusura **solo se il ticket non ha un tecnico assegnato** (es. assegnato solo a un gruppo): con un tecnico le mail vanno a lui e al richiedente, non agli altri tecnici. GLPI non invia due volte la stessa mail allo stesso indirizzo nello stesso evento.
 
 ## 3. Modello HTML
 
@@ -37,7 +46,12 @@ Se i ticket nascono «Nuova» senza assegnatario (vedi [glpi.md](glpi.md), sezio
 
 > Nota GLPI 11: se le mail mostrano codice HTML come testo («`<div>...`»), il modello nel database è salvato con i caratteri già convertiti (`&lt;div&gt;`, formato di versioni precedenti). Va reinserito HTML «vero».
 
-## 4. Evitare la mail «Aggiornamento» subito dopo «Nuova chiamata»
+## 4. Oggetto delle mail e mail doppie (trigger facoltativo)
 
-- Il portale collega gli allegati senza generare notifiche.
-- Resta una mail «Aggiornamento» causata dall'assegnazione automatica al gruppo tecnico. Se vuoi eliminarla, usa il trigger `deploy/glpi/trigger-anti-duplicati.sql` (soglia e testo nei commenti). È una modifica al solo database: ricontrollala dopo ogni aggiornamento di GLPI.
+GLPI aggiunge sempre all'oggetto il prefisso `[GLPI #0000023]` (si può cambiare la parola «GLPI» nell'entità, non toglierlo) e il titolo contiene la `[categoria]` messa dal portale. Il trigger `deploy/glpi/trigger-anti-duplicati.sql`:
+
+- riscrive l'oggetto in **`Richiesta n. 23 · Nuova · titolo`** (stati: Nuova, Aggiornamento, Risolta, Chiusa; la categoria resta nel corpo della mail e nel ticket);
+- scarta la mail «Aggiornamento» generata subito dopo la «Nuova chiamata» quando il ticket viene assegnato alla creazione;
+- toglie la casella condivisa dai destinatari quando c'è un tecnico assegnato (vedi tabella sopra).
+
+Le risposte alle mail, se usi un collettore di posta, sono collegate al ticket tramite le intestazioni `Message-ID`/`In-Reply-To`, non tramite l'oggetto. È una modifica al solo database: leggi i commenti del file e ricontrollala dopo ogni aggiornamento di GLPI.

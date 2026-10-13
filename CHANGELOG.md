@@ -12,6 +12,7 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e i
 - `MAX_TICKETS_PER_HOUR` già configurabile; documentata la scelta tra ticket «Nuova» e assegnati subito (`GLPI_GROUP_ID`).
 
 ### Modificato
+- Notifiche: oggetto «Richiesta n. N · Stato · titolo» e destinatari per assegnazione (casella condivisa solo senza tecnico assegnato) tramite il trigger facoltativo `deploy/glpi/trigger-anti-duplicati.sql`; documentati i destinatari reali di GLPI 11.
 - Testo dello stato «Risolta»: rimanda ai pulsanti di conferma/riapertura.
 - Guida HTTPS: CA interna + certificato del sito (`docs/certificati-ca-interna.md`) al posto del certificato autofirmato.
 - Testo dello stato «In attesa»: «Abbiamo ricevuto la tua richiesta, a breve la prenderemo in carico.»

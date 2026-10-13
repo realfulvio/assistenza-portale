@@ -60,7 +60,7 @@ Scegli come devono nascere i ticket del portale:
 
 ## 7. Notifiche, profilo «Tecnico Ticket», login Microsoft in GLPI
 
-- Notifiche e modello di mail: [notifiche-mail.md](notifiche-mail.md) (con i ticket «Nuova» aggiungi il gruppo tecnico come destinatario fisso della «Nuova chiamata»)
+- Notifiche e modello di mail: [notifiche-mail.md](notifiche-mail.md) (destinatari consigliati: casella condivisa come «Amministratore», tecnico assegnato e richiedente; oggetto «Richiesta n. N · Stato · titolo»)
 - Profilo semplificato per i tecnici e login Microsoft in GLPI: [sso-glpi.md](sso-glpi.md)
 
 ## Fuso orario
