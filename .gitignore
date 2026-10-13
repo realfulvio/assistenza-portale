@@ -1,0 +1,26 @@
+# Segreti e configurazione locale: MAI nel repository
+.env
+.env.*
+!.env.example
+*.key
+*.crt
+*.pem
+*.p12
+*.pfx
+config/ente.json
+config/categorie.json
+*secret*.conf
+!deploy/apache/glpi-oidc-secret.conf.example
+
+# Modelli mail generati per il tuo ente (npm run template-mail)
+deploy/glpi/mail-ticket.html
+deploy/glpi/mail-ticket.txt
+
+# Dipendenze, log, backup, dati
+node_modules/
+uploads/
+*.log
+backup/
+backups/
+*.sql.gz
+*.dump

@@ -1,0 +1,12 @@
+[
+  { "d": "Il PC è lento", "r": "Salva il lavoro e riavvia il computer (Start > Riavvia, non «Arresta»). Chiudi i programmi che non usi. Se resta lento dopo il riavvio, apri una richiesta." },
+  { "d": "La stampante non stampa", "r": "Controlla che sia accesa, che ci sia carta e toner e che non ci siano messaggi sul display. Prova a cancellare i lavori in coda e a stampare di nuovo. Se continua, apri una richiesta indicando il modello o l'ufficio." },
+  { "d": "Ho dimenticato la password o è scaduta", "r": "Se è la password di Microsoft 365 prova prima «Password dimenticata?» nella pagina di accesso. Altrimenti apri una richiesta scegliendo «Password e accesso»." },
+  { "d": "Outlook non si apre o non riceve la posta", "r": "Chiudi e riapri Outlook. Verifica di essere connesso a Internet. Prova ad aprire la posta da web (outlook.office.com): se lì funziona, segnalacelo." },
+  { "d": "Teams non sente o non si vede", "r": "Controlla in Teams > Impostazioni > Dispositivi che microfono, altoparlanti e videocamera siano quelli giusti. Chiudi altri programmi che usano la webcam." },
+  { "d": "Non ho connessione a Internet", "r": "Verifica che il cavo di rete sia inserito o che il Wi-Fi sia attivo. Prova ad aprire un altro sito. Se più colleghi hanno lo stesso problema, apri una sola richiesta indicando l'ufficio." },
+  { "d": "Non riesco ad accedere a una cartella di rete", "r": "Riavvia il computer e riprova. Se compare «accesso negato», apri una richiesta indicando il percorso della cartella." },
+  { "d": "Lo schermo è nero o non si accende nulla", "r": "Controlla cavi di alimentazione e prese, poi il pulsante del monitor. Se il PC è acceso ma lo schermo no, prova a scollegare e ricollegare il cavo video." },
+  { "d": "Devo installare un programma", "r": "Non installare nulla da solo. Apri una richiesta scegliendo «Altro», indicando programma e motivo." },
+  { "d": "Ho ricevuto una mail sospetta", "r": "Non cliccare sui link e non aprire gli allegati. Non rispondere. Apri subito una richiesta indicando che è una mail sospetta, oppure chiamaci se hai già cliccato." }
+]

@@ -1,0 +1,30 @@
+{{SERVIZIO_MAIUSCOLO}} - {{ENTE}}
+
+*** ATTENZIONE: NON RISPONDERE A QUESTA MAIL. ***
+Per scrivere al tecnico o aggiungere informazioni usa il portale:
+{{URL_PORTALE}}
+
+##ticket.action##
+
+##ticket.title## (richiesta n. ##ticket.id##)
+
+Richiedente : ##IFticket.authors####ticket.authors####ENDIFticket.authors####ELSEticket.authors##--##ENDELSEticket.authors##
+Categoria   : ##IFticket.category####ticket.category####ENDIFticket.category####ELSEticket.category##Nessuna categoria##ENDELSEticket.category##
+Stato       : ##ticket.status##
+Aperta il   : ##ticket.creationdate##
+##IFticket.assigntousers##Assegnata a : ##ticket.assigntousers##
+##ENDIFticket.assigntousers####IFticket.assigntogroups##Gruppo      : ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+Descrizione:
+##ticket.content##
+##IFticket.storestatus=5##
+Soluzione:
+##ticket.solution.description##
+##ENDIFticket.storestatus##
+Rispondi dal portale: {{URL_PORTALE}}/#richiesta/##ticket.id##
+Per i tecnici (GLPI): ##ticket.url##
+
+--
+{{UFFICIO}}
+{{ENTE}}
+NON RISPONDERE A QUESTA MAIL. Per scrivere al tecnico o aggiungere informazioni usa il portale: {{URL_PORTALE}}

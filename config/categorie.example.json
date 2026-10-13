@@ -1,0 +1,12 @@
+{
+  "_nota": "Copia in config/categorie.json. 'id' = codice interno (lettere minuscole, non cambiarlo dopo l'uso). 'nome' = prefisso del titolo del ticket in GLPI. 'glpiId' = id della categoria ITIL in GLPI (null = nessuna categoria). 'tipo': 1 = incidente, 2 = richiesta. 'titolo', 'sotto', 'colore', 'placeholder' e 'icona' servono solo all'interfaccia. Icone disponibili: pc, pr, nt, ml, ky, ap, ot.",
+  "categorie": [
+    { "id": "computer",   "nome": "Computer",          "glpiId": null, "tipo": 1, "icona": "pc", "colore": "#0066cc", "titolo": "Il mio computer",        "sotto": "Lento, bloccato, non si accende, schermo nero",          "placeholder": "Es. Il computer è lentissimo, si blocca e a volte si riavvia da solo." },
+    { "id": "stampante",  "nome": "Stampante",         "glpiId": null, "tipo": 1, "icona": "pr", "colore": "#7b3fb5", "titolo": "Stampante e scanner",    "sotto": "Non stampa, carta incastrata, toner finito, scanner",    "placeholder": "Es. La stampante del primo piano non stampa e dice «offline»." },
+    { "id": "rete",       "nome": "Rete / Internet",   "glpiId": null, "tipo": 1, "icona": "nt", "colore": "#008758", "titolo": "Internet e rete",        "sotto": "Niente connessione, Wi-Fi, cartelle di rete, VPN",       "placeholder": "Es. Non riesco a collegarmi a internet o alla cartella di rete." },
+    { "id": "posta",      "nome": "Posta e M365",      "glpiId": null, "tipo": 1, "icona": "ml", "colore": "#c75b00", "titolo": "Posta, Teams e Office",  "sotto": "Outlook, Teams, OneDrive, Word, Excel",                  "placeholder": "Es. Outlook non si apre / non ricevo le mail / Teams non va." },
+    { "id": "password",   "nome": "Password / Accessi","glpiId": null, "tipo": 2, "icona": "ky", "colore": "#c3234a", "titolo": "Password e accesso",     "sotto": "Password dimenticata, account bloccato, nuovo accesso",  "placeholder": "Es. Ho dimenticato la password / il mio account è bloccato." },
+    { "id": "gestionali", "nome": "Gestionali",        "glpiId": null, "tipo": 1, "icona": "ap", "colore": "#00838f", "titolo": "Programmi dell'ente",    "sotto": "Protocollo, atti, contabilità, anagrafe",                "placeholder": "Es. Il programma del protocollo non si apre e dà un errore." },
+    { "id": "altro",      "nome": "Altro",             "glpiId": null, "tipo": 2, "icona": "ot", "colore": "#5c6f82", "titolo": "Altro / non so",         "sotto": "Se non trovi la casella giusta, scegli questa",          "placeholder": "Descrivi con parole tue di cosa hai bisogno." }
+  ]
+}

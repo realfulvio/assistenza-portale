@@ -1,0 +1,21 @@
+# Servizio systemd del portale. Copia in /etc/systemd/system/ e adatta percorso e utente.
+#   sudo cp deploy/portale-assistenza.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now portale-assistenza
+[Unit]
+Description=Portale Assistenza (richieste di assistenza su GLPI)
+After=network.target
+
+[Service]
+User=portale
+WorkingDirectory=/opt/portale-assistenza
+EnvironmentFile=/opt/portale-assistenza/.env
+ExecStart=/usr/bin/node src/server.js
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

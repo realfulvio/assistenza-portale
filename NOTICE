@@ -1,0 +1,17 @@
+Assistenza Portale
+Copyright (c) 2026 Luca Accorsi - https://github.com/realfulvio
+
+Questo software e' distribuito con licenza EUPL-1.2 (European Union Public Licence v. 1.2).
+Il testo della licenza e' nel file LICENSE.
+
+Componenti di terze parti inclusi nel repository:
+- Font "Titillium Web" (Accademia di Belle Arti di Urbino) - SIL Open Font License 1.1
+  (public/fonts/LICENSE-TitilliumWeb-OFL.txt)
+- Font "Lora" (The Lora Project Authors) - SIL Open Font License 1.1
+  (public/fonts/LICENSE-Lora-OFL.txt)
+
+Le dipendenze npm (express, openid-client, helmet, multer, ...) hanno le proprie licenze,
+indicate nei rispettivi pacchetti in node_modules dopo "npm install".
+
+Lo stile grafico si ispira al modello "Design Comuni" di Designers Italia; questo progetto
+non e' affiliato a Designers Italia, AgID o ad altri enti.

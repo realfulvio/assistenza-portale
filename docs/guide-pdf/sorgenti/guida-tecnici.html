@@ -1,0 +1,21 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Guida per i tecnici</title><link rel="stylesheet" href="stile.css"></head><body>
+<div class="testata"><h1>Assistenza Informatica – guida per i tecnici</h1><p>Come lavorare in GLPI le richieste che arrivano dal portale (esempio da adattare)</p></div>
+<h2>Da dove arrivano i ticket</h2>
+<p>I dipendenti aprono le richieste dal portale. Ogni richiesta diventa un <b>ticket GLPI</b> con:</p>
+<ul><li>titolo con la categoria tra parentesi, es. <i>[Stampante] La stampante del secondo piano non stampa…</i>;</li>
+<li>richiedente = il dipendente (trovato per e-mail o creato con profilo Self-Service);</li>
+<li>descrizione scritta dal dipendente e, se indicati, telefono e reperibilità;</li>
+<li>allegati;</li><li>assegnazione al gruppo tecnico (regola GLPI o configurazione del portale).</li></ul>
+<h2>Lavorare un ticket</h2>
+<div class="passo"><span class="n">1</span><div>Apri GLPI (es. <b>https://glpi.esempio.it</b>) e usa la ricerca salvata «Nuovi» o «Tutti aperti».</div></div>
+<div class="passo"><span class="n">2</span><div><b>Prendi in carico</b>: assegna il ticket a te stesso. Il dipendente riceve una mail di aggiornamento.</div></div>
+<div class="passo"><span class="n">3</span><div>Scrivi le comunicazioni per il dipendente come <b>followup pubblico</b>: le vede nel portale. Le note per i colleghi vanno come followup <b>privato</b> (il portale non le mostra mai).</div></div>
+<div class="passo"><span class="n">4</span><div>Se aspetti qualcosa metti il ticket <b>In sospeso</b>. A lavoro finito aggiungi una <b>soluzione</b>: il ticket diventa «Risolta» e il dipendente riceve la mail.</div></div>
+<h2>Messaggi dal portale</h2>
+<p>Quando il dipendente scrive dal portale compare un followup pubblico con «Nome Cognome (dal portale):». Rispondi sempre in GLPI, non per mail: le notifiche hanno un indirizzo di risposta che non riceve posta.</p>
+<table><tr><th>Stato GLPI</th><th>Stato nel portale</th></tr>
+<tr><td>Nuovo</td><td>In attesa</td></tr><tr><td>In corso (assegnato / pianificato)</td><td>In lavorazione</td></tr>
+<tr><td>In attesa</td><td>In sospeso</td></tr><tr><td>Risolto</td><td>Risolta</td></tr><tr><td>Chiuso</td><td>Chiusa</td></tr></table>
+<div class="box">Non condividere mai token API, password o il file <code>.env</code> del portale in ticket, mail o chat.</div>
+<p class="piede">Guida d'esempio con dati inventati, distribuita con il progetto Assistenza Portale (licenza EUPL-1.2). Adattala al tuo ente.</p>
+</body></html>

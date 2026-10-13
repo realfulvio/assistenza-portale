@@ -1,0 +1,30 @@
+// Controllo minimo senza dipendenze: sintassi di tutti i file JavaScript e validita' dei file JSON.
+// Uso: npm run lint
+const { execFileSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const root = path.join(__dirname, '..');
+const salta = new Set(['node_modules', '.git', 'screenshots', 'docs']);
+const file = [];
+(function giro(dir) {
+  for (const n of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (salta.has(n.name)) continue;
+    const p = path.join(dir, n.name);
+    if (n.isDirectory()) giro(p);
+    else if (/\.(js|json)$/.test(n.name) && n.name !== 'package-lock.json') file.push(p);
+  }
+})(root);
+
+let errori = 0;
+for (const f of file) {
+  try {
+    if (f.endsWith('.json')) JSON.parse(fs.readFileSync(f, 'utf8'));
+    else execFileSync(process.execPath, ['--check', f], { stdio: 'pipe' });
+  } catch (e) {
+    errori++;
+    console.error('ERRORE in', path.relative(root, f), '\n', String(e.stderr || e.message).trim());
+  }
+}
+console.log(`${file.length} file controllati, ${errori} errori`);
+process.exit(errori ? 1 : 0);

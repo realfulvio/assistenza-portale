@@ -1,0 +1,75 @@
+# Preparare GLPI
+
+Provato con **GLPI 11.0.8**. I nomi dei menu sono quelli dell'interfaccia in italiano; se qualcosa non corrisponde verifica nella [documentazione ufficiale di GLPI](https://glpi-user-documentation.readthedocs.io/) e nella documentazione dell'API, che ogni installazione mostra all'indirizzo `https://<tuo-glpi>/apirest.php` (file `apirest.md`).
+
+## 1. Abilitare l'API REST
+
+*Configurazione > Generale > API*:
+- «Abilita API REST»: **Sì**;
+- «Abilita accesso con token esterno»: **Sì** (serve per il token dell'utente di servizio);
+- «Abilita accesso con credenziali»: **No** (non serve al portale).
+
+## 2. Client API (app token)
+
+Nella stessa pagina, sezione **Client API** > *Aggiungi*:
+- nome: `Portale Assistenza`, attivo;
+- intervallo IPv4: l'indirizzo da cui il portale chiama GLPI (`127.0.0.1` se sono sullo stesso server);
+- genera l'**App-Token** e copialo in `.env` come `GLPI_APP_TOKEN`.
+
+> GLPI 11 salva i token **cifrati** nel database: per cambiarli usa l'interfaccia (o l'API), non scriverli direttamente in SQL.
+
+## 3. Profilo e utente di servizio
+
+Crea un profilo dedicato, ad esempio **«Portale (API)»**, interfaccia *Standard (centrale)*, con i soli diritti necessari:
+
+| Diritto | Valore usato dall'autore | Perché |
+|---|---|---|
+| Ticket | leggere tutti, creare, aggiornare | creare i ticket e leggere quelli dei richiedenti |
+| Followup (Seguiti) | vedere i pubblici, aggiungere a tutti i ticket | timeline e messaggi dal portale (mai le note private) |
+| Utenti | leggere, creare, aggiornare | trovare il richiedente per e-mail e crearlo se manca |
+| Documenti | leggere, creare, aggiornare | allegati |
+| Categorie ITIL, Profili | leggere | categorie e profilo Self-Service |
+
+Poi crea l'utente di servizio (es. `portale-api`) con questo profilo sull'entità radice (ricorsivo). Nelle **impostazioni dell'utente** genera il **token API** e copialo in `.env` come `GLPI_USER_TOKEN`.
+
+**Prova** (dal server del portale, sostituisci i token) **[testato]**:
+```bash
+curl -s -H "App-Token: <APP_TOKEN>" -H "Authorization: user_token <USER_TOKEN>" http://127.0.0.1/apirest.php/initSession
+```
+Risposta attesa: `{"session_token":"..."}`. Errori tipici: `ERROR_WRONG_APP_TOKEN_PARAMETER` (app token o IP del client API), `ERROR_GLPI_LOGIN_USER_TOKEN` (token utente).
+
+## 4. Profilo Self-Service
+
+Il portale crea i richiedenti che non esistono ancora con il profilo **Self-Service** (cercato per nome). Se il tuo si chiama diversamente indica il suo id in `.env` con `GLPI_SELF_SERVICE_PROFILE_ID`.
+
+Gli utenti già presenti in GLPI (per esempio i tecnici) vengono riconosciuti per e-mail e **non vengono mai modificati**. Controlla quindi che i tecnici abbiano in GLPI la stessa e-mail del loro account di lavoro, altrimenti il portale creerebbe un duplicato.
+
+## 5. Categorie
+
+Crea (o scegli) le categorie ITIL in *Configurazione > Menu a discesa > Categorie ITIL* e scrivi i loro id nel campo `glpiId` di `config/categorie.json`. L'id si vede nell'indirizzo della pagina della categoria (`...itilcategory.form.php?id=12`).
+
+## 6. Assegnazione automatica al gruppo tecnico
+
+Due possibilità:
+- **Regola GLPI** (consigliata): *Amministrazione > Regole > Regole aziendali per i ticket*: alla creazione, assegna il gruppo tecnico.
+- **Dal portale**: indica l'id del gruppo in `.env` con `GLPI_GROUP_ID`.
+
+## 7. Notifiche, profilo «Tecnico Ticket», login Microsoft in GLPI
+
+- Notifiche e modello di mail: [notifiche-mail.md](notifiche-mail.md)
+- Profilo semplificato per i tecnici e login Microsoft in GLPI: [sso-glpi.md](sso-glpi.md)
+
+## Fuso orario
+
+Imposta il fuso orario del PHP di GLPI, altrimenti mail e date possono uscire in UTC **[testato]**:
+```bash
+printf 'date.timezone = Europe/Rome\n' | sudo tee /etc/php/8.4/apache2/conf.d/97-timezone.ini /etc/php/8.4/cli/conf.d/97-timezone.ini
+sudo systemctl restart apache2
+```
+(adatta `8.4` alla tua versione di PHP). I dati scritti prima della modifica possono restare spostati di qualche ora.
+
+## Allegati grandi
+
+Di base GLPI accetta documenti fino a 2 MB e PHP 2 MB per file. Per allegati fino a 10 MB **[testato]**:
+- *Configurazione > Generale > Impostazioni generali* (o simile, a seconda della versione): «Dimensione massima dei documenti» = 10 MB;
+- PHP: `printf 'upload_max_filesize = 12M\npost_max_size = 40M\n' | sudo tee /etc/php/8.4/apache2/conf.d/99-allegati.ini` e riavvio di Apache.

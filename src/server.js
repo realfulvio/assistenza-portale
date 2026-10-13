@@ -1,0 +1,206 @@
+// Portale Assistenza - apertura e consultazione di richieste di assistenza su GLPI
+// Copyright (c) Luca Accorsi - Licenza EUPL-1.2
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const express = require('express');
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const config = require('./config');
+const glpi = require('./glpi-client');
+const auth = require('./auth');
+const { upload, verificaFile } = require('./uploads');
+
+const app = express();
+app.disable('x-powered-by');
+app.set('trust proxy', 1); // dietro reverse proxy locale
+
+// Log senza dati sensibili: solo metodo, percorso (senza query), esito
+const log = (...a) => console.log(new Date().toISOString(), ...a);
+
+// Sostituisce i segnaposto {{sezione.chiave}} di index.html con i valori di config/ente.json (testo sempre escapato)
+const escHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function valoreEnte(chiave) {
+  return chiave.split('.').reduce((o, k) => (o && typeof o === 'object' ? o[k] : undefined), config.ente);
+}
+function personalizza(html) {
+  const s = config.ente.servizio || {};
+  // In modalita' DEMO il pulsante di accesso lo dice chiaramente
+  if (config.demo) config.ente.testi = { ...(config.ente.testi || {}), pulsanteAccesso: 'Entra nella demo (nessun account necessario)' };
+  const extra = {
+    // blocchi facoltativi: compaiono solo se il dato e' configurato
+    _emailHtml: s.email ? `<p>Posta elettronica: <a href="mailto:${escHtml(s.email)}">${escHtml(s.email)}</a></p>` : '',
+    _telefonoHtml: s.telefonoUrgenze ? `<p>Telefono per le urgenze: <a href="tel:${escHtml(String(s.telefonoUrgenze).replace(/\s+/g, ''))}">${escHtml(s.telefonoUrgenze)}</a></p>` : ''
+  };
+  return html.replace(/\{\{([\w.]+)\}\}/g, (m, k) => (k in extra ? extra[k] : escHtml(valoreEnte(k) ?? '')));
+}
+
+let origineIssuer = [];
+try { if (config.oidc.issuer) origineIssuer = [new URL(config.oidc.issuer).origin]; } catch { /* issuer non valido: segnalato al login */ }
+app.use(helmet({
+  contentSecurityPolicy: { directives: {
+    defaultSrc: ["'self'"], scriptSrc: ["'self'"], styleSrc: ["'self'"], imgSrc: ["'self'", 'data:', 'blob:'],
+    connectSrc: ["'self'"], formAction: ["'self'", ...origineIssuer], frameAncestors: ["'none'"], objectSrc: ["'none'"], baseUri: ["'self'"]
+  } },
+  hsts: config.hsts ? { maxAge: 15552000 } : false, // attivare solo con certificato definitivo
+  crossOriginEmbedderPolicy: false
+}));
+
+const router = express.Router();
+router.use(session({
+  name: 'portale.sid', secret: config.sessionSecret, resave: false, saveUninitialized: false, rolling: true,
+  store: new MemoryStore({ checkPeriod: 10 * 60 * 1000 }),
+  cookie: { httpOnly: true, sameSite: 'lax', secure: config.prod, maxAge: config.sessionHours * 3600 * 1000, path: config.base || '/' }
+}));
+
+router.use(express.json({ limit: '20kb' }));
+
+// --- CSRF: token legato alla sessione, richiesto come header sulle richieste che modificano dati
+function csrfToken(req) {
+  if (!req.session.csrf) req.session.csrf = crypto.randomBytes(24).toString('hex');
+  return req.session.csrf;
+}
+function csrf(req, res, next) {
+  const t = req.get('x-csrf-token') || '';
+  const ok = req.session.csrf && t.length === req.session.csrf.length && crypto.timingSafeEqual(Buffer.from(t), Buffer.from(req.session.csrf));
+  if (!ok) return res.status(403).json({ errore: 'Sessione non valida. Ricarica la pagina e riprova.' });
+  next();
+}
+function serveLogin(req, res, next) {
+  if (!req.session.user) return res.status(401).json({ errore: 'Non autenticato' });
+  next();
+}
+
+router.use('/auth', rateLimit({ windowMs: 60_000, limit: 30, standardHeaders: true, legacyHeaders: false }));
+router.use('/auth', (req, res, next) => (req.method === 'POST' ? csrf(req, res, next) : next()), auth);
+
+// --- API
+const api = express.Router();
+api.get('/me', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!req.session.user) return res.status(401).json({ errore: 'Non autenticato' });
+  const { name, email } = req.session.user;
+  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie:config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, placeholder }) => ({ id, nome, icona, sotto, titolo, colore, placeholder })) });
+});
+api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
+api.get('/faq', serveLogin, (req, res) => res.json(JSON.parse(fs.readFileSync(config.faqPath, 'utf8'))));
+
+// Cache dell'id utente GLPI nella sessione
+async function utenteGlpi(req) {
+  if (!req.session.glpiId) {
+    req.session.glpiId = await glpi.risolviRichiedente({ email: req.session.user.email, name: req.session.user.name });
+  }
+  return req.session.glpiId;
+}
+
+const limiteInvio = rateLimit({
+  windowMs: 60 * 60_000, limit: config.limits.maxTicketsPerHour, standardHeaders: true, legacyHeaders: false,
+  keyGenerator: (req) => 'u:' + req.session.user.email,
+  handler: (req, res) => res.status(429).json({ errore: 'Hai inviato molte richieste in poco tempo. Riprova tra un po\' oppure chiamaci.' })
+});
+const inCorso = new Set(); // blocco doppio invio lato server
+
+api.post('/richieste', serveLogin, csrf, limiteInvio, (req, res, next) => upload.array('allegati', config.limits.maxFiles)(req, res, (err) => {
+  if (!err) return next();
+  const mb = Math.round(config.limits.maxFileBytes / 1024 / 1024);
+  const msg = err.code === 'LIMIT_FILE_SIZE' ? `Un allegato supera i ${mb} MB.` : err.code === 'LIMIT_FILE_COUNT' || err.code === 'LIMIT_UNEXPECTED_FILE' ? `Puoi allegare al massimo ${config.limits.maxFiles} file.` : err.utente ? err.message : null;
+  if (!msg) return next(err);
+  res.status(400).json({ errore: msg });
+}), async (req, res, next) => {
+  const chiave = req.session.user.email;
+  if (inCorso.has(chiave)) return res.status(409).json({ errore: 'Invio già in corso, attendi un momento.' });
+  inCorso.add(chiave);
+  try {
+    const b = req.body || {};
+    const categoria = config.categorie.categorie.find((c) => c.id === b.categoria);
+    const descrizione = String(b.descrizione || '').trim();
+    const telefono = String(b.telefono || '').trim();
+    const reperibilita = String(b.reperibilita || '').trim();
+    if (!categoria) return res.status(400).json({ errore: 'Scegli un argomento.' });
+    if (descrizione.length < 15 || descrizione.length > 4000) return res.status(400).json({ errore: 'La descrizione deve avere da 15 a 4000 caratteri.' });
+    if (telefono && !/^[0-9+()\s./-]{3,25}$/.test(telefono)) return res.status(400).json({ errore: 'Il numero di telefono non sembra valido.' });
+    if (reperibilita.length > 200) return res.status(400).json({ errore: 'Reperibilità troppo lunga (max 200 caratteri).' });
+    const files = req.files || [];
+    verificaFile(files);
+    const userId = await utenteGlpi(req);
+    const { name, email } = req.session.user;
+    const id = await glpi.creaTicket({ userId, categoria, descrizione, telefono, reperibilita, nome: name, email });
+    let allegatiFalliti = 0;
+    for (const f of files) { try { await glpi.allega(id, f); } catch { allegatiFalliti++; } }
+    log('ticket creato', id, 'cat', categoria.id, 'allegati', files.length, 'falliti', allegatiFalliti);
+    res.status(201).json({ id, categoria: categoria.nome, allegatiFalliti });
+  } catch (e) { next(e); } finally { inCorso.delete(chiave); }
+});
+
+api.get('/richieste', serveLogin, async (req, res, next) => {
+  try { res.set('Cache-Control', 'no-store'); res.json(await glpi.elencoTicket(await utenteGlpi(req))); } catch (e) { next(e); }
+});
+
+function idTicket(req, res, next) {
+  if (!/^\d{1,9}$/.test(req.params.id)) return res.status(404).json({ errore: 'Richiesta non trovata.' });
+  req.tid = Number(req.params.id);
+  next();
+}
+api.get('/richieste/:id', serveLogin, idTicket, async (req, res, next) => {
+  try {
+    const d = await glpi.dettaglio(await utenteGlpi(req), req.tid); // il controllo di proprieta' e' nel client
+    if (!d) return res.status(404).json({ errore: 'Richiesta non trovata.' });
+    res.set('Cache-Control', 'no-store'); res.json(d);
+  } catch (e) { next(e); }
+});
+api.post('/richieste/:id/messaggi', serveLogin, csrf, idTicket, async (req, res, next) => {
+  try {
+    const testo = String((req.body || {}).testo || '').trim();
+    if (testo.length < 2 || testo.length > 4000) return res.status(400).json({ errore: 'Scrivi un messaggio (max 4000 caratteri).' });
+    const userId = await utenteGlpi(req);
+    if (!(await glpi.ticketDi(userId, req.tid))) return res.status(404).json({ errore: 'Richiesta non trovata.' });
+    await glpi.aggiungiMessaggio(userId, req.tid, req.session.user.name, testo);
+    res.status(201).json({ ok: true });
+  } catch (e) { next(e); }
+});
+router.use('/api', api);
+
+// --- Pagine (single page app): index con percorso base iniettato
+// __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
+const versione = ['style.css', 'app.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+  + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
+const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
+  .replaceAll('__BASE__', config.base).replaceAll('__V__', versione);
+const pagina = (req, res) => { res.set('Cache-Control', 'no-store').type('html').send(indice); };
+router.get(['/', '/errore', '/non-consentito'], pagina);
+
+// Colori dell'ente (config/ente.json) come variabili CSS: solo colori esadecimali validi
+const colore = (v, d) => (/^#[0-9a-fA-F]{3,8}$/.test(String(v || '')) ? v : d);
+const g = config.ente.grafica || {};
+const enteCss = `:root{--p:${colore(g.colorePrimario, '#005e8e')};--pd:${colore(g.colorePrimarioScuro, '#004a70')};--navy:${colore(g.coloreBarra, '#001a4d')};--bg:${colore(g.coloreSfondo, '#f2f2f2')}}\n`;
+router.get('/ente.css', (req, res) => res.set('Cache-Control', 'no-cache').type('css').send(enteCss));
+router.use(express.static(path.join(config.root, 'public'), {
+  index: false, maxAge: config.prod ? '1h' : 0,
+  // CSS e JS si rivalidano sempre (ETag): niente pagina nuova con stile vecchio dopo un rilascio
+  setHeaders: (res, file) => { if (/\.(css|js)$/.test(file)) res.setHeader('Cache-Control', 'no-cache'); }
+}));
+
+app.use(config.base || '/', router);
+if (config.base) app.get('/', (req, res) => res.redirect(config.base + '/'));
+
+// Errori: messaggio amichevole, dettagli solo nei log
+app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+  log('errore', req.method, req.path, err.status || '', err.message);
+  if (res.headersSent) return;
+  const msg = 'Qualcosa non ha funzionato. Riprova tra poco; se il problema continua chiamaci.';
+  if (err.utente) return res.status(400).json({ errore: err.message });
+  if (req.path.includes('/api/')) return res.status(err.status >= 400 && err.status < 500 ? err.status : 500).json({ errore: msg });
+  res.redirect(config.base + '/errore');
+});
+
+function avvia() {
+  return app.listen(config.port, config.host, () => {
+    log(`Portale in ascolto su http://${config.host}:${config.port}${config.base}/`);
+    if (config.demo) log('MODALITA DEMO: accesso simulato e GLPI finto. Non usare in produzione.');
+  });
+}
+if (require.main === module) avvia();
+module.exports = app;
+module.exports.avvia = avvia;

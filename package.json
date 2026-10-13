@@ -1,0 +1,40 @@
+{
+  "name": "assistenza-portale",
+  "version": "1.0.0",
+  "description": "Portale web per aprire e seguire richieste di assistenza informatica su GLPI, con accesso OpenID Connect (es. Microsoft Entra ID). Pensato per Comuni ed Enti pubblici.",
+  "author": "Luca Accorsi (https://github.com/realfulvio)",
+  "license": "EUPL-1.2",
+  "private": true,
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/realfulvio/assistenza-portale.git"
+  },
+  "keywords": [
+    "glpi",
+    "helpdesk",
+    "pubblica-amministrazione",
+    "comuni",
+    "openid-connect",
+    "microsoft-entra"
+  ],
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node scripts/demo.js",
+    "test": "node --test test/e2e.test.js",
+    "lint": "node scripts/lint.js",
+    "template-mail": "node scripts/genera-template-mail.js"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "memorystore": "^1.6.8",
+    "multer": "^2.4.0",
+    "openid-client": "^5.7.1"
+  }
+}

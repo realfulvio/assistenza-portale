@@ -1,0 +1,53 @@
+# FACOLTATIVO: GLPI con accesso Microsoft 365 / OpenID Connect tramite mod_auth_openidc
+# e l'SSO nativo di GLPI (variabile REMOTE_USER). Vedi docs/sso-glpi.md.
+# Richiede: sudo apt install libapache2-mod-auth-openidc
+# I segreti stanno in /etc/apache2/glpi-oidc-secret.conf (root, 600), vedi glpi-oidc-secret.conf.example.
+# Attiva:    sudo a2enconf glpi-sso && sudo apachectl configtest && sudo systemctl restart apache2
+#            (usa "restart", non "reload": vedi docs/risoluzione-problemi.md)
+# Disattiva: sudo a2disconf glpi-sso && sudo systemctl restart apache2
+<VirtualHost *:443>
+    ServerName <glpi.tuoente.it>
+    DocumentRoot /var/www/glpi/public
+
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/certs/<portale>.crt
+    SSLCertificateKeyFile /etc/ssl/private/<portale>.key
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+
+    Include /etc/apache2/glpi-oidc-secret.conf
+    OIDCRedirectURI https://<glpi.tuoente.it>/oidc-redirect
+    OIDCScope "openid email profile"
+    OIDCRemoteUserClaim preferred_username
+    OIDCPassClaimsAs environment
+    OIDCCookie glpi_oidc
+    OIDCSessionMaxDuration 28800
+    OIDCSessionInactivityTimeout 3600
+
+    <Directory /var/www/glpi/public>
+        Require all granted
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ index.php [QSA,L]
+    </Directory>
+
+    # Su tutto GLPI: se c'e' una sessione OIDC imposta REMOTE_USER, altrimenti lascia passare (login locale disponibile)
+    <Location "/">
+        AuthType openid-connect
+        OIDCUnAuthAction pass
+        Require valid-user
+    </Location>
+
+    # Ingresso SSO: /sso chiede il login e ammette solo gli account elencati, poi porta in GLPI
+    Alias /sso /opt/glpi-sso/sso.html
+    <Directory /opt/glpi-sso>
+        Require all granted
+    </Directory>
+    <Location "/sso">
+        AuthType openid-connect
+        OIDCUnAuthAction auth
+        Require claim preferred_username~(?i)^(nome1\.cognome1|nome2\.cognome2)@tuoente\.it$
+    </Location>
+
+    ErrorLog ${APACHE_LOG_DIR}/glpi-sso-error.log
+    CustomLog ${APACHE_LOG_DIR}/glpi-sso-access.log combined
+</VirtualHost>

@@ -1,0 +1,55 @@
+// GLPI finto in memoria: usato dalla modalita' DEMO (DEMO=1) e dai test automatici (GLPI_MOCK=1).
+// Non salva nulla su disco: al riavvio i dati tornano quelli di esempio.
+let seq = 100;
+let uid = 1;
+const utenti = new Map();
+const tickets = new Map();
+const nomiStato = { 1: 'In attesa', 2: 'In lavorazione', 4: 'In sospeso', 5: 'Risolta', 6: 'Chiusa' };
+
+// Data in formato GLPI ("AAAA-MM-GG hh:mm:ss") nell'ora locale del server
+function fmt(d) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+const ora = (minutiFa = 0) => fmt(new Date(Date.now() - minutiFa * 60000));
+
+const api = {
+  async risolviRichiedente({ email }) { if (!utenti.has(email)) utenti.set(email, uid++); return utenti.get(email); },
+  async creaTicket({ userId, categoria, descrizione }) {
+    const id = ++seq;
+    tickets.set(id, { id, userId, categoria: categoria.id, titolo: `[${categoria.nome}] ${descrizione.replace(/\s+/g, ' ').slice(0, 60)}`, descrizione, st: 1, aperta: ora(), aggiornata: ora(), tl: [], files: [] });
+    return id;
+  },
+  async allega(id, f) { tickets.get(id).files.push(f.originalname); },
+  async elencoTicket(userId) {
+    return [...tickets.values()].filter((t) => t.userId === userId)
+      .sort((a, b) => b.aggiornata.localeCompare(a.aggiornata))
+      .map((t) => ({ id: t.id, titolo: t.titolo, aperta: t.aperta, aggiornata: t.aggiornata, stato: nomiStato[t.st], chiusa: t.st >= 5 }));
+  },
+  async dettaglio(userId, id) {
+    const t = tickets.get(id);
+    if (!t || t.userId !== userId) return null;
+    return { id, titolo: t.titolo, aperta: t.aperta, aggiornata: t.aggiornata, stato: nomiStato[t.st], chiusa: t.st >= 5, descrizione: t.descrizione, timeline: t.tl };
+  },
+  async aggiungiMessaggio(userId, id, nome, testo) { const t = tickets.get(id); t.tl.push({ data: ora(), testo: `${nome} (dal portale): ${testo}` }); t.aggiornata = ora(); },
+  async ticketDi(userId, id) { const t = tickets.get(id); return t && t.userId === userId ? t : null; },
+  async killSession() {},
+  _tickets: tickets
+};
+
+// Dati di esempio per la modalita' DEMO: richieste inventate dell'utente demo
+if (process.env.DEMO === '1') {
+  const u = 1; // primo utente creato = utente demo
+  utenti.set('maria.bianchi@esempio.it', u); uid = 2;
+  const esempi = [
+    { cat: 'Stampante', st: 2, min: 90, txt: 'La stampante del secondo piano non stampa e dice «offline».', tl: [[60, 'Tecnico: ho riavviato lo spooler, passo in ufficio a controllare il cavo di rete.']] },
+    { cat: 'Posta e M365', st: 4, min: 2880, txt: 'Outlook chiede la password ogni volta che lo apro.', tl: [[2000, 'Tecnico: puoi indicarmi quando sei in ufficio? Serve accedere al tuo PC.']] },
+    { cat: 'Computer', st: 5, min: 7200, txt: 'Il computer è molto lento all\'avvio.', tl: [[6000, 'Tecnico: abbiamo installato gli aggiornamenti e liberato spazio sul disco. Ora dovrebbe andare meglio.']] }
+  ];
+  for (const e of esempi) {
+    const id = ++seq;
+    tickets.set(id, { id, userId: u, categoria: e.cat, titolo: `[${e.cat}] ${e.txt.slice(0, 60)}`, descrizione: e.txt, st: e.st, aperta: ora(e.min), aggiornata: ora(e.tl[0][0]), tl: e.tl.map(([m, t]) => ({ data: ora(m), testo: t })), files: [] });
+  }
+}
+
+module.exports = api;
