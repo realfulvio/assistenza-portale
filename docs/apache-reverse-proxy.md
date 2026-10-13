@@ -11,15 +11,7 @@ sudo a2enmod ssl proxy proxy_http headers      # [testato]
 ## 2. Certificato
 
 - **Consigliato**: un certificato della CA interna dell'ente o di una CA pubblica, con il nome DNS del portale.
-- **Autofirmato** (solo se non hai alternative) **[testato]**:
-  ```bash
-  sudo openssl req -x509 -newkey rsa:2048 -nodes -days 1825 \
-    -keyout /etc/ssl/private/portale.key -out /etc/ssl/certs/portale.crt \
-    -subj "/CN=<portale.tuoente.it>" \
-    -addext "subjectAltName=DNS:<portale.tuoente.it>"
-  sudo chmod 600 /etc/ssl/private/portale.key
-  ```
-  Va poi distribuito ai PC come **autorità radice attendibile** (es. con una GPO in Active Directory), altrimenti il browser mostra un avviso.
+- **CA interna + certificato del sito** (se non hai alternative): guida completa in [certificati-ca-interna.md](certificati-ca-interna.md). Evita i certificati **autofirmati**: Firefox li rifiuta con `MOZILLA_PKIX_ERROR_CA_CERT_USED_AS_END_ENTITY`.
 
 ### Firefox e i certificati interni
 

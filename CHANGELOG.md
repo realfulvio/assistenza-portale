@@ -12,6 +12,8 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e i
 - `MAX_TICKETS_PER_HOUR` già configurabile; documentata la scelta tra ticket «Nuova» e assegnati subito (`GLPI_GROUP_ID`).
 
 ### Modificato
+- Testo dello stato «Risolta»: rimanda ai pulsanti di conferma/riapertura.
+- Guida HTTPS: CA interna + certificato del sito (`docs/certificati-ca-interna.md`) al posto del certificato autofirmato.
 - Testo dello stato «In attesa»: «Abbiamo ricevuto la tua richiesta, a breve la prenderemo in carico.»
 
 ## [1.0.0] - 2026-10-13

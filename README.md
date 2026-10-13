@@ -103,7 +103,7 @@ Qui trovi la sintesi. Ogni passo ha una guida dettagliata in [docs/](docs/). Le 
 5. **Configurare** `.env` (copia di `.env.example`) e `config/ente.json` (copia di `config/ente.example.json`). → [docs/installazione.md](docs/installazione.md), [docs/personalizzazione.md](docs/personalizzazione.md)
 6. **Avviare con systemd** usando `deploy/portale-assistenza.service`.
    *Cosa dovresti vedere*: `systemctl status portale-assistenza` → `active (running)`. *Errore tipico*: «Configurazione incompleta: …» nel log se manca una variabile.
-7. **Apache e HTTPS** con `deploy/apache/assistenza.conf.example`. → [docs/apache-reverse-proxy.md](docs/apache-reverse-proxy.md)
+7. **Apache e HTTPS** con `deploy/apache/assistenza.conf.example`. → [docs/apache-reverse-proxy.md](docs/apache-reverse-proxy.md), certificato con CA interna: [docs/certificati-ca-interna.md](docs/certificati-ca-interna.md)
 8. *(Facoltativo)* **Login Microsoft anche in GLPI** e profilo «Tecnico Ticket». → [docs/sso-glpi.md](docs/sso-glpi.md)
 9. **Notifiche e-mail** con il modello pronto. → [docs/notifiche-mail.md](docs/notifiche-mail.md)
 10. *(Facoltativo)* **Icona sul desktop** con il nome del PC (GPO). → [docs/icona-desktop.md](docs/icona-desktop.md)

@@ -245,7 +245,7 @@
     'In attesa': 'Abbiamo ricevuto la tua richiesta, a breve la prenderemo in carico.',
     'In lavorazione': 'Un tecnico sta lavorando alla tua richiesta.',
     'In sospeso': 'La richiesta è ferma in attesa di qualcosa (per esempio una tua risposta o un ricambio).',
-    Risolta: 'Il problema risulta risolto. Se non è così, scrivi un messaggio qui sotto.',
+    Risolta: 'Il problema risulta risolto. Usa i pulsanti qui sotto per confermare oppure per riaprire la richiesta.',
     Chiusa: 'La richiesta è chiusa. Per un nuovo problema apri una nuova richiesta.'
   };
   // GLPI (PHP con fuso Europe/Rome) restituisce date in ora locale: nessuna conversione
