@@ -12,6 +12,7 @@ const config = require('./config');
 const glpi = require('./glpi-client');
 const auth = require('./auth');
 const { upload, verificaFile } = require('./uploads');
+const { pcValido, ipPulito } = require('./contenuto');
 
 const app = express();
 app.disable('x-powered-by');
@@ -86,6 +87,10 @@ api.get('/me', (req, res) => {
 });
 api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
 api.get('/faq', serveLogin, (req, res) => res.json(JSON.parse(fs.readFileSync(config.faqPath, 'utf8'))));
+// Consigli prima di inviare (content/suggerimenti.json, riletto a ogni richiesta; se manca: nessun consiglio)
+api.get('/suggerimenti', serveLogin, (req, res) => {
+  try { res.json(JSON.parse(fs.readFileSync(path.join(config.root, 'content', 'suggerimenti.json'), 'utf8'))); } catch { res.json([]); }
+});
 
 // Cache dell'id utente GLPI nella sessione
 async function utenteGlpi(req) {
@@ -126,7 +131,7 @@ api.post('/richieste', serveLogin, csrf, limiteInvio, (req, res, next) => upload
     verificaFile(files);
     const userId = await utenteGlpi(req);
     const { name, email } = req.session.user;
-    const id = await glpi.creaTicket({ userId, categoria, descrizione, telefono, reperibilita, nome: name, email });
+    const id = await glpi.creaTicket({ userId, categoria, descrizione, telefono, reperibilita, nome: name, email, pc: req.session.pc || null, ip: ipPulito(req.ip), ua: req.get('user-agent') });
     let allegatiFalliti = 0;
     for (const f of files) { try { await glpi.allega(id, f); } catch { allegatiFalliti++; } }
     log('ticket creato', id, 'cat', categoria.id, 'allegati', files.length, 'falliti', allegatiFalliti);
@@ -160,6 +165,17 @@ api.post('/richieste/:id/messaggi', serveLogin, csrf, idTicket, async (req, res,
     res.status(201).json({ ok: true });
   } catch (e) { next(e); }
 });
+api.post('/richieste/:id/esito', serveLogin, csrf, idTicket, async (req, res, next) => {
+  try {
+    const esito = String((req.body || {}).esito || '');
+    if (!['risolto', 'riapri'].includes(esito)) return res.status(400).json({ errore: 'Scelta non valida.' });
+    const r = await glpi.esitoSoluzione(await utenteGlpi(req), req.tid, req.session.user.name, esito);
+    if (r === null) return res.status(404).json({ errore: 'Richiesta non trovata.' });
+    if (r === 'stato') return res.status(409).json({ errore: 'Questa richiesta non è più in attesa di conferma: ricarica la pagina per vedere lo stato aggiornato.' });
+    log('esito soluzione', req.tid, esito);
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
 router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
@@ -168,7 +184,12 @@ const versione = ['style.css', 'app.js'].map((f) => Math.floor(fs.statSync(path.
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
   .replaceAll('__BASE__', config.base).replaceAll('__V__', versione);
-const pagina = (req, res) => { res.set('Cache-Control', 'no-store').type('html').send(indice); };
+const pagina = (req, res) => {
+  // ?pc=NOMEPC dall'icona sul desktop (nome del parametro: PC_PARAM): se valido resta in sessione e finisce nel ticket
+  const pc = config.pcParam ? pcValido(req.query[config.pcParam]) : null;
+  if (pc) req.session.pc = pc;
+  res.set('Cache-Control', 'no-store').type('html').send(indice);
+};
 router.get(['/', '/errore', '/non-consentito'], pagina);
 
 // Colori dell'ente (config/ente.json) come variabili CSS: solo colori esadecimali validi

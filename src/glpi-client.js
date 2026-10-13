@@ -1,6 +1,7 @@
 // Client minimale per l'API REST legacy di GLPI (/apirest.php).
 // Usa solo l'utente di servizio: i dipendenti non accedono mai a GLPI.
 const config = require('./config');
+const { contenutoTicket } = require('./contenuto');
 
 const STATI = { 1: 'In attesa', 2: 'In lavorazione', 3: 'In lavorazione', 4: 'In sospeso', 5: 'Risolta', 6: 'Chiusa' };
 const stato = (n) => STATI[Number(n)] || 'In attesa';
@@ -104,17 +105,11 @@ function nomeCognome(mail, name) {
   return { firstname: parti[0] || cap(loc[0]), realname: parti[0] || cap(loc[0]) };
 }
 
-// Contenuto del ticket: descrizione e, se indicati, telefono e reperibilita' (richiedente e origine sono gia' campi del ticket)
-function contenutoTicket({ descrizione, telefono, reperibilita }) {
-  const contatti = [telefono && `Telefono: ${esc(telefono)}`, reperibilita && `Reperibilità: ${esc(reperibilita)}`].filter(Boolean).join(' · ');
-  return `<p>${esc(descrizione).replace(/\n/g, '<br>')}</p>` + (contatti ? `<p>${contatti}</p>` : '');
-}
-
-async function creaTicket({ userId, categoria, descrizione, telefono, reperibilita, nome, email }) {
+async function creaTicket({ userId, categoria, descrizione, telefono, reperibilita, pc, ip, ua }) {
   const sintesi = descrizione.replace(/\s+/g, ' ').trim().slice(0, 60);
   const input = {
     name: `[${categoria.nome}] ${sintesi}${descrizione.length > 60 ? '…' : ''}`,
-    content: contenutoTicket({ descrizione, telefono, reperibilita, nome, email }),
+    content: contenutoTicket({ descrizione, telefono, reperibilita, pc, ip, ua }),
     type: categoria.tipo, priority: 3, urgency: 3, impact: 3,
     _users_id_requester: userId
   };
@@ -163,6 +158,20 @@ async function dettaglio(userId, ticketId) {
     descrizione: daHtml(t.content), timeline };
 }
 
+// Esito della soluzione indicato dal richiedente (pulsanti nella mail «Chiamata risolta»).
+// Stesso meccanismo di GLPI per approvare/rifiutare una soluzione: followup con add_close (chiude)
+// oppure add_reopen (rifiuta e riapre). Ritorna 'ok' | 'stato' (non e' «Risolta») | null (non e' del richiedente)
+async function esitoSoluzione(userId, ticketId, nome, esito) {
+  const t = await ticketDi(userId, ticketId);
+  if (!t) return null;
+  if (Number(t.status) !== 5) return 'stato';
+  const testo = esito === 'risolto' ? 'Il richiedente conferma che il problema è risolto.' : 'L\'utente segnala che il problema non è risolto.';
+  const input = { itemtype: 'Ticket', items_id: ticketId, is_private: 0, content: `<p><b>${esc(nome)} (dal portale):</b></p><p>${testo}</p>` };
+  if (esito === 'risolto') input.add_close = 1; else input.add_reopen = 1;
+  await call('POST', '/ITILFollowup', { body: { input } });
+  return 'ok';
+}
+
 async function aggiungiMessaggio(userId, ticketId, nome, testo) {
   const html = `<p><b>${esc(nome)} (dal portale):</b></p><p>${esc(testo).replace(/\n/g, '<br>')}</p>`;
   await call('POST', '/ITILFollowup', { body: { input: { itemtype: 'Ticket', items_id: ticketId, is_private: 0, content: html } } });
@@ -170,5 +179,5 @@ async function aggiungiMessaggio(userId, ticketId, nome, testo) {
 
 // In modalita' DEMO (o GLPI_MOCK=1, usato dai test) si usa un GLPI finto in memoria
 module.exports = (config.demo || process.env.GLPI_MOCK === '1') ? require('./glpi-mock') : {
-  risolviRichiedente, creaTicket, allega, elencoTicket, dettaglio, aggiungiMessaggio, ticketDi, killSession, call, GlpiError
+  risolviRichiedente, creaTicket, allega, elencoTicket, dettaglio, aggiungiMessaggio, esitoSoluzione, ticketDi, killSession, call, GlpiError
 };

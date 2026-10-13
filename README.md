@@ -28,9 +28,12 @@ Un portale web semplice per far aprire ai dipendenti le **richieste di assistenz
 
 Molti uffici chiedono assistenza al servizio informatico **per telefono o per mail**: le richieste si perdono e nessuno sa a che punto sono. Questo portale mette ordine:
 
-- il dipendente entra con il suo **account di lavoro** (per esempio Microsoft 365), sceglie il tipo di problema con un clic, lo descrive e allega uno screenshot;
+- il dipendente entra con il suo **account di lavoro** (per esempio Microsoft 365), sceglie il tipo di problema con un clic, lo descrive e incolla uno screenshot con **Ctrl+V**;
+- prima dell'invio il portale propone **consigli rapidi** («Prima di inviare, prova così») in base a quello che scrive;
+- al ticket si aggiungono da soli **nome del PC** (se il portale è aperto dall'icona sul desktop), IP e browser;
 - riceve subito il **numero della richiesta**;
 - vede lo stato in **«Le mie richieste»** (In attesa, In lavorazione, In sospeso, Risolta, Chiusa) e può aggiungere messaggi;
+- quando il ticket è risolto, dalla mail può rispondere **«Risolto, grazie»** o **«Non è risolto, riapri»**;
 - i tecnici lavorano in **GLPI**, che resta il loro strumento: il dipendente non entra mai in GLPI.
 
 È pensato per chi usa poco il computer: testi semplici, caselle grandi e colorate, niente gergo tecnico.
@@ -103,7 +106,8 @@ Qui trovi la sintesi. Ogni passo ha una guida dettagliata in [docs/](docs/). Le 
 7. **Apache e HTTPS** con `deploy/apache/assistenza.conf.example`. → [docs/apache-reverse-proxy.md](docs/apache-reverse-proxy.md)
 8. *(Facoltativo)* **Login Microsoft anche in GLPI** e profilo «Tecnico Ticket». → [docs/sso-glpi.md](docs/sso-glpi.md)
 9. **Notifiche e-mail** con il modello pronto. → [docs/notifiche-mail.md](docs/notifiche-mail.md)
-10. **Verifica**: accedi al portale, apri una richiesta di prova con uno screenshot e controlla in GLPI richiedente, categoria, gruppo e allegato. Poi elimina il ticket di prova.
+10. *(Facoltativo)* **Icona sul desktop** con il nome del PC (GPO). → [docs/icona-desktop.md](docs/icona-desktop.md)
+11. **Verifica**: accedi al portale, apri una richiesta di prova con uno screenshot e controlla in GLPI richiedente, categoria, gruppo e allegato. Poi elimina il ticket di prova.
 
 ## Personalizzazione
 

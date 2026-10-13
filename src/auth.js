@@ -56,9 +56,11 @@ router.get('/callback', async (req, res, next) => {
     if (!email.includes('@')) return res.redirect(config.base + '/non-consentito');
     if (config.oidc.allowedDomain && !email.endsWith('@' + config.oidc.allowedDomain)) return res.redirect(config.base + '/non-consentito');
     // Nuovo ID di sessione dopo il login (contro la session fixation)
+    const pc = req.session.pc; // nome del PC (?pc=) da conservare dopo il login
     req.session.regenerate((err) => {
       if (err) return next(err);
       req.session.user = { oid: cl.oid || cl.sub, name: cl.name || email, email };
+      if (pc) req.session.pc = pc;
       req.session.idToken = tokenSet.id_token;
       req.session.save(() => res.redirect(config.base + '/'));
     });

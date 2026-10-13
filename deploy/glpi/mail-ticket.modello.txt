@@ -20,8 +20,12 @@ Descrizione:
 ##IFticket.storestatus=5##
 Soluzione:
 ##ticket.solution.description##
+
+Il problema è risolto?
+- Risolto, grazie: {{URL_PORTALE}}?azione=risolto#richiesta/##ticket.id##
+- Non è risolto, riapri: {{URL_PORTALE}}?azione=riapri#richiesta/##ticket.id##
 ##ENDIFticket.storestatus##
-Rispondi dal portale: {{URL_PORTALE}}/#richiesta/##ticket.id##
+Apri la richiesta: {{URL_PORTALE}}#richiesta/##ticket.id##
 Per i tecnici (GLPI): ##ticket.url##
 
 --

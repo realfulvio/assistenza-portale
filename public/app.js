@@ -47,6 +47,9 @@
     return a;
   };
   function mostraLogin() {
+    if (location.hash.startsWith('#richiesta/')) {
+      try { sessionStorage.setItem('dopoLogin', location.search + location.hash); } catch { /* ignorato */ }
+    }
     const p = location.pathname.replace(BASE, '');
     if (p.startsWith('/non-consentito')) return schermata('Accesso non consentito', 'Il tuo account non è abilitato a usare questo portale. Se pensi sia un errore, contatta l\'assistenza informatica.', [el('a', { className: 'send sec', href: BASE + '/', textContent: 'Torna all\'inizio' })]);
     if (p.startsWith('/errore')) return schermata('Qualcosa non ha funzionato', 'Non siamo riusciti a completare l\'operazione. Riprova tra poco; se il problema continua chiamaci.', [btnMs()]);
@@ -84,6 +87,32 @@
     $('conta').textContent = n < 15 ? `Scrivi almeno 15 caratteri (ne mancano ${15 - n}).` : `${$('descrizione').value.length} / 4000 caratteri`;
   }
 
+  // Consigli prima di inviare: dopo una pausa nella scrittura (min 8 caratteri), al massimo 2 riquadri.
+  // Non bloccano mai l'invio.
+  let suggerimenti = null;
+  let timerConsigli = null;
+  const norm = (t) => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  async function aggiornaConsigli() {
+    const box = $('consigli');
+    const testo = norm(testoUtile());
+    if (testo.length < 8) { box.hidden = true; box.replaceChildren(); return; }
+    if (!suggerimenti) { try { suggerimenti = await api('/suggerimenti'); } catch { suggerimenti = []; } }
+    const cat = (document.querySelector('input[name=categoria]:checked') || {}).value;
+    const trovati = suggerimenti.map((s) => {
+      const parole = (s.parole || []).filter((p) => testo.includes(norm(p)));
+      return { s, punti: parole.length ? parole.length + (s.categoria === cat ? 2 : 0) : 0 };
+    }).filter((x) => x.punti > 0).sort((a, b) => b.punti - a.punti).slice(0, 2);
+    if (!trovati.length) { box.hidden = true; box.replaceChildren(); return; }
+    box.replaceChildren(...trovati.map(({ s }) => {
+      const d = el('div', { className: 'consiglio' }, el('p', { className: 'pre', textContent: 'Prima di inviare, prova così' }), el('p', { className: 'tit', textContent: s.titolo }),
+        el('ol', {}, ...(s.passi || []).map((t) => el('li', { textContent: t }))));
+      if (s.link) d.append(el('p', {}, el('a', { href: s.link, textContent: 'Leggi la guida' })));
+      return d;
+    }), el('p', { className: 'ancora', textContent: 'Il problema c\'è ancora? Invia pure la richiesta.' }));
+    box.hidden = false;
+  }
+  function programmaConsigli() { clearTimeout(timerConsigli); timerConsigli = setTimeout(() => aggiornaConsigli().catch(() => {}), 1500); }
+
   // Il modulo si colora come la categoria scelta e mostra icona, nome e suggerimento
   function scegliCategoria(c) {
     const f = $('blocco-form');
@@ -106,7 +135,7 @@
       const t = el('label', { className: 'tile', htmlFor: id }, el('input', { type: 'radio', name: 'categoria', value: c.id, id, required: true }), card);
       t.style.setProperty('--c', c.colore || '#005e8e');
       t.addEventListener('pointermove', (e) => { const r = t.getBoundingClientRect(); t.style.setProperty('--x', e.clientX - r.left + 'px'); t.style.setProperty('--y', e.clientY - r.top + 'px'); });
-      t.querySelector('input').addEventListener('change', () => scegliCategoria(c));
+      t.querySelector('input').addEventListener('change', () => { scegliCategoria(c); programmaConsigli(); });
       box.append(t);
     }
   }
@@ -133,8 +162,42 @@
     disegnaAllegati();
   }
 
+  // Ctrl+V di un'immagine (es. dopo Win+Maiusc+S): diventa un allegato. Il testo incollato non viene toccato.
+  const due = (n) => String(n).padStart(2, '0');
+  function nomeScreenshot(ext) {
+    const d = new Date();
+    const base = `screenshot-${d.getFullYear()}${due(d.getMonth() + 1)}${due(d.getDate())}-${due(d.getHours())}${due(d.getMinutes())}`;
+    let nome = `${base}.${ext}`;
+    for (let i = 2; files.some((f) => f.name === nome); i++) nome = `${base}-${i}.${ext}`;
+    return nome;
+  }
+  async function inPng(blob) { // formati diversi da PNG/JPEG (es. BMP) convertiti in PNG
+    const img = await createImageBitmap(blob);
+    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+    c.getContext('2d').drawImage(img, 0, 0);
+    return new Promise((ok) => c.toBlob(ok, 'image/png'));
+  }
+  async function incolla(e) {
+    if ($('v-nuova').hidden || !e.clipboardData) return;
+    const immagini = [...e.clipboardData.items].filter((i) => i.kind === 'file' && i.type.startsWith('image/')).map((i) => i.getAsFile()).filter(Boolean);
+    if (!immagini.length) return; // solo testo: comportamento normale
+    e.preventDefault();
+    const nuovi = [];
+    for (const img of immagini) {
+      try {
+        let blob = img; let ext = 'png';
+        if (img.type === 'image/jpeg') ext = 'jpg';
+        else if (img.type !== 'image/png') blob = await inPng(img);
+        nuovi.push(new File([blob], nomeScreenshot(ext), { type: ext === 'jpg' ? 'image/jpeg' : 'image/png' }));
+      } catch { errore('errore-form', 'Non sono riuscito a leggere l\'immagine incollata: salvala in un file e allegala con «scegli file».'); }
+    }
+    if (nuovi.length) aggiungiFile(nuovi);
+  }
+
   function inizializzaForm() {
+    document.addEventListener('paste', incolla);
     $('descrizione').addEventListener('input', aggiornaConta);
+    $('descrizione').addEventListener('input', programmaConsigli);
     document.querySelectorAll('.ex button').forEach((b) => b.addEventListener('click', () => {
       const t = $('descrizione'); const g = b.dataset.g;
       if (!t.value.includes(g.trim())) t.value = (t.value && !t.value.endsWith('\n') ? t.value + '\n' : t.value) + g;
@@ -166,7 +229,7 @@
         $('conf-riep').textContent = `Argomento: ${r.categoria}. Ti terremo aggiornato qui, in «Le mie richieste».`;
         const av = $('conf-avviso'); av.hidden = !r.allegatiFalliti;
         av.textContent = r.allegatiFalliti ? `${r.allegatiFalliti} allegato/i non è stato caricato: rispondi alla richiesta e riprova, oppure chiamaci.` : '';
-        $('form').reset(); files = []; disegnaAllegati(); aggiornaConta();
+        $('form').reset(); files = []; disegnaAllegati(); aggiornaConta(); $('consigli').hidden = true; $('consigli').replaceChildren();
         $('scelta').hidden = true; $('scegli-prima').hidden = false; $('blocco-form').style.removeProperty('--c');
         $('descrizione').placeholder = 'Descrivi il problema con parole tue.';
         if (tel) $('telefono').value = tel;
@@ -179,7 +242,7 @@
   // ---------- elenco ----------
   const CLS = { 'In attesa': 'st-attesa', 'In lavorazione': 'st-lav', 'In sospeso': 'st-sosp', Risolta: 'st-ris', Chiusa: 'st-chiu' };
   const SPIEGA = {
-    'In attesa': 'Abbiamo ricevuto la richiesta: un tecnico la prenderà in carico a breve.',
+    'In attesa': 'Abbiamo ricevuto la tua richiesta, a breve la prenderemo in carico.',
     'In lavorazione': 'Un tecnico sta lavorando alla tua richiesta.',
     'In sospeso': 'La richiesta è ferma in attesa di qualcosa (per esempio una tua risposta o un ricambio).',
     Risolta: 'Il problema risulta risolto. Se non è così, scrivi un messaggio qui sotto.',
@@ -212,8 +275,47 @@
       $('d-timeline').replaceChildren(...d.timeline.map((t) => el('li', {}, el('time', { textContent: dataOra(t.data) }), t.testo)));
       $('d-nessuno').hidden = d.timeline.length > 0;
       $('form-msg').hidden = d.chiusa; $('form-msg').dataset.id = d.id;
+      mostraEsito(d);
       errore('errore-msg', '');
     } catch (e) { location.hash = '#richieste'; }
+  }
+
+  // ---------- conferma della soluzione (pulsanti «Risolto, grazie» / «Non è risolto, riapri», anche dalla mail)
+  const azioneUrl = () => new URLSearchParams(location.search).get('azione');
+  let esitoScelto = null;
+  function chiediConferma(esito) {
+    esitoScelto = esito;
+    $('esito-domanda').textContent = esito === 'risolto'
+      ? 'Confermi che il problema è risolto? La richiesta verrà chiusa.'
+      : 'Confermi che il problema NON è risolto? La richiesta tornerà al tecnico.';
+    $('esito-ok').textContent = esito === 'risolto' ? 'Sì, è risolto' : 'Sì, riapri la richiesta';
+    $('esito-scelta').hidden = true; $('esito-conferma').hidden = false;
+    $('esito-ok').focus();
+  }
+  function mostraEsito(d) {
+    const box = $('esito'); errore('errore-esito', '');
+    box.dataset.id = d.id;
+    box.hidden = d.stato !== 'Risolta';
+    $('esito-domanda').textContent = 'La richiesta risulta risolta. È tutto a posto?';
+    $('esito-scelta').hidden = false; $('esito-conferma').hidden = true; esitoScelto = null;
+    const a = azioneUrl();
+    if (a === 'risolto' || a === 'riapri') {
+      history.replaceState(null, '', location.pathname + location.hash); // l'azione dalla mail si usa una sola volta
+      if (d.stato === 'Risolta') chiediConferma(a);
+      else $('d-stato-testo').textContent = 'Questa richiesta non è più in attesa di conferma (stato: ' + d.stato + ').';
+    }
+  }
+  function inizializzaEsito() {
+    document.querySelectorAll('#esito-scelta button').forEach((b) => b.addEventListener('click', () => chiediConferma(b.dataset.esito)));
+    $('esito-annulla').addEventListener('click', () => { $('esito-scelta').hidden = false; $('esito-conferma').hidden = true; $('esito-domanda').textContent = 'La richiesta risulta risolta. È tutto a posto?'; });
+    $('esito-ok').addEventListener('click', async () => {
+      const b = $('esito-ok'); if (b.disabled || !esitoScelto) return;
+      b.disabled = true;
+      try {
+        await api(`/richieste/${$('esito').dataset.id}/esito`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ esito: esitoScelto }) });
+        await caricaDettaglio($('esito').dataset.id);
+      } catch (e) { errore('errore-esito', e.message); } finally { b.disabled = false; }
+    });
   }
 
   async function caricaFaq() {
@@ -249,6 +351,11 @@
     $('aiuto-all').textContent = `Fino a ${me.limiti.maxFiles} file, ${Math.round(me.limiti.maxFileBytes / 1048576)} MB ciascuno (immagini, PDF, Word, Excel, testo, zip, e-mail).`;
     try { $('telefono').value = localStorage.getItem('tel') || ''; } catch { /* ignorato */ }
     if (/\/(errore|non-consentito)$/.test(location.pathname)) history.replaceState(null, '', BASE + '/');
+    inizializzaEsito();
+    try { // ritorno dal login: riapre la richiesta (e l'eventuale azione) arrivata dalla mail
+      const dopo = sessionStorage.getItem('dopoLogin'); sessionStorage.removeItem('dopoLogin');
+      if (dopo && !location.hash) history.replaceState(null, '', BASE + '/' + dopo);
+    } catch { /* ignorato */ }
     window.addEventListener('hashchange', () => route().catch((e) => console.warn(e.message)));
     route().catch((e) => console.warn(e.message));
   }

@@ -94,6 +94,7 @@
                 <label for="descrizione">Cosa è successo? <span>(più dettagli dai, più in fretta risolviamo)</span></label>
                 <textarea id="descrizione" name="descrizione" rows="5" maxlength="4000" aria-describedby="conta" placeholder="Descrivi il problema con parole tue."></textarea>
                 <p class="hint" id="conta">Scrivi almeno 15 caratteri.</p>
+                <div id="consigli" class="consigli" aria-live="polite" hidden></div>
                 <div class="ex">Non sai cosa scrivere? Rispondi a:
                   <button type="button" data-g="Da quando succede: ">Da quando succede?</button>
                   <button type="button" data-g="Cosa stavi facendo: ">Cosa stavi facendo?</button>
@@ -112,10 +113,10 @@
                 <input id="allegati" class="vh" type="file" multiple accept=".png,.jpg,.jpeg,.pdf,.docx,.xlsx,.txt,.zip,.msg,.eml" aria-describedby="aiuto-all">
                 <label class="drop" id="drop" for="allegati">
                   <svg aria-hidden="true"><use href="#up"/></svg>
-                  <span><b>Hai uno screenshot dell'errore?</b>Trascinalo qui o clicca per scegliere un file (facoltativo)</span>
+                  <span><b>Hai uno screenshot dell'errore?</b>Premi Win+Maiusc+S, seleziona l'errore, poi premi Ctrl+V qui.<small class="drop-alt">Oppure trascina un file qui o clicca per sceglierlo (facoltativo).</small></span>
                 </label>
                 <p class="hint" id="aiuto-all">Fino a 5 file, 10 MB ciascuno (immagini, PDF, Word, Excel, testo, zip, e-mail).</p>
-                <ul id="lista-all" class="allegati"></ul>
+                <ul id="lista-all" class="allegati" aria-live="polite"></ul>
               </div>
             </div>
             <h3 class="s nomt mt"><i>3</i>Invia</h3>
@@ -159,6 +160,18 @@
         <h2 id="d-titolo" class="titolo"></h2>
         <p class="sub"><span id="d-numero"></span> · <span id="d-stato" class="stato"></span> · aperta il <span id="d-data"></span></p>
         <p class="guida" id="d-stato-testo"></p>
+        <div id="esito" class="esito" hidden>
+          <p class="esito-domanda" id="esito-domanda">La richiesta risulta risolta. È tutto a posto?</p>
+          <p class="esito-azioni" id="esito-scelta">
+            <button type="button" class="send" data-esito="risolto">Risolto, grazie</button>
+            <button type="button" class="send sec" data-esito="riapri">Non è risolto, riapri</button>
+          </p>
+          <p class="esito-azioni" id="esito-conferma" hidden>
+            <button type="button" class="send" id="esito-ok"></button>
+            <button type="button" class="send sec" id="esito-annulla">Annulla</button>
+          </p>
+          <p id="errore-esito" class="errore" role="alert" hidden></p>
+        </div>
         <p id="d-desc" class="testo"></p>
         <h3>Aggiornamenti</h3>
         <ol id="d-timeline" class="timeline"></ol>

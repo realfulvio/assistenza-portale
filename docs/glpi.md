@@ -48,15 +48,19 @@ Gli utenti già presenti in GLPI (per esempio i tecnici) vengono riconosciuti pe
 
 Crea (o scegli) le categorie ITIL in *Configurazione > Menu a discesa > Categorie ITIL* e scrivi i loro id nel campo `glpiId` di `config/categorie.json`. L'id si vede nell'indirizzo della pagina della categoria (`...itilcategory.form.php?id=12`).
 
-## 6. Assegnazione automatica al gruppo tecnico
+## 6. Ticket «Nuova» o assegnati subito al gruppo tecnico
 
-Due possibilità:
-- **Regola GLPI** (consigliata): *Amministrazione > Regole > Regole aziendali per i ticket*: alla creazione, assegna il gruppo tecnico.
-- **Dal portale**: indica l'id del gruppo in `.env` con `GLPI_GROUP_ID`.
+Scegli come devono nascere i ticket del portale:
+
+- **«Nuova», senza assegnatario** (consigliato: i tecnici li vedono tra le chiamate in arrivo e li prendono in carico; il dipendente vede «In attesa», poi «In lavorazione»):
+  - lascia vuoto `GLPI_GROUP_ID` in `.env`;
+  - in GLPI controlla che nessuna **regola aziendale per i ticket** assegni un gruppo alla creazione (*Amministrazione > Regole > Regole aziendali per i ticket*) e che l'**assegnazione automatica** dell'entità sia su «No» (*Amministrazione > Entità > (entità) > Assistenza*: le categorie ITIL con un gruppo tecnico, insieme all'assegnazione automatica, assegnano il gruppo anche senza regole);
+  - il profilo dei tecnici deve poter vedere i ticket nuovi e non assegnati (diritti dei ticket: «vedere tutti» e «vedere i nuovi ticket»).
+- **Assegnati subito**: indica l'id del gruppo in `GLPI_GROUP_ID`, oppure usa una regola GLPI. Il ticket nasce «In lavorazione (assegnato)».
 
 ## 7. Notifiche, profilo «Tecnico Ticket», login Microsoft in GLPI
 
-- Notifiche e modello di mail: [notifiche-mail.md](notifiche-mail.md)
+- Notifiche e modello di mail: [notifiche-mail.md](notifiche-mail.md) (con i ticket «Nuova» aggiungi il gruppo tecnico come destinatario fisso della «Nuova chiamata»)
 - Profilo semplificato per i tecnici e login Microsoft in GLPI: [sso-glpi.md](sso-glpi.md)
 
 ## Fuso orario

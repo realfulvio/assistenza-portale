@@ -34,6 +34,8 @@ const config = {
   sessionSecret: e.SESSION_SECRET || '',
   sessionHours: num(e.SESSION_HOURS, 8),
   hsts: e.HSTS === '1',
+  // nome del parametro dell'indirizzo con il nome del PC (es. ...?pc=NOMEPC); vuoto = funzione disattivata
+  pcParam: e.PC_PARAM ?? 'pc',
 
   // Accesso: OpenID Connect generico (es. Microsoft Entra ID)
   oidc: {

@@ -1,0 +1,219 @@
+[
+  {
+    "categoria": "computer",
+    "parole": [
+      "lento",
+      "lentissimo",
+      "bloccato",
+      "si blocca",
+      "impallato",
+      "non risponde"
+    ],
+    "titolo": "Il computer è lento o bloccato",
+    "passi": [
+      "Salva il lavoro e chiudi i programmi che non usi.",
+      "Riavvia il computer da Start > Arresta > Riavvia (non basta spegnere lo schermo).",
+      "Aspetta qualche minuto dopo l'accensione prima di aprire molti programmi."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "non si accende",
+      "schermo nero",
+      "monitor",
+      "non parte",
+      "non si avvia"
+    ],
+    "titolo": "Il computer o lo schermo non si accende",
+    "passi": [
+      "Controlla che la spina e la presa multipla siano accese.",
+      "Controlla il pulsante di accensione del monitor e il cavo video.",
+      "Tieni premuto il pulsante del PC per 10 secondi, poi riaccendilo."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "non stampa",
+      "stampante",
+      "offline",
+      "stampa",
+      "coda di stampa"
+    ],
+    "titolo": "La stampante non stampa",
+    "passi": [
+      "Spegni la stampante, aspetta 30 secondi e riaccendila.",
+      "Controlla che ci siano carta e toner e che non ci siano messaggi sul display.",
+      "Riprova a stampare da un altro programma (per esempio il Blocco note)."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "inceppat",
+      "incastrat",
+      "carta",
+      "toner",
+      "scanner",
+      "scansione",
+      "scansion"
+    ],
+    "titolo": "Carta incastrata, toner o scanner",
+    "passi": [
+      "Apri gli sportelli indicati dalla stampante e togli con delicatezza i fogli incastrati.",
+      "Se il display dice che il toner è finito, sostituiscilo con uno di scorta.",
+      "Per lo scanner controlla di aver scelto la cartella o l'indirizzo mail giusto."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "rete",
+    "parole": [
+      "internet",
+      "non va internet",
+      "connessione",
+      "rete",
+      "wifi",
+      "wi-fi",
+      "cavo",
+      "non naviga"
+    ],
+    "titolo": "Internet o la rete non funzionano",
+    "passi": [
+      "Controlla che il cavo di rete sia inserito bene nel PC e nella presa a muro (o che il Wi-Fi sia attivo).",
+      "Prova ad aprire un altro sito: se uno funziona, il problema è solo di quel sito.",
+      "Riavvia il computer. Se più colleghi hanno lo stesso problema, apri una sola richiesta."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "rete",
+    "parole": [
+      "cartella di rete",
+      "cartella condivisa",
+      "unita di rete",
+      "accesso negato",
+      "percorso"
+    ],
+    "titolo": "Non apro una cartella di rete",
+    "passi": [
+      "Riavvia il computer e riprova.",
+      "Se compare «accesso negato», scrivi nella richiesta il percorso esatto della cartella."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "outlook",
+      "posta",
+      "mail",
+      "email",
+      "e-mail",
+      "non ricevo",
+      "non invio"
+    ],
+    "titolo": "Outlook o la posta non funzionano",
+    "passi": [
+      "Chiudi Outlook e riaprilo.",
+      "Prova la posta dal browser su outlook.office.com: se lì funziona, il problema è solo nel PC.",
+      "Controlla di essere connesso a internet."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "teams",
+      "microfono",
+      "webcam",
+      "videocamera",
+      "audio",
+      "non sento",
+      "non mi sentono",
+      "riunione"
+    ],
+    "titolo": "Teams: audio o video non vanno",
+    "passi": [
+      "In Teams apri Impostazioni > Dispositivi e scegli il microfono, gli altoparlanti e la videocamera giusti.",
+      "Chiudi gli altri programmi che usano la webcam.",
+      "Esci da Teams (anche dall'icona vicino all'orologio) e riaprilo."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "password",
+    "parole": [
+      "password",
+      "dimenticat",
+      "scadut",
+      "bloccat",
+      "account",
+      "non riesco ad accedere",
+      "credenziali"
+    ],
+    "titolo": "Password dimenticata o account bloccato",
+    "passi": [
+      "Per Microsoft 365 usa «Password dimenticata?» nella pagina di accesso.",
+      "Controlla che il blocco maiuscole (Caps Lock) sia spento.",
+      "Dopo troppi tentativi sbagliati aspetta 15 minuti prima di riprovare."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "gestionali",
+    "parole": [
+      "programma",
+      "gestionale",
+      "protocollo",
+      "atti",
+      "contabilita",
+      "anagrafe",
+      "non si apre",
+      "errore"
+    ],
+    "titolo": "Un programma dell'ente non si apre o dà errore",
+    "passi": [
+      "Chiudi il programma e riaprilo.",
+      "Riavvia il computer.",
+      "Se compare un messaggio di errore, fai uno screenshot (Win+Maiusc+S) e incollalo qui sotto con Ctrl+V."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "altro",
+    "parole": [
+      "installare",
+      "installazione",
+      "nuovo programma",
+      "software"
+    ],
+    "titolo": "Devi installare un programma",
+    "passi": [
+      "Non installare nulla da solo: scrivi qui quale programma ti serve e perché.",
+      "Indica se serve solo a te o a tutto l'ufficio."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "altro",
+    "parole": [
+      "mail sospetta",
+      "phishing",
+      "truffa",
+      "link sospetto",
+      "virus",
+      "allegato sospetto"
+    ],
+    "titolo": "Hai ricevuto una mail sospetta",
+    "passi": [
+      "Non cliccare link né aprire allegati, non rispondere.",
+      "Inoltrala all'assistenza e cancellala."
+    ],
+    "link": "#faq"
+  }
+]

@@ -1,5 +1,6 @@
 // GLPI finto in memoria: usato dalla modalita' DEMO (DEMO=1) e dai test automatici (GLPI_MOCK=1).
 // Non salva nulla su disco: al riavvio i dati tornano quelli di esempio.
+const { contenutoTicket } = require('./contenuto');
 let seq = 100;
 let uid = 1;
 const utenti = new Map();
@@ -15,9 +16,9 @@ const ora = (minutiFa = 0) => fmt(new Date(Date.now() - minutiFa * 60000));
 
 const api = {
   async risolviRichiedente({ email }) { if (!utenti.has(email)) utenti.set(email, uid++); return utenti.get(email); },
-  async creaTicket({ userId, categoria, descrizione }) {
+  async creaTicket({ userId, categoria, descrizione, telefono, reperibilita, pc, ip, ua }) {
     const id = ++seq;
-    tickets.set(id, { id, userId, categoria: categoria.id, titolo: `[${categoria.nome}] ${descrizione.replace(/\s+/g, ' ').slice(0, 60)}`, descrizione, st: 1, aperta: ora(), aggiornata: ora(), tl: [], files: [] });
+    tickets.set(id, { id, userId, categoria: categoria.id, contenuto: contenutoTicket({ descrizione, telefono, reperibilita, pc, ip, ua }), titolo: `[${categoria.nome}] ${descrizione.replace(/\s+/g, ' ').slice(0, 60)}`, descrizione, st: 1, aperta: ora(), aggiornata: ora(), tl: [], files: [] });
     return id;
   },
   async allega(id, f) { tickets.get(id).files.push(f.originalname); },
@@ -32,6 +33,15 @@ const api = {
     return { id, titolo: t.titolo, aperta: t.aperta, aggiornata: t.aggiornata, stato: nomiStato[t.st], chiusa: t.st >= 5, descrizione: t.descrizione, timeline: t.tl };
   },
   async aggiungiMessaggio(userId, id, nome, testo) { const t = tickets.get(id); t.tl.push({ data: ora(), testo: `${nome} (dal portale): ${testo}` }); t.aggiornata = ora(); },
+  async esitoSoluzione(userId, id, nome, esito) {
+    const t = tickets.get(id);
+    if (!t || t.userId !== userId) return null;
+    if (t.st !== 5) return 'stato';
+    t.st = esito === 'risolto' ? 6 : 2;
+    t.tl.push({ data: ora(), testo: `${nome} (dal portale): ` + (esito === 'risolto' ? 'Il richiedente conferma che il problema è risolto.' : 'L\'utente segnala che il problema non è risolto.') });
+    t.aggiornata = ora();
+    return 'ok';
+  },
   async ticketDi(userId, id) { const t = tickets.get(id); return t && t.userId === userId ? t : null; },
   async killSession() {},
   _tickets: tickets

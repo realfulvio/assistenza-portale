@@ -40,9 +40,16 @@
         <div style="font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#00732f;font-weight:bold;margin-bottom:6px">Soluzione</div>
         <div style="font-size:15px;line-height:1.5">##ticket.solution.description##</div>
       </div>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:14px 20px 0 20px">
+      <div style="font-size:16px;font-weight:bold;margin-bottom:10px;color:#191919">Il problema è risolto?</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 8px 0"><tr><td bgcolor="{{COLORE}}" style="background:{{COLORE}};border-radius:4px;border-bottom:4px solid {{COLORE_BARRA}}"><a href="{{URL_PORTALE}}?azione=risolto#richiesta/##ticket.id##" style="display:inline-block;padding:14px 26px;font-size:17px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Segoe UI',Arial,Helvetica,sans-serif">Risolto, grazie</a></td></tr></table>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 8px 0"><tr><td bgcolor="#ffffff" style="background:#ffffff;border-radius:4px;border:2px solid {{COLORE}};border-bottom:4px solid {{COLORE_BARRA}}"><a href="{{URL_PORTALE}}?azione=riapri#richiesta/##ticket.id##" style="display:inline-block;padding:14px 26px;font-size:17px;font-weight:bold;color:{{COLORE}};text-decoration:none;font-family:'Segoe UI',Arial,Helvetica,sans-serif">Non è risolto, riapri</a></td></tr></table>
+      <div style="font-size:13px;color:#455a64;margin-top:2px">Si apre il portale: ti chiederemo una conferma con un clic.</div>
     </td></tr>##ENDIFticket.storestatus##
-    <tr><td style="background:#ffffff;padding:22px 20px 8px 20px">
-      <a href="{{URL_PORTALE}}/#richiesta/##ticket.id##" style="display:inline-block;background:{{COLORE}};color:#ffffff;text-decoration:none;font-weight:bold;font-size:20px;padding:18px 44px;border-radius:4px">Rispondi dal portale</a>
+    <tr><td style="background:#ffffff;padding:22px 20px 4px 20px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 8px 0"><tr><td bgcolor="{{COLORE}}" style="background:{{COLORE}};border-radius:4px;border-bottom:4px solid {{COLORE_BARRA}}"><a href="{{URL_PORTALE}}#richiesta/##ticket.id##" style="display:inline-block;padding:18px 44px;font-size:20px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Segoe UI',Arial,Helvetica,sans-serif">Apri la richiesta</a></td></tr></table>
+      <div style="font-size:14px;color:#455a64;margin-top:4px">Per rispondere o aggiungere informazioni usa il portale.</div>
     </td></tr>
     <tr><td style="background:#ffffff;padding:6px 20px 22px 20px;font-size:12px;color:#455a64">Per i tecnici: <a href="##ticket.url##" style="color:{{COLORE}}">apri in GLPI</a></td></tr>
     <tr><td style="background:#ffffff;padding:0 20px 22px 20px;font-size:14px;color:#191919;border-top:1px solid #e3e8ec">

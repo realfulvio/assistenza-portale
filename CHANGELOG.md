@@ -2,6 +2,18 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [1.1.0] - 2026-10-13
+
+### Aggiunto
+- Nome del PC dall'indirizzo (`?pc=NOMEPC`, parametro configurabile con `PC_PARAM`), IP (da `X-Forwarded-For` del reverse proxy) e browser/sistema in coda al ticket; script PowerShell per l'icona sul desktop via GPO (`deploy/gpo/`).
+- Incolla screenshot con Ctrl+V negli allegati (nome automatico, miniatura, limiti invariati).
+- Consigli prima di inviare (`content/suggerimenti.json`), al massimo 2, senza bloccare l'invio.
+- Mail: pulsante «Apri la richiesta»; nella mail «Chiamata risolta» pulsanti «Risolto, grazie» / «Non è risolto, riapri» con conferma nel portale (approvazione/rifiuto della soluzione in GLPI).
+- `MAX_TICKETS_PER_HOUR` già configurabile; documentata la scelta tra ticket «Nuova» e assegnati subito (`GLPI_GROUP_ID`).
+
+### Modificato
+- Testo dello stato «In attesa»: «Abbiamo ricevuto la tua richiesta, a breve la prenderemo in carico.»
+
 ## [1.0.0] - 2026-10-13
 
 Prima versione pubblica.

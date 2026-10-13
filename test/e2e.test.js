@@ -1,5 +1,6 @@
 // Test end-to-end in modalita' DEMO (GLPI finto e accesso simulato): npm test
 process.env.DEMO = '1';
+process.env.MAX_TICKETS_PER_HOUR = '30';
 process.env.BASE_PATH = '/assistenza';
 const test = require('node:test');
 const assert = require('node:assert');
@@ -85,13 +86,6 @@ test('messaggio su richiesta propria', async () => {
   assert.equal((await (await s.rq('/api/richieste/' + id)).json()).timeline.length, 1);
 });
 
-test('rate limit sull\'invio', async () => {
-  const s = await sessione(); const me = await login(s);
-  let ultimo;
-  for (let i = 0; i < 12; i++) ultimo = (await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf }, body: form(ok) })).status;
-  assert.equal(ultimo, 429);
-});
-
 test('header di sicurezza e cookie', async () => {
   const s = await sessione();
   const r = await s.rq('/');
@@ -118,3 +112,57 @@ test("modalita' demo: richieste di esempio visibili", async () => {
   assert.ok(lista.length >= 3);
   assert.ok(lista.some((t) => t.stato === 'Risolta'));
 });
+
+test('nome PC da ?pc=, IP da X-Forwarded-For (ultimo valore) e browser nel ticket', async () => {
+  const s = await sessione();
+  await s.rq('/?pc=PC-UFF-01');
+  const me = await login(s);
+  const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0';
+  const r = await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf, 'user-agent': ua, 'x-forwarded-for': '6.6.6.6, 10.20.30.40' }, body: form(ok) });
+  const { id } = await r.json();
+  const c = glpi._tickets.get(id).contenuto;
+  assert.match(c, /PC: PC-UFF-01 · IP: 10\.20\.30\.40 · Browser: Edge 141 su Windows 10\/11/);
+  assert.ok(!c.includes('6.6.6.6'));
+});
+
+test('nome PC non valido ignorato', async () => {
+  const s = await sessione();
+  await s.rq('/?pc=' + encodeURIComponent('<script>x</script>'));
+  const me = await login(s);
+  const { id } = await (await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf }, body: form(ok) })).json();
+  assert.ok(!glpi._tickets.get(id).contenuto.includes('PC:'));
+});
+
+test('esito della soluzione: risolto chiude, riapri rimette in lavorazione, solo se Risolta', async () => {
+  const s = await sessione(); const me = await login(s);
+  const h = { 'x-csrf-token': me.csrf, 'content-type': 'application/json' };
+  const nuovo = async () => (await (await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf }, body: form(ok) })).json()).id;
+  const esito = (id, e) => s.rq(`/api/richieste/${id}/esito`, { method: 'POST', headers: h, body: JSON.stringify({ esito: e }) });
+  const a = await nuovo();
+  assert.equal((await esito(a, 'risolto')).status, 409);
+  glpi._tickets.get(a).st = 5;
+  assert.equal((await esito(a, 'boh')).status, 400);
+  assert.equal((await esito(a, 'risolto')).status, 200);
+  assert.equal((await (await s.rq('/api/richieste/' + a)).json()).stato, 'Chiusa');
+  const b = await nuovo(); glpi._tickets.get(b).st = 5;
+  assert.equal((await esito(b, 'riapri')).status, 200);
+  assert.equal((await (await s.rq('/api/richieste/' + b)).json()).stato, 'In lavorazione');
+  const altro = await glpi.risolviRichiedente({ email: 'altro3@esempio.it' });
+  glpi._tickets.get(b).st = 5;
+  assert.equal(await glpi.esitoSoluzione(altro, b, 'X', 'risolto'), null);
+});
+
+test('consigli prima di inviare disponibili', async () => {
+  const s = await sessione(); await login(s);
+  const c = await (await s.rq('/api/suggerimenti')).json();
+  assert.ok(Array.isArray(c) && c.length >= 7);
+});
+
+// Ultimo: consuma il limite di invii dell'utente di prova
+test('rate limit sull\'invio', async () => {
+  const s = await sessione(); const me = await login(s);
+  let ultimo;
+  for (let i = 0; i < 35; i++) ultimo = (await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf }, body: form(ok) })).status;
+  assert.equal(ultimo, 429);
+});
+

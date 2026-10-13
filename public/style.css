@@ -215,6 +215,24 @@ body{font-size:18px}
 .tile input:checked+.card .go{font-size:0}
 .tile input:checked+.card .go:before{font-size:13px}
 
+/* incolla screenshot (Ctrl+V) */
+.drop .drop-alt{display:block;font-size:14px;color:var(--m);margin-top:2px}
+
+/* consigli prima di inviare */
+.consigli{margin-top:12px}
+.consiglio{background:#fff4ce;border-left:5px solid #b58900;padding:12px 16px;margin-bottom:10px}
+.consiglio .pre{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#6b4e00}
+.consiglio .tit{font-weight:700;font-size:17px;margin:2px 0 4px}
+.consiglio ol{margin:0;padding-left:22px}
+.consiglio a{color:var(--p);font-weight:600;text-decoration:underline}
+.consigli .ancora{font-weight:700;color:var(--pd)}
+
+/* conferma della soluzione (Risolto / Riapri) */
+.esito{background:#eaf3f8;border-left:5px solid var(--p);padding:14px 16px;margin:0 0 18px}
+.esito-domanda{font-weight:700;font-size:18px;margin-bottom:10px}
+.esito-azioni{display:flex;gap:10px;flex-wrap:wrap}
+.esito-azioni .send{margin:0}
+
 /* credito dell'autore (modificabile in config/ente.json) */
 .credito-alto{margin-left:auto;align-self:flex-start;font-size:12px;color:#fff;opacity:.85;text-decoration:underline}
 .credito-alto:hover{opacity:1}

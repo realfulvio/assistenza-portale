@@ -52,6 +52,19 @@ Le icone sono simboli SVG in `public/index.html` (blocco `<svg class="sprite">`)
 
 Elenco di coppie `{"d": "domanda", "r": "risposta"}`. Compaiono nella pagina «Guide».
 
+## Consigli prima di inviare – `content/suggerimenti.json`
+
+Mentre il dipendente scrive la descrizione (dopo una breve pausa e almeno 8 caratteri) il portale mostra al massimo 2 riquadri «Prima di inviare, prova così» se il testo contiene una delle parole chiave. Non bloccano mai l'invio. Ogni voce:
+
+```json
+{ "categoria": "stampante", "parole": ["non stampa", "offline"], "titolo": "La stampante non stampa",
+  "passi": ["Spegni e riaccendi la stampante.", "Controlla carta e toner."], "link": "#faq" }
+```
+
+- `parole`: confronto senza maiuscole e accenti; vale anche una parte di parola (es. `inceppat`).
+- Le voci della categoria scelta hanno la precedenza.
+- Il file viene riletto a ogni richiesta: non serve riavviare.
+
 ## Testi delle mail
 
 Vedi [notifiche-mail.md](notifiche-mail.md): il modello usa gli stessi dati di `config/ente.json`.

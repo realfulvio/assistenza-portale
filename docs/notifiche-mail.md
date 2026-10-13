@@ -22,6 +22,8 @@ Ricorda di attivare il **cron** di GLPI (su Debian 13 il pacchetto `cron` potreb
 
 Consigliate (le altre si possono disattivare per non riempire le caselle): **Nuova chiamata**, **Aggiornamento** (comprende l'assegnazione), **Chiamata risolta**, con destinatari *Richiedente* e *Gruppo assegnato*.
 
+Se i ticket nascono «Nuova» senza assegnatario (vedi [glpi.md](glpi.md), sezione 6), il gruppo assegnato alla creazione non c'è: aggiungi alla notifica **Nuova chiamata** il destinatario fisso **Gruppo: (il tuo gruppo tecnico)**, così i tecnici ricevono la mail. GLPI non invia due volte la stessa mail allo stesso indirizzo nello stesso evento.
+
 ## 3. Modello HTML
 
 1. Personalizza `config/ente.json` e imposta `PUBLIC_URL` in `.env`.
@@ -29,7 +31,8 @@ Consigliate (le altre si possono disattivare per non riempire le caselle): **Nuo
    ```bash
    npm run template-mail
    ```
-   Crea `deploy/glpi/mail-ticket.html` e `deploy/glpi/mail-ticket.txt` (riquadro «Non rispondere», pulsante «Rispondi dal portale», colori dell'ente).
+   Crea `deploy/glpi/mail-ticket.html` e `deploy/glpi/mail-ticket.txt` con: riquadro «Non rispondere», pulsante grande **«Apri la richiesta»** (porta al portale, nella pagina del ticket), colori dell'ente e, nella mail **«Chiamata risolta»**, i pulsanti **«Risolto, grazie»** e **«Non è risolto, riapri»**.
+   I due pulsanti aprono il portale con `?azione=risolto` o `?azione=riapri`: dopo l'accesso il portale chiede una conferma con un clic e poi usa il meccanismo di GLPI per approvare o rifiutare la soluzione (un followup con `add_close` chiude il ticket; con `add_reopen` lo riapre «In lavorazione» con il messaggio «L'utente segnala che il problema non è risolto»). Funziona solo per il richiedente e solo se il ticket è «Risolto». Verifica sul tuo GLPI che l'utente di servizio del portale possa farlo (provato dall'autore solo in modalità demo).
 3. In GLPI: *Configurazione > Notifiche > Modelli di notifica > Tickets* > traduzione predefinita: incolla il testo nel campo testo e l'HTML nel campo HTML (passa alla vista codice dell'editor). Oggetto consigliato: `##ticket.action## ##ticket.title##`.
 
 > Nota GLPI 11: se le mail mostrano codice HTML come testo («`<div>...`»), il modello nel database è salvato con i caratteri già convertiti (`&lt;div&gt;`, formato di versioni precedenti). Va reinserito HTML «vero».

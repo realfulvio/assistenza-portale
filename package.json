@@ -1,6 +1,6 @@
 {
   "name": "assistenza-portale",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Portale web per aprire e seguire richieste di assistenza informatica su GLPI, con accesso OpenID Connect (es. Microsoft Entra ID). Pensato per Comuni ed Enti pubblici.",
   "author": "Luca Accorsi (https://github.com/realfulvio)",
   "license": "EUPL-1.2",
