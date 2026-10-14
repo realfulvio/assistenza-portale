@@ -14,7 +14,7 @@ La **risposta** è il messaggio scritto nella cronologia durante la gestione. In
 
 Una risposta pubblica è il modo per aggiornare il richiedente: presa in carico, richiesta di un dato, esito parziale. Il portale mostra al dipendente solo le risposte pubbliche. Un messaggio che il dipendente scrive dal portale arriva in GLPI come risposta pubblica.
 
-Una risposta non chiude il ticket. Sulla 10.0.5 i manutentori di GLPI hanno indicato che lo stato di attesa si toglie se risponde il richiedente, e resta se risponde il tecnico ([issue 13583](https://github.com/glpi-project/glpi/issues/13583)). Non ho riverificato quel passaggio sull'interfaccia di GLPI 11: controllalo prima di contarci.
+Una semplice risposta durante la gestione non sostituisce una soluzione o una chiusura. Eventuali cambi di stato associati ai messaggi e ai motivi di sospensione vanno verificati sulla propria installazione: questa guida non li configura.
 
 ## Nota privata
 
@@ -40,9 +40,9 @@ I motivi di sospensione sono una funzione a parte, con promemoria e azioni propr
 
 La **soluzione** è la descrizione di come l'intervento si è concluso. In GLPI 11.0.8 i pulsanti sono «Soluzione» e «Aggiungi una soluzione». Aggiungerla porta il ticket allo stato **Risolto**. Il tipo di soluzione è un dato in più, utile alle statistiche; l'elenco dei tipi dipende dai menu a discesa dell'installazione. La pagina inglese fa esempi (soluzione applicata, soluzione temporanea, informazione fornita): non sono voci obbligatorie.
 
-Il richiedente può approvare o rifiutare la soluzione. Se la rifiuta, il ticket resta aperto finché non c'è un'altra soluzione. Se la approva, o se non risponde, il passaggio a **Chiuso** avviene quando qualcuno lo chiude oppure quando scade il tempo di chiusura automatica dell'entità. Lo descrivono la sezione *Solution approval* e la sezione *Automatic closing* di [Solution](https://help.glpi-project.org/documentation/modules/assistance/tabs/solution.md).
+Il richiedente può approvare o rifiutare la soluzione: l'approvazione conclude il ticket in **Chiuso**, il rifiuto lo riapre. Se non risponde, non presumere la chiusura: dipende dall'automazione effettiva dell'entità, descritta sotto. Vedi [soluzione e approvazione](https://help.glpi-project.org/documentation/modules/assistance/tabs/solution.md) e [ciclo di vita](https://help.glpi-project.org/documentation/modules/assistance/tickets/ticketlifecycle.md).
 
-Il paragrafo iniziale di quella stessa pagina parla di 15 giorni e di un ticket «marked as resolved». Più sotto, la stessa pagina rimanda al campo dell'entità e non fissa un numero. La guida delle entità indica per la chiusura un intervallo da «never» a 365 giorni ([Entities](https://glpi-user-documentation.readthedocs.io/fr/latest/modules/administration/entity/entities.html)). Non usare 15 giorni, né qualunque altro numero, come valore di questa installazione.
+Leggi i tempi configurati nell'entità, compresa l'eventuale eredità. Non usare un numero citato come esempio o default in una pagina esterna come valore generale del progetto: [parametri delle entità GLPI](https://help.glpi-project.org/documentation/modules/administration/entities#assistance).
 
 Dal portale, con la richiesta nello stato «Risolta», il dipendente può confermare o riaprire. La conferma invia una risposta pubblica con la chiusura prevista da GLPI (`add_close`); il rifiuto riapre in lavorazione (`add_reopen`). Vale solo per il richiedente e solo se il ticket è risolto. Il dettaglio, compresi i limiti della prova, è in [notifiche-mail.md](notifiche-mail.md).
 
@@ -50,7 +50,7 @@ Nel portale i pulsanti di conferma compaiono solo sullo stato «Risolta». Il fi
 
 ## Chiuso
 
-**Chiuso** è la conclusione amministrativa, dopo l'accettazione della soluzione oppure per l'automazione configurata sull'entità. In italiano lo stato è «Chiusa». Un tecnico può chiudere a mano solo se il «Ciclo di vita delle chiamate» del suo profilo consente il passaggio. La matrice è in *Amministrazione > Profili*, scheda documentata in inglese come life cycle. Può nascondere lo stato Chiuso: in quel caso il ticket resta Risolto anche se il lavoro è finito. Vedi la [matrice del ciclo di vita](https://help.glpi-project.org/documentation/modules/administration/profiles/lifecyclematrix.md).
+**Chiuso** è la conclusione amministrativa, dopo l'accettazione della soluzione oppure per l'automazione configurata sull'entità. In italiano lo stato è «Chiusa». Un tecnico può chiudere a mano solo se il «Ciclo di vita delle chiamate» del suo profilo consente il passaggio. La matrice è in *Amministrazione > Profili*, scheda documentata in inglese come life cycle. Se il profilo nasconde una transizione, quella scelta non è disponibile al tecnico; ciò non impedisce necessariamente l'accettazione o una diversa automazione autorizzata. Vedi la [matrice del ciclo di vita](https://help.glpi-project.org/documentation/modules/administration/profiles/lifecyclematrix.md).
 
 La chiusura lascia il ticket consultabile. Non è una cancellazione.
 
@@ -58,7 +58,7 @@ La chiusura lascia il ticket consultabile. Non è una cancellazione.
 
 Un ticket che non compare più nell'elenco quotidiano spesso è solo fuori dal filtro. Ricerche salvate, viste predefinite e cruscotti possono mostrare i ticket ancora aperti ed escludere i chiusi. Sparire dall'elenco non significa che sia stato cancellato.
 
-Per rivederlo, cerca con il criterio **Stato** uguale a **Chiuso**, nell'entità giusta. La ricerca non allarga i permessi: restano i diritti del profilo (per esempio solo i propri ticket, quelli del gruppo o tutti) e i confini dell'entità, inclusa o meno la ricorsività. Un tecnico che non vede i ticket di un'altra entità non li ottiene cambiando il criterio di stato.
+Per rivederlo, apri **Assistenza > Ticket**, rimuovi i filtri incompatibili (per esempio «solo aperti») e cerca con il criterio **Stato = Chiuso** (o «Chiusa» nell'interfaccia), eventualmente per numero o titolo. La ricerca non allarga i permessi: restano i diritti del profilo e i confini dell'entità, inclusa o meno la ricorsività. Un tecnico che non vede i ticket di un'altra entità non li ottiene cambiando il criterio di stato.
 
 Lo stato Chiuso e l'eliminazione sono due operazioni diverse. Eliminare usa un altro diritto e toglie il ticket dagli elenchi ordinari. L'eliminazione automatica dei chiusi è un'altra impostazione ancora, descritta sotto.
 
@@ -69,12 +69,14 @@ Sono due campi distinti dell'entità, nella scheda Assistenza, e due operazioni 
 - «Chiusura automatica delle chiamate risolte dopo», eseguita da `closeticket`: passa i ticket **risolti** a **chiusi** dopo il ritardo dell'entità;
 - «Pulizia automatica delle chiamate chiuse dopo», eseguita da `purgeticket`: **cancella** i ticket già chiusi. In inglese il campo è *Automatic purge of closed tickets after*. La pagina [Solution](https://help.glpi-project.org/documentation/modules/assistance/tabs/solution.md) avvisa che la purge elimina i ticket in quello stato. «Pulizia» qui non significa archivio consultabile.
 
-La stessa scheda, se l'operazione è spenta, mostra «L'azione di chiusura chiamata è disabilitata» oppure «L'azione di pulizia delle chiamate è disabilitata». Il percorso inglese della documentazione è *Administration > Entity > (entità) > Assistance*. Il valore può essere ereditato dall'entità padre: conta il valore effettivo sull'entità del ticket, non la sola scritta «eredità» letta senza aprire il padre. Un'entità figlia può anche avere un valore proprio.
+La stessa scheda, se l'operazione è spenta, mostra «L'azione di chiusura chiamata è disabilitata» oppure «L'azione di pulizia delle chiamate è disabilitata». Il percorso italiano è **Amministrazione > Entità > entità interessata > Assistenza**. Il valore può essere ereditato dall'entità padre: conta il valore effettivo sull'entità del ticket, non la sola scritta «eredità» letta senza aprire il padre. Un'entità figlia può anche avere un valore proprio.
 
-Se la chiusura automatica effettiva è **Mai** (la stringa inglese `Never`), i ticket risolti **non** vengono chiusi da soli. Nel codice pubblico di GLPI, `Ticket::cronCloseTicket` chiude i risolti di un'entità solo quando il ritardo effettivo è maggiore o uguale a zero; il valore «mai» non entra in quel ramo. Le notifiche, con lo stesso valore, scrivono «Never» e non annunciano una chiusura fra qualche giorno. Vedi `cronCloseTicket` in [Ticket.php](https://github.com/glpi-project/glpi/blob/main/src/Ticket.php) e il tag `ticket.autoclose` in [NotificationTargetTicket.php](https://github.com/glpi-project/glpi/blob/main/src/NotificationTargetTicket.php). Il catalogo 11.0.8 traduce `Never` con «Mai».
+Se la chiusura automatica effettiva è **Mai** (`Never`), `closeticket` non chiude da solo i ticket risolti: restano possibili l'accettazione e altre azioni consentite/configurate. Nel codice di **GLPI 11.0.8**, `Ticket::cronCloseTicket` elabora l'entità solo quando il ritardo effettivo è maggiore o uguale a zero; «Mai» non entra in quel ramo. Vedi [Ticket.php, tag 11.0.8](https://github.com/glpi-project/glpi/blob/11.0.8/src/Ticket.php) e la [configurazione delle entità](https://help.glpi-project.org/documentation/modules/administration/entities#assistance).
 
 «Immediatamente» non è «Mai». La documentazione delle entità lo descrive come chiusura appena il ticket è risolto, e in quel caso il richiedente può non avere il tempo di approvare. Non è un valore da copiare.
 
 L'operazione deve anche essere attiva. In inglese si controlla in *Setup > Automatic actions*. Nel catalogo italiano di GLPI 11.0.8 il tipo si chiama «Operazione pianificata» (al plurale «Operazioni pianificate») e sta sotto *Configurazione*; i nomi tecnici restano `closeticket` e `purgeticket`. Un ritardo compilato sull'entità non ha effetto se l'operazione è spenta o se il pianificatore di GLPI non la esegue. Modalità GLPI e modalità CLI cambiano solo il modo in cui parte: il criterio resta lo stato Risolto più il ritardo dell'entità.
 
-La purge non chiude i risolti e la chiusura non li cancella. Anche la purge ha un proprio «mai»: con quel valore i chiusi restano nel database. Non ricavare un tempo unico da questa guida e non cambiare i due campi per «allinearli» a un esempio.
+La purge non chiude i risolti e la chiusura non li cancella. Anche la purge ha un proprio «Mai»: con quel valore quell'azione non elimina automaticamente i chiusi; restano possibili eliminazioni esplicite o altre automazioni. Non ricavare un tempo unico da questa guida e non cambiare i due campi per «allinearli» a un esempio.
+
+Per aumentare facoltativamente l'altezza della nuova Risposta su GLPI 11.0.8, vedi [CSS opzionale: applicazione, verifiche e rollback](glpi-css-risposta.md).

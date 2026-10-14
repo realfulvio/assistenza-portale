@@ -2,6 +2,19 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [Unreleased]
+
+### Aggiunto
+
+- Guida alla fiducia della CA interna sui PC Windows in dominio (`docs/https-ca-dominio.md`): distribuzione del solo certificato pubblico, impronta esatta, ambito GPO e Computers, browser e diagnosi su una singola postazione, con limiti delle verifiche espliciti.
+- Guida al flusso dei ticket per i tecnici GLPI (`docs/flusso-ticket-tecnici.md`): Risposta, note private, Attività, stati, ricerca dei ticket chiusi e distinzione tra chiusura automatica ed eliminazione.
+- Esempio CSS opzionale per l'altezza minima della nuova Risposta nei ticket GLPI 11.0.8, con istruzioni per la personalizzazione nativa dell'entità, prove osservate e rollback.
+
+### Modificato
+
+- Guida di creazione della CA: corretti i riferimenti generali ad autofirmati e durata del certificato; rimossa l'indicazione di disabilitare la revoca. Distribuzione e diagnosi client consolidate nella nuova guida di dominio; guida tecnici precedente mantenuta come indice verso il flusso aggiornato.
+- Collegamenti dal README e nuovo indice delle guide. Solo documentazione e personalizzazione opzionale del backend GLPI: codice e versione del portale invariati.
+
 ## [1.1.0] - 2026-10-13
 
 ### Aggiunto

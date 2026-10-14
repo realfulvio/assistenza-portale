@@ -2,11 +2,13 @@
 
 Questa guida spiega come far accettare ai browser dei PC in dominio un sito firmato da una **CA interna**. La creazione della CA e l'installazione in Apache sono in [certificati-ca-interna.md](certificati-ca-interna.md). Qui non si ripetono quei comandi.
 
-Gli esempi usano nomi finti: `portale.ente.example`, `DC=ente,DC=example`, `PC-ESEMPIO`. Sostituisci impronte e percorsi con i tuoi. La sintassi di `gpupdate`, `gpresult` e `certutil -dump` è quella del loro aiuto su Windows; i comandi di controllo non sono stati lanciati su un dominio reale.
+Gli esempi usano nomi finti: `portale.ente.example`, `DC=ente,DC=example`, `PC-ESEMPIO`. Sostituisci impronte e percorsi con i tuoi. Sono documentazione del backend e dei client, senza modifiche al codice del portale.
+
+**Limiti delle verifiche:** su Windows sono stati controllati gli aiuti di `gpupdate`, `gpresult` e `certutil -dump`; quest'ultimo è stato provato su un certificato fittizio, senza installarlo. I blocchi PowerShell sono stati analizzati sintatticamente senza eseguirli. **Invoke-GPUpdate non è stato eseguito** (modulo GroupPolicy assente nella postazione di verifica). Non sono state effettuate prove su un dominio, su GPO o nei browser per questa guida.
 
 ## Certificato pubblico e CA interna
 
-Un certificato emesso da una **CA pubblica** già presente negli archivi dei browser (programma radici di Windows, [Chrome Root Store](https://chromium.googlesource.com/chromium/src/+/main/net/data/ssl/chrome_root_store/faq.md), archivio di Firefox) è accettato senza distribuire quella radice ai PC. Sul server restano il certificato del sito e la catena, come in [apache-reverse-proxy.md](apache-reverse-proxy.md).
+Un certificato emesso da una **CA pubblica** riconosciuta dal browser è normalmente accettato senza distribuire quella radice ai PC, se catena, validità e nome DNS sono corretti. I browser hanno programmi di fiducia propri: la sola presenza di una radice pubblica nell'archivio Windows non garantisce che sia inclusa nel [Chrome Root Store](https://chromium.googlesource.com/chromium/src/+/main/net/data/ssl/chrome_root_store/faq.md). Sul server restano il certificato del sito e la catena, come in [apache-reverse-proxy.md](apache-reverse-proxy.md).
 
 Un certificato emesso da una **CA interna** non è in quegli archivi. Ogni PC deve ricevere il certificato **pubblico della CA radice** e considerarlo attendibile. Il nome della CA, da solo, non basta: due certificati possono avere lo stesso nome e chiavi diverse.
 
@@ -49,7 +51,7 @@ Edge documenta lo stesso principio per le radici installate in locale, dalla ver
 
 ## Firefox
 
-Firefox tiene un proprio archivio e, senza un criterio, ignora le radici di Windows. Il criterio `Certificates` > `ImportEnterpriseRoots` gli fa usare i certificati aggiunti all'archivio del sistema. È disponibile da Firefox 60 e da Firefox ESR 60. Riferimento attuale: [Certificates](https://firefox-admin-docs.mozilla.org/reference/policies/certificates/). Il criterio agisce sulla preferenza `security.enterprise_roots.enabled`; si imposta il criterio, non la preferenza a mano in `about:config`.
+Firefox mantiene un proprio archivio; le versioni correnti su Windows possono già usare per impostazione predefinita le CA aggiunte al sistema. Non presumere quindi che, senza GPO, ignorino sempre le radici Windows: verifica versione e configurazione effettive. Per rendere esplicita e gestita la scelta usa il criterio `Certificates` > `ImportEnterpriseRoots`, disponibile da Firefox 60 / ESR 60. Il criterio abilita la fiducia nelle radici del sistema, ma **non distribuisce il certificato**. Fonti: [supporto CA di Firefox, Mozilla](https://support.mozilla.org/en-US/kb/setting-certificate-authorities-firefox) e [criterio Certificates](https://firefox-admin-docs.mozilla.org/reference/policies/certificates/).
 
 Con i modelli di criterio per computer il valore atteso è:
 
@@ -70,7 +72,7 @@ Un oggetto Criteri di gruppo si collega a un **sito**, a un **dominio** o a una 
 
 Prima di dare per buona la GPO, controlla tutti questi punti:
 
-- il collegamento è abilitato sul contenitore giusto;
+- il collegamento è abilitato sul sito, dominio o sulla OU scelta;
 - la **parte computer** dell'oggetto è abilitata (la CA e la chiave `HKLM` di Firefox stanno lì; la parte utente non le sostituisce);
 - i computer di destinazione hanno i permessi **Lettura** e **Applica criteri di gruppo** sull'oggetto. «Utenti autenticati» li include e comprende anche gli account computer. Se togli quel gruppo e lasci solo gruppi di persone, i PC non applicano la parte computer;
 - un filtro di protezione o un filtro WMI non esclude `PC-ESEMPIO`;
@@ -124,15 +126,20 @@ Poi leggi il riepilogo dei criteri computer:
 gpresult /scope computer /r
 ```
 
+Riferimenti ufficiali per sintassi e opzioni: [gpupdate](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate), [gpresult](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpresult) e [certutil](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil).
+
 Nell'elenco dei criteri applicati deve comparire la GPO della CA. Se è tra quelli non applicati, la motivazione (protezione, filtro WMI, collegamento o oggetto disabilitato) è il passo successivo. I testi sono nella lingua di Windows. Il riepilogo non stampa l'impronta del certificato: quella si controlla a parte.
 
 ```powershell
-Get-ChildItem -Path 'Cert:\LocalMachine\Root' |
-  Where-Object { $_.Thumbprint -eq 'INCOLLA_IMPRONTA_SHA1' } |
-  Format-List Subject, Issuer, Thumbprint, NotBefore, NotAfter
+$improntaAttesa = '<IMPRONTA_SHA1_CA_RADICE_40_CARATTERI_ESADECIMALI>' -replace '\s', ''
+if ($improntaAttesa -notmatch '^[0-9A-Fa-f]{40}$') {
+    throw "Sostituire il placeholder con l'impronta SHA-1 verificata della CA radice."
+}
+$ca = Get-Item -LiteralPath "Cert:\LocalMachine\Root\$improntaAttesa" -ErrorAction Stop
+$ca | Format-List Subject, Issuer, Thumbprint, NotBefore, NotAfter, HasPrivateKey
 ```
 
-Sostituisci `INCOLLA_IMPRONTA_SHA1` con l'hash SHA-1 letto da `certutil -dump`, senza spazi. Il confronto di PowerShell non distingue le maiuscole. Nessuna riga in uscita significa che quella radice non è nell'archivio del computer. Se ne esce una, controlla anche che `NotAfter` sia nel futuro e che il soggetto sia la CA che ti aspetti.
+Sostituisci il placeholder con l'hash SHA-1 **già confrontato con il valore attendibile**, non con una qualunque impronta letta dal file ricevuto. Se la radice manca, il comando genera un errore. Controlla identità, `NotBefore`, `NotAfter` e assenza della chiave privata (`HasPrivateKey = False`). `Thumbprint` è l'impronta SHA-1 di Windows: usarla per identificare il certificato non significa firmare certificati con SHA-1. Vedi [provider certificati PowerShell, Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/about/about_certificate_provider).
 
 Firefox, stessa console:
 
@@ -154,10 +161,10 @@ Sintassi del modulo `GroupPolicy` documentata per Windows Server 2025: [Invoke-G
 
 Prerequisiti, tutti necessari e nessuno da allargare all'intera rete:
 
-- il modulo `GroupPolicy`, installato con gli strumenti di amministrazione remota (RSAT) «Group Policy Management Tools», sul computer da cui lanci il comando;
+- il modulo `GroupPolicy`, installato con gli strumenti di amministrazione remota (RSAT) «Group Policy Management Tools», sul computer da cui lanci il comando; usa Windows PowerShell se necessario per il modulo;
 - un nome che si risolve nel DNS. Formati accettati: `PC-ESEMPIO`, `PC-ESEMPIO.ente.example`, `ente.example\PC-ESEMPIO` o il nome NetBIOS del dominio seguito dal nome del PC;
 - il permesso di creare un'attività pianificata su quella postazione (in pratica un amministratore del PC);
-- il PC acceso e raggiungibile;
+- il PC acceso e raggiungibile, con connettività al dominio per applicare i criteri;
 - sul PC, le regole firewall in ingresso già previste dalla nota del cmdlet: **Remote Scheduled Tasks Management (RPC)**, **Remote Scheduled Tasks Management (RPC-EPMAP)** e **Windows Management Instrumentation (WMI-In)**. I nomi visualizzati possono essere tradotti. Se il cmdlet fallisce, non aprire il firewall in modo generico: esegui `gpupdate` localmente sul PC di prova oppure consenti solo il percorso tra la postazione di amministrazione e `PC-ESEMPIO`.
 
 Il cmdlet non è supportato per Windows XP e precedenti. Non usarlo per un aggiornamento di molti computer.
@@ -171,14 +178,14 @@ Invoke-GPUpdate -Computer 'PC-ESEMPIO.ente.example' -Target Computer -RandomDela
 
 ## Due errori che non sono la stessa cosa
 
-`NET::ERR_CERT_AUTHORITY_INVALID`, in Chrome o Edge, compare quando il certificato del sito non arriva a una radice del Chrome Root Store né a una CA locale considerata da quel browser. Cause abituali: radice interna assente dall'archivio, catena incompleta sul server (vedi il punto 3 di [certificati-ca-interna.md](certificati-ca-interna.md)), nome del sito diverso da `portale.ente.example`. La FAQ del Chrome Root Store collega questo errore ai siti che non risultano validi rispetto all'elenco pubblico o alle impostazioni locali.
+`NET::ERR_CERT_AUTHORITY_INVALID`, in Chrome o Edge, indica una catena non riconosciuta come attendibile dal browser. Controlla la radice interna e la catena servita dal sito (vedi il punto 3 di [certificati-ca-interna.md](certificati-ca-interna.md)). Per Chrome il riferimento è il Chrome Root Store e la fiducia locale; Edge usa le proprie radici pubbliche e considera quelle locali. Controlla anche DNS/SAN, validità e orologio, ma tieni distinti gli errori: un nome DNS non corrispondente riguarda `ERR_CERT_COMMON_NAME_INVALID`, non dimostra che manchi la CA. Vedi i [codici di errore di Chromium](https://chromium.googlesource.com/chromium/src/+/main/net/base/net_error_list.h).
 
 `CRYPT_E_NO_REVOCATION_CHECK` (`0x80092012`) è un codice di Windows. `CertVerifyRevocation` lo usa quando una funzione di revoca non è riuscita a controllare il certificato. Il testo associato è «The revocation function was unable to check revocation for the certificate». Può comparire in `certutil` o in `curl` di Windows (Schannel) anche se la CA è già attendibile: per esempio se la CA interna non pubblica un elenco di revoca, come annotato nella guida di creazione. Non dimostra che la radice manchi. Non è nemmeno `CRYPT_E_REVOCATION_OFFLINE` (`0x80092013`), che indica un server di revoca non raggiungibile.
 
-Non disattivare il controllo di revoca, non aggiungere opzioni che saltano la verifica TLS e non spegnere TLS per far passare la prova. I due errori si leggono e si sistemano in modo separato: l'autorità si sistema con la radice giusta e la catena; la revoca si sistema pubblicando i dati di revoca della CA, se ti servono per gli strumenti Windows, non nascondendo il controllo.
+Non disattivare il controllo di revoca e non aggiungere opzioni che saltano la verifica TLS. Diagnostica separatamente fiducia e revoca: per quest'ultima verifica pubblicazione, validità e raggiungibilità dei dati CRL/OCSP previsti dalla PKI. Riferimenti Microsoft: [CertVerifyRevocation](https://learn.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-certverifyrevocation) e [errori di validazione della catena](https://learn.microsoft.com/en-us/windows/win32/api/wincrypt/ns-wincrypt-cert_chain_policy_status).
 
 ## Tempo, PC spenti, browser
 
-Con l'intervallo predefinito, la parte computer si aggiorna all'avvio e poi circa ogni 90 minuti, con uno scarto casuale fino a 30 minuti. Lo descrive la procedura Microsoft [Refresh Group Policy](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj125376(v=ws.11)). Un PC spento o fuori dalla rete del dominio non riceve nulla finché non raggiunge un controller. Al ritorno applica i criteri all'avvio o al ciclo successivo: non serve un aggiornamento forzato di tutti gli altri.
+Con l'intervallo predefinito, sui client la parte computer si aggiorna all'avvio e poi circa ogni 90 minuti, con uno scarto casuale fino a 30 minuti. Vedi [elaborazione dei criteri, Microsoft](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-processing). Un PC spento o fuori dalla rete del dominio non riceve i nuovi criteri finché non raggiunge un controller. Al ritorno può applicarli all'avvio o al ciclo successivo: non serve un aggiornamento forzato di tutti gli altri.
 
 Chrome, Edge e Firefox possono tenere aperta la sessione in cui hanno già valutato il certificato. Dopo che l'archivio e, per Firefox, il registro sono a posto, chiudi i browser e riaprili prima di giudicare il sito. Un criterio Firefox letto a browser già aperto non è una prova.

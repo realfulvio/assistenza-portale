@@ -103,7 +103,7 @@ Qui trovi la sintesi. Ogni passo ha una guida dettagliata in [docs/](docs/). Le 
 5. **Configurare** `.env` (copia di `.env.example`) e `config/ente.json` (copia di `config/ente.example.json`). → [docs/installazione.md](docs/installazione.md), [docs/personalizzazione.md](docs/personalizzazione.md)
 6. **Avviare con systemd** usando `deploy/portale-assistenza.service`.
    *Cosa dovresti vedere*: `systemctl status portale-assistenza` → `active (running)`. *Errore tipico*: «Configurazione incompleta: …» nel log se manca una variabile.
-7. **Apache e HTTPS** con `deploy/apache/assistenza.conf.example`. → [docs/apache-reverse-proxy.md](docs/apache-reverse-proxy.md), certificato con CA interna: [docs/certificati-ca-interna.md](docs/certificati-ca-interna.md)
+7. **Apache e HTTPS** con `deploy/apache/assistenza.conf.example`. → [docs/apache-reverse-proxy.md](docs/apache-reverse-proxy.md), emissione con CA interna: [docs/certificati-ca-interna.md](docs/certificati-ca-interna.md), fiducia sui PC Windows in dominio: [docs/https-ca-dominio.md](docs/https-ca-dominio.md)
 8. *(Facoltativo)* **Login Microsoft anche in GLPI** e profilo «Tecnico Ticket». → [docs/sso-glpi.md](docs/sso-glpi.md)
 9. **Notifiche e-mail** con il modello pronto. → [docs/notifiche-mail.md](docs/notifiche-mail.md)
 10. *(Facoltativo)* **Icona sul desktop** con il nome del PC (GPO). → [docs/icona-desktop.md](docs/icona-desktop.md)
@@ -121,10 +121,14 @@ Le **categorie** dei problemi (nome, descrizione, icona, colore, categoria GLPI 
 
 ## Guide per utenti e tecnici
 
+Per il backend GLPI sono disponibili il [flusso dei ticket per i tecnici](docs/flusso-ticket-tecnici.md) (Risposta, Attività, soluzione e ticket chiusi) e l'[esempio CSS opzionale per la nuova Risposta](docs/glpi-css-risposta.md), verificato su GLPI 11.0.8. Sono documentazione e personalizzazione opzionale di GLPI, senza modifiche al codice del portale. Tutte le guide sono nell'[indice della documentazione](docs/README.md).
+
 In [docs/guide-pdf/](docs/guide-pdf/) trovi due guide d'esempio in PDF, con dati inventati, da adattare al tuo ente:
 
 - `guida-utenti.pdf` – come aprire e seguire una richiesta;
 - `guida-tecnici.pdf` – come lavorare i ticket in GLPI.
+
+I PDF sono esempi da adattare; per i dettagli aggiornati sul ciclo di gestione e sulla chiusura fai riferimento alla guida del flusso in Markdown collegata sopra.
 
 ## Sicurezza
 
