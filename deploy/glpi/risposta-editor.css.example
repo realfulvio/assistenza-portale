@@ -1,0 +1,4 @@
+/* GLPI 11.0.8: altezza minima della nuova Risposta nei ticket. */
+#itil-object-container #new-ITILFollowup-block:has(.itilfollowup > form > input[name="itemtype"][value="Ticket"]) .tox-tinymce:not(.tox-fullscreen) {
+    min-height: 460px;
+}
