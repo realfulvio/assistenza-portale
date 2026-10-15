@@ -14,6 +14,7 @@
 ## Utilizzo e personalizzazione
 
 - [Flusso dei ticket per i tecnici GLPI](flusso-ticket-tecnici.md)
+- [Riquadro «Nuova attività» nel cruscotto GLPI 11.0.8](glpi-nuova-attivita.md)
 - [CSS opzionale della nuova Risposta, verificato su GLPI 11.0.8](glpi-css-risposta.md)
 - [Personalizzazione del portale](personalizzazione.md)
 - [Notifiche e-mail](notifiche-mail.md)
