@@ -9,13 +9,7 @@
       "impallato",
       "non risponde"
     ],
-    "titolo": "Il computer è lento o bloccato",
-    "passi": [
-      "Salva il lavoro e chiudi i programmi che non usi.",
-      "Riavvia il computer da Start > Arresta > Riavvia (non basta spegnere lo schermo).",
-      "Aspetta qualche minuto dopo l'accensione prima di aprire molti programmi."
-    ],
-    "link": "#faq"
+    "guida": "pc-lento-bloccato"
   },
   {
     "categoria": "computer",
@@ -26,49 +20,78 @@
       "non parte",
       "non si avvia"
     ],
-    "titolo": "Il computer o lo schermo non si accende",
-    "passi": [
-      "Controlla che la spina e la presa multipla siano accese.",
-      "Controlla il pulsante di accensione del monitor e il cavo video.",
-      "Tieni premuto il pulsante del PC per 10 secondi, poi riaccendilo."
+    "guida": "monitor-nero"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "secondo monitor",
+      "secondo schermo",
+      "doppio schermo",
+      "due monitor"
     ],
-    "link": "#faq"
+    "guida": "secondo-monitor"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "audio",
+      "non sento",
+      "casse",
+      "cuffie",
+      "volume"
+    ],
+    "guida": "audio"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "nome del pc",
+      "nome del computer",
+      "nome dispositivo"
+    ],
+    "guida": "nome-pc"
   },
   {
     "categoria": "stampante",
     "parole": [
       "non stampa",
       "stampante",
-      "offline",
       "stampa",
-      "coda di stampa"
+      "inceppat",
+      "incastrat",
+      "carta",
+      "toner"
     ],
-    "titolo": "La stampante non stampa",
-    "passi": [
-      "Spegni la stampante, aspetta 30 secondi e riaccendila.",
-      "Controlla che ci siano carta e toner e che non ci siano messaggi sul display.",
-      "Riprova a stampare da un altro programma (per esempio il Blocco note)."
-    ],
-    "link": "#faq"
+    "guida": "stampante-non-stampa"
   },
   {
     "categoria": "stampante",
     "parole": [
-      "inceppat",
-      "incastrat",
-      "carta",
-      "toner",
+      "offline",
+      "non raggiungibile"
+    ],
+    "guida": "stampante-offline"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "coda di stampa",
+      "coda",
+      "stampa bloccata",
+      "annulla stampa"
+    ],
+    "guida": "coda-stampa"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
       "scanner",
       "scansione",
-      "scansion"
+      "scansion",
+      "scannerizz"
     ],
-    "titolo": "Carta incastrata, toner o scanner",
-    "passi": [
-      "Apri gli sportelli indicati dalla stampante e togli con delicatezza i fogli incastrati.",
-      "Se il display dice che il toner è finito, sostituiscilo con uno di scorta.",
-      "Per lo scanner controlla di aver scelto la cartella o l'indirizzo mail giusto."
-    ],
-    "link": "#faq"
+    "guida": "scansione"
   },
   {
     "categoria": "rete",
@@ -82,13 +105,7 @@
       "cavo",
       "non naviga"
     ],
-    "titolo": "Internet o la rete non funzionano",
-    "passi": [
-      "Controlla che il cavo di rete sia inserito bene nel PC e nella presa a muro (o che il Wi-Fi sia attivo).",
-      "Prova ad aprire un altro sito: se uno funziona, il problema è solo di quel sito.",
-      "Riavvia il computer. Se più colleghi hanno lo stesso problema, apri una sola richiesta."
-    ],
-    "link": "#faq"
+    "guida": "internet"
   },
   {
     "categoria": "rete",
@@ -99,31 +116,46 @@
       "accesso negato",
       "percorso"
     ],
-    "titolo": "Non apro una cartella di rete",
-    "passi": [
-      "Riavvia il computer e riprova.",
-      "Se compare «accesso negato», scrivi nella richiesta il percorso esatto della cartella."
+    "guida": "cartella-rete"
+  },
+  {
+    "categoria": "rete",
+    "parole": [
+      "da remoto",
+      "da casa",
+      "vpn",
+      "smart working"
     ],
-    "link": "#faq"
+    "guida": "accesso-remoto"
   },
   {
     "categoria": "posta",
     "parole": [
       "outlook",
-      "posta",
-      "mail",
-      "email",
-      "e-mail",
+      "non si apre",
+      "disconnesso"
+    ],
+    "guida": "outlook-non-si-apre"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
       "non ricevo",
-      "non invio"
+      "non arriva",
+      "posta non arriva",
+      "mail non arrivano"
     ],
-    "titolo": "Outlook o la posta non funzionano",
-    "passi": [
-      "Chiudi Outlook e riaprilo.",
-      "Prova la posta dal browser su outlook.office.com: se lì funziona, il problema è solo nel PC.",
-      "Controlla di essere connesso a internet."
+    "guida": "posta-non-arriva"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "allegato",
+      "allegati",
+      "file troppo grande",
+      "non riesco a inviare"
     ],
-    "link": "#faq"
+    "guida": "allegato-troppo-grande"
   },
   {
     "categoria": "posta",
@@ -132,18 +164,11 @@
       "microfono",
       "webcam",
       "videocamera",
-      "audio",
-      "non sento",
       "non mi sentono",
+      "non mi vedono",
       "riunione"
     ],
-    "titolo": "Teams: audio o video non vanno",
-    "passi": [
-      "In Teams apri Impostazioni > Dispositivi e scegli il microfono, gli altoparlanti e la videocamera giusti.",
-      "Chiudi gli altri programmi che usano la webcam.",
-      "Esci da Teams (anche dall'icona vicino all'orologio) e riaprilo."
-    ],
-    "link": "#faq"
+    "guida": "teams-audio-video"
   },
   {
     "categoria": "password",
@@ -156,13 +181,19 @@
       "non riesco ad accedere",
       "credenziali"
     ],
-    "titolo": "Password dimenticata o account bloccato",
-    "passi": [
-      "Per Microsoft 365 usa «Password dimenticata?» nella pagina di accesso.",
-      "Controlla che il blocco maiuscole (Caps Lock) sia spento.",
-      "Dopo troppi tentativi sbagliati aspetta 15 minuti prima di riprovare."
+    "guida": "password-dimenticata"
+  },
+  {
+    "categoria": "password",
+    "parole": [
+      "mfa",
+      "approva",
+      "approvazione",
+      "codice",
+      "autenticazione",
+      "verifica in due passaggi"
     ],
-    "link": "#faq"
+    "guida": "mfa-richiesta"
   },
   {
     "categoria": "gestionali",
@@ -192,12 +223,7 @@
       "nuovo programma",
       "software"
     ],
-    "titolo": "Devi installare un programma",
-    "passi": [
-      "Non installare nulla da solo: scrivi qui quale programma ti serve e perché.",
-      "Indica se serve solo a te o a tutto l'ufficio."
-    ],
-    "link": "#faq"
+    "guida": "installare-programma"
   },
   {
     "categoria": "altro",
@@ -209,11 +235,17 @@
       "virus",
       "allegato sospetto"
     ],
-    "titolo": "Hai ricevuto una mail sospetta",
-    "passi": [
-      "Non cliccare link né aprire allegati, non rispondere.",
-      "Inoltrala all'assistenza e cancellala."
+    "guida": "mail-sospetta"
+  },
+  {
+    "categoria": "altro",
+    "parole": [
+      "avviso",
+      "pop-up",
+      "popup",
+      "finestra strana",
+      "allarme"
     ],
-    "link": "#faq"
+    "guida": "avviso-sicurezza"
   }
 ]

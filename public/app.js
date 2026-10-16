@@ -72,7 +72,7 @@
     if (h === 'nuova') { vai('nuova'); }
     else if (h === 'richieste') { vai('richieste'); await caricaRichieste(); timer = setInterval(() => caricaRichieste().catch(() => {}), 60000); }
     else if (h.startsWith('richiesta/')) { vai('dettaglio', 'richieste'); await caricaDettaglio(h.split('/')[1]); }
-    else if (h === 'faq') { vai('faq'); await caricaFaq(); }
+    else if (h === 'faq' || h.startsWith('faq/')) { vai('faq'); await caricaFaq(FaqLogica.idDaHash(h)); }
     else if (h === 'contatti') { vai('contatti'); }
     else location.hash = '#nuova';
   }
@@ -98,12 +98,19 @@
     if (testo.length < 8) { box.hidden = true; box.replaceChildren(); return; }
     if (!suggerimenti) { try { suggerimenti = await api('/suggerimenti'); } catch { suggerimenti = []; } }
     const cat = (document.querySelector('input[name=categoria]:checked') || {}).value;
+    const guide = await datiFaq().catch(() => []);
     const trovati = suggerimenti.map((s) => {
       const parole = (s.parole || []).filter((p) => testo.includes(norm(p)));
       return { s, punti: parole.length ? parole.length + (s.categoria === cat ? 2 : 0) : 0 };
     }).filter((x) => x.punti > 0).sort((a, b) => b.punti - a.punti).slice(0, 2);
-    if (!trovati.length) { box.hidden = true; box.replaceChildren(); return; }
-    box.replaceChildren(...trovati.map(({ s }) => {
+    // Una voce con "guida" prende titolo e primi passi dalla guida corrispondente (nessun testo duplicato)
+    const voci = trovati.map(({ s }) => {
+      const g = s.guida && guide.find((x) => x.id === s.guida);
+      if (g) return { titolo: g.d, passi: (g.passi.length ? g.passi.map((p) => p.t) : g.controlli).slice(0, 3), link: '#faq/' + g.id };
+      return s.titolo ? s : null;
+    }).filter(Boolean);
+    if (!voci.length) { box.hidden = true; box.replaceChildren(); return; }
+    box.replaceChildren(...voci.map((s) => {
       const d = el('div', { className: 'consiglio' }, el('p', { className: 'pre', textContent: 'Prima di inviare, prova così' }), el('p', { className: 'tit', textContent: s.titolo }),
         el('ol', {}, ...(s.passi || []).map((t) => el('li', { textContent: t }))));
       if (s.link) d.append(el('p', {}, el('a', { href: s.link, textContent: 'Leggi la guida' })));
@@ -318,9 +325,105 @@
     });
   }
 
-  async function caricaFaq() {
-    const f = await api('/faq');
-    $('faq-lista').replaceChildren(...f.map((x) => el('details', {}, el('summary', { textContent: x.d }), el('p', { textContent: x.r }))));
+  // ---------- guide (FAQ) ----------
+  // Dati letti una volta sola; il formato vecchio { d, r } e quello esteso sono normalizzati da FaqLogica
+  let faqVoci = null;
+  async function datiFaq() {
+    if (!faqVoci) faqVoci = FaqLogica.normalizza(await api('/faq'));
+    return faqVoci;
+  }
+  const faq = { q: '', cat: 'tutte', pronta: false };
+
+  function figura(p, n) {
+    const img = el('img', { src: BASE + '/' + p.img, alt: p.alt, loading: 'lazy', decoding: 'async' });
+    if (p.w && p.h) { img.width = p.w; img.height = p.h; }
+    const b = el('button', { type: 'button', className: 'faq-img', title: 'Ingrandisci l\'immagine' }, img, el('span', { className: 'vh', textContent: ' Ingrandisci l\'immagine del passo ' + n }));
+    b.addEventListener('click', () => {
+      $('faq-zoom-img').src = img.src; $('faq-zoom-img').alt = p.alt;
+      $('faq-zoom-didascalia').textContent = p.alt;
+      $('faq-zoom').showModal();
+    });
+    return el('figure', { className: 'faq-fig' }, b);
+  }
+
+  function blocco(classe, titolo, ...contenuto) {
+    return el('div', { className: 'faq-blocco ' + classe }, el('h4', { textContent: titolo }), ...contenuto);
+  }
+
+  function disegnaGuida(v, nomeCat) {
+    const corpo = el('div', { className: 'faq-corpo' });
+    if (v.intro) corpo.append(el('p', { className: 'faq-intro', textContent: v.intro }));
+    if (v.controlli.length) corpo.append(blocco('faq-controlli', 'Prima controlla', el('ul', {}, ...v.controlli.map((t) => el('li', { textContent: t })))));
+    if (v.passi.length) {
+      corpo.append(blocco('faq-passi', 'Cosa fare', el('ol', {}, ...v.passi.map((p, i) => {
+        const li = el('li', {}, el('span', { textContent: p.t }));
+        if (p.nota) li.append(el('small', { className: 'faq-nota', textContent: p.nota }));
+        if (p.img) li.append(figura(p, i + 1));
+        return li;
+      }))));
+    }
+    if (v.r) corpo.append(el('p', { className: 'faq-testo', textContent: v.r }));
+    if (v.ok) corpo.append(blocco('faq-ok', 'Cosa dovresti vedere', el('p', { textContent: v.ok })));
+    if (v.stop) corpo.append(blocco('faq-stop', 'Quando fermarti', el('p', { textContent: v.stop })));
+    if (v.richiesta) corpo.append(blocco('faq-richiesta', 'Quando aprire una richiesta', el('p', { textContent: v.richiesta }), el('p', {}, el('a', { className: 'send', href: '#nuova', textContent: 'Apri una richiesta' }))));
+    const col = v.vedi.map((id) => faqVoci.find((x) => x.id === id)).filter(Boolean);
+    if (col.length) corpo.append(el('p', { className: 'faq-vedi' }, 'Guide collegate: ', ...col.flatMap((g, i) => [i ? ' · ' : '', el('a', { href: '#faq/' + g.id, textContent: g.d })])));
+    corpo.append(el('p', { className: 'faq-link' }, el('a', { href: '#faq/' + v.id, textContent: 'Link diretto a questa guida' })));
+    const d = el('details', { id: 'g-' + v.id }, el('summary', {}, el('span', { textContent: v.d }), el('small', { className: 'faq-cat', textContent: nomeCat })), corpo);
+    d.addEventListener('toggle', () => { // l'indirizzo segue la guida aperta, così si può copiare e inviare
+      const mio = '#faq/' + v.id;
+      if (d.open) history.replaceState(null, '', mio);
+      else if (location.hash === mio) history.replaceState(null, '', '#faq');
+    });
+    return d;
+  }
+
+  function applicaFiltri() {
+    // con una ricerca le guide più pertinenti vanno in alto; senza, resta l'ordine del file
+    const trovate = FaqLogica.filtra(faqVoci, faq.q, faq.cat);
+    const ids = new Set(trovate.map((v) => v.id));
+    const resto = faqVoci.filter((v) => !ids.has(v.id));
+    $('faq-lista').append(...[...trovate, ...resto].map((v) => $('g-' + v.id)));
+    for (const v of faqVoci) $('g-' + v.id).hidden = !ids.has(v.id);
+    $('faq-vuoto').hidden = ids.size > 0;
+    $('faq-conta').textContent = ids.size === faqVoci.length ? `${faqVoci.length} guide` : `${ids.size} ${ids.size === 1 ? 'guida trovata' : 'guide trovate'}`;
+  }
+
+  function impostaCategoria(c) {
+    faq.cat = c;
+    document.querySelectorAll('.faq-chip').forEach((b) => { const on = b.dataset.cat === c; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+  }
+
+  function costruisciFaq() {
+    const cats = FaqLogica.categorie(faqVoci);
+    const nomi = Object.fromEntries(cats.map((c) => [c.id, c.nome]));
+    $('faq-lista').replaceChildren(...faqVoci.map((v) => disegnaGuida(v, nomi[v.cat])));
+    const chips = [{ id: 'tutte', nome: 'Tutte' }, ...cats].map((c) => {
+      const b = el('button', { type: 'button', className: 'filtro faq-chip', textContent: c.nome });
+      b.dataset.cat = c.id; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => { impostaCategoria(c.id); applicaFiltri(); });
+      return b;
+    });
+    $('faq-chips').replaceChildren(...chips);
+    $('faq-cerca').addEventListener('input', (e) => { faq.q = e.target.value; applicaFiltri(); });
+    $('faq-zoom-chiudi').addEventListener('click', () => $('faq-zoom').close());
+    $('faq-zoom').addEventListener('click', (e) => { if (e.target === $('faq-zoom')) $('faq-zoom').close(); }); // clic sullo sfondo
+    faq.pronta = true;
+  }
+
+  async function caricaFaq(id) {
+    $('faq-errore').hidden = true;
+    try { await datiFaq(); } catch { $('faq-errore').hidden = false; return; }
+    if (!faq.pronta) { costruisciFaq(); impostaCategoria('tutte'); }
+    const g = id && faqVoci.find((x) => x.id === id);
+    if (g) { faq.q = ''; $('faq-cerca').value = ''; impostaCategoria('tutte'); } // il link diretto vince su ricerca e filtro
+    applicaFiltri();
+    if (!id) return;
+    if (!g) { $('faq-conta').textContent = 'Questa guida non esiste più: ecco l\'elenco aggiornato.'; return; }
+    const d = $('g-' + id);
+    d.open = true;
+    d.scrollIntoView({ block: 'start' });
+    d.querySelector('summary').focus({ preventScroll: true });
   }
 
   // ---------- avvio ----------

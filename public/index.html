@@ -187,8 +187,16 @@
 
     <section id="v-faq" class="main faq" hidden>
       <h2 class="titolo">Prima di aprire una richiesta</h2>
-      <p class="sub">Magari si risolve in un minuto.</p>
+      <p class="sub">Magari si risolve in un minuto. Cerca il tuo problema o scegli un argomento.</p>
+      <div class="faq-strumenti" role="search">
+        <label class="vh" for="faq-cerca">Cerca nelle guide</label>
+        <input id="faq-cerca" type="search" placeholder="Cerca: stampante, password, Outlook" autocomplete="off" maxlength="80">
+        <div class="filtri faq-chips" id="faq-chips" role="group" aria-label="Filtra le guide per argomento"></div>
+        <p class="hint" id="faq-conta" role="status" aria-live="polite"></p>
+      </div>
       <div id="faq-lista"></div>
+      <p id="faq-vuoto" class="faq-vuoto" hidden>Nessuna guida trovata. Prova con altre parole oppure apri una richiesta.</p>
+      <p id="faq-errore" class="errore" role="alert" hidden>Non riesco a caricare le guide. Riprova tra poco oppure apri una richiesta.</p>
       <p><a class="send" href="#nuova">Non si è risolto: apri una richiesta</a></p>
     </section>
 
@@ -205,6 +213,12 @@
   </div>
 </main>
 
+<dialog id="faq-zoom" class="faq-zoom" aria-label="Immagine ingrandita">
+  <button type="button" class="send sec" id="faq-zoom-chiudi">Chiudi</button>
+  <img id="faq-zoom-img" alt="">
+  <p id="faq-zoom-didascalia" class="hint"></p>
+</dialog>
+
 <footer>
   <div class="in">
     <span class="logo"><img src="__BASE__/{{grafica.logo}}" width="44" height="44" alt="{{grafica.logoAlt}}"></span>
@@ -212,6 +226,7 @@
     <div class="pw">{{crediti.testo}} <a href="{{crediti.link}}" rel="noopener"><b>{{crediti.autore}}</b></a></div>
   </div>
 </footer>
+<script src="__BASE__/faq.js?v=__V__" defer></script>
 <script src="__BASE__/app.js?v=__V__" defer></script>
 </body>
 </html>
