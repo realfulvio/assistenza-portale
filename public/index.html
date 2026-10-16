@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="__BASE__/img/icon-192.png">
 <link rel="stylesheet" href="__BASE__/style.css?v=__V__">
 <link rel="stylesheet" href="__BASE__/ente.css?v=__V__">
+<link rel="stylesheet" href="__BASE__/stats-bar.css?v=__V__">
 </head>
 <body data-accesso="{{testi.pulsanteAccesso}}">
 <svg class="sprite" width="0" height="0" aria-hidden="true"><defs>
@@ -53,6 +54,17 @@
       <a class="dim" href="{{ente.sito}}" rel="noopener">Torna al sito</a>
     </div>
   </nav>
+  <div class="live" id="live" role="region" aria-label="Attività del servizio in tempo reale" hidden>
+    <div class="in">
+      <span class="live-v live-tag"><i class="live-dot" aria-hidden="true"></i>LIVE</span>
+      <span class="live-v live-ric"><b data-k="ricevute">0</b> richieste <span data-k="periodo"></span><svg class="live-spark" width="54" height="14" viewBox="0 0 54 14" aria-hidden="true" focusable="false"><polyline points=""/></svg></span>
+      <span class="live-v live-ris"><b class="live-oro" data-k="risolte">0</b> risolte</span>
+      <span class="live-v live-lav"><b data-k="in_lavorazione">0</b> in lavorazione</span>
+      <span class="live-v live-presa">presa in carico ~<b data-k="presa">–</b></span>
+      <span class="live-v live-msg" aria-live="polite"><span class="live-msg-t"></span></span>
+    </div>
+    <div class="live-prog" aria-hidden="true"><i></i></div>
+  </div>
 </header>
 
 <main id="main" tabindex="-1">
@@ -228,5 +240,6 @@
 </footer>
 <script src="__BASE__/faq.js?v=__V__" defer></script>
 <script src="__BASE__/app.js?v=__V__" defer></script>
+<script src="__BASE__/stats-bar.js?v=__V__" defer></script>
 </body>
 </html>
