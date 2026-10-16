@@ -1,0 +1,87 @@
+/* Foto profilo: avatar in «Il mio profilo» e nella barra in alto (avatar.js) */
+.av{--av:#0a5c8f;position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:50%;background:var(--av);color:#fff;font-weight:700;line-height:1;user-select:none}
+.av img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
+.av.nuova{animation:av-in .35s ease-out both}
+.av-grande{width:112px;height:112px;font-size:40px;box-shadow:0 0 0 3px #fff,0 0 0 5px #e6b93c}
+.av-medio{width:96px;height:96px;font-size:34px;box-shadow:0 0 0 3px #fff,0 0 0 5px #e6b93c}
+.av-mini{width:24px;height:24px;font-size:10px;box-shadow:0 0 0 1.5px #e6b93c;margin-right:8px;vertical-align:middle}
+.slim .av-mini[hidden]{display:none}
+.slim .r>.av-mini{padding:0;border:0;min-height:0;margin:0 8px 0 18px;align-self:center;display:inline-flex;color:#fff}
+.slim .r>.av-mini::before{content:"";position:absolute;left:-18px;top:-4px;bottom:-4px;border-left:1px solid #ffffff26}
+.slim .r>.av-mini:not([hidden])+.utente{border-left:0;padding-left:0}
+
+/* Riga in alto della card profilo */
+.pf-riga{display:flex;align-items:center;gap:28px;margin-bottom:6px}
+.pf-avatar{position:relative;flex:none;padding:5px}
+.pf-cam{position:absolute;right:-2px;bottom:-2px;width:44px;height:44px;border-radius:50%;border:3px solid #fff;background:#0a5c8f;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,background .15s}
+.pf-cam:hover{transform:scale(1.08);background:#0b2a55}
+.pf-cam svg{width:20px;height:20px}
+.pf-dati{min-width:0}
+.form .pf-nome{font-size:calc(24px * var(--text-scale,1));font-weight:700;color:#0b2a55;margin:0;line-height:1.2}
+.form .pf-email{color:var(--m,#455a64);margin:2px 0 10px;overflow-wrap:anywhere}
+.pf-chip{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;background:#eef3f8;color:#22384f;font-size:calc(14px * var(--text-scale,1));line-height:1.3}
+.pf-chip i{width:9px;height:9px;border-radius:50%;background:#8a96a3;flex:none}
+.pf-chip[data-o=m365] i{background:#0a5c8f}
+.pf-chip[data-o=manual] i{background:#e6b93c}
+
+/* Pulsanti */
+.pf-azioni{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.pf-btn{min-height:44px;padding:0 18px;border-radius:6px;font:600 calc(15px * var(--text-scale,1)) "Titillium Web","Segoe UI",sans-serif;cursor:pointer;border:2px solid #0a5c8f;background:#fff;color:#0a5c8f;transition:background .15s,box-shadow .15s}
+.pf-btn:hover{background:#eaf2f9}
+.pf-btn.pf-pri{background:#0a5c8f;color:#fff}
+.pf-btn.pf-pri:hover{background:#0b2a55;border-color:#0b2a55}
+.pf-btn.pf-del{border-color:#e8b4b4;color:#9b2c2c}
+.pf-btn.pf-del:hover{background:#fdf0f0}
+.pf-btn[disabled]{opacity:.6;cursor:not-allowed}
+.pf-btn[aria-busy=true]{cursor:wait}
+.pf-btn.entra{animation:pf-giu .3s ease-out both}
+.pf-btn[hidden]{display:none}
+:is(.pf-btn,.pf-cam,.pf-drop):focus-visible{outline:3px solid #e6b93c;outline-offset:2px}
+
+/* Pannello di caricamento */
+.pf-pannello{background:#f8fafc;border:1px solid #dde3ea;border-radius:10px;padding:18px;margin:18px 0 4px;animation:pf-giu .3s ease-out both}
+.pf-pannello[hidden]{display:none}
+.pf-pan-in{display:flex;gap:22px;align-items:center}
+.pf-drop-col{flex:1;min-width:0}
+.pf-drop{width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 14px;border:2px dashed #8fb2cf;border-radius:10px;background:#fff;color:#0b2a55;font:inherit;cursor:pointer;transition:background .15s,border-color .15s}
+.pf-drop:hover,.pf-drop.sopra{background:#eaf2f9;border-color:#0a5c8f}
+.pf-drop svg{width:34px;height:34px;color:#0a5c8f}
+.pf-drop-t{font-weight:600}
+.pf-drop-s{font-size:calc(14px * var(--text-scale,1));color:var(--m,#455a64)}
+.form .pf-err{color:#9b2c2c;font-weight:600;margin:8px 0 0}
+.pf-anteprima{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px;flex:none;padding:5px}
+.pf-anteprima figcaption{font-size:calc(13px * var(--text-scale,1));color:var(--m,#455a64)}
+.form .pf-nota{font-size:calc(14px * var(--text-scale,1));color:var(--m,#455a64);margin:14px 0 0}
+.form .pf-esito{min-height:1.5em;margin:10px 0 0;font-weight:600;color:var(--ok,#00732f)}
+.form .pf-esito.no{color:#9b2c2c}
+
+@keyframes av-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+@keyframes pf-giu{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* Temi di «Aspetto» diversi dal Classico */
+html:not([data-theme=classic]) .form .pf-nome{color:var(--accent)}
+html:not([data-theme=classic]) .pf-chip{background:var(--soft);color:var(--txt)}
+html:not([data-theme=classic]) .pf-pannello{background:var(--soft);border-color:var(--border);border-radius:var(--radius)}
+html:not([data-theme=classic]) .pf-drop{background:var(--surface);color:var(--txt);border-color:var(--border)}
+html:not([data-theme=classic]) :is(.pf-drop:hover,.pf-drop.sopra){background:var(--soft);border-color:var(--accent)}
+html:not([data-theme=classic]) .pf-btn{background:var(--surface);color:var(--accent);border-color:var(--accent);border-radius:var(--radius)}
+html:not([data-theme=classic]) .pf-btn.pf-pri{background:var(--button);color:var(--button-text);border-color:var(--button)}
+html:not([data-theme=classic]) .pf-btn:hover{box-shadow:0 0 0 2px var(--accent)}
+html:not([data-theme=classic]) .pf-btn.pf-del{color:#c53030;border-color:#c53030}
+html[data-theme=dark] .pf-btn.pf-del,html[data-theme=cyber] .pf-btn.pf-del,html[data-theme=terminal] .pf-btn.pf-del{color:#ffb4b4;border-color:#ffb4b4}
+
+/* Sotto 600px: avatar e testi impilati, pulsanti a tutta larghezza */
+@media (max-width:600px){
+  .pf-riga,.pf-pan-in{flex-direction:column;align-items:center;text-align:center}
+  .pf-azioni{flex-direction:column}
+  .pf-btn{width:100%}
+  .pf-dati{width:100%}
+}
+
+/* Movimento ridotto (sistema o «Aspetto») */
+html[data-motion=reduce] :is(.av,.pf-btn,.pf-pannello,.pf-cam,.pf-drop){animation:none!important;transition:none!important}
+html[data-motion=reduce] .pf-cam:hover{transform:none}
+@media (prefers-reduced-motion:reduce){
+  html:not([data-motion=full]) :is(.av,.pf-btn,.pf-pannello,.pf-cam,.pf-drop){animation:none!important;transition:none!important}
+  html:not([data-motion=full]) .pf-cam:hover{transform:none}
+}

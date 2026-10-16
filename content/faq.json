@@ -1,12 +1,2490 @@
 [
-  { "d": "Il PC è lento", "r": "Salva il lavoro e riavvia il computer (Start > Riavvia, non «Arresta»). Chiudi i programmi che non usi. Se resta lento dopo il riavvio, apri una richiesta." },
-  { "d": "La stampante non stampa", "r": "Controlla che sia accesa, che ci sia carta e toner e che non ci siano messaggi sul display. Prova a cancellare i lavori in coda e a stampare di nuovo. Se continua, apri una richiesta indicando il modello o l'ufficio." },
-  { "d": "Ho dimenticato la password o è scaduta", "r": "Se è la password di Microsoft 365 prova prima «Password dimenticata?» nella pagina di accesso. Altrimenti apri una richiesta scegliendo «Password e accesso»." },
-  { "d": "Outlook non si apre o non riceve la posta", "r": "Chiudi e riapri Outlook. Verifica di essere connesso a Internet. Prova ad aprire la posta da web (outlook.office.com): se lì funziona, segnalacelo." },
-  { "d": "Teams non sente o non si vede", "r": "Controlla in Teams > Impostazioni > Dispositivi che microfono, altoparlanti e videocamera siano quelli giusti. Chiudi altri programmi che usano la webcam." },
-  { "d": "Non ho connessione a Internet", "r": "Verifica che il cavo di rete sia inserito o che il Wi-Fi sia attivo. Prova ad aprire un altro sito. Se più colleghi hanno lo stesso problema, apri una sola richiesta indicando l'ufficio." },
-  { "d": "Non riesco ad accedere a una cartella di rete", "r": "Riavvia il computer e riprova. Se compare «accesso negato», apri una richiesta indicando il percorso della cartella." },
-  { "d": "Lo schermo è nero o non si accende nulla", "r": "Controlla cavi di alimentazione e prese, poi il pulsante del monitor. Se il PC è acceso ma lo schermo no, prova a scollegare e ricollegare il cavo video." },
-  { "d": "Devo installare un programma", "r": "Non installare nulla da solo. Apri una richiesta scegliendo «Altro», indicando programma e motivo." },
-  { "d": "Ho ricevuto una mail sospetta", "r": "Non cliccare sui link e non aprire gli allegati. Non rispondere. Apri subito una richiesta indicando che è una mail sospetta, oppure chiamaci se hai già cliccato." }
+  {
+    "id": "pc-lento-bloccato",
+    "cat": "computer",
+    "d": "Il PC è lento o bloccato",
+    "intro": "Il computer ci mette molto a rispondere, oppure il mouse si muove ma i programmi non reagiscono.",
+    "controlli": [
+      "Aspetta un minuto: subito dopo l'accensione, o con molti programmi aperti, il PC può essere solo occupato.",
+      "Guarda se il problema è in un solo programma (per esempio Outlook) o in tutto il computer."
+    ],
+    "passi": [
+      {
+        "t": "Salva il lavoro, se riesci, e chiudi i programmi che non ti servono con la X in alto a destra di ogni finestra."
+      },
+      {
+        "t": "Se un solo programma non risponde, premi insieme i tasti Ctrl + Maiusc + Esc. Si apre la finestra «Gestione attività»."
+      },
+      {
+        "t": "Nell'elenco clicca il programma che non risponde, poi clicca «Termina attività».",
+        "nota": "Il lavoro non salvato in quel programma va perso.",
+        "img": "img/faq/pc-lento-bloccato-01-gestione-attivita.webp",
+        "alt": "Finestra Gestione attività di Windows con il pulsante «Termina attività» evidenziato (numero 3)",
+        "w": 1400,
+        "h": 194
+      },
+      {
+        "t": "Riavvia il computer: clicca Start, poi il pulsante di accensione e scegli «Riavvia il sistema».",
+        "nota": "Scegli «Riavvia il sistema» e non «Arresta il sistema»: il riavvio pulisce la memoria, lo spegnimento può non farlo.",
+        "mancante": "Schermata del menu Start di Windows 11 con il pulsante di accensione e la voce «Riavvia il sistema» evidenziati (da acquisire su un PC di prova: il menu Start mostra file recenti e nome utente, va ritagliato)."
+      },
+      {
+        "t": "Dopo l'accensione aspetta un paio di minuti prima di aprire molti programmi."
+      }
+    ],
+    "ok": "Il computer risponde di nuovo e i programmi si aprono in tempi normali.",
+    "stop": "Se il computer è completamente fermo (il mouse non si muove da 5 minuti), tieni premuto il pulsante di accensione per circa 10 secondi finché si spegne, aspetta qualche secondo e riaccendilo. Il lavoro non salvato può andare perso. Non farlo se sullo schermo c'è scritto che è in corso un aggiornamento.",
+    "richiesta": "Se dopo il riavvio il PC è ancora lento, o si blocca più volte al giorno, apri una richiesta scegliendo «Il mio computer» e scrivi da quando succede e quale programma stavi usando.",
+    "vedi": [
+      "nome-pc",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "lento",
+      "lentissimo",
+      "bloccato",
+      "si blocca",
+      "impallato",
+      "non risponde",
+      "pesante",
+      "riavviare",
+      "riavvio",
+      "congelato"
+    ]
+  },
+  {
+    "id": "monitor-nero",
+    "cat": "computer",
+    "d": "Lo schermo è nero o il computer non si accende",
+    "intro": "Lo schermo non mostra nulla, oppure sembra che il computer non si accenda.",
+    "controlli": [
+      "Il PC è acceso? Guarda se ci sono luci accese o se senti la ventola.",
+      "La luce del monitor è accesa, lampeggia o è spenta?"
+    ],
+    "passi": [
+      {
+        "t": "Controlla che le spine del PC e del monitor siano inserite bene e che la ciabatta sia accesa."
+      },
+      {
+        "t": "Premi una volta il pulsante di accensione del monitor.",
+        "mancante": "Fotografia del pulsante e della luce di un monitor tipo in uso al Comune (da scattare sul posto)."
+      },
+      {
+        "t": "Muovi il mouse e premi un tasto qualsiasi: il computer potrebbe essere solo in riposo."
+      },
+      {
+        "t": "Se il PC è acceso ma lo schermo resta nero, scollega e ricollega il cavo che va dal PC al monitor, a entrambe le estremità."
+      },
+      {
+        "t": "Se sul monitor compare «Nessun segnale» (o un messaggio simile), vuol dire che non riceve immagine dal PC: ricontrolla il cavo del passo precedente."
+      }
+    ],
+    "ok": "Compare l'immagine del computer o la schermata di accesso a Windows.",
+    "stop": "Non aprire il computer e non spostarlo mentre è acceso. Se senti odore di bruciato o vedi fumo o scintille, stacca la spina e chiama subito il CED.",
+    "richiesta": "Se il PC resta spento con le spine inserite, o lo schermo resta nero dopo questi controlli, apri una richiesta scegliendo «Il mio computer» e scrivi cosa vedi (luci accese o spente, messaggi sul monitor) e dove si trova il PC.",
+    "parole": [
+      "schermo nero",
+      "monitor",
+      "non si accende",
+      "non parte",
+      "non si avvia",
+      "nessun segnale",
+      "spento"
+    ]
+  },
+  {
+    "id": "secondo-monitor",
+    "cat": "computer",
+    "d": "Il secondo monitor non funziona",
+    "intro": "Il secondo schermo resta nero oppure mostra la stessa immagine del primo.",
+    "controlli": [
+      "Il secondo monitor è acceso (luce accesa) e con la spina inserita?",
+      "Il cavo che lo collega al PC è inserito bene a entrambe le estremità?"
+    ],
+    "passi": [
+      {
+        "t": "Premi insieme il tasto Windows e il tasto P. A destra si apre un pannello con quattro scelte.",
+        "mancante": "Pannello che si apre con Windows + P (Solo schermo PC, Duplica, Estendi, Solo secondo schermo), acquisito su un PC con due monitor collegati."
+      },
+      {
+        "t": "Clicca «Estendi» per usare i due schermi insieme, oppure «Duplica» per avere la stessa immagine su entrambi."
+      },
+      {
+        "t": "Se non cambia nulla, controlla il cavo e premi sul secondo monitor il pulsante che cambia la sorgente (di solito si chiama «Input» o «Source»)."
+      }
+    ],
+    "ok": "Il secondo schermo mostra l'immagine.",
+    "stop": "Se per errore scegli «Solo secondo schermo» e il tuo schermo diventa nero, premi di nuovo Windows + P e scegli «Solo schermo PC».",
+    "richiesta": "Se il secondo monitor non si accende o non viene riconosciuto, apri una richiesta scegliendo «Il mio computer» e scrivi che monitor è e cosa succede quando premi Windows + P.",
+    "parole": [
+      "doppio schermo",
+      "secondo schermo",
+      "due monitor",
+      "estendi",
+      "duplica"
+    ]
+  },
+  {
+    "id": "audio",
+    "cat": "computer",
+    "d": "Non sento l'audio",
+    "intro": "Dalle casse o dalle cuffie non esce suono, anche durante una riunione.",
+    "controlli": [
+      "Casse o cuffie sono accese e collegate? Molte casse hanno una manopola del volume.",
+      "Stai provando con un video o una riunione che hanno davvero l'audio acceso?"
+    ],
+    "passi": [
+      {
+        "t": "Clicca l'icona dell'altoparlante in basso a destra, vicino all'orologio, e sposta il cursore verso destra per alzare il volume."
+      },
+      {
+        "t": "Se sull'icona c'è una X, il volume è silenziato: clicca l'icona dell'altoparlante nel pannello per riattivarlo."
+      },
+      {
+        "t": "Clicca Start, poi «Impostazioni», poi «Sistema» e «Audio». Sotto «Scegli dove riprodurre l'audio» controlla che sia selezionato il dispositivo giusto (casse o cuffie).",
+        "mancante": "Schermata di Impostazioni > Sistema > Audio senza nomi di dispositivi reali (da acquisire su un PC di prova)."
+      },
+      {
+        "t": "Se usi cuffie con il cavo, scollegale e ricollegale. Poi riprova con un video."
+      }
+    ],
+    "ok": "Senti l'audio dal dispositivo scelto.",
+    "stop": "Non installare programmi o driver trovati su Internet per risolvere il problema.",
+    "richiesta": "Se dopo questi passi non si sente ancora nulla, apri una richiesta scegliendo «Il mio computer» e scrivi cosa stai usando (casse, cuffie, riunione Teams) e da quando succede.",
+    "vedi": [
+      "teams-audio-video"
+    ],
+    "parole": [
+      "audio",
+      "suono",
+      "volume",
+      "casse",
+      "cuffie",
+      "non sento",
+      "muto"
+    ]
+  },
+  {
+    "id": "nome-pc",
+    "cat": "computer",
+    "d": "Come trovare il nome del mio computer",
+    "intro": "Il tecnico può chiederti il nome del computer per trovarlo e collegarsi.",
+    "passi": [
+      {
+        "t": "Premi insieme il tasto Windows e il tasto Pausa. Si apre la pagina «Informazioni sul sistema».",
+        "nota": "Se la tastiera non ha il tasto Pausa: clicca Start, poi «Impostazioni», poi «Sistema» e in fondo «Informazioni sul sistema»."
+      },
+      {
+        "t": "Nella sezione «Specifiche dispositivo» leggi la riga «Nome dispositivo»: è il nome del tuo computer. Scrivilo nella richiesta.",
+        "img": "img/faq/nome-pc-01-informazioni.webp",
+        "alt": "Pagina Informazioni sul sistema di Windows 11 con la riga «Nome dispositivo» evidenziata (i nomi reali sono oscurati)",
+        "w": 1000,
+        "h": 245
+      }
+    ],
+    "ok": "Vedi un nome fatto di lettere, numeri e trattini.",
+    "stop": "Non cambiare il nome del computer e non toccare altre impostazioni in questa pagina.",
+    "richiesta": "Scrivi il nome del PC ogni volta che apri una richiesta su un problema del computer.",
+    "vedi": [
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "nome pc",
+      "nome computer",
+      "nome dispositivo",
+      "hostname",
+      "come si chiama il pc"
+    ],
+    "verifica": "Se i PC hanno l'icona «Assistenza» sul desktop (docs/icona-desktop.md) il nome arriva già nella richiesta: confermare se è attiva e, in caso, aggiungerlo al testo."
+  },
+  {
+    "id": "installare-programma",
+    "cat": "computer",
+    "d": "Devo installare un programma",
+    "r": "Non installare nulla da solo. Apri una richiesta scegliendo «Altro», indicando programma e motivo.",
+    "parole": [
+      "installare",
+      "installazione",
+      "programma",
+      "software",
+      "scaricare"
+    ]
+  },
+  {
+    "id": "stampante-non-stampa",
+    "cat": "stampanti",
+    "d": "La stampante non stampa",
+    "intro": "Hai mandato in stampa un documento ma non esce nulla.",
+    "controlli": [
+      "La stampante è accesa (display o luce accesi)?",
+      "Sul display ci sono messaggi d'errore (carta, toner, sportello aperto)?",
+      "Le stampe dei colleghi escono? Se anche per loro non esce nulla, il problema è della stampante."
+    ],
+    "passi": [
+      {
+        "t": "Leggi il display della stampante: se c'è un messaggio d'errore, seguilo se parla di carta o sportelli, poi riprova.",
+        "mancante": "Fotografia di un display di fotocopiatrice con un messaggio d'errore reale (carta o toner) e del pulsante di accensione."
+      },
+      {
+        "t": "Controlla che ci sia carta nel cassetto e che sportelli e cassetti siano chiusi bene."
+      },
+      {
+        "t": "Controlla di aver scelto la stampante giusta: vedi la guida «Come scegliere la stampante giusta»."
+      },
+      {
+        "t": "Controlla la coda di stampa: vedi la guida «Coda di stampa». Se c'è un documento bloccato, cancellalo."
+      },
+      {
+        "t": "Stampa di nuovo una sola volta e aspetta un minuto."
+      }
+    ],
+    "ok": "Il documento esce dalla stampante.",
+    "stop": "Non aprire parti interne della stampante, non tirare la carta con forza e non toccare le parti calde. Non mandare più volte lo stesso documento: si riempie la coda.",
+    "richiesta": "Se la stampante continua a non stampare, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome o l'ufficio della stampante e l'eventuale messaggio sul display.",
+    "vedi": [
+      "stampante-offline",
+      "coda-stampa",
+      "stampante-scelta"
+    ],
+    "parole": [
+      "stampante",
+      "non stampa",
+      "stampa",
+      "fotocopiatrice",
+      "toner",
+      "carta",
+      "bloccata",
+      "inceppata",
+      "incastrata"
+    ]
+  },
+  {
+    "id": "stampante-offline",
+    "cat": "stampanti",
+    "d": "La stampante risulta «Offline»",
+    "intro": "In Windows accanto alla stampante compare la scritta «Offline» e i documenti restano fermi.",
+    "controlli": [
+      "La stampante è accesa e senza messaggi sul display?",
+      "Il cavo di rete (o il cavo USB) è inserito?"
+    ],
+    "passi": [
+      {
+        "t": "Clicca Start, poi «Impostazioni», poi «Bluetooth e dispositivi» e «Stampanti e scanner».",
+        "mancante": "Pagina Impostazioni > Bluetooth e dispositivi > Stampanti e scanner con una stampante di prova in stato «Offline» (la pagina reale elenca le stampanti del Comune, quindi va acquisita su un PC di prova)."
+      },
+      {
+        "t": "Clicca il nome della tua stampante, poi «Apri coda di stampa»."
+      },
+      {
+        "t": "Guarda lo stato in alto nella finestra: se c'è scritto «Offline», la stampante non è raggiungibile."
+      },
+      {
+        "t": "Spegni la stampante con il suo pulsante, aspetta 10 secondi e riaccendila. Poi aspetta un minuto che sia pronta."
+      },
+      {
+        "t": "Torna alla finestra e controlla che la scritta «Offline» sia sparita. Poi stampa di nuovo."
+      }
+    ],
+    "ok": "Lo stato non indica più «Offline» e i documenti in coda escono.",
+    "stop": "Non aggiungere né rimuovere stampanti da solo: serve il CED.",
+    "richiesta": "Se resta «Offline», apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della stampante e che risulta «Offline».",
+    "vedi": [
+      "coda-stampa",
+      "stampante-non-stampa"
+    ],
+    "parole": [
+      "offline",
+      "non raggiungibile",
+      "stampante non risponde",
+      "non connessa"
+    ]
+  },
+  {
+    "id": "coda-stampa",
+    "cat": "stampanti",
+    "d": "Coda di stampa: vedere i documenti e cancellare una stampa bloccata",
+    "intro": "Un documento fermo nella coda blocca anche quelli che mandi dopo.",
+    "passi": [
+      {
+        "t": "Clicca Start, poi «Impostazioni», poi «Bluetooth e dispositivi» e «Stampanti e scanner»."
+      },
+      {
+        "t": "Clicca il nome della stampante, poi «Apri coda di stampa». Si apre una finestra con i documenti in attesa.",
+        "img": "img/faq/coda-stampa-01-coda.webp",
+        "alt": "Finestra della coda di stampa (esempio con la stampante «Microsoft Print to PDF», senza documenti) con il menu «Stampante» evidenziato",
+        "nota": "Il nome nella barra del titolo sarà quello della tua stampante.",
+        "w": 636,
+        "h": 273
+      },
+      {
+        "t": "Clicca con il tasto destro sul documento bloccato (quello con stato «Errore» o fermo da molto) e scegli «Annulla»."
+      },
+      {
+        "t": "Per cancellarli tutti: clicca il menu «Stampante» in alto nella finestra, poi «Annulla tutti i documenti», poi «Sì»."
+      },
+      {
+        "t": "Chiudi la finestra e stampa di nuovo una sola volta."
+      }
+    ],
+    "ok": "La coda è vuota e la nuova stampa esce.",
+    "stop": "Non spegnere la stampante mentre sta stampando. Non cancellare i documenti degli altri colleghi se la stampante è condivisa: cancella solo i tuoi.",
+    "richiesta": "Se «Annulla» non fa sparire il documento, o la coda si riempie di nuovo da sola, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della stampante.",
+    "vedi": [
+      "stampante-offline",
+      "stampante-non-stampa"
+    ],
+    "parole": [
+      "coda",
+      "coda di stampa",
+      "annulla stampa",
+      "stampa bloccata",
+      "documento in coda",
+      "cancellare stampa"
+    ]
+  },
+  {
+    "id": "stampante-scelta",
+    "cat": "stampanti",
+    "d": "Come scegliere la stampante giusta",
+    "intro": "Con più stampanti in elenco è facile mandare il documento a quella sbagliata.",
+    "passi": [
+      {
+        "t": "Nel programma in cui lavori (Word, Excel, il browser) premi insieme Ctrl + P, oppure clicca «File» e poi «Stampa»."
+      },
+      {
+        "t": "Nella finestra cerca la voce «Stampante»: è la prima della pagina, con il nome della stampante in uso.",
+        "mancante": "Schermata della finestra «Stampa» di Word o Excel con il menu «Stampante» aperto, con nomi di stampante di esempio (da acquisire su un PC di prova senza stampanti reali)."
+      },
+      {
+        "t": "Clicca il nome e scegli la stampante del tuo ufficio. Se non sai quale sia, chiedi a un collega o al CED prima di stampare."
+      },
+      {
+        "t": "Controlla il numero di «Copie» e clicca «Stampa»."
+      }
+    ],
+    "ok": "Il documento esce dalla stampante che hai scelto.",
+    "stop": "Non stampare documenti riservati finché non sei sicuro della stampante: il documento potrebbe uscire in un altro ufficio.",
+    "richiesta": "Se la stampante del tuo ufficio non compare nell'elenco, apri una richiesta scegliendo «Stampante e scanner» e scrivi in quale ufficio si trova.",
+    "vedi": [
+      "fronte-retro",
+      "stampante-non-stampa"
+    ],
+    "parole": [
+      "scegliere stampante",
+      "stampante sbagliata",
+      "stampante predefinita",
+      "quale stampante",
+      "stampa"
+    ]
+  },
+  {
+    "id": "fronte-retro",
+    "cat": "stampanti",
+    "d": "Come stampare fronte e retro",
+    "intro": "Stampare su entrambi i lati risparmia carta.",
+    "passi": [
+      {
+        "t": "Premi insieme Ctrl + P per aprire la finestra «Stampa»."
+      },
+      {
+        "t": "Cerca la voce che parla di lati, per esempio «Stampa su un lato solo» o «Fronte/retro»."
+      },
+      {
+        "t": "Scegli «Stampa su entrambi i lati». Se ti viene chiesto da che lato girare il foglio, scegli «lato lungo» per i fogli in verticale e «lato corto» per quelli in orizzontale."
+      },
+      {
+        "t": "Clicca «Stampa»."
+      }
+    ],
+    "ok": "Il foglio esce stampato su tutti e due i lati.",
+    "stop": "Non rimettere nel cassetto fogli già stampati da un lato per provare: possono incastrarsi.",
+    "richiesta": "Se la voce non compare o il retro esce capovolto, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della stampante.",
+    "verifica": "I nomi esatti delle voci cambiano con programma e modello di stampante: controllare su un PC dell'ente con le stampanti reali.",
+    "parole": [
+      "fronte retro",
+      "doppio lato",
+      "entrambi i lati",
+      "duplex",
+      "risparmiare carta"
+    ]
+  },
+  {
+    "id": "scansione",
+    "cat": "stampanti",
+    "d": "Come fare una scansione",
+    "intro": "Vuoi trasformare un foglio di carta in un file da inviare o salvare.",
+    "passi": [
+      {
+        "t": "Appoggia il foglio sul vetro oppure mettilo nell'alimentatore, come indicato dai disegni sul coperchio della fotocopiatrice."
+      },
+      {
+        "t": "Sul display tocca «Scansione» (o «Scan»)."
+      },
+      {
+        "t": "Scegli la destinazione che usi di solito (per esempio la tua e-mail o una cartella) e controlla le opzioni mostrate."
+      },
+      {
+        "t": "Premi il pulsante di avvio del display e aspetta la fine della scansione."
+      },
+      {
+        "t": "Controlla di aver ricevuto il file dove avevi scelto."
+      }
+    ],
+    "ok": "Il file con la scansione arriva nella destinazione scelta.",
+    "stop": "Non lasciare sul vetro i documenti riservati dopo la scansione.",
+    "richiesta": "Se non vedi la destinazione che ti serve, o compare un errore, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della fotocopiatrice e cosa compare sul display.",
+    "verifica": "Il modo di fare la scansione dipende dal modello di fotocopiatrice e dalle destinazioni configurate: sostituire i passi generici con quelli reali, con foto del display.",
+    "parole": [
+      "scansione",
+      "scanner",
+      "scansionare",
+      "scannerizzare",
+      "pdf",
+      "fotocopiatrice"
+    ]
+  },
+  {
+    "id": "outlook-non-si-apre",
+    "cat": "posta",
+    "d": "Outlook non si apre o non funziona",
+    "intro": "Outlook non parte, resta bloccato o non mostra la posta.",
+    "controlli": [
+      "Altri programmi o siti funzionano? Se Internet non va, vedi la guida «Non ho Internet».",
+      "Compare un messaggio d'errore? Se sì, fai uno screenshot."
+    ],
+    "passi": [
+      {
+        "t": "Chiudi Outlook con la X in alto a destra e aspetta 10 secondi."
+      },
+      {
+        "t": "Riaprilo da Start: scrivi «Outlook» e clicca l'icona."
+      },
+      {
+        "t": "Guarda in fondo alla finestra: se compare «Disconnesso» o «Tentativo di connessione», Outlook non riesce a collegarsi alla posta."
+      },
+      {
+        "t": "Prova la posta dal browser: apri outlook.office.com e accedi con il tuo account di lavoro."
+      },
+      {
+        "t": "Se dal browser la posta funziona, il problema è nel programma sul tuo PC: segnalacelo. Se non funziona neanche lì, segnalalo comunque."
+      }
+    ],
+    "ok": "Outlook si apre e mostra la tua posta.",
+    "stop": "Non disinstallare né reinstallare Outlook e non cancellare impostazioni o profili.",
+    "richiesta": "Se Outlook non si apre dopo questi passi, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi il messaggio d'errore (meglio con uno screenshot), da quando succede e se la posta funziona dal browser.",
+    "vedi": [
+      "posta-non-arriva",
+      "internet",
+      "screenshot-allegati"
+    ],
+    "verifica": "Confermare se il Comune usa Outlook classico o il «nuovo Outlook» e adattare la voce «Disconnesso» e gli screenshot.",
+    "parole": [
+      "outlook",
+      "posta",
+      "non si apre",
+      "mail",
+      "email",
+      "disconnesso",
+      "non carica"
+    ]
+  },
+  {
+    "id": "posta-non-arriva",
+    "cat": "posta",
+    "d": "Non ricevo le e-mail",
+    "intro": "Aspetti un messaggio ma nella casella non arriva.",
+    "controlli": [
+      "Altri messaggi arrivano normalmente?",
+      "Il mittente ti ha scritto all'indirizzo giusto?"
+    ],
+    "passi": [
+      {
+        "t": "In Outlook apri la cartella «Posta indesiderata» nell'elenco a sinistra e guarda se il messaggio è finito lì."
+      },
+      {
+        "t": "Controlla la casella «Cerca» in alto: scrivi il nome del mittente o una parola dell'oggetto e premi Invio."
+      },
+      {
+        "t": "Chiedi al mittente di controllare l'indirizzo e di rimandare il messaggio."
+      },
+      {
+        "t": "Apri outlook.office.com nel browser e guarda se il messaggio compare lì."
+      }
+    ],
+    "ok": "Trovi il messaggio, in una delle cartelle o nel browser.",
+    "stop": "Non cliccare link o allegati dei messaggi che trovi nella posta indesiderata se non conosci il mittente: vedi la guida sulle e-mail sospette.",
+    "richiesta": "Se il messaggio atteso non compare da più di un giorno, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi mittente, data e oggetto.",
+    "vedi": [
+      "mail-sospetta",
+      "cercare-email",
+      "outlook-non-si-apre"
+    ],
+    "parole": [
+      "non arriva",
+      "non ricevo",
+      "posta non arriva",
+      "mail non arrivano",
+      "posta indesiderata",
+      "spam"
+    ]
+  },
+  {
+    "id": "allegato-troppo-grande",
+    "cat": "posta",
+    "d": "Non riesco a inviare un allegato",
+    "intro": "Outlook rifiuta il messaggio con l'allegato, oppure l'invio non finisce mai.",
+    "passi": [
+      {
+        "t": "Guarda la dimensione del file: in Outlook è scritta accanto al nome dell'allegato."
+      },
+      {
+        "t": "Se il file è molto grande (la posta rifiuta di solito gli allegati sopra i 20-25 MB), prova a inviare solo le pagine o le foto che servono."
+      },
+      {
+        "t": "Controlla il tipo di file: alcuni (per esempio i programmi, che finiscono con «.exe») sono bloccati per sicurezza e non si possono spedire."
+      },
+      {
+        "t": "Prova a inviare di nuovo il messaggio una volta e aspetta che l'invio finisca prima di chiudere Outlook."
+      }
+    ],
+    "ok": "Il messaggio parte e compare nella cartella «Posta inviata».",
+    "stop": "Non inviare l'allegato a un indirizzo personale per aggirare il blocco.",
+    "richiesta": "Se il messaggio non parte, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi nome e dimensione del file e il messaggio d'errore.",
+    "verifica": "Il limite reale della dimensione allegati dipende dalla configurazione della posta del Comune: verificare il valore e scriverlo.",
+    "parole": [
+      "allegato",
+      "allegati",
+      "file troppo grande",
+      "non riesco a inviare",
+      "invio",
+      "grande"
+    ]
+  },
+  {
+    "id": "cercare-email",
+    "cat": "posta",
+    "d": "Come trovare un'e-mail",
+    "intro": "Non ricordi dove hai messo un messaggio.",
+    "passi": [
+      {
+        "t": "In Outlook clicca la casella «Cerca» in alto."
+      },
+      {
+        "t": "Scrivi il nome di chi te l'ha mandato, o una parola dell'oggetto, e premi Invio."
+      },
+      {
+        "t": "Se non compare, controlla anche le cartelle «Posta indesiderata» ed «Elementi eliminati»."
+      }
+    ],
+    "ok": "Il messaggio compare nell'elenco dei risultati.",
+    "stop": "Non spostare o cancellare in massa i messaggi mentre cerchi.",
+    "richiesta": "Se un messaggio importante risulta sparito, apri una richiesta scegliendo «Posta, Teams e Office» con mittente, data approssimativa e oggetto.",
+    "verifica": "I nomi delle opzioni di ricerca dipendono dalla versione di Outlook in uso.",
+    "parole": [
+      "cercare",
+      "trovare mail",
+      "ricerca",
+      "messaggio sparito",
+      "ritrovare"
+    ]
+  },
+  {
+    "id": "teams-audio-video",
+    "cat": "posta",
+    "d": "Teams: non mi sentono o non mi vedono",
+    "intro": "In una riunione Teams il microfono o la videocamera non funzionano.",
+    "controlli": [
+      "Il microfono delle cuffie non è disattivato dal suo interruttore?",
+      "La videocamera non è coperta dalla sua protezione?"
+    ],
+    "passi": [
+      {
+        "t": "Nella riunione guarda la barra in alto: l'icona del microfono e quella della videocamera non devono avere una riga che le taglia. Se ce l'hanno, cliccale per attivarle."
+      },
+      {
+        "t": "Clicca i tre puntini «…» (o «Impostazioni e altro») in Teams, poi «Impostazioni» e «Dispositivi»."
+      },
+      {
+        "t": "Controlla che microfono, altoparlanti e videocamera siano quelli giusti. Se sono diversi, scegli i tuoi dall'elenco."
+      },
+      {
+        "t": "Chiudi gli altri programmi che usano la videocamera (per esempio un'altra riunione) e riprova."
+      }
+    ],
+    "ok": "Gli altri partecipanti ti sentono e ti vedono.",
+    "stop": "Non installare driver o programmi da Internet per risolvere il problema.",
+    "richiesta": "Se continuano a non sentirti o vederti, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi se il problema riguarda il microfono, la videocamera o entrambi.",
+    "vedi": [
+      "audio"
+    ],
+    "verifica": "Le voci di menu di Teams cambiano tra vecchio e nuovo Teams: controllare la versione in uso e aggiungere lo screenshot.",
+    "parole": [
+      "teams",
+      "microfono",
+      "webcam",
+      "videocamera",
+      "riunione",
+      "non mi sentono",
+      "non mi vedono"
+    ]
+  },
+  {
+    "id": "internet",
+    "cat": "rete",
+    "d": "Non ho connessione a Internet",
+    "intro": "I siti non si aprono o compare un messaggio che dice che non c'è connessione.",
+    "controlli": [
+      "Prova ad aprire un altro sito: forse non funziona solo quello.",
+      "Chiedi ai colleghi vicini: se non hanno Internet neanche loro, è un guasto generale."
+    ],
+    "passi": [
+      {
+        "t": "In basso a destra, vicino all'orologio, trova l'icona della rete: un computer con il cavo, oppure le onde del Wi-Fi. Se c'è una X, un globo o un segnale di divieto, la connessione manca.",
+        "mancante": "Ritaglio della barra delle applicazioni con l'icona di rete nei tre stati (connesso, senza Internet, cavo scollegato) da acquisire su un PC di prova."
+      },
+      {
+        "t": "Se il PC usa un cavo, controlla che sia inserito bene dietro al computer e nella presa a muro."
+      },
+      {
+        "t": "Se usi il Wi-Fi, clicca l'icona della rete e controlla che «Wi-Fi» sia acceso e «Modalità aereo» sia spenta."
+      },
+      {
+        "t": "Riavvia il computer: Start, pulsante di accensione, «Riavvia il sistema»."
+      },
+      {
+        "t": "Dopo il riavvio riprova ad aprire un sito."
+      }
+    ],
+    "ok": "I siti si aprono e l'icona della rete non ha più la X.",
+    "stop": "Non staccare cavi dagli armadietti di rete o dai dispositivi del corridoio e non cambiare impostazioni di rete.",
+    "richiesta": "Se ancora non funziona, apri una richiesta scegliendo «Internet e rete». Se anche i colleghi hanno lo stesso problema, apri una sola richiesta indicando l'ufficio e quante persone sono coinvolte.",
+    "vedi": [
+      "cartella-rete",
+      "pc-lento-bloccato"
+    ],
+    "parole": [
+      "internet",
+      "rete",
+      "wifi",
+      "wi-fi",
+      "connessione",
+      "non naviga",
+      "siti",
+      "cavo"
+    ]
+  },
+  {
+    "id": "cartella-rete",
+    "cat": "rete",
+    "d": "Non riesco ad aprire una cartella condivisa",
+    "intro": "Una cartella di rete non si apre, oppure compare «Accesso negato».",
+    "controlli": [
+      "Altri siti o la posta funzionano? Se no, vedi la guida «Non ho Internet».",
+      "Il problema c'è per tutte le cartelle o per una sola?"
+    ],
+    "passi": [
+      {
+        "t": "Apri «Esplora file» (la cartella gialla nella barra in basso) e riprova ad aprire la cartella dal percorso che usi di solito."
+      },
+      {
+        "t": "Riavvia il computer: Start, pulsante di accensione, «Riavvia il sistema». Poi riprova."
+      },
+      {
+        "t": "Se compare un messaggio, fai uno screenshot oppure scrivi il testo esatto. Non provare a cambiare permessi o password."
+      }
+    ],
+    "ok": "La cartella si apre e vedi i file.",
+    "stop": "Non copiare i file su chiavette o altri computer per aggirare il problema.",
+    "richiesta": "Se la cartella non si apre, apri una richiesta scegliendo «Internet e rete» e scrivi il percorso della cartella e il messaggio. Se compare «accesso negato» fermati subito e scrivici senza riprovare.",
+    "vedi": [
+      "internet",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "cartella",
+      "cartella di rete",
+      "cartella condivisa",
+      "accesso negato",
+      "percorso",
+      "non si apre",
+      "condivisa"
+    ]
+  },
+  {
+    "id": "accesso-remoto",
+    "cat": "rete",
+    "d": "Non riesco a collegarmi da remoto",
+    "intro": "Da casa o fuori sede non riesci ad accedere ai tuoi programmi o ai tuoi file di lavoro.",
+    "controlli": [
+      "Da casa funziona Internet? Prova ad aprire un sito qualsiasi.",
+      "Stai usando proprio il collegamento che ti ha indicato il CED?"
+    ],
+    "passi": [
+      {
+        "t": "Apri un sito qualsiasi per controllare che Internet funzioni."
+      },
+      {
+        "t": "Chiudi il programma o la pagina del collegamento e riaprili."
+      },
+      {
+        "t": "Controlla di aver scritto bene il nome utente. Non scrivere la password a nessuno."
+      },
+      {
+        "t": "Aspetta qualche minuto e riprova una sola volta."
+      }
+    ],
+    "ok": "Il collegamento riesce e vedi i tuoi programmi o file.",
+    "stop": "Non provare più volte di seguito con password diverse: l'account può bloccarsi. Non usare collegamenti che non ti ha dato il CED.",
+    "richiesta": "Se non funziona, apri una richiesta scegliendo «Internet e rete» e scrivi da dove ti colleghi (casa o altro luogo), che collegamento usi, il messaggio che compare e l'ora del tentativo.",
+    "verifica": "Dipende dal sistema di accesso remoto in uso (VPN, desktop virtuale, altro): sostituire i passi generici con quelli reali.",
+    "vedi": [
+      "internet",
+      "password-dimenticata"
+    ],
+    "parole": [
+      "remoto",
+      "da casa",
+      "smart working",
+      "vpn",
+      "collegarmi",
+      "desktop remoto"
+    ]
+  },
+  {
+    "id": "password-dimenticata",
+    "cat": "accessi",
+    "d": "Ho dimenticato la password, è scaduta o non viene accettata",
+    "intro": "Non riesci ad accedere perché la password non funziona.",
+    "controlli": [
+      "Il tasto «Blocco maiuscole» è spento? Di solito ha una luce sulla tastiera.",
+      "Stai usando l'account di lavoro, non uno personale?"
+    ],
+    "passi": [
+      {
+        "t": "Riscrivi la password lentamente, controllando le maiuscole. Se c'è l'icona a forma di occhio, usala per vedere cosa scrivi."
+      },
+      {
+        "t": "Se è la password di Microsoft 365 (Outlook, Teams, questo portale), nella pagina di accesso clicca «Password dimenticata?» e segui le istruzioni.",
+        "mancante": "Schermata della pagina di accesso con «Password dimenticata?» evidenziato (solo se la reimpostazione è attiva)."
+      },
+      {
+        "t": "Se «Password dimenticata?» non compare o non funziona, apri una richiesta scegliendo «Password e accesso»."
+      }
+    ],
+    "ok": "Riesci ad accedere con la nuova password.",
+    "stop": "Non dire la tua password a nessuno, nemmeno al CED: non te la chiederemo mai. Dopo alcuni tentativi sbagliati l'account può bloccarsi: non insistere.",
+    "richiesta": "Apri una richiesta scegliendo «Password e accesso» e scrivi il tuo nome utente (mai la password), se stai provando dal PC o dal telefono e il messaggio che compare.",
+    "verifica": "Confermare se la reimpostazione autonoma della password è attiva in Microsoft Entra e se vale anche per la password di Windows.",
+    "vedi": [
+      "mfa-richiesta"
+    ],
+    "parole": [
+      "password",
+      "dimenticata",
+      "scaduta",
+      "non accettata",
+      "bloccato",
+      "account",
+      "accesso",
+      "credenziali",
+      "non riesco ad accedere"
+    ]
+  },
+  {
+    "id": "mfa-richiesta",
+    "cat": "accessi",
+    "d": "Mi compare una richiesta di approvazione sul telefono",
+    "intro": "Dopo aver scritto la password, il telefono mostra una notifica o chiede un codice.",
+    "passi": [
+      {
+        "t": "Se in questo momento stai accedendo tu, approva la richiesta sul telefono o scrivi il codice richiesto."
+      },
+      {
+        "t": "Se non stavi accedendo, NON approvare: scegli «Nega» (o «Non sono io»)."
+      },
+      {
+        "t": "Avvisa subito il CED: qualcuno potrebbe conoscere la tua password."
+      }
+    ],
+    "ok": "Se eri tu, l'accesso va a buon fine. Se non eri tu, l'accesso resta bloccato.",
+    "stop": "Non approvare mai una richiesta che non hai avviato tu, anche se arriva più volte di seguito o ti sembra «solo per farla smettere». Non dare a nessuno il codice che compare sul telefono.",
+    "richiesta": "Se la richiesta non era tua, chiamaci subito (il numero è nella pagina «Contatti»). Se invece non ti arriva la richiesta quando accedi, apri una richiesta scegliendo «Password e accesso».",
+    "vedi": [
+      "password-dimenticata",
+      "avviso-sicurezza"
+    ],
+    "verifica": "Confermare quali metodi di verifica a due passaggi sono attivi (app, SMS, chiamata) e i testi dei pulsanti dell'app usata.",
+    "parole": [
+      "mfa",
+      "autenticazione",
+      "approva",
+      "approvazione",
+      "codice",
+      "notifica",
+      "verifica in due passaggi",
+      "authenticator"
+    ]
+  },
+  {
+    "id": "blocca-pc",
+    "cat": "sicurezza",
+    "d": "Come bloccare il PC quando mi allontano",
+    "intro": "Se ti alzi lasciando il PC acceso, chiunque potrebbe leggere o usare i tuoi dati e quelli del Comune.",
+    "passi": [
+      {
+        "t": "Prima di alzarti premi insieme il tasto Windows e il tasto L."
+      },
+      {
+        "t": "Lo schermo mostra la schermata di blocco. Il lavoro resta aperto, ma nessuno può usarlo."
+      },
+      {
+        "t": "Quando torni, premi un tasto, scrivi la tua password e continua."
+      }
+    ],
+    "ok": "Compare la schermata di blocco con l'ora e l'immagine di sfondo.",
+    "stop": "Non lasciare mai il PC sbloccato, nemmeno per pochi minuti, se ci sono persone che non lavorano con te.",
+    "richiesta": "Se la schermata di blocco non compare o non riesci a sbloccare, apri una richiesta scegliendo «Password e accesso».",
+    "parole": [
+      "blocca",
+      "bloccare pc",
+      "bloccare schermo",
+      "allontano",
+      "schermata di blocco",
+      "win+l",
+      "sicurezza"
+    ]
+  },
+  {
+    "id": "mail-sospetta",
+    "cat": "sicurezza",
+    "d": "Ho ricevuto un'e-mail sospetta",
+    "intro": "Un messaggio ti sembra strano o non te lo aspettavi: potrebbe essere un tentativo di truffa (phishing).",
+    "controlli": [
+      "Il mittente è sconosciuto o l'indirizzo è strano?",
+      "Il messaggio ha fretta, minaccia, o chiede password, codici o soldi?",
+      "Ci sono errori di italiano, link strani (avvicina il mouse senza cliccare) o allegati che non aspettavi?"
+    ],
+    "passi": [
+      {
+        "t": "Non cliccare sui link e non aprire gli allegati."
+      },
+      {
+        "t": "Non rispondere e non inoltrare il messaggio ai colleghi."
+      },
+      {
+        "t": "Lascia il messaggio dove si trova: serve al CED per controllarlo."
+      },
+      {
+        "t": "Apri una richiesta scegliendo «Altro» (o «Posta, Teams e Office») e scrivi mittente, oggetto e orario del messaggio."
+      }
+    ],
+    "ok": "Il CED controlla il messaggio e ti dice cosa fare.",
+    "stop": "Se hai già cliccato un link, aperto un allegato o scritto dati, non perdere tempo: vedi la guida «Ho cliccato un link sospetto» e chiama subito.",
+    "richiesta": "Apri una richiesta anche se sei quasi sicuro che sia una truffa: serve a proteggere anche i colleghi che hanno ricevuto lo stesso messaggio.",
+    "vedi": [
+      "link-cliccato",
+      "posta-non-arriva"
+    ],
+    "verifica": "Verificare se in Outlook è attivo un pulsante «Segnala» (phishing) e, in caso, inserirlo qui con uno screenshot.",
+    "parole": [
+      "mail sospetta",
+      "email sospetta",
+      "phishing",
+      "truffa",
+      "spam",
+      "allegato strano",
+      "link strano"
+    ]
+  },
+  {
+    "id": "link-cliccato",
+    "cat": "sicurezza",
+    "d": "Ho cliccato un link sospetto",
+    "intro": "Hai cliccato su un link di un messaggio strano, o aperto un allegato, e ora hai un dubbio.",
+    "passi": [
+      {
+        "t": "Non scrivere password, codici o dati nella pagina che si è aperta. Se li hai già scritti, dillo subito al CED."
+      },
+      {
+        "t": "Chiudi la pagina con la X in alto a destra della finestra."
+      },
+      {
+        "t": "Se è stato scaricato un file, non aprirlo."
+      },
+      {
+        "t": "Chiama subito il CED (il numero è nella pagina «Contatti») e racconta cosa hai cliccato e a che ora. Non aprire soltanto una richiesta: serve una telefonata."
+      },
+      {
+        "t": "Aspetta le indicazioni del CED prima di continuare a lavorare con quel PC."
+      }
+    ],
+    "ok": "Il CED sa cosa è successo e ti dice se serve fare altro.",
+    "stop": "Se vedi finestre strane, file che cambiano nome o il PC che si comporta in modo anomalo, scollega il cavo di rete (o spegni il Wi-Fi) e chiama subito. Non cercare di risolvere da solo.",
+    "richiesta": "Dopo la telefonata, apri una richiesta scegliendo «Altro» e scrivi quello che hai raccontato al telefono.",
+    "vedi": [
+      "mail-sospetta",
+      "avviso-sicurezza"
+    ],
+    "verifica": "Confermare con il CED la procedura ufficiale (spegnere o solo scollegare dalla rete) e il numero di reperibilità.",
+    "parole": [
+      "ho cliccato",
+      "link",
+      "cliccato",
+      "allegato aperto",
+      "virus",
+      "malware"
+    ]
+  },
+  {
+    "id": "avviso-sicurezza",
+    "cat": "sicurezza",
+    "d": "Compare un avviso di sicurezza o un messaggio strano sullo schermo",
+    "intro": "Si apre una finestra che parla di virus, ti dice di chiamare un numero o di installare qualcosa.",
+    "passi": [
+      {
+        "t": "Non cliccare sui pulsanti dentro il messaggio e non telefonare a numeri che compaiono sullo schermo."
+      },
+      {
+        "t": "Scatta una foto allo schermo con il telefono, oppure usa Windows + Maiusc + S, per mostrare il messaggio al CED."
+      },
+      {
+        "t": "Se è una finestra del browser, chiudila con la X in alto a destra della finestra, non dentro il messaggio."
+      },
+      {
+        "t": "Apri una richiesta scegliendo «Altro» e allega la foto o lo screenshot."
+      }
+    ],
+    "ok": "Il messaggio sparisce e il CED sa cosa ti è comparso.",
+    "stop": "Non installare nulla e non scrivere password o dati nel messaggio. Se la finestra non si chiude o continua a ricomparire, chiama subito il CED.",
+    "richiesta": "Apri una richiesta anche se il messaggio sparisce: scrivi cosa dice, a che ora è comparso e che sito o programma stavi usando.",
+    "vedi": [
+      "link-cliccato",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "avviso",
+      "virus",
+      "pop-up",
+      "popup",
+      "finestra strana",
+      "allarme",
+      "sicurezza",
+      "antivirus"
+    ]
+  },
+  {
+    "id": "screenshot-allegati",
+    "cat": "portale",
+    "d": "Come fare una foto dello schermo e allegarla alla richiesta",
+    "intro": "Un'immagine dell'errore aiuta il tecnico a capire subito il problema, senza bisogno di molte domande.",
+    "passi": [
+      {
+        "t": "Quando compare il problema o il messaggio d'errore, premi insieme i tasti Windows + Maiusc + S. Lo schermo si scurisce e in alto compare una barra.",
+        "mancante": "Barra dello Strumento di cattura (Windows + Maiusc + S) con il rettangolo di selezione, acquisita su un PC di prova con sfondo neutro."
+      },
+      {
+        "t": "Con il mouse disegna un rettangolo attorno a ciò che vuoi far vedere. Quando rilasci il mouse l'immagine è copiata."
+      },
+      {
+        "t": "Nel portale apri «Nuova richiesta» e scegli l'argomento. Poi premi insieme Ctrl + V.",
+        "nota": "Funziona in qualunque punto della pagina della nuova richiesta.",
+        "img": "img/faq/screenshot-allegati-01-riquadro.webp",
+        "alt": "Il riquadro «Hai uno screenshot dell'errore?» della pagina Nuova richiesta, con le istruzioni Win+Maiusc+S e Ctrl+V",
+        "w": 1100,
+        "h": 125
+      },
+      {
+        "t": "Sotto il riquadro «Hai uno screenshot dell'errore?» compare l'immagine con il nome «screenshot-» seguito da data e ora. Se hai sbagliato, clicca «Rimuovi» e ripeti.",
+        "mancante": "Schermata con l'allegato «screenshot-…» già incollato nell'elenco sotto il riquadro e il pulsante «Rimuovi» (da acquisire dal portale con un utente di prova)."
+      }
+    ],
+    "ok": "L'immagine compare nell'elenco degli allegati, prima di inviare la richiesta.",
+    "stop": "Prima di allegare controlla che nell'immagine non si vedano password o dati che non c'entrano con il problema.",
+    "richiesta": "Se Ctrl + V non funziona, clicca il riquadro «Hai uno screenshot dell'errore?» e scegli un file salvato sul computer. Se non riesci neanche così, descrivi il messaggio a parole nella richiesta.",
+    "vedi": [
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "screenshot",
+      "schermata",
+      "foto dello schermo",
+      "allegare",
+      "allegato",
+      "immagine",
+      "cattura",
+      "incolla"
+    ]
+  },
+  {
+    "id": "aprire-richiesta",
+    "cat": "portale",
+    "d": "Come aprire una richiesta di assistenza",
+    "intro": "Se i controlli delle guide non bastano, apri una richiesta: ha un numero e puoi seguirne lo stato.",
+    "controlli": [
+      "Cosa succede e da quando.",
+      "L'eventuale messaggio d'errore (meglio con uno screenshot).",
+      "Il nome del computer, se il problema riguarda il PC.",
+      "Il tuo telefono o interno, per essere richiamato."
+    ],
+    "passi": [
+      {
+        "t": "Clicca «Nuova richiesta» nel menu in alto."
+      },
+      {
+        "t": "Clicca la casella che somiglia di più al tuo problema. Se non sai quale scegliere, scegli «Altro / non so».",
+        "img": "img/faq/aprire-richiesta-01-argomenti.webp",
+        "alt": "La pagina Nuova richiesta con le caselle degli argomenti: Il mio computer, Stampante e scanner, Internet e rete, Posta, Teams e Office, Password e accesso, Programmi dell'ente, Altro",
+        "w": 1100,
+        "h": 899
+      },
+      {
+        "t": "Nella casella «Cosa è successo?» scrivi il problema con parole tue. I pulsanti sotto («Da quando succede?», «Cosa stavi facendo?», «Vedi un messaggio d'errore?») ti aiutano a non dimenticare nulla.",
+        "img": "img/faq/aprire-richiesta-02-descrizione.webp",
+        "alt": "Il modulo con la casella «Cosa è successo?» e i pulsanti che aiutano a descrivere il problema",
+        "w": 1100,
+        "h": 342
+      },
+      {
+        "t": "Scrivi il tuo telefono o interno. Se hai uno screenshot, premi Ctrl + V."
+      },
+      {
+        "t": "Clicca «Invia richiesta».",
+        "img": "img/faq/aprire-richiesta-03-invia.webp",
+        "alt": "Il pulsante «Invia richiesta» in fondo al modulo",
+        "w": 1100,
+        "h": 190
+      },
+      {
+        "t": "Compare «Richiesta inviata» con il numero: annotalo."
+      }
+    ],
+    "ok": "Vedi la pagina «Richiesta inviata» con il numero e ricevi una e-mail di conferma.",
+    "stop": "Non scrivere la tua password nella richiesta, nemmeno se un tecnico sembra chiedertela: non lo farà.",
+    "richiesta": "Per problemi urgenti che bloccano il lavoro di tutto l'ufficio chiama anche il CED (numero nella pagina «Contatti»).",
+    "vedi": [
+      "stato-richiesta",
+      "screenshot-allegati",
+      "nome-pc"
+    ],
+    "parole": [
+      "aprire richiesta",
+      "nuova richiesta",
+      "ticket",
+      "segnalazione",
+      "come scrivere",
+      "cosa scrivere",
+      "assistenza"
+    ]
+  },
+  {
+    "id": "stato-richiesta",
+    "cat": "portale",
+    "d": "Come controllare lo stato di una richiesta",
+    "intro": "Vuoi sapere a che punto è una richiesta che hai già aperto.",
+    "passi": [
+      {
+        "t": "Clicca «Le mie richieste» nel menu in alto.",
+        "img": "img/faq/stato-richiesta-01-elenco.webp",
+        "alt": "L'elenco «Le mie richieste» con numero, oggetto, date e stato",
+        "w": 1100,
+        "h": 546
+      },
+      {
+        "t": "Guarda la colonna «Stato»: «In attesa» (presa in carico a breve), «In lavorazione» (un tecnico ci sta lavorando), «In sospeso» (ferma in attesa di qualcosa, per esempio una tua risposta), «Risolta» o «Chiusa»."
+      },
+      {
+        "t": "Clicca il numero o l'oggetto per aprire i dettagli e leggere gli aggiornamenti."
+      },
+      {
+        "t": "Per vedere anche le richieste concluse clicca «Chiuse» o «Tutte» sopra l'elenco."
+      }
+    ],
+    "ok": "Vedi lo stato aggiornato e gli ultimi messaggi del tecnico.",
+    "stop": "Non aprire una nuova richiesta per lo stesso problema: aggiungi un messaggio a quella che hai già.",
+    "richiesta": "Se la richiesta è ferma da tempo, scrivi un messaggio dal suo dettaglio (vedi la guida «Come rispondere al CED»).",
+    "vedi": [
+      "rispondere-al-ced"
+    ],
+    "parole": [
+      "stato",
+      "richiesta",
+      "ticket",
+      "le mie richieste",
+      "a che punto",
+      "in lavorazione",
+      "risolta"
+    ]
+  },
+  {
+    "id": "rispondere-al-ced",
+    "cat": "portale",
+    "d": "Come rispondere al CED o aggiungere informazioni",
+    "intro": "Il tecnico ti ha scritto, oppure ti è venuto in mente qualcosa da aggiungere a una richiesta aperta.",
+    "passi": [
+      {
+        "t": "Clicca «Le mie richieste» e poi la richiesta che ti interessa."
+      },
+      {
+        "t": "Leggi gli ultimi messaggi sotto «Aggiornamenti»."
+      },
+      {
+        "t": "In fondo alla pagina, nella casella «Vuoi aggiungere informazioni?», scrivi il messaggio e clicca «Invia messaggio».",
+        "img": "img/faq/rispondere-al-ced-01-messaggio.webp",
+        "alt": "Il dettaglio di una richiesta con gli aggiornamenti e la casella per scrivere un messaggio",
+        "w": 1100,
+        "h": 755
+      },
+      {
+        "t": "Se la richiesta risulta «Risolta» e il problema è davvero risolto, clicca «Risolto, grazie». Se non lo è, clicca «Non è risolto, riapri»."
+      }
+    ],
+    "ok": "Il messaggio compare tra gli aggiornamenti e arriva direttamente al tecnico.",
+    "stop": "Non rispondere alla e-mail di avviso: la risposta non arriva al tecnico. Usa sempre il portale. Non scrivere password.",
+    "richiesta": "Per un problema nuovo, diverso da quello della richiesta, apri una nuova richiesta.",
+    "vedi": [
+      "stato-richiesta",
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "rispondere",
+      "messaggio",
+      "aggiungere informazioni",
+      "tecnico",
+      "riaprire",
+      "risolto"
+    ]
+  },
+  {
+    "id": "cercare-guide",
+    "cat": "portale",
+    "d": "Come cercare una guida e usare i filtri",
+    "intro": "Prima di aprire una richiesta, cerca una guida con le parole del problema o del messaggio di errore.",
+    "controlli": [
+      "Le guide si consultano dopo l'accesso al portale con il proprio account di lavoro."
+    ],
+    "passi": [
+      {
+        "t": "Apri «Guide» e scrivi una o due parole nella casella «Cerca nelle guide», per esempio stampante oppure Outlook.",
+        "img": "img/faq/cercare-guide-01-ricerca.png",
+        "alt": "Ricerca e filtri della pagina Guide, acquisiti dal portale reale. Intestazione e account esclusi dal ritaglio; il numero di guide può cambiare.",
+        "w": 1180,
+        "h": 300
+      },
+      {
+        "t": "Per restringere i risultati, scegli un argomento. La ricerca e il filtro si applicano insieme."
+      },
+      {
+        "t": "Apri il titolo della guida e segui i passaggi. Per vedere tutti i risultati, cancella il testo e seleziona «Tutte»."
+      }
+    ],
+    "ok": "Vedi le guide pertinenti e puoi leggere i controlli da fare prima della segnalazione.",
+    "stop": "Se una guida richiede permessi che non hai, fermati e chiedi assistenza. Non usare l'account di un collega.",
+    "richiesta": "Se nessuna guida risolve il problema, apri una richiesta e indica i controlli già fatti.",
+    "vedi": [
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "cercare",
+      "ricerca guide",
+      "filtri",
+      "nessuna guida",
+      "faq"
+    ]
+  },
+  {
+    "id": "xdesk-ticket-chiusi",
+    "cat": "gestionali",
+    "d": "X-Desk: non trovo una segnalazione vecchia o chiusa",
+    "intro": "Un ticket può non comparire perché l'elenco mostra solo alcuni stati o perché si trova in un'altra pagina.",
+    "controlli": [
+      "Verifica di essere entrato con il tuo account e nell'ente corretto.",
+      "Il campo di ricerca osservato in X-Desk cerca nella pagina corrente: un elenco vuoto non dimostra che il ticket non esista nell'archivio."
+    ],
+    "passi": [
+      {
+        "t": "Apri «Segnalazioni». Nei filtri «Stato» controlla che siano selezionati anche «Chiusa» e «Chiusa dal mittente».",
+        "img": "img/faq/xdesk-ticket-chiusi-01-filtri.png",
+        "alt": "Filtri Stato di X-Desk con tutti e sette gli stati selezionati, compresi Chiusa e Chiusa dal mittente. Nessun ticket o account nel ritaglio.",
+        "w": 541,
+        "h": 343
+      },
+      {
+        "t": "Cancella un eventuale testo di ricerca. Controlla la data e passa alle pagine successive con «Avanti». Puoi scegliere «50 per pagina» per vedere più voci insieme."
+      },
+      {
+        "t": "Quando trovi il ticket, aprilo e leggi l'ultimo aggiornamento. «Trasferita» indica che la richiesta è passata a un altro settore: verifica se è indicato il riferimento della nuova segnalazione."
+      }
+    ],
+    "ok": "Ritrovi la segnalazione o raccogli il suo riferimento senza aprire un duplicato.",
+    "stop": "Non premere «Chiudi Ticket» per tornare all'elenco. Usa «Indietro». I filtri cambiano solo ciò che vedi, non lo stato delle richieste.",
+    "richiesta": "Se non la trovi, comunica al CED numero del ticket, periodo indicativo e servizio interessato. Non allegare elenchi completi di altre richieste.",
+    "vedi": [
+      "xdesk-rispondere-ticket"
+    ],
+    "parole": [
+      "xdesk",
+      "x-desk",
+      "ticket chiuso",
+      "storico",
+      "segnalazioni",
+      "trasferita",
+      "non trovo"
+    ]
+  },
+  {
+    "id": "xdesk-rispondere-ticket",
+    "cat": "gestionali",
+    "d": "X-Desk: aggiungere un aggiornamento a una segnalazione",
+    "intro": "Se devi aggiungere dettagli sullo stesso problema, usa il ticket già aperto anziché crearne un altro.",
+    "controlli": [
+      "Questa guida riguarda X-Desk, il portale del fornitore. Per rispondere al CED dal portale assistenza usa la guida «Come rispondere al CED o aggiungere informazioni».",
+      "Controlla il numero del ticket e leggi l'ultima risposta prima di scrivere."
+    ],
+    "passi": [
+      {
+        "t": "Apri la segnalazione da «Segnalazioni» e vai in fondo alla conversazione."
+      },
+      {
+        "t": "Se è presente il riquadro di risposta, scrivi cosa è cambiato, quale prova hai fatto e quando puoi essere contattato. Poi usa il pulsante di invio del messaggio.",
+        "img": "img/faq/xdesk-rispondere-01-editor.png",
+        "alt": "Riquadro vuoto per scrivere una risposta in X-Desk, ritagliato escludendo conversazione, nominativi e numero del ticket. Nessun messaggio è stato inviato durante l'acquisizione.",
+        "w": 1350,
+        "h": 435
+      },
+      {
+        "t": "Controlla che il tuo aggiornamento compaia nella conversazione. Se non compare, rileggi gli eventuali errori prima di riprovare."
+      }
+    ],
+    "ok": "Il nuovo messaggio è visibile nel ticket corretto.",
+    "stop": "Se il ticket è trasferito o manca il riquadro di risposta, non chiuderlo e non crearne subito un duplicato: verifica il riferimento del ticket attivo o chiedi al CED. Non inserire password o dati di cittadini non necessari.",
+    "richiesta": "Se non riesci ad aggiornare la segnalazione, indica al CED numero e stato del ticket e quale comando manca.",
+    "vedi": [
+      "xdesk-ticket-chiusi",
+      "rispondere-al-ced"
+    ],
+    "parole": [
+      "xdesk",
+      "x-desk",
+      "carteggio",
+      "carteggiare",
+      "rispondere",
+      "aggiornare ticket",
+      "duplicato"
+    ],
+    "verifica": "Sono stati verificati presenza del riquadro e lettura delle conversazioni. L'invio non è stato provato su ticket reali: verificare il flusso completo su un ticket di prova autorizzato."
+  },
+  {
+    "id": "gestionale-non-raggiungibile",
+    "cat": "gestionali",
+    "d": "Il gestionale non si apre o il browser non trova il server",
+    "intro": "Il browser mostra un errore prima che si apra il programma di lavoro.",
+    "controlli": [
+      "Guarda se il problema riguarda un solo programma oppure anche gli altri siti.",
+      "Se lavori da remoto, verifica che il collegamento aziendale previsto sia attivo."
+    ],
+    "passi": [
+      {
+        "t": "Apri il programma dal collegamento abituale. Controlla di non usare un vecchio preferito o un indirizzo scritto a mano."
+      },
+      {
+        "t": "Prova un altro sito di lavoro che usi normalmente. Se non si apre nemmeno quello, consulta la guida sulla connessione."
+      },
+      {
+        "t": "Chiedi a un collega dello stesso ufficio se vede lo stesso errore, senza utilizzare le sue credenziali. Annota l'ora e il testo del messaggio."
+      }
+    ],
+    "ok": "Il programma torna raggiungibile oppure hai distinto un problema di connessione da uno del singolo servizio.",
+    "stop": "Non cambiare DNS, proxy, certificati o impostazioni di sicurezza. Se il browser segnala un certificato non valido, fermati e segnala l'avviso.",
+    "richiesta": "Apri una richiesta in «Programmi del Comune»: indica programma, errore, ora, se sei in ufficio o da remoto e se sono coinvolti altri colleghi.",
+    "vedi": [
+      "internet",
+      "accesso-remoto"
+    ],
+    "parole": [
+      "halley",
+      "server non trovato",
+      "non trova il server",
+      "gestionale",
+      "intranet",
+      "irraggiungibile"
+    ]
+  },
+  {
+    "id": "gestionale-funzione-non-abilitata",
+    "cat": "gestionali",
+    "d": "Manca una piattaforma o una funzione del gestionale è disabilitata",
+    "intro": "L'accesso al portale funziona, ma non vedi una piattaforma oppure una funzione non è selezionabile.",
+    "controlli": [
+      "L'accesso a X-Desk non abilita automaticamente tutte le piattaforme.",
+      "Le funzioni disponibili dipendono dal profilo personale e dal servizio di appartenenza.",
+      "Per TERRITORIO la richiesta ordinaria documentata passa da «X-Desk → Segnalazioni → Gestione Territorio». L’eventuale creazione diretta dell’utenza resta riservata ai responsabili autorizzati."
+    ],
+    "passi": [
+      {
+        "t": "Verifica il nome del tuo account e l'ente selezionato. Chiudi eventuali sessioni di altri utenti sul PC condiviso."
+      },
+      {
+        "t": "Annota il nome della piattaforma o il percorso della funzione che manca e descrivi l'attività di lavoro che devi svolgere."
+      },
+      {
+        "t": "Apri una richiesta al CED scegliendo «Programmi del Comune». Indica se prima riuscivi a usare la funzione oppure se si tratta di una nuova abilitazione."
+      }
+    ],
+    "ok": "Il CED può verificare quale profilo serve e gestire la richiesta di abilitazione.",
+    "stop": "Non usare account o password di colleghi e non modificare le autorizzazioni di altri utenti. Un comando disabilitato non va aggirato.",
+    "richiesta": "Per una nuova abilitazione descrivi anche ufficio e attività richiesta; il CED verificherà le autorizzazioni necessarie.",
+    "vedi": [
+      "aprire-richiesta",
+      "xgdpr-percorso-formativo"
+    ],
+    "parole": [
+      "abilitazione",
+      "territorio",
+      "xdesk",
+      "x-desk",
+      "profilo",
+      "permessi",
+      "accesso negato",
+      "disabilitata"
+    ]
+  },
+  {
+    "id": "imu-annualita-mancanti",
+    "cat": "gestionali",
+    "d": "IMU: vedo solo alcune annualità",
+    "intro": "Nel gestionale IMU non compaiono gli anni che ti servono, oppure l'intervallo è cambiato.",
+    "controlli": [
+      "Annota il primo e l'ultimo anno visibile e gli anni che ti servono.",
+      "Controlla quale funzione IMU stai utilizzando, senza modificare configurazioni generali."
+    ],
+    "passi": [
+      {
+        "t": "Controlla se nella schermata sono presenti filtri di ricerca o di anno già impostati. Non cambiare parametri di amministrazione."
+      },
+      {
+        "t": "Se il filtro della schermata non spiega il problema, apri una richiesta in «Programmi del Comune» specificando l'intervallo visibile e quello richiesto."
+      },
+      {
+        "t": "Dopo l'intervento dell'assistenza, riapri la funzione e controlla che compaiano tutti gli anni richiesti."
+      }
+    ],
+    "ok": "Sono visibili le annualità necessarie, verificate nella funzione che usi per lavorare.",
+    "stop": "Non creare una nuova annualità e non copiare dati per far ricomparire un anno. L'assenza dall'elenco non dimostra che i dati siano stati cancellati.",
+    "richiesta": "Indica percorso della funzione, anni visibili, anni attesi e da quando hai notato il cambiamento. Non allegare dichiarazioni o anagrafiche di contribuenti per mostrare un filtro.",
+    "vedi": [
+      "gestionale-funzione-non-abilitata"
+    ],
+    "parole": [
+      "imu",
+      "annualità",
+      "annualita",
+      "anni",
+      "anno mancante",
+      "intervallo"
+    ]
+  },
+  {
+    "id": "protocollo-fascicolo-copia",
+    "cat": "gestionali",
+    "d": "Protocollo: la copia mantiene un fascicolo sbagliato",
+    "intro": "Dopo aver copiato un protocollo e cambiato la fascicolazione, riaprendolo compare ancora il fascicolo precedente.",
+    "controlli": [
+      "Confronta il fascicolo mostrato prima e dopo la riapertura.",
+      "Verifica se il problema compare solo nei protocolli copiati."
+    ],
+    "passi": [
+      {
+        "t": "Riapri il protocollo già salvato e controlla la fascicolazione effettivamente presente. Non creare altri protocolli solo per fare prove."
+      },
+      {
+        "t": "Annota il numero e l'anno del protocollo interessato e descrivi quale fascicolo dovrebbe risultare. Inserisci questi riferimenti solo nella richiesta riservata di assistenza."
+      },
+      {
+        "t": "Se esiste già una segnalazione sullo stesso caso, aggiungi lì l'esito del controllo anziché aprire un duplicato."
+      }
+    ],
+    "ok": "L'assistenza dispone di un caso preciso da controllare e, dopo la correzione, la fascicolazione resta corretta anche riaprendo il protocollo.",
+    "stop": "Non annullare protocolli e non ripetere invii per correggere la visualizzazione. Nei casi esaminati il problema richiedeva una verifica del fornitore: non è documentata una correzione autonoma affidabile.",
+    "richiesta": "Scegli «Programmi del Comune» e indica funzione, operazione di copia e risultato dopo la riapertura. Oscura oggetto, mittenti e destinatari non necessari negli screenshot.",
+    "vedi": [
+      "xdesk-rispondere-ticket",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "protocollo",
+      "fascicolo",
+      "fascicolazione",
+      "copia",
+      "copiato",
+      "non salva"
+    ]
+  },
+  {
+    "id": "protocollo-copia-timbro",
+    "cat": "gestionali",
+    "d": "Protocollo: manca la copia PDF con numero e data",
+    "intro": "Stai preparando un invio con un documento firmato e non trovi la copia PDF con i riferimenti del protocollo.",
+    "controlli": [
+      "Distingui il file firmato dalla sua eventuale copia PDF di consultazione.",
+      "Prima di inviare, controlla l'elenco completo degli allegati."
+    ],
+    "passi": [
+      {
+        "t": "Mantieni il file firmato originale e controlla se il gestionale ha già prodotto una copia PDF con numero e data."
+      },
+      {
+        "t": "Se la copia manca, chiedi al CED o al referente del protocollo di verificare l'impostazione prevista per gli invii. La configurazione può riguardare più operatori."
+      },
+      {
+        "t": "Se l'invio è già partito, segnala il caso prima di aggiungere file o ripetere la spedizione. La procedura da seguire va verificata sul caso concreto."
+      }
+    ],
+    "ok": "Prima dell'invio sono stati verificati gli allegati previsti e la presenza dei riferimenti sulla copia PDF, quando richiesta.",
+    "stop": "Non modificare il contenuto del documento firmato e non sostituirlo con la copia di consultazione. Non attivare impostazioni generali per risolvere un singolo invio senza il referente.",
+    "richiesta": "Indica formato del file, fase dell'operazione e se l'invio è già avvenuto. I riferimenti del protocollo vanno nella richiesta riservata, non nel titolo di una guida o in un servizio esterno.",
+    "vedi": [
+      "pdf-gestionale-non-apre"
+    ],
+    "parole": [
+      "protocollo",
+      "timbro",
+      "p7m",
+      "pades",
+      "cades",
+      "copia conforme",
+      "copia cortesia",
+      "firma"
+    ]
+  },
+  {
+    "id": "pdf-gestionale-non-apre",
+    "cat": "gestionali",
+    "d": "Un PDF del gestionale non si apre o non si scarica",
+    "intro": "Un documento prodotto o scaricato dal gestionale dà errore, mentre altri PDF potrebbero funzionare.",
+    "controlli": [
+      "Distingui un errore di download da un errore nell'apertura di un file già scaricato.",
+      "Verifica se il problema riguarda un solo documento o più documenti della stessa funzione."
+    ],
+    "passi": [
+      {
+        "t": "Prova ad aprire un altro PDF di lavoro già disponibile e che sei autorizzato a consultare. Annota se si apre correttamente."
+      },
+      {
+        "t": "Sul documento che dà errore, annota il messaggio e se il file viene scaricato oppure il download non parte."
+      },
+      {
+        "t": "Apri una richiesta indicando il gestionale e il percorso della funzione. Allega un ritaglio del solo errore, senza mostrare il contenuto del documento."
+      }
+    ],
+    "ok": "Hai raccolto gli elementi per distinguere un problema del lettore PDF da uno di generazione o download del documento.",
+    "stop": "Non caricare atti o dati di cittadini su siti esterni per convertire o riparare il PDF. Non disattivare le protezioni del browser o del lettore.",
+    "richiesta": "Scegli «Programmi del Comune» se il problema riguarda solo il gestionale; specifica se gli altri PDF si aprono e in quale momento compare l'errore.",
+    "vedi": [
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "pdf",
+      "adobe",
+      "reader",
+      "ansc",
+      "annotazioni",
+      "non scarica",
+      "download",
+      "non si apre"
+    ]
+  },
+  {
+    "id": "atto-pdf-incompleto",
+    "cat": "gestionali",
+    "d": "Il PDF di un atto ha pagine mancanti",
+    "intro": "La copia PDF di un atto contiene meno pagine del documento atteso oppure si interrompe prima della fine.",
+    "controlli": [
+      "Controlla il numero totale delle pagine nel lettore PDF.",
+      "Distingui il testo principale dagli allegati separati, se previsti."
+    ],
+    "passi": [
+      {
+        "t": "Confronta il PDF con il documento disponibile nel gestionale e annota quante pagine sono presenti e quante ne mancano."
+      },
+      {
+        "t": "Indica quale copia è incompleta, per esempio copia conforme o copia per uso amministrativo."
+      },
+      {
+        "t": "Segnala il problema prima di usare o inviare quella copia. Dopo l'intervento, controlla di nuovo numero di pagine e ultima pagina."
+      }
+    ],
+    "ok": "La copia verificata contiene tutte le pagine previste e termina correttamente.",
+    "stop": "Non ricostruire il documento unendo pagine con strumenti online e non sostituire da solo file firmati o già pubblicati.",
+    "richiesta": "Apri una richiesta in «Programmi del Comune» con tipo di atto, riferimento riservato, tipo di copia e pagine presenti/attese. Non allegare l'intero atto se basta il messaggio o il conteggio.",
+    "vedi": [
+      "pdf-gestionale-non-apre"
+    ],
+    "parole": [
+      "pdf",
+      "pagine mancanti",
+      "incompleto",
+      "atto",
+      "determina",
+      "copia conforme",
+      "rigenerare"
+    ]
+  },
+  {
+    "id": "albo-allegati-assenti",
+    "cat": "gestionali",
+    "d": "Un atto è pubblicato ma non vedo gli allegati",
+    "intro": "Sul sito compare l'atto, ma uno o più allegati previsti non sono visibili.",
+    "controlli": [
+      "Verifica di guardare la pagina dell'atto corretto.",
+      "Un allegato presente nel gestionale non è necessariamente destinato alla pubblicazione.",
+      "Nelle pubblicazioni VAOL controlla anche che sia presente il documento principale: soli allegati e ritardo di sincronizzazione sono due situazioni diverse, da far verificare al referente."
+    ],
+    "passi": [
+      {
+        "t": "Controlla quali allegati sono visibili nella pagina pubblicata e confrontali con quelli che il referente dell'atto ha previsto di pubblicare."
+      },
+      {
+        "t": "Annota quando hai notato il problema e conserva il collegamento alla pagina pubblica."
+      },
+      {
+        "t": "Chiedi al referente dell'atto e al CED di verificare le impostazioni di pubblicazione e le abilitazioni. Dopo l'intervento, ricontrolla la pagina pubblica."
+      }
+    ],
+    "ok": "La pagina pubblica mostra gli allegati autorizzati e il referente ha verificato il risultato.",
+    "stop": "Non pubblicare tutti gli allegati per tentativi: alcuni possono contenere dati riservati. Non rifare l'atto e non usare le funzioni di rettifica senza il referente autorizzato.",
+    "richiesta": "Indica pagina, tipo di atto e quale allegato autorizzato manca. Usa la richiesta riservata per dettagli o documenti non pubblici.",
+    "vedi": [
+      "gestionale-funzione-non-abilitata"
+    ],
+    "parole": [
+      "albo",
+      "allegati",
+      "pubblicazione",
+      "atto",
+      "sito",
+      "non visibile",
+      "rettifica"
+    ]
+  },
+  {
+    "id": "ordinanza-giorni-pubblicazione",
+    "cat": "gestionali",
+    "d": "I giorni di pubblicazione di un'ordinanza non sono quelli attesi",
+    "intro": "La durata mostrata per una pubblicazione non coincide con quella prevista dal referente dell'atto.",
+    "controlli": [
+      "Controlla la data iniziale e quella finale effettivamente mostrate.",
+      "Verifica con il referente quale durata era stata prevista per quello specifico atto.",
+      "La fonte distingue anche la rettifica di un’ordinanza già pubblicata, che può sostituire la pubblicazione precedente: deve intervenire il referente abilitato, dopo verifica di atto, date e versione."
+    ],
+    "passi": [
+      {
+        "t": "Annota durata attesa, durata mostrata e fase attuale dell'atto: da firmare, firmato o già pubblicato."
+      },
+      {
+        "t": "Segnala la discrepanza al referente e al CED prima di intervenire sulle impostazioni generali."
+      },
+      {
+        "t": "Dopo l'intervento, verifica le date nella pubblicazione effettiva. La sola modifica di un parametro non dimostra che l'atto sia stato aggiornato."
+      }
+    ],
+    "ok": "Il referente verifica che le date della pubblicazione effettiva corrispondano a quelle previste.",
+    "stop": "Non modificare per tentativi il valore predefinito dei giorni: può riguardare anche altri atti. Nei casi esaminati è stato necessario un intervento del fornitore dopo un primo tentativo non risolutivo.",
+    "richiesta": "Indica tipo e riferimento riservato dell'atto, fase, date attese e date osservate. Non annullare o ripubblicare autonomamente.",
+    "vedi": [
+      "albo-allegati-assenti"
+    ],
+    "parole": [
+      "ordinanza",
+      "giorni",
+      "pubblicazione",
+      "durata",
+      "15 giorni",
+      "30 giorni",
+      "albo"
+    ]
+  },
+  {
+    "id": "halley-destinatario-email",
+    "cat": "gestionali",
+    "d": "Halley propone un indirizzo email sbagliato per inviare un atto",
+    "intro": "Nella funzione di invio di un atto compare un indirizzo diverso da quello di lavoro atteso.",
+    "controlli": [
+      "Controlla l'indirizzo completo prima dell'invio, anche se il nominativo del destinatario sembra corretto.",
+      "Le etichette dei campi dell'anagrafica operatori non bastano a capire quale indirizzo userà ogni procedura.",
+      "Lo schema di produzione riepilogato nel cruscotto distingue usi dei recapiti tra procedure e flussi del personale. Prima di una correzione vanno verificati anche i destinatari dei documenti del dipendente."
+    ],
+    "passi": [
+      {
+        "t": "Se l'indirizzo non è quello previsto, fermati prima dell'invio."
+      },
+      {
+        "t": "Indica al CED il percorso della funzione e che viene proposta una casella non corretta. Trasmetti il riferimento dell'operatore soltanto nella richiesta riservata."
+      },
+      {
+        "t": "Dopo la verifica del referente, controlla di nuovo il destinatario nella schermata di invio. Non usare un atto reale per fare una spedizione di prova."
+      }
+    ],
+    "ok": "La funzione propone il destinatario di lavoro verificato dal referente.",
+    "stop": "Non copiare lo stesso indirizzo in tutti i campi dell'anagrafica: altre procedure possono usarli in modo diverso. Non inserire indirizzi personali per tentativi e non inoltrare documenti a una casella non autorizzata.",
+    "richiesta": "Apri una richiesta in «Programmi del Comune». Oscura indirizzi e contenuto dell'atto negli screenshot; il CED potrà chiedere il solo dettaglio necessario nel canale riservato.",
+    "vedi": [
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "halley",
+      "email personale",
+      "email istituzionale",
+      "invio atto",
+      "destinatario",
+      "indirizzo sbagliato"
+    ]
+  },
+  {
+    "id": "pec-aruba-parametri",
+    "cat": "posta",
+    "d": "PEC Aruba: parametri per il programma di posta",
+    "intro": "Per una casella PEC che sei autorizzato a usare. La configurazione dipende dal programma di posta e dalle regole del servizio.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Nella configurazione dell’account scegli IMAP. Usa come nome utente l’indirizzo PEC completo; se hai un accesso multiutente, chiedi al referente il nome account corretto."
+      },
+      {
+        "t": "Imposta la posta in arrivo su imaps.pec.aruba.it, porta 993, con SSL/TLS."
+      },
+      {
+        "t": "Imposta la posta in uscita su smtps.pec.aruba.it, porta 465, con SSL/TLS e autenticazione."
+      },
+      {
+        "t": "Se è attiva la verifica in due passaggi, serve la password dedicata al programma di posta prevista da Aruba. Reperisci o genera il dato soltanto con il referente autorizzato, nel canale protetto."
+      },
+      {
+        "t": "Controlla con il referente la presenza delle cartelle e dei messaggi. La lettura da webmail.pec.it può aiutare a distinguere un problema della casella da uno del programma."
+      }
+    ],
+    "ok": "La casella autorizzata mostra i messaggi e non segnala errori di autenticazione o connessione.",
+    "stop": "Non disattivare SSL/TLS o la verifica in due passaggi. Non cancellare account, messaggi o cartelle per tentativi: le eliminazioni IMAP si propagano agli altri dispositivi.",
+    "richiesta": "Indica programma, tipo di errore e se la webmail funziona. Non scrivere password nella richiesta.",
+    "vedi": [
+      "posta-non-arriva"
+    ],
+    "parole": [
+      "pec",
+      "aruba",
+      "imap",
+      "smtp",
+      "993",
+      "465",
+      "configurazione"
+    ]
+  },
+  {
+    "id": "unimoney-documenti",
+    "cat": "gestionali",
+    "d": "Unimoney: non vedo i documenti appena inviati",
+    "intro": "Per gli operatori già abilitati. La notifica di nuovi documenti non aggiorna necessariamente l’elenco aperto nel browser.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri «Documenti», poi «Da inviare alla firma»."
+      },
+      {
+        "t": "Dopo la notifica aggiorna la pagina e controlla di nuovo l’elenco."
+      },
+      {
+        "t": "Verifica l’eventuale filtro «Struttura», che può separare i documenti dei diversi uffici."
+      },
+      {
+        "t": "Se il flusso è stato trasmesso più volte, consulta «Da confermare». Se non supera la validazione preventiva, controlla «Con errori» nella sezione Documenti."
+      }
+    ],
+    "ok": "Trovi il documento nella sezione corretta oppure individui lo stato che ne impedisce il passaggio alla firma.",
+    "stop": "Non confermare o firmare una seconda versione senza averla confrontata con l’ufficio che ha inviato il flusso. La correzione nel gestionale compete all’ufficio competente.",
+    "richiesta": "Indica sezione, filtro Struttura, ora dell’invio e messaggio. Oscura dati finanziari e nominativi non necessari negli screenshot.",
+    "vedi": [
+      "unimoney-esiti-errori"
+    ],
+    "parole": [
+      "unimoney",
+      "documenti",
+      "notifica",
+      "da inviare alla firma",
+      "da confermare",
+      "flusso"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "unimoney-esiti-errori",
+    "cat": "gestionali",
+    "d": "Unimoney: leggere un errore SIOPE+ o Tesoreria",
+    "intro": "Questa consultazione riguarda gli esiti dopo l’invio. Non coincide con gli errori di validazione nella sezione Documenti.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri «Situazione Bancaria» e seleziona «Con errori»."
+      },
+      {
+        "t": "Apri il documento interessato e visualizza l’XML per leggere la descrizione restituita."
+      },
+      {
+        "t": "Riporta il codice e il testo preciso dell’errore all’ufficio competente, evitando di copiare l’intero XML se contiene dati personali."
+      },
+      {
+        "t": "Per seguire il flusso consulta anche «In elaborazione», «Accettati» ed «Eseguiti», verificando le ricevute associate."
+      }
+    ],
+    "ok": "Hai individuato l’esito e il messaggio relativi al documento corretto.",
+    "stop": "Non modificare l’XML e non ripetere invii o pagamenti per tentativi. Un errore letto non determina da solo quale correzione effettuare.",
+    "richiesta": "Fornisci codice errore, stato, riferimento nel canale riservato e ora del controllo.",
+    "vedi": [
+      "unimoney-documenti"
+    ],
+    "parole": [
+      "unimoney",
+      "siope",
+      "tesoreria",
+      "xml",
+      "esiti",
+      "con errori"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "trasparenza-spostare-documento",
+    "cat": "pubblicazioni",
+    "d": "Amministrazione trasparente: spostare un documento nella categoria corretta",
+    "intro": "Per chi è già abilitato alla gestione dei contenuti e ha concordato con il referente la riclassificazione.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri il dettaglio del documento usando la matita e verifica di avere scelto quello corretto."
+      },
+      {
+        "t": "Seleziona «Sposta» e indica la categoria di destinazione concordata."
+      },
+      {
+        "t": "Dopo la conferma controlla la collocazione nella pagina pubblica e confronta le date di pubblicazione e modifica."
+      }
+    ],
+    "ok": "Il documento compare nella categoria prevista e non è stata creata una seconda copia.",
+    "stop": "La risposta del fornitore del 15/01/2025 indica che lo spostamento mantiene le date. Se il sistema mostra un comportamento diverso, fermati e chiedi verifica. La scelta della categoria resta al referente della pubblicazione.",
+    "richiesta": "Indica documento, categoria attuale e attesa. Non eliminare la pubblicazione per riclassificarla.",
+    "vedi": [
+      "albo-allegati-assenti"
+    ],
+    "parole": [
+      "trasparenza",
+      "sposta",
+      "categoria",
+      "documento",
+      "riclassificare"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "trasparenza-recapiti-ufficio",
+    "cat": "pubblicazioni",
+    "d": "Amministrazione trasparente: correggere i recapiti di un ufficio",
+    "intro": "Per gli operatori già abilitati. Telefono ed email dell’ufficio sono distinti dai recapiti del suo responsabile.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri «Organizzazione → Articolazione degli uffici» e cerca l’ufficio."
+      },
+      {
+        "t": "Nella scheda controlla i recapiti dell’ufficio, non soltanto quelli del responsabile o del settore."
+      },
+      {
+        "t": "Inserisci i recapiti istituzionali verificati con il referente. Se i comandi laterali non si vedono, controlla la barra di scorrimento in fondo alla scheda."
+      },
+      {
+        "t": "Dopo il salvataggio controlla «Telefono e posta elettronica» nella pagina pubblica. Verifica separatamente gli altri punti del sito che mostrano gli stessi contatti."
+      }
+    ],
+    "ok": "La pagina pubblica mostra i recapiti istituzionali corretti dell’ufficio.",
+    "stop": "Se l’ufficio non compare, fai verificare anche se è classificato come area. Non creare un duplicato e non pubblicare recapiti personali.",
+    "richiesta": "Indica ufficio e pagina interessata; segnala se il dato manca nella scheda oppure solo nella visualizzazione pubblica.",
+    "vedi": [
+      "sito-contatti-servizio"
+    ],
+    "parole": [
+      "trasparenza",
+      "telefono",
+      "email",
+      "recapiti",
+      "ufficio",
+      "articolazione"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "vurp-pratica-chiusa",
+    "cat": "istanze",
+    "d": "VURP: ritrovare una pratica chiusa",
+    "intro": "Una pratica conclusa può essere esclusa dal filtro iniziale, anche se cerchi il suo numero.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri «X-Desk → VURP → Servizi → Servizi richiesti»."
+      },
+      {
+        "t": "Apri «Filtri disponibili → Stato» e includi «Chiuse positivamente» oppure lo stato pertinente."
+      },
+      {
+        "t": "Ripeti la ricerca e verifica servizio, periodo e riferimento della pratica prima di aprirla."
+      }
+    ],
+    "ok": "La pratica compare nell’elenco con il suo stato di conclusione.",
+    "stop": "Non avviare una nuova pratica e non riaprire quella chiusa solo per renderla visibile.",
+    "richiesta": "Se resta assente, indica servizio, periodo e filtri usati; inserisci i riferimenti personali soltanto nel canale riservato.",
+    "vedi": [
+      "xdesk-ticket-chiusi"
+    ],
+    "parole": [
+      "vurp",
+      "virtual urp",
+      "pratica chiusa",
+      "chiuse positivamente",
+      "stato",
+      "ricerca"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "vurp-date-domande",
+    "cat": "istanze",
+    "d": "VURP: modificare il periodo di presentazione delle domande",
+    "intro": "Per il referente già abilitato del servizio. La pagina informativa del sito e il modulo di domanda sono due elementi distinti.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Conferma con il referente le date previste e il servizio da modificare."
+      },
+      {
+        "t": "Apri «Modifica servizio → Pubblicazione», aggiorna le date concordate e salva."
+      },
+      {
+        "t": "Controlla dal sito il collegamento al modulo e il periodo effettivo di accesso. Non inoltrare una domanda fittizia per fare la verifica."
+      },
+      {
+        "t": "Controlla anche la scheda descrittiva: un testo «servizio non attivo» o un pulsante ancora visibile non dimostrano da soli che il modulo sia aperto o chiuso."
+      }
+    ],
+    "ok": "Date, descrizione pubblica e accesso al modulo sono coerenti con il periodo concordato.",
+    "stop": "Non applicare automaticamente le vecchie impostazioni di un altro servizio. Se una dicitura richiede l’intervento del fornitore, chiedi l’allineamento senza duplicare il modello.",
+    "richiesta": "Indica servizio, date desiderate, date mostrate e punto in cui i due ambienti non coincidono.",
+    "vedi": [
+      "vurp-servizio-non-visibile"
+    ],
+    "parole": [
+      "vurp",
+      "apertura",
+      "chiusura",
+      "domande",
+      "pubblicazione",
+      "scadenza",
+      "servizio non attivo"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "vurp-servizio-non-visibile",
+    "cat": "istanze",
+    "d": "Il servizio è visibile in VURP ma non compare nel sito",
+    "intro": "La configurazione del modulo non dimostra da sola che la scheda pubblica del servizio sia stata sincronizzata.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Verifica se il servizio si trova nell’area personale, in «Pratiche → Nuova richiesta → categoria», senza presentare una domanda di prova."
+      },
+      {
+        "t": "Cerca separatamente la scheda del servizio nel sito e controlla il collegamento al modulo."
+      },
+      {
+        "t": "Se modulo e sito non coincidono, chiedi al referente o al fornitore la verifica della sincronizzazione di titolo, descrizione e collegamento."
+      }
+    ],
+    "ok": "La scheda del sito e il modulo corretto sono entrambi raggiungibili.",
+    "stop": "Non cambiare lo slug di un servizio attivo per tentativi: può interrompere il collegamento con il sito. Le voci amministrative possono non essere disponibili al tuo profilo.",
+    "richiesta": "Indica nome del servizio e quale dei due elementi manca: scheda pubblica oppure modulo nell’area personale.",
+    "vedi": [
+      "sito-contatti-servizio"
+    ],
+    "parole": [
+      "vurp",
+      "servizio invisibile",
+      "sito",
+      "sincronizzazione",
+      "slug",
+      "nuovo servizio"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "sito-contatti-servizio",
+    "cat": "pubblicazioni",
+    "d": "I contatti della scheda servizio e quelli dell’istanza non coincidono",
+    "intro": "La scheda informativa del sito e l’istanza VURP sono gestite in ambienti distinti.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Individua dove compare il contatto errato: scheda del sito oppure modulo nell’area personale."
+      },
+      {
+        "t": "Confronta il dato con il recapito istituzionale dell’ufficio competente."
+      },
+      {
+        "t": "Segnala al referente quale ambiente va corretto e verifica separatamente il risultato su sito e istanza."
+      }
+    ],
+    "ok": "Il cittadino trova il recapito istituzionale previsto nel punto corretto.",
+    "stop": "La modifica del responsabile non aggiorna necessariamente contatti pubblici, destinatari email e uffici di protocollazione. Non duplicare uffici o punti di contatto senza una verifica della configurazione.",
+    "richiesta": "Indica servizio, pagina e tipo di dato errato. Non usare dati personali di chi ha presentato una domanda per mostrare il problema.",
+    "vedi": [
+      "trasparenza-recapiti-ufficio"
+    ],
+    "parole": [
+      "sito",
+      "contatti",
+      "scheda servizio",
+      "vurp",
+      "responsabile",
+      "recapiti"
+    ]
+  },
+  {
+    "id": "vurp-excel-colonne",
+    "cat": "istanze",
+    "d": "VURP: l’esportazione Excel ha colonne disallineate",
+    "intro": "L’estrazione deve mantenere i dati associati alla pratica corretta. Un precedente del 2026 è stato risolto dal fornitore.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Conserva il file originale esportato senza riordinare singole colonne."
+      },
+      {
+        "t": "Controlla servizio, periodo e filtri dell’estrazione. Distingui dati mancanti da valori finiti sotto un’intestazione diversa."
+      },
+      {
+        "t": "Segnala al CED i nomi delle colonne e il tipo di disallineamento. Usa un esempio oscurato, non l’intero elenco di utenti."
+      },
+      {
+        "t": "Dopo l’intervento ripeti l’esportazione e confronta intestazioni e corrispondenza dei dati."
+      }
+    ],
+    "ok": "La nuova estrazione mantiene ogni dato nella colonna e nella riga della pratica corretta.",
+    "stop": "Non spostare manualmente una colonna per far sembrare corretto il file: potresti associare dati a persone diverse.",
+    "richiesta": "Indica funzione usata, filtri, ora dell’estrazione e colonne interessate.",
+    "vedi": [
+      "gestionale-funzione-non-abilitata"
+    ],
+    "parole": [
+      "vurp",
+      "excel",
+      "esportazione",
+      "estrazione",
+      "colonne",
+      "disallineate"
+    ]
+  },
+  {
+    "id": "protocollo-bacheca-archiviata",
+    "cat": "gestionali",
+    "d": "Protocollo: ritrovare una comunicazione archiviata in bacheca",
+    "intro": "Il ripristino della comunicazione in bacheca non crea una nuova registrazione di protocollo.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Nella bacheca apri «Ricerca», compila i filtri necessari e avvia la ricerca con i binocoli in alto a destra."
+      },
+      {
+        "t": "Apri la comunicazione archiviata e verifica il riferimento."
+      },
+      {
+        "t": "Usa «Ripristina» e controlla che la comunicazione torni nell’elenco della bacheca."
+      }
+    ],
+    "ok": "La comunicazione è di nuovo visibile in bacheca.",
+    "stop": "Se il riferimento non coincide o il comando non è disponibile, fermati. Non usare un nuovo protocollo o un nuovo invio come sostituto del ripristino.",
+    "richiesta": "Indica che cerchi una comunicazione archiviata, specificando filtri e comandi disponibili.",
+    "vedi": [],
+    "parole": [
+      "protocollo",
+      "bacheca",
+      "comunicazione",
+      "archiviata",
+      "ripristina"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "xdesk-accesso-multiente",
+    "cat": "gestionali",
+    "d": "X-Desk: riprendere l’accesso Halley dopo il passaggio tra enti",
+    "intro": "Indicazione documentata per il caso specifico di passaggio tra ambienti comunali. Non è una soluzione generale per ogni errore del firewall.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Salva il lavoro e termina eventuali operazioni in corso nelle finestre del browser."
+      },
+      {
+        "t": "Nel servizio usa «ESCI» in basso a destra."
+      },
+      {
+        "t": "Chiudi tutte le finestre di quel browser, non soltanto la scheda del gestionale."
+      },
+      {
+        "t": "Riapri il browser, accedi con il tuo account e usa il pulsante Halley. Verifica l’ente raggiunto prima di lavorare."
+      }
+    ],
+    "ok": "Accedi all’ambiente dell’ente per il quale sei autorizzato a operare.",
+    "stop": "Se il blocco resta, fermati. Non modificare firewall, rete o autorizzazioni. Non condividere credenziali e non interrompere finestre con lavoro non salvato.",
+    "richiesta": "Indica ente atteso, punto del blocco e messaggio esatto, con un ritaglio privo di dati personali.",
+    "vedi": [
+      "gestionale-non-raggiungibile"
+    ],
+    "parole": [
+      "xdesk",
+      "x-desk",
+      "halley",
+      "multiente",
+      "esci",
+      "request denied",
+      "watchguard"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "xgdpr-percorso-formativo",
+    "cat": "gestionali",
+    "d": "X-GDPR: compare «Nessun percorso formativo»",
+    "intro": "Poter aprire X-GDPR non significa che al tuo profilo sia stato assegnato un percorso di formazione.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Verifica di essere entrato con il tuo account e apri «Il mio percorso formativo»."
+      },
+      {
+        "t": "Annota il messaggio mostrato e se vedi corsi, scadenze o attestati."
+      },
+      {
+        "t": "Segnala il problema al referente della formazione o al CED, distinguendo il percorso X-GDPR dai corsi generici del catalogo X-Desk."
+      }
+    ],
+    "ok": "Il referente può verificare assegnazione e visibilità del percorso corretto.",
+    "stop": "Non modificare i ruoli del profilo e non considerare completata la formazione solo perché il portale si apre.",
+    "richiesta": "Indica applicativo, messaggio e corso atteso, senza inviare schermate con dati di altri dipendenti.",
+    "vedi": [],
+    "parole": [
+      "xgdpr",
+      "x-gdpr",
+      "formazione",
+      "nessun percorso",
+      "corsi"
+    ]
+  },
+  {
+    "id": "recupero-file-cancellato",
+    "cat": "documenti",
+    "d": "Ho cancellato un file o mi serve una versione precedente",
+    "intro": "Raccogli le informazioni utili al recupero, mantenendo intatti i dati ancora presenti.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Controlla il Cestino del tuo PC oppure la cronologia versioni o il Cestino della raccolta di lavoro, se disponibili al tuo profilo."
+      },
+      {
+        "t": "Se la versione cercata non è disponibile, annota nome del file, cartella e data dell’ultima versione corretta."
+      },
+      {
+        "t": "Chiedi al CED il recupero, indicando dove salvare una copia da confrontare. Mantieni la versione attuale fino alla verifica."
+      },
+      {
+        "t": "Quando ricevi il file recuperato, aprilo e verifica contenuto e data prima di sostituire qualsiasi versione."
+      }
+    ],
+    "ok": "Hai recuperato e controllato il contenuto richiesto senza perdere le versioni ancora disponibili.",
+    "stop": "Non accedere alle console di backup e non sovrascrivere la versione corrente per tentativi. Non inviare l’intero contenuto della cartella se bastano nome e periodo.",
+    "richiesta": "Scegli l’argomento più pertinente e indica file, cartella, periodo da recuperare e urgenza.",
+    "vedi": [
+      "documenti-originale-condiviso"
+    ],
+    "parole": [
+      "file cancellato",
+      "recuperare",
+      "backup",
+      "versione precedente",
+      "cestino"
+    ]
+  },
+  {
+    "id": "file-percorso-lungo",
+    "cat": "documenti",
+    "d": "Il percorso di un file è troppo lungo",
+    "intro": "Nel conteggio entrano sia il nome del file sia tutte le cartelle che lo contengono.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Annota l’operazione che non riesce e il messaggio esatto: apertura, copia, spostamento oppure trasferimento."
+      },
+      {
+        "t": "Controlla se il file è dentro molte sottocartelle o ha un nome molto lungo. Prima di rinominare o spostare documenti condivisi, concorda l’intervento con il referente."
+      },
+      {
+        "t": "Per controllare molte cartelle chiedi al CED l’utilità approvata e la soglia prevista per quella migrazione. Non applicare una soglia storica come limite universale di Windows."
+      }
+    ],
+    "ok": "Il referente può individuare i percorsi da correggere e verificare il trasferimento senza perdere i collegamenti.",
+    "stop": "Non rinominare in massa file condivisi e non installare strumenti trovati online. Il percorso completo può contenere informazioni riservate: condividilo solo nel canale di assistenza.",
+    "richiesta": "Indica operazione, cartella e messaggio; segnala se si tratta di un singolo file o di molte sottocartelle.",
+    "vedi": [],
+    "parole": [
+      "percorso lungo",
+      "nome file lungo",
+      "path",
+      "trasferimento",
+      "cartelle"
+    ]
+  },
+  {
+    "id": "documenti-originale-condiviso",
+    "cat": "documenti",
+    "d": "Come aggiornare un documento condiviso senza creare copie diverse",
+    "intro": "Prima di modificare un file, individua l’originale corrente e la raccolta di lavoro indicata dal servizio.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri la raccolta SharePoint del servizio con il tuo account di lavoro e cerca il documento nella pratica o nel progetto pertinente."
+      },
+      {
+        "t": "Modifica l’originale corrente, conservando formato, identità del file e modifiche dei colleghi. Per un documento nuovo usa la cartella della pratica già esistente."
+      },
+      {
+        "t": "Evita copie progressive usate come nuovi master. Un file trovato nel vecchio archivio non è necessariamente la versione corrente."
+      },
+      {
+        "t": "Dopo il salvataggio riapri l’originale nella raccolta e controlla la modifica. Un allegato ricevuto in chat non dimostra che il file condiviso sia stato aggiornato."
+      }
+    ],
+    "ok": "La modifica è visibile nell’originale condiviso e i colleghi possono aprire la stessa versione.",
+    "stop": "Non cambiare permessi e non creare collegamenti pubblici. Archivi diversi non si sincronizzano automaticamente se non è previsto un collegamento specifico.",
+    "richiesta": "Se non trovi il file o non hai accesso, indica al referente documento e pratica senza creare una seconda raccolta.",
+    "vedi": [],
+    "parole": [
+      "sharepoint",
+      "documento condiviso",
+      "originale",
+      "master",
+      "versione",
+      "salvataggio"
+    ]
+  },
+  {
+    "id": "nuovo-pc-preparazione",
+    "cat": "computer",
+    "d": "Devo sostituire il PC: cosa preparo per il CED",
+    "intro": "La configurazione e la consegna della nuova postazione vengono gestite dai tecnici.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Indica il nome del PC attuale, ufficio, utilizzatore e data entro cui serve la sostituzione."
+      },
+      {
+        "t": "Elenca applicativi, stampanti, cartelle di lavoro e dispositivi necessari. Segnala firma digitale e altri strumenti particolari."
+      },
+      {
+        "t": "Concorda con il CED quali dati trasferire: Desktop, Documenti, altre cartelle e dati del browser. Non comunicare password nella richiesta."
+      },
+      {
+        "t": "Prima di riconsegnare la vecchia postazione verifica con il tecnico accesso ai dati, applicativi, posta e stampa. Conserva gli originali finché il trasferimento non è stato controllato."
+      }
+    ],
+    "ok": "Il CED ha l’elenco delle esigenze e il nuovo PC è verificato prima della riconsegna del precedente.",
+    "stop": "Non inizializzare il vecchio PC, cancellare cartelle o installare agenti e pacchetti amministrativi in autonomia.",
+    "richiesta": "Apri una richiesta con nome PC, esigenze e scadenza; concorda eventuali appuntamenti per il trasferimento.",
+    "vedi": [
+      "nome-pc"
+    ],
+    "parole": [
+      "nuovo pc",
+      "sostituzione",
+      "migrazione",
+      "trasferire dati",
+      "postazione"
+    ]
+  },
+  {
+    "id": "halley-tablet-smartphone",
+    "cat": "gestionali",
+    "d": "Halley da tablet o smartphone: menu e pulsanti non funzionano",
+    "intro": "L’apertura del menu da un dispositivo mobile non dimostra che tutte le operazioni siano supportate.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Indica dispositivo, sistema, browser e operazione che devi svolgere: consultazione, modifica, firma o salvataggio."
+      },
+      {
+        "t": "Se un pulsante è coperto o una funzione non è disponibile, ferma l’operazione e verifica dal PC di lavoro già configurato."
+      },
+      {
+        "t": "Chiedi al CED o al fornitore una verifica delle funzioni necessarie sul dispositivo specifico, prima di farne la tua postazione di lavoro."
+      }
+    ],
+    "ok": "Sai quali operazioni sono utilizzabili sul dispositivo senza affidarti alla sola visibilità del menu.",
+    "stop": "Non installare componenti non approvati e non forzare la firma o il salvataggio. I precedenti Android non documentano una soluzione generale o pieno supporto.",
+    "richiesta": "Indica dispositivo e funzione, allegando soltanto il comando o errore senza il contenuto del documento.",
+    "vedi": [],
+    "parole": [
+      "halley",
+      "android",
+      "tablet",
+      "smartphone",
+      "dex",
+      "hplugin",
+      "pulsanti"
+    ]
+  },
+  {
+    "id": "send-attestazione-singola",
+    "cat": "gestionali",
+    "d": "SEND: consultare la cronologia e scaricare una singola attestazione",
+    "intro": "Per gli operatori già autorizzati alla consultazione della notifica. Questa guida descrive la consultazione, non un nuovo invio.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Apri la singola notifica dal collegamento «PND» e verifica il riferimento IUN."
+      },
+      {
+        "t": "Consulta cronologia, eventi, date e documenti disponibili. Non dedurre l’esito dalla sola etichetta «Richiesta notificata»."
+      },
+      {
+        "t": "Nel percorso TG documentato: collegamento PND del documento → pulsante PND nella notifica MC → icona PDF nella colonna documenti della cronologia."
+      },
+      {
+        "t": "Salva la singola attestazione nella pratica secondo le regole del servizio e controlla che riguardi notifica ed evento corretti."
+      }
+    ],
+    "ok": "Hai consultato l’evento e acquisito l’attestazione riferita alla notifica corretta.",
+    "stop": "Il download non prova il versamento in protocollo o in conservazione. Non usare questa guida per stabilire termini giuridici. L’estrazione massiva non è attestata come disponibile.",
+    "richiesta": "Se il documento manca, indica nel canale riservato il riferimento della notifica e quale evento o attestazione cerchi.",
+    "vedi": [],
+    "parole": [
+      "send",
+      "pnd",
+      "attestazione",
+      "ricevuta",
+      "iun",
+      "cronologia",
+      "pdf"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "appio-notifiche-tg",
+    "cat": "gestionali",
+    "d": "App IO: verificare le notifiche delle bollettazioni TG",
+    "intro": "Per gli operatori TG già abilitati. La trasmissione a pagoPA e la notifica App IO sono passaggi distinti nel flusso documentato.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "In «Stampe e Trasmissioni» individua il documento o ruolo corretto e controlla l’esito della trasmissione al nodo pagoPA."
+      },
+      {
+        "t": "Verifica la funzione «Trasmissione → Invio notifiche IO»: nel documento del fornitore l’invio delle notifiche è un’operazione separata, non la conseguenza automatica del solo invio a pagoPA."
+      },
+      {
+        "t": "Prima di qualsiasi invio, confronta rate, destinatari e pagamenti già intervenuti con il referente. Dopo un invio autorizzato controlla indicatore di notifica inviata ed eventuali errori."
+      }
+    ],
+    "ok": "Hai distinto l’esito pagoPA da quello delle notifiche IO e individuato eventuali errori nel flusso corretto.",
+    "stop": "Non inviare nuovamente per fare una prova. La fonte del 04/11/2025 riguarda TG: non estenderla a SK, VURP o a tutte le rate IMU. Parametri, modelli e abilitazioni vanno verificati dal referente.",
+    "richiesta": "Indica procedura, fase e tipo di errore, senza allegare elenchi di debitori o notifiche non pertinenti.",
+    "vedi": [],
+    "parole": [
+      "app io",
+      "appio",
+      "tg",
+      "bollettazioni",
+      "notifiche",
+      "pagopa"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "webinar-registrazioni",
+    "cat": "gestionali",
+    "d": "Dove trovare la registrazione di un webinar del fornitore",
+    "intro": "Un corso nel catalogo non è necessariamente la registrazione della sessione che stai cercando.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Cerca in «Formazione» il titolo e il periodo del corso. Confronta l’argomento, non soltanto una parola simile."
+      },
+      {
+        "t": "Se il fornitore ti ha fornito il collegamento a una registrazione, verifica titolo e destinazione prima di aprirlo."
+      },
+      {
+        "t": "Per alcune registrazioni la risposta del luglio 2026 indica «Iscriviti» con nome, cognome e indirizzo di lavoro. Usa solo il portale o collegamento ufficiale previsto per il corso."
+      },
+      {
+        "t": "Se non trovi il video corretto, indica al referente titolo e data della sessione: la presenza di un corso diverso o la chiusura del ticket non dimostrano che la registrazione sia disponibile."
+      }
+    ],
+    "ok": "Hai individuato la registrazione della sessione richiesta oppure puoi chiedere il riferimento preciso al fornitore.",
+    "stop": "Non inserire credenziali in pagine non riconosciute. Non tutte le sessioni vengono registrate; la disponibilità delle registrazioni va controllata per il singolo corso.",
+    "richiesta": "Indica corso, periodo e se possiedi già un collegamento del fornitore.",
+    "vedi": [],
+    "parole": [
+      "webinar",
+      "registrazione",
+      "formazione",
+      "corso",
+      "video",
+      "catalogo"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "sito-audio-video",
+    "cat": "pubblicazioni",
+    "d": "Sito: aggiungere video, audio o una galleria di immagini",
+    "intro": "Per i redattori già abilitati. Le possibilità cambiano secondo il tipo di contenuto del sito.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Individua il tipo di pagina da aggiornare: notizia, luogo, evento o pagina informativa."
+      },
+      {
+        "t": "Per video esterni, il riscontro del settembre 2026 distingue il semplice collegamento in Notizie, Luoghi, Territorio e tradizione e Associazioni dall’incorporamento con anteprima in Eventi e Pagine."
+      },
+      {
+        "t": "Per le fotografie cerca «aggiungi media» o «galleria di immagini» dove presenti nella sezione."
+      },
+      {
+        "t": "Per audio o video caricati direttamente, la fonte indica 64 MB per singolo file. Prima di predisporre file grandi verifica il limite corrente e il formato accettato dal tuo ambiente."
+      },
+      {
+        "t": "Controlla l’anteprima e accessibilità del contenuto prima della pubblicazione autorizzata."
+      }
+    ],
+    "ok": "Il contenuto compare nel formato previsto dalla sezione, senza attribuire a tutte le pagine la stessa funzione.",
+    "stop": "La risposta non elenca codec ed estensioni e non conferma uno slider attivo o spazio totale illimitato. Non caricare materiali riservati o privi delle autorizzazioni necessarie.",
+    "richiesta": "Indica tipo di pagina, formato e dimensione del file, oltre alla funzione che manca.",
+    "vedi": [],
+    "parole": [
+      "sito",
+      "video",
+      "audio",
+      "galleria",
+      "immagini",
+      "64 mb",
+      "multimedia"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "vurp-statistiche",
+    "cat": "istanze",
+    "d": "VURP: leggere le statistiche senza confondere istanze e utenti",
+    "intro": "Prima di usare un numero in una relazione verifica indicatore, periodo e stati inclusi.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Nel percorso documentato apri «PIA → stream Servizi → app VirtualURP → Istanze» nel secondo foglio."
+      },
+      {
+        "t": "Imposta e annota il periodo, i servizi e gli stati effettivamente consultati."
+      },
+      {
+        "t": "Distingui data di avvio, chiusura e durata del procedimento: quest’ultima riguarda la gestione dell’ente, non il tempo usato dal cittadino per compilare."
+      },
+      {
+        "t": "Non trasformare il numero di istanze in utenti unici: la stessa persona può avere più richieste. Per confronti con la carta serve una rilevazione separata e coerente."
+      }
+    ],
+    "ok": "Il dato riportato nella relazione è accompagnato dalla sua definizione e dai filtri utilizzati.",
+    "stop": "Non dedurre conclusione, utenti unici o canale esclusivamente digitale da un solo totale. Non pubblicare esportazioni con dati personali.",
+    "richiesta": "Indica quale indicatore serve e per quale periodo; chiedi conferma se il portale non distingue le misure necessarie.",
+    "vedi": [],
+    "parole": [
+      "vurp",
+      "pia",
+      "statistiche",
+      "utenti unici",
+      "istanze",
+      "durata",
+      "relazione"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "ansc-richieste-web",
+    "cat": "gestionali",
+    "d": "ANSC: consultare le richieste web di estratti e copie integrali",
+    "intro": "Per gli ufficiali di stato civile già abilitati. La valutazione e la scelta dell’esito restano all’USC competente.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "In Stato civile apri «ANSC → Richieste certificati web», oppure l’avviso «Certificati ANSC on line». Usa i pulsanti di stato per filtrare le richieste."
+      },
+      {
+        "t": "Per una richiesta «APERTA» consulta «Visura richiesta». La presa in carico e l’USC incaricato vanno gestiti dall’operatore competente."
+      },
+      {
+        "t": "«Consulta atto», «Consulta sintetico» e «Scarica documento» permettono di consultare i documenti prima della valutazione."
+      },
+      {
+        "t": "Una richiesta presa in carico senza esito resta «IN LAVORAZIONE» e si riprende con «Procedi». Dopo una risposta del cittadino, controlla lo stato «INTEGRATA» e rileggi la risposta."
+      },
+      {
+        "t": "Motivazione, integrazione, irricevibilità o evasione devono essere stabilite dall’USC: questa guida aiuta a trovare la richiesta e non sceglie il provvedimento."
+      }
+    ],
+    "ok": "L’USC trova la richiesta nello stato corretto e può esaminarla con la procedura prevista.",
+    "stop": "Non duplicare richieste per farle comparire e non effettuare operazioni nella web app esterna come alternativa automatica a Halley. La fonte documenta l’integrazione dalla versione 085100; verificare il proprio ambiente.",
+    "richiesta": "Indica funzione e stato, riportando i riferimenti della richiesta solo nel canale riservato e senza allegare l’atto integrale se non necessario.",
+    "vedi": [
+      "pdf-gestionale-non-apre"
+    ],
+    "parole": [
+      "ansc",
+      "certificati web",
+      "estratti",
+      "copie integrali",
+      "integrata",
+      "in lavorazione"
+    ],
+    "verifica": "Percorso ricavato dalla documentazione del cruscotto. Verificare i nomi dei menu e le abilitazioni nella versione attuale, senza effettuare operazioni su casi reali per collaudare la guida."
+  },
+  {
+    "id": "vurp-isee-area-personale",
+    "cat": "istanze",
+    "d": "Il cittadino ha aggiornato l’ISEE ma la domanda precedente non cambia",
+    "intro": "Il salvataggio generico nell’area personale e l’invio di un documento per una pratica sono operazioni diverse.",
+    "controlli": [],
+    "passi": [
+      {
+        "t": "Verifica con il cittadino se il documento è stato soltanto salvato nell’area personale oppure inoltrato tramite il servizio previsto."
+      },
+      {
+        "t": "Controlla la domanda o comunicazione effettivamente ricevuta dall’ufficio, senza presumere che il nuovo file abbia aggiornato automaticamente una pratica già presentata."
+      },
+      {
+        "t": "Indica al cittadino il canale previsto dal servizio per trasmettere l’aggiornamento; se non è definito, chiedi al referente prima di suggerire una nuova domanda."
+      }
+    ],
+    "ok": "L’ufficio distingue un documento disponibile al cittadino da un aggiornamento effettivamente ricevuto e gestibile.",
+    "stop": "Non modificare rette o posizioni sulla sola base di un file salvato nel profilo. Le valutazioni amministrative spettano al servizio competente. Non chiedere documenti personali tramite canali pubblici.",
+    "richiesta": "Indica il servizio e il dubbio sul percorso di trasmissione, senza allegare l’ISEE completo per spiegare il funzionamento.",
+    "vedi": [],
+    "parole": [
+      "vurp",
+      "isee",
+      "area personale",
+      "documenti salvati",
+      "domanda",
+      "aggiornamento"
+    ]
+  }
 ]

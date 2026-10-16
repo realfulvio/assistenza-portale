@@ -2,6 +2,7 @@
 // In modalita' DEMO l'accesso e' simulato con un utente finto.
 const express = require('express');
 const config = require('./config');
+const avatar = require('./avatar');
 
 const router = express.Router();
 let clientPromise = null;
@@ -62,6 +63,11 @@ router.get('/callback', async (req, res, next) => {
       req.session.user = { oid: cl.oid || cl.sub, tenant: cl.tid || '', name: cl.name || email, email };
       if (pc) req.session.pc = pc;
       req.session.idToken = tokenSet.id_token;
+      // Foto profilo da Microsoft 365: solo con Entra ID e scope User.Read (OIDC_SCOPE). Il token resta nella sessione lato server
+      if (tokenSet.access_token && /^https:\/\/login\.microsoftonline\.com\//.test(config.oidc.issuer)) {
+        req.session.graph = { token: tokenSet.access_token, scade: tokenSet.expires_at ? tokenSet.expires_at * 1000 : Date.now() + 50 * 60_000 };
+        avatar.sincronizzaAlLogin(req.session.user, tokenSet.access_token); // in background: non rallenta ne' blocca il login
+      }
       req.session.save(() => res.redirect(config.base + '/'));
     });
   } catch (e) { next(e); }

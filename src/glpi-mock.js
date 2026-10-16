@@ -44,6 +44,20 @@ const api = {
   },
   async ticketDi(userId, id) { const t = tickets.get(id); return t && t.userId === userId ? t : null; },
   async killSession() {},
+  // Barra «Live»: numeri finti ma plausibili (STATS_MOCK_ERRORE=1 simula GLPI non raggiungibile)
+  async statsSorgente(da) {
+    if (process.env.STATS_MOCK_ERRORE === '1') throw new Error('GLPI finto non raggiungibile');
+    const righe = [];
+    const due = (n) => String(n).padStart(2, '0');
+    const f = (d) => `${d.getFullYear()}-${due(d.getMonth() + 1)}-${due(d.getDate())} ${due(d.getHours())}:${due(d.getMinutes())}:00`;
+    for (let t = da.getTime(), i = 0; t < Date.now(); t += 3 * 3600 * 1000, i++) {
+      const d = new Date(t);
+      if (d.getHours() < 8 || d.getHours() > 17 || d.getDay() === 0 || d.getDay() === 6) continue;
+      righe.push({ data: f(d), stato: Date.now() - t < 2 * 86400000 && i % 3 ? 2 : (i % 11 ? 6 : 4), presa: 600 + (i % 7) * 420 });
+    }
+    for (const t of tickets.values()) righe.push({ data: t.aperta, stato: t.st, presa: 0 });
+    return { righe, inLavorazione: righe.filter((r) => r.stato < 5).length, ultimaSoluzione: f(new Date(Date.now() - 17 * 60000)) };
+  },
   _tickets: tickets
 };
 

@@ -26,5 +26,8 @@ for (const f of file) {
     console.error('ERRORE in', path.relative(root, f), '\n', String(e.stderr || e.message).trim());
   }
 }
-console.log(`${file.length} file controllati, ${errori} errori`);
+// Contenuto delle guide: id, campi obbligatori, immagini, collegamenti
+const guide = require('./verifica-faq').verifica(root);
+for (const e of guide.errori) { errori++; console.error('ERRORE guide:', e); }
+console.log(`${file.length} file controllati, ${guide.guide} guide controllate, ${errori} errori`);
 process.exit(errori ? 1 : 0);

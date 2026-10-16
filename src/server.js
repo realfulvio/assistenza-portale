@@ -10,6 +10,9 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const config = require('./config');
 const glpi = require('./glpi-client');
+const stats = require('./stats');
+const avatar = require('./avatar');
+const multer = require('multer');
 const auth = require('./auth');
 const preferences = require('./preferences');
 const { upload, verificaFile } = require('./uploads');
@@ -98,9 +101,70 @@ api.put('/preferenze', serveLogin, csrf, (req, res) => {
   catch { res.status(503).json({ errore: 'Aspetto applicato, ma non salvato sul tuo account. Riprova: puoi continuare a usare il portale.' }); }
 });
 api.get('/faq', serveLogin, (req, res) => res.json(JSON.parse(fs.readFileSync(config.faqPath, 'utf8'))));
+// Barra «Live»: numeri aggregati dei ticket (cache lato server). Se GLPI non risponde: 200 con { ok: false }
+api.get('/stats', serveLogin, async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    const { dati, daCache } = await stats.statistiche();
+    res.set('X-Cache', daCache ? 'HIT' : 'MISS').json(dati);
+  } catch { res.json({ ok: false }); }
+});
 // Consigli prima di inviare (content/suggerimenti.json, riletto a ogni richiesta; se manca: nessun consiglio)
 api.get('/suggerimenti', serveLogin, (req, res) => {
   try { res.json(JSON.parse(fs.readFileSync(path.join(config.root, 'content', 'suggerimenti.json'), 'utf8'))); } catch { res.json([]); }
+});
+
+// --- Foto profilo: sempre e solo quella dell'utente in sessione (mai un id dal client)
+const limiteFoto = rateLimit({
+  windowMs: 60 * 60_000, limit: 10, standardHeaders: true, legacyHeaders: false,
+  keyGenerator: (req) => 'foto:' + req.session.user.email,
+  handler: (req, res) => res.status(429).json({ errore: 'Hai cambiato foto molte volte: riprova tra un po\'.' })
+});
+const caricaFoto = multer({ storage: multer.memoryStorage(), limits: { files: 1, fileSize: avatar.opzioni.maxByte, fields: 0, parts: 2 } }).single('foto');
+const infoFoto = (req) => avatar.info(req.session.user);
+api.get('/profilo/foto/info', serveLogin, (req, res) => res.set('Cache-Control', 'no-store').json(infoFoto(req)));
+api.get('/profilo/foto', serveLogin, (req, res) => {
+  const buf = avatar.leggi(req.session.user);
+  if (!buf) return res.status(404).set('Cache-Control', 'no-store').end();
+  const etag = '"' + crypto.createHash('sha256').update(buf).digest('base64url').slice(0, 27) + '"';
+  res.set({ 'Cache-Control': 'private, max-age=86400', ETag: etag, 'Content-Type': 'image/webp', 'X-Content-Type-Options': 'nosniff' });
+  if (req.get('if-none-match') === etag) return res.status(304).end();
+  res.send(buf);
+});
+// Limite del corpo valutato sugli header, prima di login e parsing (equivale al limite del web server su questa sola rotta)
+const corpoFoto = (req, res, next) => {
+  const n = Number(req.get('content-length') || 0);
+  if (n <= avatar.opzioni.maxByte + 64 * 1024) return next();
+  if (n > 20 * 1024 * 1024) res.set('Connection', 'close'); // corpi enormi: niente lettura, connessione chiusa
+  res.status(413).json({ errore: 'File troppo grande (massimo 3 MB)' });
+};
+api.post('/profilo/foto', corpoFoto, serveLogin, csrf, limiteFoto, (req, res, next) => caricaFoto(req, res, async (err) => {
+  try {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') return res.status(413).json({ errore: 'File troppo grande (massimo 3 MB)' });
+      return res.status(400).json({ errore: 'Formato non supportato' });
+    }
+    if (!req.file) return res.status(400).json({ errore: 'Scegli una foto da caricare.' });
+    await avatar.salvaManuale(req.session.user, req.file.buffer);
+    log('foto profilo caricata');
+    res.json(infoFoto(req));
+  } catch (e) {
+    if (e.utente) return res.status(e.status || 400).json({ errore: e.message });
+    next(e);
+  }
+}));
+api.post('/profilo/foto/rimuovi', serveLogin, csrf, (req, res, next) => {
+  try { avatar.rimuovi(req.session.user); res.json(infoFoto(req)); } catch (e) { next(e); }
+});
+api.post('/profilo/foto/microsoft', serveLogin, csrf, async (req, res, next) => {
+  try {
+    const g = req.session.graph;
+    if (!g || !g.token || g.scade < Date.now() + 60_000) return res.status(409).json({ errore: 'Per usare la foto di Microsoft 365 esci e accedi di nuovo, poi riprova.' });
+    const esito = await avatar.sincronizza(req.session.user, g.token, { forza: true });
+    if (esito === 'nessuna') return res.status(404).json({ errore: 'Non hai una foto su Microsoft 365.', ...infoFoto(req) });
+    if (esito !== 'ok') return res.status(502).json({ errore: 'Microsoft 365 non risponde: riprova tra qualche minuto.' });
+    res.json(infoFoto(req));
+  } catch (e) { next(e); }
 });
 
 // Cache dell'id utente GLPI nella sessione
@@ -191,7 +255,7 @@ router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
 // __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
-const versione = ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+const versione = ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
   .replaceAll('__BASE__', config.base).replaceAll('__V__', versione);

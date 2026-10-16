@@ -28,6 +28,9 @@ Ogni richiesta diventa un **ticket**, cioè una segnalazione numerata, in GLPI. 
 3. **Invia.** Ricevi il numero della richiesta, utile per ritrovarla.
 4. **Segui la richiesta.** Controlla lo stato e gli aggiornamenti; aggiungi informazioni quando servono. Quando è risolta, puoi confermare la soluzione o chiedere di riaprirla.
 
+- In **«Il mio profilo»** ognuno può mettere una foto personale oppure usare quella di Microsoft 365 (altrimenti si vedono le iniziali).
+- Sotto il menu una sottile **barra «Live»** mostra il lavoro del servizio: richieste del periodo, risolte, in lavorazione, tempo medio di presa in carico (solo numeri aggregati).
+
 Nell'installazione completa si entra con il proprio account di lavoro, per esempio Microsoft 365. La demo usa un accesso simulato.
 
 ## Come lavorano i tecnici
@@ -36,6 +39,10 @@ Nell'installazione completa si entra con il proprio account di lavoro, per esemp
   <source media="(max-width: 600px)" srcset="screenshots/presentation/ruolo-glpi-mobile.png" />
   <img src="screenshots/presentation/ruolo-glpi.png" alt="Diagramma del collegamento: dipendente nel portale, portale collegato tramite API, tecnici nel backend GLPI" />
 </picture>
+
+![Barra «Live» con i contatori delle richieste](screenshots/live/barra-live.png)
+
+Funziona anche su telefono: vedi [screenshots/](screenshots/).
 
 I tecnici ricevono il ticket in **GLPI**: lo prendono in carico, registrano l'intervento, rispondono e descrivono la soluzione. Il dipendente vede nel portale **lo stato e i messaggi pubblici**; le note private restano riservate ai soggetti autorizzati in GLPI.
 
@@ -139,7 +146,8 @@ Tutto quello che riguarda il tuo ente sta in **un solo file**, `config/ente.json
 
 - nome dell'ente, nome del servizio, sottotitolo, e-mail e telefono per le urgenze, link «Torna al sito»;
 - logo/stemma (metti il file in `public/img/` e indica il nome);
-- colori (predefiniti: blu `#005e8e`, barra `#001a4d`, sfondo `#f2f2f2`).
+- colori (predefiniti: blu `#005e8e`, barra `#001a4d`, sfondo `#f2f2f2`);
+- barra «Live» dei contatori (`barraLive`: attiva, periodo `giorni` (predefinito: ultimi 30) / `anno` / `mese` / `da_data`, durata della cache).
 
 Le **categorie** dei problemi (nome, descrizione, icona, colore, categoria GLPI collegata) stanno in `config/categorie.json`; le **domande frequenti** in `content/faq.json`. → [docs/personalizzazione.md](docs/personalizzazione.md)
 
