@@ -238,3 +238,50 @@ body{font-size:18px}
 .credito-alto:hover{opacity:1}
 footer .pw a{color:inherit}
 @media(max-width:760px){.credito-alto{display:none}}
+
+/* guide (FAQ): ricerca, argomenti, passi numerati, immagini ingrandibili */
+.faq-strumenti{max-width:820px;margin-bottom:14px}
+.faq-strumenti input[type=search]{background:#fff;border:1px solid #5c6f82;border-bottom-width:2px;border-radius:4px}
+.faq-chips{flex-wrap:wrap;margin:12px 0 4px}
+.faq-chip:hover{background:#eaf3f8}.faq-chip.on:hover{background:var(--pd)}
+.faq-vuoto{max-width:820px;background:#fff;border-left:4px solid #b58900;padding:12px 18px;margin-bottom:12px}
+.faq summary{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:18px}
+.faq summary{list-style:none}.faq summary::-webkit-details-marker{display:none}
+.faq summary:before{content:"";flex:none;border:6px solid transparent;border-left:9px solid var(--p);border-right:0;margin-right:4px;align-self:center}
+.faq details[open]>summary:before{transform:rotate(90deg)}
+.faq summary>span{flex:1}
+.faq .faq-cat{flex:none;font-weight:600;font-size:13px;color:var(--m)}
+.faq .faq-corpo{margin-top:10px;border-top:1px solid #dfe5ea;padding-top:10px}
+.faq .faq-corpo p{font-family:Lora,Georgia,serif;margin:8px 0}
+.faq .faq-intro{color:var(--m)}
+.faq-blocco{margin:14px 0}
+.faq-blocco h4{font-size:15px;text-transform:uppercase;letter-spacing:.4px;color:var(--pd);margin-bottom:4px}
+.faq-blocco ul{padding-left:22px;font-family:Lora,Georgia,serif}
+.faq-blocco li{margin:4px 0}
+.faq-passi ol{list-style:none;counter-reset:passo;padding:0;margin:0}
+.faq-passi ol>li{counter-increment:passo;position:relative;padding:4px 0 14px 46px;font-family:Lora,Georgia,serif;min-height:38px}
+.faq-passi ol>li:before{content:counter(passo);position:absolute;left:0;top:2px;width:32px;height:32px;border-radius:50%;background:var(--p);color:#fff;font:700 17px "Titillium Web",sans-serif;display:grid;place-items:center}
+.faq-passi ol>li>span{display:block;font-size:18px}
+.faq-nota{display:block;font:14px "Titillium Web",sans-serif;color:var(--m);margin-top:2px}
+.faq-fig{margin:10px 0 2px}
+.faq-img{display:block;padding:0;border:2px solid #c3ccd3;background:#fff;cursor:zoom-in;max-width:100%}
+.faq-img:hover{border-color:var(--p)}
+.faq-img img{display:block;max-width:100%;height:auto}
+.faq .faq-ok,.faq .faq-stop,.faq .faq-richiesta{padding:8px 14px;border-left:5px solid}
+.faq .faq-ok{background:#e6f4ea;border-color:var(--ok)}
+.faq .faq-stop{background:#fff4ce;border-color:#b58900}
+.faq .faq-richiesta{background:#eaf3f8;border-color:var(--p)}
+.faq .faq-blocco p{margin:4px 0}
+.faq .faq-richiesta .send{margin-top:8px}
+.faq .faq-vedi,.faq .faq-link{font:15px "Titillium Web",sans-serif}
+.faq .faq-corpo a:not(.send){color:var(--p);text-decoration:underline}
+.faq-zoom{border:0;padding:12px;max-width:96vw;max-height:96vh;background:#fff;box-shadow:0 8px 40px #0008}
+.faq-zoom::backdrop{background:#000a}
+.faq-zoom img{display:block;max-width:100%;max-height:78vh;margin:10px auto 0}
+.faq-zoom .hint{text-align:center;margin-top:8px}
+@media(max-width:760px){
+  .faq summary{flex-wrap:wrap;gap:2px 8px}
+  .faq summary>span{flex-basis:calc(100% - 24px)}
+  .faq .faq-cat{margin-left:20px}
+  .faq .faq-passi ol>li{padding-left:40px}
+}
