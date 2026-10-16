@@ -25,3 +25,10 @@ backup/
 backups/
 *.sql.gz
 *.dump
+
+# Dati locali, materiale riservato e file generati
+avatars/
+data/avatars/
+PROMPT-v2.md
+docs/design-v2/
+*.pdf
