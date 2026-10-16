@@ -40,7 +40,7 @@ Gradienti, paesaggi e alcuni pseudo-elementi richiedono un controllo visivo aggi
 
 - [Pannello desktop](pannello-desktop.png)
 - [Pannello mobile al 150%](pannello-mobile-150.png)
-- [Classico Bondeno](1440-classic-100.png)
+- [Classico](1440-classic-100.png)
 - [Scuro](1440-dark-100.png)
 - [Contrasto elevato](1440-contrast-100.png)
 - [Cyberpunk](1440-cyber-100.png)
