@@ -73,7 +73,8 @@ async function go(page, url, hash) {
     await page.locator('.tile[data-id="computer"]').click();
     const description = 'Prova grafica: il computer non risponde da questa mattina. Riferimento: https://esempio.it/' + 'a'.repeat(120);
     await page.locator('#descrizione').fill(description); await page.locator('#telefono').fill('0123 456');
-    await page.locator('.when[data-v="Mattina"]').click();
+    await page.locator('#rep-dalle').fill('09:00'); await page.locator('#rep-alle').fill('12:00');
+    assert.equal(await page.locator('#reperibilita').inputValue(), 'dalle 09:00 alle 12:00');
     await page.locator('#allegati').setInputFiles({ name: 'prova.txt', mimeType: 'text/plain', buffer: Buffer.from('Prova locale.') });
     if (process.env.QA_FOCUS !== 'flows') {
     for (const width of [1440, 390, 320]) {
@@ -87,7 +88,7 @@ async function go(page, url, hash) {
           await close(page); await noOverflow(page, name);
           assert.equal(await page.locator('#descrizione').inputValue(), description);
           assert.equal(await page.locator('#telefono').inputValue(), '0123 456');
-          assert.equal(await page.locator('.when[data-v="Mattina"]').getAttribute('aria-pressed'), 'true');
+          assert.equal(await page.locator('#reperibilita').inputValue(), 'dalle 09:00 alle 12:00');
           assert.equal(await page.locator('.tile[data-id="computer"]').getAttribute('aria-pressed'), 'true');
           assert.match(await page.locator('#lista-all').textContent(), /prova.txt/);
           if (width !== 320) await accessibility(page, name);
@@ -96,7 +97,7 @@ async function go(page, url, hash) {
         }
       }
     }
-    report.checks.push('66 combinazioni: 11 temi, 3 viewport, dimensioni normali e massime; modulo e allegato conservati.');
+    report.checks.push(`${report.matrix.length} combinazioni: ${model.themes.length} temi, 3 viewport, dimensioni normali e massime; modulo, fascia oraria e allegato conservati.`);
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
     await open(page); await dimensions(page, false); await theme(page, 'cyber'); await close(page);
@@ -140,7 +141,7 @@ async function go(page, url, hash) {
         await open(page); await dimensions(page, true); await theme(page, themeId); await close(page);
         for (const hash of ['richieste', 'richiesta/' + id, 'richiesta/101', 'faq', 'contatti', 'profilo']) {
           await go(page, url, hash); await noOverflow(page, `${width}-${themeId}-${hash}`); await accessibility(page, `${width}-${themeId}-${hash}`);
-          if (width === 390 && ['classic', 'spazio', 'retro'].includes(themeId) && ['richiesta/101', 'profilo'].includes(hash)) await page.screenshot({ path: path.join(output, `${width}-${themeId}-${hash.replace('/', '-')}.png`), fullPage: true });
+          if (width === 390 && ['classic', 'spazio', 'autunno'].includes(themeId) && ['richiesta/101', 'profilo'].includes(hash)) await page.screenshot({ path: path.join(output, `${width}-${themeId}-${hash.replace('/', '-')}.png`), fullPage: true });
         }
         console.log('QA pagine', width, themeId);
       }

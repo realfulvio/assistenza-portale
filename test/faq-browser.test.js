@@ -64,8 +64,8 @@ test('guide: il resto del portale continua a funzionare', { skip: salta, timeout
   await p.waitForSelector('#tiles .tile');
   assert.ok((await p.$$('#tiles .tile')).length >= 5);
   await p.goto(url + '#richieste', { waitUntil: 'networkidle0' });
-  await p.waitForSelector('#righe tr');
-  assert.ok((await p.$$('#righe tr')).length >= 1);
+  await p.waitForSelector('#righe .lrow');
+  assert.ok((await p.$$('#righe .lrow')).length >= 1);
   await p.goto(url + '#contatti', { waitUntil: 'networkidle0' });
   assert.equal(await p.$eval('#v-contatti', (e) => e.hidden), false);
   assert.deepEqual(p.errori, []);

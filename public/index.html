@@ -158,29 +158,36 @@
               <div class="nr-cols">
                 <div class="nr-main">
                   <label for="descrizione">Cosa è successo? <span>(più dettagli dai, più in fretta risolviamo)</span></label>
-                  <div class="chips" id="chips" role="group" aria-label="Problema più frequente (facoltativo)" hidden></div>
                   <textarea id="descrizione" name="descrizione" rows="5" maxlength="4000" aria-describedby="conta" placeholder="Descrivi il problema con parole tue."></textarea>
-                  <p class="hint" id="conta">Scrivi almeno 15 caratteri.</p>
+                  <p class="hint conta" id="conta" aria-live="polite"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="c-piu" d="M12 5v14M5 12h14"/><path class="c-ok" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span id="conta-t">Scrivi almeno 15 caratteri.</span><small id="conta-n"></small></p>
                   <div id="consigli" class="consigli" aria-live="polite" hidden></div>
-                  <div class="ex">Non sai cosa scrivere? Rispondi a:
-                    <button type="button" data-g="Da quando succede: ">Da quando succede?</button>
-                    <button type="button" data-g="Cosa stavi facendo: ">Cosa stavi facendo?</button>
-                    <button type="button" data-g="Messaggio d&#39;errore: ">Vedi un messaggio d&#39;errore?</button>
+                  <div class="ex"><span>Non sai cosa scrivere? Rispondi a:</span>
+                    <button type="button" data-g="Da quando succede: "><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z M12 7v5l3 2"/></svg>Da quando succede?</button>
+                    <button type="button" data-g="Cosa stavi facendo: "><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h4l3-8 4 16 3-8h2"/></svg>Cosa stavi facendo?</button>
+                    <button type="button" data-g="Messaggio d&#39;errore: "><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l10 18H2z M12 10v5 M12 18h.01"/></svg>Vedi un messaggio d&#39;errore?</button>
                   </div>
                 </div>
                 <div class="nr-side">
-                  <div><label for="telefono">Telefono</label>
+                  <div><label for="telefono">Il tuo telefono o interno</label>
                     <span class="campo-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><input id="telefono" name="telefono" type="tel" autocomplete="tel" maxlength="25" placeholder="{{testi.esempioTelefono}}"></span></div>
-                  <fieldset class="whens"><legend>Quando sei raggiungibile?</legend><div class="whens-r" id="whens"><button type="button" class="when" data-v="Mattina" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8z M12 2v2 M12 20v2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M2 12h2 M20 12h2 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4"/></svg>Mattina</button><button type="button" class="when" data-v="Pomeriggio" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 18a7 7 0 0 1 14 0 M12 6v3 M3 18h18 M5.6 11.6l1.4 1.4 M18.4 11.6L17 13"/></svg>Pomeriggio</button><button type="button" class="when" data-v="Sempre" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 8a4 4 0 1 0 0 8c4 0 6-8 10-8a4 4 0 1 1 0 8c-4 0-6-8-10-8z"/></svg>Sempre</button></div></fieldset>
-                  <div><span class="lbl" id="lbl-all">Allegati</span>
-                    <input id="allegati" class="vh" type="file" multiple accept=".png,.jpg,.jpeg,.pdf,.docx,.xlsx,.txt,.zip,.msg,.eml" aria-describedby="aiuto-all" aria-labelledby="lbl-all">
-                    <label class="drop" id="drop" for="allegati"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.5 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7"/></svg><span>Aggiungi file o screenshot</span></label>
-                    <p class="hint" id="aiuto-all">Puoi anche incollare uno screenshot con Ctrl+V.</p>
-                    <ul id="lista-all" class="allegati" aria-live="polite"></ul></div>
+                  <div class="rep"><label for="reperibilita">Quando ti troviamo? <span>(facoltativo)</span></label>
+                    <span class="campo-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z M12 7v5l3 2"/></svg><input id="reperibilita" name="reperibilita" maxlength="200" autocomplete="off" placeholder="es. tutte le mattine"></span>
+                    <div class="fascia">oppure dalle <input type="time" id="rep-dalle" aria-label="Dalle ore" step="900"> alle <input type="time" id="rep-alle" aria-label="Alle ore" step="900"></div>
+                    <div class="fascia-barra" aria-hidden="true"><div class="fb"><i id="fascia-i"></i></div><div class="fb-n"><span>7</span><span>10</span><span>13</span><span>16</span><span>19</span></div></div>
+                  </div>
                 </div>
               </div>
+              <div class="allega">
+                <input id="allegati" class="vh" type="file" multiple accept=".png,.jpg,.jpeg,.pdf,.docx,.xlsx,.txt,.zip,.msg,.eml" aria-describedby="aiuto-all">
+                <label class="drop" id="drop" for="allegati">
+                  <svg class="drop-ico" width="56" height="56" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false"><rect x="4" y="8" width="40" height="28" rx="4" class="k-muted" stroke-width="2.4"/><path d="M16 42h16M24 36v6" class="k-muted" stroke-width="2.4" stroke-linecap="round"/><rect class="snip k-accent" x="12" y="14" width="22" height="14" rx="1.5" stroke-width="2.4" stroke-dasharray="5 3"/><path class="k-cursore" d="M30 24l8 8-4 .8-1.2 3.6z" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                  <span class="drop-a"><b>Hai uno screenshot dell'errore?</b><span class="keys">Premi <kbd class="key">Win</kbd>+<kbd class="key">Maiusc</kbd>+<kbd class="key">S</kbd>, seleziona l'errore, poi premi <kbd class="key k2">Ctrl</kbd>+<kbd class="key k2">V</kbd> qui.</span></span>
+                  <span class="drop-b"><span class="drop-alt"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.5 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7"/></svg>Oppure trascina un file qui o clicca per sceglierlo (facoltativo).</span><small class="hint" id="aiuto-all">Fino a 5 file, 10 MB ciascuno (immagini, PDF, Word, Excel, testo, zip, e-mail).</small></span>
+                </label>
+                <ul id="lista-all" class="allegati" aria-live="polite"></ul>
+              </div>
               <p id="errore-form" class="errore" role="alert" tabindex="-1" hidden></p>
-              <div class="nr-send"><small>Riceverai una mail a ogni aggiornamento. <b>Non rispondere alla mail: usa il portale.</b></small><button class="send big" id="invia" type="submit"><span id="invia-t">Invia richiesta</span><span class="plane"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 11l18-8-8 18-2-8z M11 13l10-10"/></svg></span></button></div>
+              <div class="nr-send"><div class="nr-send-t"><h3 class="s"><i>3</i>Invia</h3><small>Riceverai una mail a ogni aggiornamento. <b>Non rispondere alla mail: usa il portale.</b></small></div><button class="send big" id="invia" type="submit"><span id="invia-t">Invia richiesta</span><span class="plane"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 11l18-8-8 18-2-8z M11 13l10-10"/></svg></span></button></div>
             </div>
             <div class="done" id="done" hidden>
               <div class="parts" id="parts" aria-hidden="true"></div>
@@ -194,18 +201,24 @@
     </section>
 
     <section id="v-richieste" class="main" hidden>
-      <h2 class="titolo">Le mie richieste</h2>
-      <p class="guida">Qui vedi lo stato delle tue richieste. Per aggiungere informazioni scrivi un messaggio nel ticket. Lo stato si aggiorna da solo ogni minuto.</p>
-      <div class="filtri" role="group" aria-label="Filtra richieste">
-        <button type="button" data-f="aperte" class="filtro on" aria-pressed="true">Aperte</button>
-        <button type="button" data-f="chiuse" class="filtro" aria-pressed="false">Chiuse</button>
-        <button type="button" data-f="tutte" class="filtro" aria-pressed="false">Tutte</button>
+      <div class="lr-h">
+        <div class="lr-tit">
+          <h2 class="titolo">Le mie richieste</h2>
+          <p class="lr-sub">Qui vedi lo stato delle tue richieste. Per aggiungere informazioni scrivi un messaggio nel ticket.</p>
+          <p class="lr-agg"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8" fill="none" class="k-line" stroke-width="3"/><circle class="cd k-primary" id="cd" cx="11" cy="11" r="8" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="50.3" transform="rotate(-90 11 11)"/></svg>Lo stato si aggiorna da solo ogni minuto.</p>
+        </div>
+        <div class="lr-az">
+          <div class="filtri lr-filtri" role="group" aria-label="Filtra richieste">
+            <button type="button" data-f="aperte" class="filtro on" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z M12 8v4l2.5 2.5"/></svg>Aperte<span class="cnt" data-cnt="aperte">0</span></button>
+            <button type="button" data-f="chiuse" class="filtro" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 11h10a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z M8 11V8a4 4 0 0 1 8 0v3"/></svg>Chiuse<span class="cnt" data-cnt="chiuse">0</span></button>
+            <button type="button" data-f="tutte" class="filtro" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Tutte<span class="cnt" data-cnt="tutte">0</span></button>
+          </div>
+          <a class="send lr-nuova" href="#nuova"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>Nuova richiesta</a>
+        </div>
       </div>
-      <div class="tabella-w"><table>
-        <thead><tr><th>N.</th><th>Oggetto</th><th>Aperta il</th><th>Ultimo aggiornamento</th><th>Stato</th></tr></thead>
-        <tbody id="righe"></tbody>
-      </table></div>
-      <p id="vuoto" class="sub" hidden>Nessuna richiesta da mostrare.</p>
+      <div class="lhead" aria-hidden="true"><span>N.</span><span>Oggetto</span><span>Aperta il</span><span>Ultimo aggiornamento</span><span>Stato</span></div>
+      <ul class="lrows" id="righe" aria-label="Richieste"></ul>
+      <div id="vuoto" class="lr-vuoto" hidden><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 13l3-8h12l3 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z M3 13h5l1 3h6l1-3h5"/></svg><span>Nessuna richiesta da mostrare.</span></div>
     </section>
 
     <section id="v-dettaglio" class="main" hidden>
@@ -221,8 +234,8 @@
         <div id="esito" class="esito" hidden>
           <p class="esito-domanda" id="esito-domanda">La richiesta risulta risolta. È tutto a posto?</p>
           <p class="esito-azioni" id="esito-scelta">
-            <button type="button" class="send" data-esito="risolto">Risolto, grazie</button>
-            <button type="button" class="send sec" data-esito="riapri">Non è risolto, riapri</button>
+            <button type="button" class="send" data-esito="risolto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 11v9H4v-9h3z M7 11l4-7c1.5 0 2.5 1 2.2 2.5L12.7 9H19a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 20H7"/></svg>Risolto, grazie</button>
+            <button type="button" class="send sec" data-esito="riapri"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 2.3-5.7 M4 4v4h4"/></svg>Non è risolto, riapri</button>
           </p>
           <p class="esito-azioni" id="esito-conferma" hidden>
             <button type="button" class="send" id="esito-ok"></button>

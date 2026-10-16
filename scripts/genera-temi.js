@@ -6,13 +6,15 @@ const path = require('path');
 // Variabili: --top barra alta, --head testata, --bar barra Live, --accent oro/accento, --primary pulsanti e numeri,
 // --bg sfondo, --card superfici, --text testo, --muted testo secondario, --line bordi, --soft riquadri tenui,
 // --hero fascia della testata della pagina, --herotext titolo nella fascia, --r raggio, --foot piè di pagina,
-// --dk testo scuro su accento. Facoltative: --onprimary (testo sui pulsanti, predefinito bianco), --bartext.
+// --dk testo scuro su accento. Facoltative: --onprimary (testo sui pulsanti, predefinito bianco), --bartext (testo della
+// barra Live), --live (etichetta «LIVE»), --foottext (testo del piè di pagina), --liveaccent (numero oro sulla barra Live).
 const temi = {
   // Classico: i valori della 1.x prevalgono (blu #005e8e, barra #001a4d, sfondo #f2f2f2)
   classic: { top: '#001a4d', head: '#005e8e', bar: '#071c38', accent: '#e6b93c', primary: '#005e8e', bg: '#f2f2f2', card: '#ffffff', text: '#191919', muted: '#455a64', line: '#dde3ea', soft: '#f2f7fb', hero: '#ffffff', herotext: '#005e8e', r: '8px', foot: '#001a4d', dk: '#0b2a55' },
   hawaii: { top: '#0b6e78', head: '#0a7c84', bar: '#08525a', accent: '#ff7a59', primary: '#0b7a85', bg: '#fff6e5', card: '#ffffff', text: '#16424a', muted: '#4f6e73', line: '#f0dcb8', soft: '#fffaf0', hero: '#fff0cc', herotext: '#0a6a73', r: '20px', foot: '#08525a', dk: '#3d1a0a', liveaccent: '#ffd166' },
   spazio: { top: '#0d0b2e', head: '#262072', bar: '#07061f', accent: '#ffd24a', primary: '#6352e0', bg: '#14123d', card: '#1e1c52', text: '#eceaff', muted: '#b4b0e0', line: '#34308a', soft: '#17154a', hero: '#1a1850', herotext: '#ffffff', r: '14px', foot: '#07061f', dk: '#0b1030' },
   giardino: { top: '#1f5a38', head: '#2f7d4f', bar: '#163f28', accent: '#f2b134', primary: '#2a7347', bg: '#f2f8ec', card: '#ffffff', text: '#1d3a2a', muted: '#4c6656', line: '#d8e6cf', soft: '#f7fbf3', hero: '#e6f3da', herotext: '#225f3a', r: '16px', foot: '#163f28', dk: '#163f28' },
+  autunno: { top: '#5a2d0c', head: '#a84c17', bar: '#3b1d09', accent: '#f2a93b', primary: '#a84c17', bg: '#fbf3e6', card: '#ffffff', text: '#3b2412', muted: '#765a44', line: '#ecd9bf', soft: '#fff9ef', hero: '#fbe7c8', herotext: '#9a4216', r: '16px', foot: '#3b1d09', dk: '#3b1d09' },
   retro: { top: '#0a0618', head: '#2a1458', bar: '#06030f', accent: '#00f5d4', primary: '#c2186f', bg: '#120a26', card: '#1d1040', text: '#f3eaff', muted: '#b9a7e3', line: '#4a2d91', soft: '#150c30', hero: '#190d38', herotext: '#00f5d4', r: '2px', foot: '#06030f', dk: '#06030f' },
   // Temi della 1.x: stessi id, palette ricavate da quelle esistenti
   dark: { top: '#091e2c', head: '#124c66', bar: '#06141d', accent: '#91dcff', primary: '#1f6f96', bg: '#101c25', card: '#1c2c38', text: '#edf5f9', muted: '#c3d4de', line: '#3d5566', soft: '#273e4c', hero: '#16252f', herotext: '#91dcff', r: '6px', foot: '#091e2c', dk: '#10212d' },
@@ -39,9 +41,9 @@ for (const [id, t] of Object.entries(temi)) {
   const onp = t.onprimary || '#ffffff';
   const coppie = [
     ['testo/sfondo', t.text, t.bg, 4.5], ['testo/card', t.text, t.card, 4.5], ['testo/soft', t.text, t.soft, 4.5],
-    ['ora/conversazione', t.muted, miscela(t.primary, t.card, 0.14), 4.5], ['secondario/card', t.muted, t.card, 4.5], ['secondario/sfondo', t.muted, t.bg, 4.5], ['titolo/hero', t.herotext, t.hero, 4.5],
+    ['ora/conversazione', t.muted, miscela(t.primary, t.card, 0.14), 4.5], ['secondario/card', t.muted, t.card, 4.5], ['secondario/soft (aiuti del modulo)', t.muted, t.soft, 4.5], ['avviso/errore', t.text, miscela(scuri.includes(id) ? categorie.rosso[1] : categorie.rosso[0], t.card, 0.14), 4.5], ['secondario/sfondo', t.muted, t.bg, 4.5], ['titolo/hero', t.herotext, t.hero, 4.5],
     ['testo/hero', t.text, t.hero, 4.5], ['pulsante', onp, t.primary, 4.5], ['testata', '#ffffff', t.head, 4.5], ['barra alta', '#ffffff', t.top, 4.5],
-    ['barra Live', '#c9d6e6', t.bar, 4.5], ['piede', '#c9d6e6', t.foot, 4.5], ['numero sulla barra Live', t.liveaccent || t.accent, t.bar, 4.5], ['scuro su accento', t.dk, t.accent, 4.5],
+    ['barra Live', t.bartext || '#c9d6e6', t.bar, 4.5], ['etichetta LIVE', t.live || '#4ade80', t.bar, 4.5], ['piede', t.foottext || '#c9d6e6', t.foot, 4.5], ['numero sulla barra Live', t.liveaccent || t.accent, t.bar, 4.5], ['scuro su accento', t.dk, t.accent, 4.5],
     ['evidenza/card (numeri, link: usa --herotext)', t.herotext, t.card, 4.5]
   ];
   for (const [nome, a, b, min] of coppie) {
@@ -58,7 +60,7 @@ for (const [id, t] of Object.entries(temi)) {
 let css = '/* Generato da scripts/genera-temi.js: non modificare a mano. Variabili dei temi di «Aspetto». */\n';
 for (const [id, t] of Object.entries(temi)) {
   const sel = id === 'classic' ? ':root,html[data-theme=classic]' : `html[data-theme=${id}]`;
-  css += `${sel}{${scuri.includes(id) ? 'color-scheme:dark;' : 'color-scheme:light;'}${Object.entries(t).map(([k, v]) => `--${k}:${v}`).join(';')};--onprimary:${t.onprimary || '#ffffff'}`;
+  css += `${sel}{${scuri.includes(id) ? 'color-scheme:dark;' : 'color-scheme:light;'}${Object.entries(t).filter(([k]) => !['onprimary', 'bartext', 'live', 'foottext'].includes(k)).map(([k, v]) => `--${k}:${v}`).join(';')};--onprimary:${t.onprimary || '#ffffff'};--bartext:${t.bartext || '#c9d6e6'};--live:${t.live || '#4ade80'};--foottext:${t.foottext || '#c9d6e6'}`;
   for (const [nome, [chiaro, scuro]] of Object.entries(categorie)) css += `;--cat-${nome}:${scuri.includes(id) ? scuro : chiaro}`;
   css += '}\n';
 }

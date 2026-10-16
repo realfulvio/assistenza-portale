@@ -102,7 +102,7 @@ h3.s i{font-style:normal;width:34px;height:34px;border-radius:50%;background:var
 .tile-t small{font-size:14px;line-height:1.35;color:var(--muted)}
 .tarrow{position:absolute;right:10px;bottom:10px;display:flex;color:var(--c);transition:transform .2s}
 .tile:hover .tarrow{transform:translateX(4px)}
-.tok{position:absolute;right:9px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;display:none;align-items:center;justify-content:center;animation:popin .45s ease-out both}
+.tok{position:absolute;right:9px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--c);color:var(--card);display:none;align-items:center;justify-content:center;animation:popin .45s ease-out both}
 .tile[aria-pressed=true] .tok{display:flex}
 .tile[aria-pressed=true] .tarrow{display:none}
 
@@ -128,18 +128,31 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
 .campo-ico{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:10px;background:var(--soft);padding:0 12px;color:var(--muted)}
 .campo-ico:focus-within{outline:3px solid var(--focus);outline-offset:1px;border-color:var(--primary)}
 .campo-ico input{border:0!important;background:transparent!important;padding:10px 0!important;outline:none!important}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{--c:var(--cat-blu);height:36px;padding:0 14px;border-radius:999px;border:2px solid var(--line);background:var(--soft);color:var(--text);font:600 14px "Titillium Web",sans-serif;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .15s}
-.chip:hover{transform:translateY(-1px)}
-.chip[aria-pressed=true]{background:var(--c);border-color:var(--c);color:#fff}
-html[data-theme=spazio] .chip[aria-pressed=true],html[data-theme=retro] .chip[aria-pressed=true],html[data-theme=dark] .chip[aria-pressed=true],html[data-theme=cyber] .chip[aria-pressed=true],html[data-theme=terminal] .chip[aria-pressed=true]{color:#0b0b1a}
-.whens-r{display:flex;flex-wrap:wrap;gap:8px}
-.when{height:40px;padding:0 14px 0 10px;border-radius:10px;border:2px solid var(--line);background:var(--soft);color:var(--herotext);display:flex;align-items:center;gap:8px;font:600 14px "Titillium Web",sans-serif;cursor:pointer;transition:transform .15s}
-.when:hover{transform:translateY(-1px)}
-.when[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:var(--onprimary)}
 .hint{font-size:14px;color:var(--muted);margin-top:4px}
-.drop{display:flex;gap:10px;align-items:center;justify-content:center;min-height:44px;border:2px dashed var(--line);border-radius:10px;padding:8px 14px;color:var(--herotext);background:var(--soft);font-weight:600;font-size:15px;cursor:pointer;margin:0;transition:.2s}
+.conta{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;margin:0;font-size:14px}
+.conta .c-ok,.conta.ok .c-piu{display:none}.conta.ok .c-ok{display:inline}
+.conta.ok{color:var(--herotext);font-weight:600}.conta small{font-size:13px;font-weight:400;color:var(--muted)}
+.k-muted{stroke:var(--muted)}.k-primary{stroke:var(--primary)}.k-cursore{fill:var(--primary);stroke:var(--card)}
+/* «Quando ti troviamo?»: testo libero con fascia oraria facoltativa (barra 7–19) */
+.rep{display:flex;flex-direction:column;gap:8px}.rep label{margin-bottom:0}
+.fascia{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+#nr-form .fascia input[type=time]{width:auto;min-height:40px;padding:0 10px;font-size:15px}
+.fascia-barra{display:flex;flex-direction:column;gap:3px}
+.fb{position:relative;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.fb i{position:absolute;top:0;bottom:0;left:var(--da,0);width:var(--amp,0);border-radius:5px;background:var(--accent);transition:left .5s ease,width .5s ease}
+.fb-n{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+/* Allegati: screenshot con i tasti che si «premono» in sequenza, trascinamento o scelta del file */
+.drop{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;border:2px dashed var(--line);border-radius:12px;padding:14px 20px;color:var(--text);background:var(--soft);font-weight:400;font-size:15px;cursor:pointer;margin:0;transition:border-color .2s,background .2s}
 .drop:hover,.drop.over{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 8%,var(--soft))}
+.drop-ico{flex:none}
+.drop-a{flex:2 1 380px;display:flex;flex-direction:column;gap:8px;min-width:0}.drop-a b{font-size:16px;color:var(--text)}
+.keys{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px;color:var(--text)}
+.key{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 8px;border-radius:6px;border:2px solid var(--line);background:var(--card);box-shadow:0 3px 0 var(--line);font:700 13px "Titillium Web",sans-serif;color:var(--text);animation:keypress 3.6s ease-in-out infinite}
+.key.k2{animation-delay:-1.8s}
+.snip{animation:march 1.2s linear infinite}
+.drop-b{flex:1 1 260px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.drop-alt{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text)}.drop-alt svg{color:var(--primary)}
+.drop-b .hint{font-size:13px;margin:0}
 #allegati:focus-visible+.drop{outline:3px solid var(--focus);outline-offset:2px}
 .allegati{list-style:none;padding:0;margin:10px 0 0}
 .allegati li{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:8px;padding:6px 10px;margin-bottom:6px;flex-wrap:wrap}
@@ -147,11 +160,12 @@ html[data-theme=spazio] .chip[aria-pressed=true],html[data-theme=retro] .chip[ar
 .allegati .nome{flex:1;overflow-wrap:anywhere;font-size:15px}
 .allegati button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:6px;cursor:pointer;padding:4px 10px;font:inherit;font-size:14px}
 .ex{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
-.ex button{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--herotext);border-radius:16px;padding:2px 12px;font:600 14px "Titillium Web",sans-serif}
-.ex button:hover{border-color:var(--primary)}
+.ex button{cursor:pointer;min-height:34px;display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);background:transparent;color:var(--herotext);border-radius:999px;padding:0 12px 0 10px;font:600 14px "Titillium Web",sans-serif;transition:background .2s,transform .15s}
+.ex button:hover{border-color:var(--primary);background:var(--soft);transform:translateY(-1px)}
 .nr-send{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.nr-send-t{display:flex;flex-direction:column;gap:6px;min-width:0}
 .nr-send small{color:var(--muted);font-size:14px}
-.errore{color:#9b1c1c;font-weight:700;background:#fff0ed;border-left:4px solid #9b1c1c;padding:8px 12px;border-radius:4px}
+.errore{color:var(--text);font-weight:700;background:color-mix(in srgb,var(--cat-rosso) 14%,var(--card));border-left:4px solid var(--cat-rosso);padding:8px 12px;border-radius:4px}
 .errore:not(:empty)::before{content:'⚠ ';font-family:system-ui,sans-serif}
 
 /* pulsanti */
@@ -195,24 +209,54 @@ h3{font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted
 .guida:empty{display:none}
 .indietro{color:var(--herotext);font-weight:600;display:inline-flex;align-items:center;gap:6px}
 
-/* elenco richieste */
-.tabella-w{overflow-x:auto}
-table{width:100%;border-collapse:collapse;background:var(--card);color:var(--text)}
-th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
-th{background:var(--soft);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-tbody tr{cursor:pointer}tbody tr:hover{background:var(--soft)}
-tbody a{font-weight:700;color:var(--herotext)}
+/* elenco richieste: righe-scheda (colonne N., Oggetto, Aperta il, Ultimo aggiornamento, Stato) */
 .filtri{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .filtro{min-height:36px;border:2px solid var(--primary);background:var(--card);color:var(--herotext);border-radius:20px;padding:4px 18px;font:600 15px "Titillium Web",sans-serif;cursor:pointer}
 .filtro.on{background:var(--primary);color:var(--onprimary)}
-.stato,.st-b{font-size:14px;font-weight:700;padding:2px 10px;border-radius:12px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
-.st-attesa{background:#fff0c2;color:#5c4300}.st-lav{background:#dbe7ff;color:#14407f}
-.st-sosp{background:#ffe1d6;color:#7a2c00}.st-ris{background:#d8f1df;color:#1d5c32}.st-chiu{background:#e4e7ee;color:#2f3747}
+.lr-h{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:var(--g)}
+.lr-tit{display:flex;flex-direction:column;gap:8px;min-width:0}.lr-tit .titolo{margin:0}
+.lr-sub{font-family:Lora,Georgia,serif;font-size:17px;color:var(--text);max-width:760px}
+.lr-agg{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.cd{animation:countdown 60s linear infinite}
+.lr-az{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.lr-filtri{gap:6px;margin:0;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px}
+.lr-filtri .filtro{min-height:38px;border:0;background:transparent;color:var(--text);border-radius:999px;padding:0 14px 0 12px;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,transform .15s}
+.lr-filtri .filtro:hover{transform:translateY(-1px)}
+.lr-filtri .filtro.on{background:var(--primary);color:var(--onprimary)}
+.cnt{min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--soft);color:var(--text);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.filtro.on .cnt{background:color-mix(in srgb,var(--onprimary) 25%,transparent);color:var(--onprimary)}
+.lr-nuova{padding:0 18px;min-height:46px;border-radius:999px;font-size:15px;gap:8px}
+.lhead,.lrow{display:grid;grid-template-columns:70px minmax(0,1fr) 130px 190px 250px;gap:16px;align-items:center}
+.lhead{padding:0 20px;margin-bottom:10px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lrows{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.lrow{--c:var(--cat-grigio);--sc:var(--primary);background:var(--card);color:var(--text);border:2px solid var(--line);border-radius:var(--r);padding:14px 20px;transition:transform .2s,box-shadow .2s,border-color .2s;animation:tilein .5s ease-out both}
+.lrow:hover{transform:translateY(-2px);box-shadow:0 8px 20px #0000001f;border-color:var(--primary)}
+.lr-n{font-size:20px;font-weight:700;color:var(--herotext)}
+.lr-ogg{display:flex;align-items:center;gap:14px;min-width:0}
+.lr-ico{width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c);display:flex;align-items:center;justify-content:center;flex:none}
+.lr-ico svg{width:calc(26px * var(--icon-scale,1));height:calc(26px * var(--icon-scale,1))}
+.lr-ot{display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}.lr-ot b{font-size:17px}.lr-ot small{font-size:13px;color:var(--muted)}
+.lr-d{display:flex;align-items:center;gap:8px;font-size:15px}.lr-d svg{color:var(--muted)}
+.lr-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.lr-st{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.lr-stw{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.lr-stato{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 12px 0 9px;border-radius:999px;border:2px solid var(--sc);background:var(--soft);color:var(--text);font-size:14px;font-weight:700;white-space:nowrap}
+.lr-stato svg{color:var(--sc)}
+.lr-conf{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;background:var(--accent);color:var(--dk);font-size:13px;font-weight:700;animation:pulsegold 2s ease-out infinite}
+.lr-mini{display:flex;align-items:center}
+.lr-mini b{width:11px;height:11px;border-radius:50%;background:var(--line)}.lr-mini i{width:18px;height:3px;background:var(--line)}
+.lr-mini .on{background:var(--primary)}
+.lr-vuoto{display:flex;flex-direction:column;align-items:center;gap:14px;background:var(--card);border:2px dashed var(--line);border-radius:var(--r);padding:36px 20px;color:var(--muted);animation:enter .35s ease-out both}
+.lr-vuoto span{font-size:18px;font-weight:600;color:var(--text)}
+/* Pillole di stato (dettaglio): colore dello stato mescolato alla superficie del tema, testo del tema */
+.stato,.st-b{--sc:var(--primary);font-size:14px;font-weight:700;padding:2px 10px;border-radius:12px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--sc) 18%,var(--card));color:var(--text);border:1px solid var(--sc)}
+.st-attesa{--sc:var(--accent)}.st-lav{--sc:var(--primary)}.st-sosp{--sc:var(--cat-arancio)}.st-ris{--sc:var(--cat-verde)}.st-chiu{--sc:var(--muted)}
 
 /* conferma della soluzione (Risolto / Riapri) */
 .esito{background:var(--soft);border-left:5px solid var(--primary);padding:14px 16px;margin:0 0 18px}
 .esito-domanda{font-weight:700;font-size:18px;margin-bottom:10px}
 .esito-azioni{display:flex;gap:10px;flex-wrap:wrap}
+.esito-azioni .send{padding:11px 22px;font-size:16px}.esito-azioni .send.sec{padding:9px 20px}
 
 /* ---------- Dettaglio richiesta: avanzamento e conversazione ---------- */
 .tk{display:flex;flex-direction:column;gap:22px;padding:32px 36px}
@@ -288,7 +332,7 @@ tbody a{font-weight:700;color:var(--herotext)}
 .faq-strumenti{max-width:820px;margin-bottom:14px}
 .faq-strumenti input[type=search]{background:var(--card)}
 .faq-chips{flex-wrap:wrap;margin:12px 0 4px}
-.faq-vuoto{max-width:820px;background:var(--card);border-left:4px solid #b58900;padding:12px 18px;margin-bottom:12px}
+.faq-vuoto{max-width:820px;background:var(--card);border-left:4px solid var(--accent);padding:12px 18px;margin-bottom:12px}
 .faq .faq-corpo{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
 .faq .faq-corpo p{font-family:Lora,Georgia,serif;margin:8px 0}
 .faq .faq-intro{color:var(--muted)}
@@ -305,9 +349,9 @@ tbody a{font-weight:700;color:var(--herotext)}
 .faq-img{display:block;padding:0;border:2px solid var(--line);background:var(--card);cursor:zoom-in;max-width:100%}
 .faq-img:hover{border-color:var(--primary)}
 .faq-img img{display:block;max-width:100%;height:auto}
-.faq .faq-ok,.faq .faq-stop,.faq .faq-richiesta{padding:8px 14px;border-left:5px solid;color:#1d2b22}
-.faq .faq-ok{background:#e6f4ea;border-color:#00732f}
-.faq .faq-stop{background:#fff4ce;border-color:#b58900;color:#463600}
+.faq .faq-ok,.faq .faq-stop,.faq .faq-richiesta{padding:8px 14px;border-left:5px solid;color:var(--text)}
+.faq .faq-ok{background:color-mix(in srgb,var(--cat-verde) 14%,var(--card));border-color:var(--cat-verde)}
+.faq .faq-stop{background:color-mix(in srgb,var(--accent) 18%,var(--card));border-color:var(--accent)}
 .faq .faq-richiesta{background:var(--soft);border-color:var(--primary);color:var(--text)}
 .faq .faq-ok h4,.faq .faq-stop h4{color:inherit}
 .faq .faq-blocco p{margin:4px 0}
@@ -321,11 +365,11 @@ tbody a{font-weight:700;color:var(--herotext)}
 
 /* consigli prima di inviare */
 .consigli{margin-top:4px}
-.consiglio{background:#fff4ce;color:#463600;border-left:5px solid #876700;padding:12px 16px;margin-bottom:10px;border-radius:0 8px 8px 0}
+.consiglio{background:color-mix(in srgb,var(--accent) 18%,var(--card));color:var(--text);border-left:5px solid var(--accent);padding:12px 16px;margin-bottom:10px;border-radius:0 8px 8px 0}
 .consiglio .pre{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .consiglio .tit{font-weight:700;font-size:17px;margin:2px 0 4px}
 .consiglio ol{margin:0;padding-left:22px}
-.consiglio a{color:#004a70;font-weight:600;text-decoration:underline}
+.consiglio a{color:var(--herotext);font-weight:600;text-decoration:underline}
 .consigli .ancora{font-weight:700;color:var(--text)}
 
 /* accesso ed errori */
@@ -340,12 +384,12 @@ tbody a{font-weight:700;color:var(--herotext)}
 /* ---------- Piè di pagina: decorazione del tema, versione, Novità ---------- */
 footer{position:relative;margin-top:auto}
 .deco{position:relative;height:30px;overflow:hidden}
-.foot{background:var(--foot);color:#c9d6e6;font-size:13px}
+.foot{background:var(--foot);color:var(--foottext);font-size:13px}
 .foot .in{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 .ver{height:32px;border:1px solid #ffffff40;border-radius:999px;background:transparent;color:#fff;font:700 13px "Titillium Web",sans-serif;padding:0 14px 0 10px;display:flex;align-items:center;gap:8px;cursor:pointer}
 .ver svg{color:var(--accent)}
 .ver:hover{border-color:var(--accent)}
-.foot .pw{display:flex;align-items:center;gap:8px;color:#c9d6e6}
+.foot .pw{display:flex;align-items:center;gap:8px;color:var(--foottext)}
 .foot .pw b{color:#fff}
 .foot .pw:hover b{text-decoration:underline}
 .foot :focus-visible{outline-color:var(--accent)}
@@ -390,8 +434,8 @@ footer{position:relative;margin-top:auto}
 .appearance-check{display:flex;align-items:center;gap:10px}.appearance-controls input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--primary)}
 .appearance-controls button,.dw-azioni button{font:inherit;font-size:14px;cursor:pointer;padding:8px 12px;border:1px solid var(--line);color:var(--herotext);background:var(--soft);border-radius:6px}
 #aspetto-stato{color:var(--muted);font-size:13px;min-height:1.2em}
-.appearance-notice{max-width:1132px;margin:16px auto;padding:12px 16px;background:#fff4ce;color:#463600;border-left:4px solid #876700;overflow-wrap:anywhere}
-.appearance-notice button{font:inherit;color:#004a70;background:#fff;border:1px solid #004a70;padding:6px 10px;cursor:pointer;margin-top:4px}
+.appearance-notice{max-width:1132px;margin:16px auto;padding:12px 16px;background:color-mix(in srgb,var(--accent) 18%,var(--card));color:var(--text);border-left:4px solid var(--accent);overflow-wrap:anywhere}
+.appearance-notice button{font:inherit;color:var(--herotext);background:var(--card);border:1px solid var(--herotext);padding:6px 10px;cursor:pointer;margin-top:4px}
 
 /* ---------- animazioni ---------- */
 @keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
@@ -412,12 +456,22 @@ footer{position:relative;margin-top:auto}
 @keyframes sheen{0%{transform:translateX(-120%)}100%{transform:translateX(420%)}}
 @keyframes badgein{0%{transform:scale(0) rotate(-45deg)}100%{transform:scale(1) rotate(0)}}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes keypress{0%,72%,100%{transform:translateY(0);box-shadow:0 3px 0 var(--line);background:var(--card);color:var(--text)}80%,90%{transform:translateY(3px);box-shadow:0 0 0 var(--line);background:var(--accent);color:var(--dk)}}
+@keyframes march{to{stroke-dashoffset:-16}}
+@keyframes countdown{from{stroke-dashoffset:0}to{stroke-dashoffset:50.3}}
 
 /* ---------- responsive ---------- */
 @media(max-width:900px){
   .hero-top{flex-direction:column;align-items:flex-start}
   .nr-cols{flex-direction:column}.nr-main,.nr-side{flex-basis:auto;width:100%}
   .tk{padding:24px 18px}
+}
+@media(max-width:860px){
+  .lhead{display:none}
+  .lrow{grid-template-columns:minmax(0,1fr);gap:8px;padding:14px 16px}
+  .lr-d{flex-wrap:wrap;gap:4px 8px}
+  .lr-stato{white-space:normal}
+  .lr-lbl{position:static;width:auto;height:auto;overflow:visible;clip:auto;font-size:12px;color:var(--muted);margin-right:2px}
 }
 @media(max-width:760px){
   .slim .r>*{padding:0 10px}

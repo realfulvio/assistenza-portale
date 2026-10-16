@@ -25,7 +25,7 @@
     x: 'M6 6l12 12M18 6L6 18', cal: 'M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zM4 10h16M8 4v4M16 4v4',
     ticket: 'M4 9V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6zM14 5v14',
     clock: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z', hand: 'M12 12V6.5', sys: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z M8 12.5l3 3 5-6',
-    tile: 'M12 7v5l3 2'
+    tile: 'M12 7v5l3 2', pause: 'M9 5v14M15 5v14'
   };
   // SVG da un tracciato: opzioni { size, sw, cls, path: classe del tracciato, label }
   function ico(d, o = {}) {
@@ -111,9 +111,12 @@
   const GUIDE = ['Da quando succede:', 'Cosa stavi facendo:', "Messaggio d'errore:"];
   const testoUtile = () => GUIDE.reduce((t, g) => t.split(g).join(''), $('descrizione').value).trim();
 
+  // «Scrivi almeno 15 caratteri.» diventa «Va bene così» con la spunta quando il testo basta
   function aggiornaConta() {
-    const n = testoUtile().length;
-    $('conta').textContent = n < 15 ? `Scrivi almeno 15 caratteri (ne mancano ${15 - n}).` : `${$('descrizione').value.length} / 4000 caratteri`;
+    const n = testoUtile().length, ok = n >= 15;
+    $('conta').classList.toggle('ok', ok);
+    $('conta-t').textContent = ok ? 'Va bene così' : 'Scrivi almeno 15 caratteri.';
+    $('conta-n').textContent = ok ? `${$('descrizione').value.length} / 4000 caratteri` : n ? `(ne mancano ${15 - n})` : '';
     aggiornaProgresso();
   }
 
@@ -150,8 +153,8 @@
   }
   function programmaConsigli() { clearTimeout(timerConsigli); timerConsigli = setTimeout(() => aggiornaConsigli().catch(() => {}), 1500); }
 
-  // ---------- stato del modulo: categoria, pulsante rapido, reperibilita', invio ----------
-  let categoria = null, sottotipo = '', inviata = false;
+  // ---------- stato del modulo: categoria, reperibilita', invio ----------
+  let categoria = null, inviata = false;
   const coloreCat = (c) => (c.temaColore ? `var(--cat-${c.temaColore})` : c.colore || 'var(--cat-blu)');
   const catScelta = () => categoria && categoria.id;
 
@@ -163,22 +166,10 @@
     window.Temi && window.Temi.progresso(fatti.filter(Boolean).length);
   }
 
-  function disegnaChips() {
-    const box = $('chips');
-    const r = (categoria && categoria.rapidi) || [];
-    box.hidden = !r.length;
-    box.replaceChildren(...r.map((t) => {
-      const b = el('button', { type: 'button', className: 'chip', textContent: t });
-      b.style.setProperty('--c', coloreCat(categoria));
-      b.setAttribute('aria-pressed', String(t === sottotipo));
-      b.addEventListener('click', () => { sottotipo = sottotipo === t ? '' : t; disegnaChips(); });
-      return b;
-    }));
-  }
-
-  // Il riquadro si adatta alla categoria scelta: pillola con icona e nome, pulsanti rapidi, modulo su due colonne
+  // Il riquadro si adatta alla categoria scelta: pillola con icona e nome, modulo su due colonne
+  // (nessun pulsante o testo preimpostato per categoria: le descrizioni restano sulle caselle)
   function scegliCategoria(c) {
-    categoria = c; sottotipo = '';
+    categoria = c;
     document.querySelectorAll('#tiles .tile').forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.id === c.id)));
     const pill = $('scelta');
     pill.style.setProperty('--c', coloreCat(c));
@@ -187,10 +178,10 @@
     $('cn').textContent = c.titolo || c.nome;
     pill.hidden = false; $('scegli-prima').hidden = true; $('nr-form').hidden = false;
     $('descrizione').placeholder = c.placeholder || 'Descrivi il problema con parole tue.';
-    disegnaChips(); aggiornaProgresso(); programmaConsigli();
+    aggiornaProgresso(); programmaConsigli();
   }
   function annullaCategoria() {
-    categoria = null; sottotipo = '';
+    categoria = null;
     document.querySelectorAll('#tiles .tile').forEach((t) => t.setAttribute('aria-pressed', 'false'));
     $('scelta').hidden = true; $('scegli-prima').hidden = false; $('nr-form').hidden = true;
     aggiornaProgresso();
@@ -268,8 +259,27 @@
     if (nuovi.length) aggiungiFile(nuovi);
   }
 
+  // «Quando ti troviamo?»: testo libero; i selettori dalle/alle (facoltativi) compongono il testo e colorano la barra 7–19
+  const minuti = (v) => { const [h, m] = String(v).split(':').map(Number); return h * 60 + m; };
+  function componiFascia() {
+    const f = $('rep-dalle').value, t = $('rep-alle').value;
+    $('reperibilita').value = f && t ? `dalle ${f} alle ${t}` : f ? `dalle ${f}` : t ? `fino alle ${t}` : '';
+    disegnaFascia();
+  }
+  function disegnaFascia() {
+    const f = $('rep-dalle').value, t = $('rep-alle').value, barra = $('fascia-i');
+    let da = 0, ampiezza = 0;
+    if (f && t && minuti(t) > minuti(f)) {
+      da = Math.max(0, Math.min(100, (minuti(f) - 420) / 720 * 100));
+      ampiezza = Math.max(0, Math.min(100 - da, (minuti(t) - minuti(f)) / 720 * 100));
+    }
+    barra.style.setProperty('--da', da.toFixed(1) + '%'); barra.style.setProperty('--amp', ampiezza.toFixed(1) + '%');
+  }
+
   function nuovaRichiesta() {
     inviata = false; files = []; disegnaAllegati();
+    for (const id of ['reperibilita', 'rep-dalle', 'rep-alle']) $(id).value = '';
+    disegnaFascia();
     $('descrizione').value = ''; aggiornaConta(); $('consigli').hidden = true; $('consigli').replaceChildren();
     $('done').hidden = true; $('parts').replaceChildren();
     annullaCategoria();
@@ -281,11 +291,8 @@
     $('descrizione').addEventListener('input', programmaConsigli);
     $('cambia').addEventListener('click', annullaCategoria);
     $('nuova-ancora').addEventListener('click', () => { nuovaRichiesta(); window.scrollTo(0, 0); });
-    // Quando sei raggiungibile? (facoltativo; Sempre preselezionato come nel riferimento)
-    const whens = [...document.querySelectorAll('#whens .when')];
-    const scegliWhen = (b) => whens.forEach((x) => x.setAttribute('aria-pressed', String(x === b && x.getAttribute('aria-pressed') !== 'true')));
-    whens.forEach((b) => b.addEventListener('click', () => scegliWhen(b)));
-    whens.find((b) => b.dataset.v === 'Sempre').setAttribute('aria-pressed', 'true');
+    $('rep-dalle').addEventListener('change', componiFascia);
+    $('rep-alle').addEventListener('change', componiFascia);
     document.querySelectorAll('.ex button').forEach((b) => b.addEventListener('click', () => {
       const t = $('descrizione'); const g = b.dataset.g;
       if (!t.value.includes(g.trim())) t.value = (t.value && !t.value.endsWith('\n') ? t.value + '\n' : t.value) + g;
@@ -305,10 +312,9 @@
       if (testoUtile().length < 15) return errore('errore-form', 'Descrivi il problema con almeno 15 caratteri.');
       if (tel && !/^[0-9+()\s./-]{3,25}$/.test(tel)) return errore('errore-form', 'Il numero di telefono non sembra valido.');
       errore('errore-form', '');
-      const when = document.querySelector('#whens .when[aria-pressed=true]');
       const fd = new FormData();
-      fd.append('categoria', categoria.id); fd.append('sottotipo', sottotipo); fd.append('telefono', tel);
-      fd.append('reperibilita', when ? when.dataset.v : ''); fd.append('descrizione', desc);
+      fd.append('categoria', categoria.id); fd.append('telefono', tel);
+      fd.append('reperibilita', $('reperibilita').value.trim()); fd.append('descrizione', desc);
       files.forEach((f) => fd.append('allegati', f, f.name));
       btn.disabled = true; $('invia-t').textContent = 'Invio in corso…';
       try {
@@ -342,16 +348,49 @@
   const parse = (s) => new Date(String(s).replace(' ', 'T'));
   const data = (s) => { const d = parse(s); return isNaN(d) ? '' : d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' }); };
   const dataOra = (s) => { const d = parse(s); return isNaN(d) ? '' : d.toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' }); };
-  const badge = (s) => el('span', { className: 'st-b ' + (CLS[s] || 'st-attesa'), textContent: s });
 
-  async function caricaRichieste() { richieste = await api('/richieste'); disegnaRichieste(); }
+  // Stato nell'elenco: icona, colore della pillola e tappa del mini avanzamento (Aperta, In carico, Soluzione, Chiusa)
+  const STATO_LISTA = {
+    'In attesa': [I.flag, 'var(--primary)', 1], 'In lavorazione': [I.userCheck, 'var(--accent)', 2], 'In sospeso': [I.pause, 'var(--cat-arancio)', 2],
+    Risolta: [I.bulb, 'var(--cat-verde)', 3], Chiusa: [I.lock, 'var(--muted)', 4]
+  };
+  // La categoria e' il prefisso «[Nome]» che il portale mette nel titolo; senza prefisso noto: icona «Altro»
+  function catDaTitolo(t) {
+    const m = /^\[([^\]]+)\]\s*/.exec(t || '');
+    const c = m && me.categorie.find((x) => x.nome === m[1]);
+    return c ? { c, titolo: t.slice(m[0].length) } : { c: null, titolo: t };
+  }
+  // «Risolta» resta tra le aperte finche' il richiedente non conferma (badge «Conferma»)
+  const aperta = (r) => !r.chiusa || r.stato === 'Risolta';
+  const dataOraLista = (s) => (data(s) ? `${data(s)}, ${hhmm(s)}` : '');
+  async function caricaRichieste() {
+    richieste = (await api('/richieste')).slice().sort((a, b) => parse(b.aggiornata) - parse(a.aggiornata));
+    disegnaRichieste();
+    const cd = $('cd'); cd.classList.remove('cd'); cd.getBoundingClientRect(); cd.classList.add('cd'); // anello dei 60 secondi da capo
+  }
   function disegnaRichieste() {
-    const l = richieste.filter((r) => filtro === 'tutte' || (filtro === 'aperte' ? !r.chiusa : r.chiusa));
-    $('righe').replaceChildren(...l.map((r) => {
-      const a = el('a', { href: '#richiesta/' + r.id, textContent: '#' + r.id });
-      const tr = el('tr', {}, el('td', {}, a), el('td', { textContent: r.titolo }), el('td', { textContent: data(r.aperta) }), el('td', { textContent: data(r.aggiornata) }), el('td', {}, badge(r.stato)));
-      tr.addEventListener('click', (e) => { if (e.target !== a) location.hash = '#richiesta/' + r.id; });
-      return tr;
+    const n = { aperte: richieste.filter(aperta).length, tutte: richieste.length };
+    n.chiuse = n.tutte - n.aperte;
+    document.querySelectorAll('[data-cnt]').forEach((x) => { x.textContent = n[x.dataset.cnt]; });
+    const l = richieste.filter((r) => filtro === 'tutte' || (filtro === 'aperte' ? aperta(r) : !aperta(r)));
+    $('righe').replaceChildren(...l.map((r, k) => {
+      const { c, titolo } = catDaTitolo(r.titolo);
+      const [sIco, sCol, tappa] = STATO_LISTA[r.stato] || STATO_LISTA['In attesa'];
+      const a = el('a', { className: 'lrow', href: '#richiesta/' + r.id });
+      a.style.setProperty('--c', c ? coloreCat(c) : 'var(--cat-grigio)'); a.style.setProperty('--sc', sCol); a.style.animationDelay = (k * 0.07) + 's';
+      const stato = el('span', { className: 'lr-stw' }, el('span', { className: 'lr-stato' }, ico(sIco, { size: 16, sw: 2.3 }), r.stato));
+      if (r.stato === 'Risolta') stato.append(el('span', { className: 'lr-conf', textContent: 'Conferma' }));
+      const mini = el('span', { className: 'lr-mini', ariaHidden: 'true' });
+      for (let i = 1; i <= 4; i++) { if (i > 1) mini.append(el('i', { className: tappa >= i ? 'on' : '' })); mini.append(el('b', { className: tappa >= i ? 'on' : '' })); }
+      const lbl = (t) => el('span', { className: 'lr-lbl', textContent: t + ' ' });
+      a.append(
+        el('span', { className: 'lr-n' }, lbl('N.'), '#' + r.id),
+        el('span', { className: 'lr-ogg' }, el('span', { className: 'lr-ico' }, icona(c ? c.icona : 'ot')),
+          el('span', { className: 'lr-ot' }, el('b', { textContent: titolo }), el('small', { textContent: c ? c.titolo || c.nome : '' }))),
+        el('span', { className: 'lr-d' }, ico(I.cal, { size: 17 }), lbl('Aperta il'), data(r.aperta)),
+        el('span', { className: 'lr-d' }, ico([I.clock, I.tile], { size: 17 }), lbl('Ultimo aggiornamento'), dataOraLista(r.aggiornata)),
+        el('span', { className: 'lr-st' }, stato, mini));
+      return el('li', {}, a);
     }));
     $('vuoto').hidden = l.length > 0;
   }
@@ -632,9 +671,9 @@
 
   // ---------- avvio ----------
   async function avvio() {
-    document.querySelectorAll('.filtro').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.lr-filtri .filtro').forEach((b) => b.addEventListener('click', () => {
       filtro = b.dataset.f;
-      document.querySelectorAll('.filtro').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+      document.querySelectorAll('.lr-filtri .filtro').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
       disegnaRichieste();
     }));
     $('esci').addEventListener('click', async () => {
@@ -668,7 +707,7 @@
     $('profilo-nome').textContent = me.nome; $('profilo-email').textContent = me.email;
     disegnaTile(); inizializzaForm(); aggiornaProgresso();
     window.Appearance.refresh();
-    $('aiuto-all').textContent = `Fino a ${me.limiti.maxFiles} file da ${Math.round(me.limiti.maxFileBytes / 1048576)} MB (immagini, PDF, Office, testo, zip, e-mail). Puoi anche incollare uno screenshot con Ctrl+V.`;
+    $('aiuto-all').textContent = `Fino a ${me.limiti.maxFiles} file, ${Math.round(me.limiti.maxFileBytes / 1048576)} MB ciascuno (immagini, PDF, Word, Excel, testo, zip, e-mail).`;
     try { $('telefono').value = localStorage.getItem('tel') || ''; } catch { /* ignorato */ }
     if (/\/(errore|non-consentito)$/.test(location.pathname)) history.replaceState(null, '', BASE + '/');
     inizializzaEsito();
