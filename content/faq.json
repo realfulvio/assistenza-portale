@@ -1,12 +1,1157 @@
 [
-  { "d": "Il PC è lento", "r": "Salva il lavoro e riavvia il computer (Start > Riavvia, non «Arresta»). Chiudi i programmi che non usi. Se resta lento dopo il riavvio, apri una richiesta." },
-  { "d": "La stampante non stampa", "r": "Controlla che sia accesa, che ci sia carta e toner e che non ci siano messaggi sul display. Prova a cancellare i lavori in coda e a stampare di nuovo. Se continua, apri una richiesta indicando il modello o l'ufficio." },
-  { "d": "Ho dimenticato la password o è scaduta", "r": "Se è la password di Microsoft 365 prova prima «Password dimenticata?» nella pagina di accesso. Altrimenti apri una richiesta scegliendo «Password e accesso»." },
-  { "d": "Outlook non si apre o non riceve la posta", "r": "Chiudi e riapri Outlook. Verifica di essere connesso a Internet. Prova ad aprire la posta da web (outlook.office.com): se lì funziona, segnalacelo." },
-  { "d": "Teams non sente o non si vede", "r": "Controlla in Teams > Impostazioni > Dispositivi che microfono, altoparlanti e videocamera siano quelli giusti. Chiudi altri programmi che usano la webcam." },
-  { "d": "Non ho connessione a Internet", "r": "Verifica che il cavo di rete sia inserito o che il Wi-Fi sia attivo. Prova ad aprire un altro sito. Se più colleghi hanno lo stesso problema, apri una sola richiesta indicando l'ufficio." },
-  { "d": "Non riesco ad accedere a una cartella di rete", "r": "Riavvia il computer e riprova. Se compare «accesso negato», apri una richiesta indicando il percorso della cartella." },
-  { "d": "Lo schermo è nero o non si accende nulla", "r": "Controlla cavi di alimentazione e prese, poi il pulsante del monitor. Se il PC è acceso ma lo schermo no, prova a scollegare e ricollegare il cavo video." },
-  { "d": "Devo installare un programma", "r": "Non installare nulla da solo. Apri una richiesta scegliendo «Altro», indicando programma e motivo." },
-  { "d": "Ho ricevuto una mail sospetta", "r": "Non cliccare sui link e non aprire gli allegati. Non rispondere. Apri subito una richiesta indicando che è una mail sospetta, oppure chiamaci se hai già cliccato." }
+  {
+    "id": "pc-lento-bloccato",
+    "cat": "computer",
+    "d": "Il PC è lento o bloccato",
+    "intro": "Il computer ci mette molto a rispondere, oppure il mouse si muove ma i programmi non reagiscono.",
+    "controlli": [
+      "Aspetta un minuto: subito dopo l'accensione, o con molti programmi aperti, il PC può essere solo occupato.",
+      "Guarda se il problema è in un solo programma (per esempio Outlook) o in tutto il computer."
+    ],
+    "passi": [
+      {
+        "t": "Salva il lavoro, se riesci, e chiudi i programmi che non ti servono con la X in alto a destra di ogni finestra."
+      },
+      {
+        "t": "Se un solo programma non risponde, premi insieme i tasti Ctrl + Maiusc + Esc. Si apre la finestra «Gestione attività»."
+      },
+      {
+        "t": "Nell'elenco clicca il programma che non risponde, poi clicca «Termina attività».",
+        "nota": "Il lavoro non salvato in quel programma va perso.",
+        "img": "img/faq/pc-lento-bloccato-01-gestione-attivita.webp",
+        "alt": "Finestra Gestione attività di Windows con il pulsante «Termina attività» evidenziato (numero 3)",
+        "w": 1400,
+        "h": 194
+      },
+      {
+        "t": "Riavvia il computer: clicca Start, poi il pulsante di accensione e scegli «Riavvia il sistema».",
+        "nota": "Scegli «Riavvia il sistema» e non «Arresta il sistema»: il riavvio pulisce la memoria, lo spegnimento può non farlo.",
+        "mancante": "Schermata del menu Start di Windows 11 con il pulsante di accensione e la voce «Riavvia il sistema» evidenziati (da acquisire su un PC di prova: il menu Start mostra file recenti e nome utente, va ritagliato)."
+      },
+      {
+        "t": "Dopo l'accensione aspetta un paio di minuti prima di aprire molti programmi."
+      }
+    ],
+    "ok": "Il computer risponde di nuovo e i programmi si aprono in tempi normali.",
+    "stop": "Se il computer è completamente fermo (il mouse non si muove da 5 minuti), tieni premuto il pulsante di accensione per circa 10 secondi finché si spegne, aspetta qualche secondo e riaccendilo. Il lavoro non salvato può andare perso. Non farlo se sullo schermo c'è scritto che è in corso un aggiornamento.",
+    "richiesta": "Se dopo il riavvio il PC è ancora lento, o si blocca più volte al giorno, apri una richiesta scegliendo «Il mio computer» e scrivi da quando succede e quale programma stavi usando.",
+    "vedi": [
+      "nome-pc",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "lento",
+      "lentissimo",
+      "bloccato",
+      "si blocca",
+      "impallato",
+      "non risponde",
+      "pesante",
+      "riavviare",
+      "riavvio",
+      "congelato"
+    ]
+  },
+  {
+    "id": "monitor-nero",
+    "cat": "computer",
+    "d": "Lo schermo è nero o il computer non si accende",
+    "intro": "Lo schermo non mostra nulla, oppure sembra che il computer non si accenda.",
+    "controlli": [
+      "Il PC è acceso? Guarda se ci sono luci accese o se senti la ventola.",
+      "La luce del monitor è accesa, lampeggia o è spenta?"
+    ],
+    "passi": [
+      {
+        "t": "Controlla che le spine del PC e del monitor siano inserite bene e che la ciabatta sia accesa."
+      },
+      {
+        "t": "Premi una volta il pulsante di accensione del monitor.",
+        "mancante": "Fotografia del pulsante e della luce di un monitor tipo in uso al Comune (da scattare sul posto)."
+      },
+      {
+        "t": "Muovi il mouse e premi un tasto qualsiasi: il computer potrebbe essere solo in riposo."
+      },
+      {
+        "t": "Se il PC è acceso ma lo schermo resta nero, scollega e ricollega il cavo che va dal PC al monitor, a entrambe le estremità."
+      },
+      {
+        "t": "Se sul monitor compare «Nessun segnale» (o un messaggio simile), vuol dire che non riceve immagine dal PC: ricontrolla il cavo del passo precedente."
+      }
+    ],
+    "ok": "Compare l'immagine del computer o la schermata di accesso a Windows.",
+    "stop": "Non aprire il computer e non spostarlo mentre è acceso. Se senti odore di bruciato o vedi fumo o scintille, stacca la spina e chiama subito il CED.",
+    "richiesta": "Se il PC resta spento con le spine inserite, o lo schermo resta nero dopo questi controlli, apri una richiesta scegliendo «Il mio computer» e scrivi cosa vedi (luci accese o spente, messaggi sul monitor) e dove si trova il PC.",
+    "parole": [
+      "schermo nero",
+      "monitor",
+      "non si accende",
+      "non parte",
+      "non si avvia",
+      "nessun segnale",
+      "spento"
+    ]
+  },
+  {
+    "id": "secondo-monitor",
+    "cat": "computer",
+    "d": "Il secondo monitor non funziona",
+    "intro": "Il secondo schermo resta nero oppure mostra la stessa immagine del primo.",
+    "controlli": [
+      "Il secondo monitor è acceso (luce accesa) e con la spina inserita?",
+      "Il cavo che lo collega al PC è inserito bene a entrambe le estremità?"
+    ],
+    "passi": [
+      {
+        "t": "Premi insieme il tasto Windows e il tasto P. A destra si apre un pannello con quattro scelte.",
+        "mancante": "Pannello che si apre con Windows + P (Solo schermo PC, Duplica, Estendi, Solo secondo schermo), acquisito su un PC con due monitor collegati."
+      },
+      {
+        "t": "Clicca «Estendi» per usare i due schermi insieme, oppure «Duplica» per avere la stessa immagine su entrambi."
+      },
+      {
+        "t": "Se non cambia nulla, controlla il cavo e premi sul secondo monitor il pulsante che cambia la sorgente (di solito si chiama «Input» o «Source»)."
+      }
+    ],
+    "ok": "Il secondo schermo mostra l'immagine.",
+    "stop": "Se per errore scegli «Solo secondo schermo» e il tuo schermo diventa nero, premi di nuovo Windows + P e scegli «Solo schermo PC».",
+    "richiesta": "Se il secondo monitor non si accende o non viene riconosciuto, apri una richiesta scegliendo «Il mio computer» e scrivi che monitor è e cosa succede quando premi Windows + P.",
+    "parole": [
+      "doppio schermo",
+      "secondo schermo",
+      "due monitor",
+      "estendi",
+      "duplica"
+    ]
+  },
+  {
+    "id": "audio",
+    "cat": "computer",
+    "d": "Non sento l'audio",
+    "intro": "Dalle casse o dalle cuffie non esce suono, anche durante una riunione.",
+    "controlli": [
+      "Casse o cuffie sono accese e collegate? Molte casse hanno una manopola del volume.",
+      "Stai provando con un video o una riunione che hanno davvero l'audio acceso?"
+    ],
+    "passi": [
+      {
+        "t": "Clicca l'icona dell'altoparlante in basso a destra, vicino all'orologio, e sposta il cursore verso destra per alzare il volume."
+      },
+      {
+        "t": "Se sull'icona c'è una X, il volume è silenziato: clicca l'icona dell'altoparlante nel pannello per riattivarlo."
+      },
+      {
+        "t": "Clicca Start, poi «Impostazioni», poi «Sistema» e «Audio». Sotto «Scegli dove riprodurre l'audio» controlla che sia selezionato il dispositivo giusto (casse o cuffie).",
+        "mancante": "Schermata di Impostazioni > Sistema > Audio senza nomi di dispositivi reali (da acquisire su un PC di prova)."
+      },
+      {
+        "t": "Se usi cuffie con il cavo, scollegale e ricollegale. Poi riprova con un video."
+      }
+    ],
+    "ok": "Senti l'audio dal dispositivo scelto.",
+    "stop": "Non installare programmi o driver trovati su Internet per risolvere il problema.",
+    "richiesta": "Se dopo questi passi non si sente ancora nulla, apri una richiesta scegliendo «Il mio computer» e scrivi cosa stai usando (casse, cuffie, riunione Teams) e da quando succede.",
+    "vedi": [
+      "teams-audio-video"
+    ],
+    "parole": [
+      "audio",
+      "suono",
+      "volume",
+      "casse",
+      "cuffie",
+      "non sento",
+      "muto"
+    ]
+  },
+  {
+    "id": "nome-pc",
+    "cat": "computer",
+    "d": "Come trovare il nome del mio computer",
+    "intro": "Il tecnico può chiederti il nome del computer per trovarlo e collegarsi.",
+    "passi": [
+      {
+        "t": "Premi insieme il tasto Windows e il tasto Pausa. Si apre la pagina «Informazioni sul sistema».",
+        "nota": "Se la tastiera non ha il tasto Pausa: clicca Start, poi «Impostazioni», poi «Sistema» e in fondo «Informazioni sul sistema»."
+      },
+      {
+        "t": "Nella sezione «Specifiche dispositivo» leggi la riga «Nome dispositivo»: è il nome del tuo computer. Scrivilo nella richiesta.",
+        "img": "img/faq/nome-pc-01-informazioni.webp",
+        "alt": "Pagina Informazioni sul sistema di Windows 11 con la riga «Nome dispositivo» evidenziata (i nomi reali sono oscurati)",
+        "w": 1000,
+        "h": 245
+      }
+    ],
+    "ok": "Vedi un nome fatto di lettere, numeri e trattini.",
+    "stop": "Non cambiare il nome del computer e non toccare altre impostazioni in questa pagina.",
+    "richiesta": "Scrivi il nome del PC ogni volta che apri una richiesta su un problema del computer.",
+    "vedi": [
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "nome pc",
+      "nome computer",
+      "nome dispositivo",
+      "hostname",
+      "come si chiama il pc"
+    ],
+    "verifica": "Se i PC hanno l'icona «Assistenza» sul desktop (docs/icona-desktop.md) il nome arriva già nella richiesta: confermare se è attiva e, in caso, aggiungerlo al testo."
+  },
+  {
+    "id": "installare-programma",
+    "cat": "computer",
+    "d": "Devo installare un programma",
+    "r": "Non installare nulla da solo. Apri una richiesta scegliendo «Altro», indicando programma e motivo.",
+    "parole": [
+      "installare",
+      "installazione",
+      "programma",
+      "software",
+      "scaricare"
+    ]
+  },
+  {
+    "id": "stampante-non-stampa",
+    "cat": "stampanti",
+    "d": "La stampante non stampa",
+    "intro": "Hai mandato in stampa un documento ma non esce nulla.",
+    "controlli": [
+      "La stampante è accesa (display o luce accesi)?",
+      "Sul display ci sono messaggi d'errore (carta, toner, sportello aperto)?",
+      "Le stampe dei colleghi escono? Se anche per loro non esce nulla, il problema è della stampante."
+    ],
+    "passi": [
+      {
+        "t": "Leggi il display della stampante: se c'è un messaggio d'errore, seguilo se parla di carta o sportelli, poi riprova.",
+        "mancante": "Fotografia di un display di fotocopiatrice con un messaggio d'errore reale (carta o toner) e del pulsante di accensione."
+      },
+      {
+        "t": "Controlla che ci sia carta nel cassetto e che sportelli e cassetti siano chiusi bene."
+      },
+      {
+        "t": "Controlla di aver scelto la stampante giusta: vedi la guida «Come scegliere la stampante giusta»."
+      },
+      {
+        "t": "Controlla la coda di stampa: vedi la guida «Coda di stampa». Se c'è un documento bloccato, cancellalo."
+      },
+      {
+        "t": "Stampa di nuovo una sola volta e aspetta un minuto."
+      }
+    ],
+    "ok": "Il documento esce dalla stampante.",
+    "stop": "Non aprire parti interne della stampante, non tirare la carta con forza e non toccare le parti calde. Non mandare più volte lo stesso documento: si riempie la coda.",
+    "richiesta": "Se la stampante continua a non stampare, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome o l'ufficio della stampante e l'eventuale messaggio sul display.",
+    "vedi": [
+      "stampante-offline",
+      "coda-stampa",
+      "stampante-scelta"
+    ],
+    "parole": [
+      "stampante",
+      "non stampa",
+      "stampa",
+      "fotocopiatrice",
+      "toner",
+      "carta",
+      "bloccata",
+      "inceppata",
+      "incastrata"
+    ]
+  },
+  {
+    "id": "stampante-offline",
+    "cat": "stampanti",
+    "d": "La stampante risulta «Offline»",
+    "intro": "In Windows accanto alla stampante compare la scritta «Offline» e i documenti restano fermi.",
+    "controlli": [
+      "La stampante è accesa e senza messaggi sul display?",
+      "Il cavo di rete (o il cavo USB) è inserito?"
+    ],
+    "passi": [
+      {
+        "t": "Clicca Start, poi «Impostazioni», poi «Bluetooth e dispositivi» e «Stampanti e scanner».",
+        "mancante": "Pagina Impostazioni > Bluetooth e dispositivi > Stampanti e scanner con una stampante di prova in stato «Offline» (la pagina reale elenca le stampanti del Comune, quindi va acquisita su un PC di prova)."
+      },
+      {
+        "t": "Clicca il nome della tua stampante, poi «Apri coda di stampa»."
+      },
+      {
+        "t": "Guarda lo stato in alto nella finestra: se c'è scritto «Offline», la stampante non è raggiungibile."
+      },
+      {
+        "t": "Spegni la stampante con il suo pulsante, aspetta 10 secondi e riaccendila. Poi aspetta un minuto che sia pronta."
+      },
+      {
+        "t": "Torna alla finestra e controlla che la scritta «Offline» sia sparita. Poi stampa di nuovo."
+      }
+    ],
+    "ok": "Lo stato non indica più «Offline» e i documenti in coda escono.",
+    "stop": "Non aggiungere né rimuovere stampanti da solo: serve il CED.",
+    "richiesta": "Se resta «Offline», apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della stampante e che risulta «Offline».",
+    "vedi": [
+      "coda-stampa",
+      "stampante-non-stampa"
+    ],
+    "parole": [
+      "offline",
+      "non raggiungibile",
+      "stampante non risponde",
+      "non connessa"
+    ]
+  },
+  {
+    "id": "coda-stampa",
+    "cat": "stampanti",
+    "d": "Coda di stampa: vedere i documenti e cancellare una stampa bloccata",
+    "intro": "Un documento fermo nella coda blocca anche quelli che mandi dopo.",
+    "passi": [
+      {
+        "t": "Clicca Start, poi «Impostazioni», poi «Bluetooth e dispositivi» e «Stampanti e scanner»."
+      },
+      {
+        "t": "Clicca il nome della stampante, poi «Apri coda di stampa». Si apre una finestra con i documenti in attesa.",
+        "img": "img/faq/coda-stampa-01-coda.webp",
+        "alt": "Finestra della coda di stampa (esempio con la stampante «Microsoft Print to PDF», senza documenti) con il menu «Stampante» evidenziato",
+        "nota": "Il nome nella barra del titolo sarà quello della tua stampante.",
+        "w": 636,
+        "h": 273
+      },
+      {
+        "t": "Clicca con il tasto destro sul documento bloccato (quello con stato «Errore» o fermo da molto) e scegli «Annulla»."
+      },
+      {
+        "t": "Per cancellarli tutti: clicca il menu «Stampante» in alto nella finestra, poi «Annulla tutti i documenti», poi «Sì»."
+      },
+      {
+        "t": "Chiudi la finestra e stampa di nuovo una sola volta."
+      }
+    ],
+    "ok": "La coda è vuota e la nuova stampa esce.",
+    "stop": "Non spegnere la stampante mentre sta stampando. Non cancellare i documenti degli altri colleghi se la stampante è condivisa: cancella solo i tuoi.",
+    "richiesta": "Se «Annulla» non fa sparire il documento, o la coda si riempie di nuovo da sola, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della stampante.",
+    "vedi": [
+      "stampante-offline",
+      "stampante-non-stampa"
+    ],
+    "parole": [
+      "coda",
+      "coda di stampa",
+      "annulla stampa",
+      "stampa bloccata",
+      "documento in coda",
+      "cancellare stampa"
+    ]
+  },
+  {
+    "id": "stampante-scelta",
+    "cat": "stampanti",
+    "d": "Come scegliere la stampante giusta",
+    "intro": "Con più stampanti in elenco è facile mandare il documento a quella sbagliata.",
+    "passi": [
+      {
+        "t": "Nel programma in cui lavori (Word, Excel, il browser) premi insieme Ctrl + P, oppure clicca «File» e poi «Stampa»."
+      },
+      {
+        "t": "Nella finestra cerca la voce «Stampante»: è la prima della pagina, con il nome della stampante in uso.",
+        "mancante": "Schermata della finestra «Stampa» di Word o Excel con il menu «Stampante» aperto, con nomi di stampante di esempio (da acquisire su un PC di prova senza stampanti reali)."
+      },
+      {
+        "t": "Clicca il nome e scegli la stampante del tuo ufficio. Se non sai quale sia, chiedi a un collega o al CED prima di stampare."
+      },
+      {
+        "t": "Controlla il numero di «Copie» e clicca «Stampa»."
+      }
+    ],
+    "ok": "Il documento esce dalla stampante che hai scelto.",
+    "stop": "Non stampare documenti riservati finché non sei sicuro della stampante: il documento potrebbe uscire in un altro ufficio.",
+    "richiesta": "Se la stampante del tuo ufficio non compare nell'elenco, apri una richiesta scegliendo «Stampante e scanner» e scrivi in quale ufficio si trova.",
+    "vedi": [
+      "fronte-retro",
+      "stampante-non-stampa"
+    ],
+    "parole": [
+      "scegliere stampante",
+      "stampante sbagliata",
+      "stampante predefinita",
+      "quale stampante",
+      "stampa"
+    ]
+  },
+  {
+    "id": "fronte-retro",
+    "cat": "stampanti",
+    "d": "Come stampare fronte e retro",
+    "intro": "Stampare su entrambi i lati risparmia carta.",
+    "passi": [
+      {
+        "t": "Premi insieme Ctrl + P per aprire la finestra «Stampa»."
+      },
+      {
+        "t": "Cerca la voce che parla di lati, per esempio «Stampa su un lato solo» o «Fronte/retro»."
+      },
+      {
+        "t": "Scegli «Stampa su entrambi i lati». Se ti viene chiesto da che lato girare il foglio, scegli «lato lungo» per i fogli in verticale e «lato corto» per quelli in orizzontale."
+      },
+      {
+        "t": "Clicca «Stampa»."
+      }
+    ],
+    "ok": "Il foglio esce stampato su tutti e due i lati.",
+    "stop": "Non rimettere nel cassetto fogli già stampati da un lato per provare: possono incastrarsi.",
+    "richiesta": "Se la voce non compare o il retro esce capovolto, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della stampante.",
+    "verifica": "I nomi esatti delle voci cambiano con programma e modello di stampante: controllare su un PC dell'ente con le stampanti reali.",
+    "parole": [
+      "fronte retro",
+      "doppio lato",
+      "entrambi i lati",
+      "duplex",
+      "risparmiare carta"
+    ]
+  },
+  {
+    "id": "scansione",
+    "cat": "stampanti",
+    "d": "Come fare una scansione",
+    "intro": "Vuoi trasformare un foglio di carta in un file da inviare o salvare.",
+    "passi": [
+      {
+        "t": "Appoggia il foglio sul vetro oppure mettilo nell'alimentatore, come indicato dai disegni sul coperchio della fotocopiatrice."
+      },
+      {
+        "t": "Sul display tocca «Scansione» (o «Scan»)."
+      },
+      {
+        "t": "Scegli la destinazione che usi di solito (per esempio la tua e-mail o una cartella) e controlla le opzioni mostrate."
+      },
+      {
+        "t": "Premi il pulsante di avvio del display e aspetta la fine della scansione."
+      },
+      {
+        "t": "Controlla di aver ricevuto il file dove avevi scelto."
+      }
+    ],
+    "ok": "Il file con la scansione arriva nella destinazione scelta.",
+    "stop": "Non lasciare sul vetro i documenti riservati dopo la scansione.",
+    "richiesta": "Se non vedi la destinazione che ti serve, o compare un errore, apri una richiesta scegliendo «Stampante e scanner» e scrivi il nome della fotocopiatrice e cosa compare sul display.",
+    "verifica": "Il modo di fare la scansione dipende dal modello di fotocopiatrice e dalle destinazioni configurate: sostituire i passi generici con quelli reali, con foto del display.",
+    "parole": [
+      "scansione",
+      "scanner",
+      "scansionare",
+      "scannerizzare",
+      "pdf",
+      "fotocopiatrice"
+    ]
+  },
+  {
+    "id": "outlook-non-si-apre",
+    "cat": "posta",
+    "d": "Outlook non si apre o non funziona",
+    "intro": "Outlook non parte, resta bloccato o non mostra la posta.",
+    "controlli": [
+      "Altri programmi o siti funzionano? Se Internet non va, vedi la guida «Non ho Internet».",
+      "Compare un messaggio d'errore? Se sì, fai uno screenshot."
+    ],
+    "passi": [
+      {
+        "t": "Chiudi Outlook con la X in alto a destra e aspetta 10 secondi."
+      },
+      {
+        "t": "Riaprilo da Start: scrivi «Outlook» e clicca l'icona."
+      },
+      {
+        "t": "Guarda in fondo alla finestra: se compare «Disconnesso» o «Tentativo di connessione», Outlook non riesce a collegarsi alla posta."
+      },
+      {
+        "t": "Prova la posta dal browser: apri outlook.office.com e accedi con il tuo account di lavoro."
+      },
+      {
+        "t": "Se dal browser la posta funziona, il problema è nel programma sul tuo PC: segnalacelo. Se non funziona neanche lì, segnalalo comunque."
+      }
+    ],
+    "ok": "Outlook si apre e mostra la tua posta.",
+    "stop": "Non disinstallare né reinstallare Outlook e non cancellare impostazioni o profili.",
+    "richiesta": "Se Outlook non si apre dopo questi passi, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi il messaggio d'errore (meglio con uno screenshot), da quando succede e se la posta funziona dal browser.",
+    "vedi": [
+      "posta-non-arriva",
+      "internet",
+      "screenshot-allegati"
+    ],
+    "verifica": "Confermare se il Comune usa Outlook classico o il «nuovo Outlook» e adattare la voce «Disconnesso» e gli screenshot.",
+    "parole": [
+      "outlook",
+      "posta",
+      "non si apre",
+      "mail",
+      "email",
+      "disconnesso",
+      "non carica"
+    ]
+  },
+  {
+    "id": "posta-non-arriva",
+    "cat": "posta",
+    "d": "Non ricevo le e-mail",
+    "intro": "Aspetti un messaggio ma nella casella non arriva.",
+    "controlli": [
+      "Altri messaggi arrivano normalmente?",
+      "Il mittente ti ha scritto all'indirizzo giusto?"
+    ],
+    "passi": [
+      {
+        "t": "In Outlook apri la cartella «Posta indesiderata» nell'elenco a sinistra e guarda se il messaggio è finito lì."
+      },
+      {
+        "t": "Controlla la casella «Cerca» in alto: scrivi il nome del mittente o una parola dell'oggetto e premi Invio."
+      },
+      {
+        "t": "Chiedi al mittente di controllare l'indirizzo e di rimandare il messaggio."
+      },
+      {
+        "t": "Apri outlook.office.com nel browser e guarda se il messaggio compare lì."
+      }
+    ],
+    "ok": "Trovi il messaggio, in una delle cartelle o nel browser.",
+    "stop": "Non cliccare link o allegati dei messaggi che trovi nella posta indesiderata se non conosci il mittente: vedi la guida sulle e-mail sospette.",
+    "richiesta": "Se il messaggio atteso non compare da più di un giorno, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi mittente, data e oggetto.",
+    "vedi": [
+      "mail-sospetta",
+      "cercare-email",
+      "outlook-non-si-apre"
+    ],
+    "parole": [
+      "non arriva",
+      "non ricevo",
+      "posta non arriva",
+      "mail non arrivano",
+      "posta indesiderata",
+      "spam"
+    ]
+  },
+  {
+    "id": "allegato-troppo-grande",
+    "cat": "posta",
+    "d": "Non riesco a inviare un allegato",
+    "intro": "Outlook rifiuta il messaggio con l'allegato, oppure l'invio non finisce mai.",
+    "passi": [
+      {
+        "t": "Guarda la dimensione del file: in Outlook è scritta accanto al nome dell'allegato."
+      },
+      {
+        "t": "Se il file è molto grande (la posta rifiuta di solito gli allegati sopra i 20-25 MB), prova a inviare solo le pagine o le foto che servono."
+      },
+      {
+        "t": "Controlla il tipo di file: alcuni (per esempio i programmi, che finiscono con «.exe») sono bloccati per sicurezza e non si possono spedire."
+      },
+      {
+        "t": "Prova a inviare di nuovo il messaggio una volta e aspetta che l'invio finisca prima di chiudere Outlook."
+      }
+    ],
+    "ok": "Il messaggio parte e compare nella cartella «Posta inviata».",
+    "stop": "Non inviare l'allegato a un indirizzo personale per aggirare il blocco.",
+    "richiesta": "Se il messaggio non parte, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi nome e dimensione del file e il messaggio d'errore.",
+    "verifica": "Il limite reale della dimensione allegati dipende dalla configurazione della posta del Comune: verificare il valore e scriverlo.",
+    "parole": [
+      "allegato",
+      "allegati",
+      "file troppo grande",
+      "non riesco a inviare",
+      "invio",
+      "grande"
+    ]
+  },
+  {
+    "id": "cercare-email",
+    "cat": "posta",
+    "d": "Come trovare un'e-mail",
+    "intro": "Non ricordi dove hai messo un messaggio.",
+    "passi": [
+      {
+        "t": "In Outlook clicca la casella «Cerca» in alto."
+      },
+      {
+        "t": "Scrivi il nome di chi te l'ha mandato, o una parola dell'oggetto, e premi Invio."
+      },
+      {
+        "t": "Se non compare, controlla anche le cartelle «Posta indesiderata» ed «Elementi eliminati»."
+      }
+    ],
+    "ok": "Il messaggio compare nell'elenco dei risultati.",
+    "stop": "Non spostare o cancellare in massa i messaggi mentre cerchi.",
+    "richiesta": "Se un messaggio importante risulta sparito, apri una richiesta scegliendo «Posta, Teams e Office» con mittente, data approssimativa e oggetto.",
+    "verifica": "I nomi delle opzioni di ricerca dipendono dalla versione di Outlook in uso.",
+    "parole": [
+      "cercare",
+      "trovare mail",
+      "ricerca",
+      "messaggio sparito",
+      "ritrovare"
+    ]
+  },
+  {
+    "id": "teams-audio-video",
+    "cat": "posta",
+    "d": "Teams: non mi sentono o non mi vedono",
+    "intro": "In una riunione Teams il microfono o la videocamera non funzionano.",
+    "controlli": [
+      "Il microfono delle cuffie non è disattivato dal suo interruttore?",
+      "La videocamera non è coperta dalla sua protezione?"
+    ],
+    "passi": [
+      {
+        "t": "Nella riunione guarda la barra in alto: l'icona del microfono e quella della videocamera non devono avere una riga che le taglia. Se ce l'hanno, cliccale per attivarle."
+      },
+      {
+        "t": "Clicca i tre puntini «…» (o «Impostazioni e altro») in Teams, poi «Impostazioni» e «Dispositivi»."
+      },
+      {
+        "t": "Controlla che microfono, altoparlanti e videocamera siano quelli giusti. Se sono diversi, scegli i tuoi dall'elenco."
+      },
+      {
+        "t": "Chiudi gli altri programmi che usano la videocamera (per esempio un'altra riunione) e riprova."
+      }
+    ],
+    "ok": "Gli altri partecipanti ti sentono e ti vedono.",
+    "stop": "Non installare driver o programmi da Internet per risolvere il problema.",
+    "richiesta": "Se continuano a non sentirti o vederti, apri una richiesta scegliendo «Posta, Teams e Office» e scrivi se il problema riguarda il microfono, la videocamera o entrambi.",
+    "vedi": [
+      "audio"
+    ],
+    "verifica": "Le voci di menu di Teams cambiano tra vecchio e nuovo Teams: controllare la versione in uso e aggiungere lo screenshot.",
+    "parole": [
+      "teams",
+      "microfono",
+      "webcam",
+      "videocamera",
+      "riunione",
+      "non mi sentono",
+      "non mi vedono"
+    ]
+  },
+  {
+    "id": "internet",
+    "cat": "rete",
+    "d": "Non ho connessione a Internet",
+    "intro": "I siti non si aprono o compare un messaggio che dice che non c'è connessione.",
+    "controlli": [
+      "Prova ad aprire un altro sito: forse non funziona solo quello.",
+      "Chiedi ai colleghi vicini: se non hanno Internet neanche loro, è un guasto generale."
+    ],
+    "passi": [
+      {
+        "t": "In basso a destra, vicino all'orologio, trova l'icona della rete: un computer con il cavo, oppure le onde del Wi-Fi. Se c'è una X, un globo o un segnale di divieto, la connessione manca.",
+        "mancante": "Ritaglio della barra delle applicazioni con l'icona di rete nei tre stati (connesso, senza Internet, cavo scollegato) da acquisire su un PC di prova."
+      },
+      {
+        "t": "Se il PC usa un cavo, controlla che sia inserito bene dietro al computer e nella presa a muro."
+      },
+      {
+        "t": "Se usi il Wi-Fi, clicca l'icona della rete e controlla che «Wi-Fi» sia acceso e «Modalità aereo» sia spenta."
+      },
+      {
+        "t": "Riavvia il computer: Start, pulsante di accensione, «Riavvia il sistema»."
+      },
+      {
+        "t": "Dopo il riavvio riprova ad aprire un sito."
+      }
+    ],
+    "ok": "I siti si aprono e l'icona della rete non ha più la X.",
+    "stop": "Non staccare cavi dagli armadietti di rete o dai dispositivi del corridoio e non cambiare impostazioni di rete.",
+    "richiesta": "Se ancora non funziona, apri una richiesta scegliendo «Internet e rete». Se anche i colleghi hanno lo stesso problema, apri una sola richiesta indicando l'ufficio e quante persone sono coinvolte.",
+    "vedi": [
+      "cartella-rete",
+      "pc-lento-bloccato"
+    ],
+    "parole": [
+      "internet",
+      "rete",
+      "wifi",
+      "wi-fi",
+      "connessione",
+      "non naviga",
+      "siti",
+      "cavo"
+    ]
+  },
+  {
+    "id": "cartella-rete",
+    "cat": "rete",
+    "d": "Non riesco ad aprire una cartella condivisa",
+    "intro": "Una cartella di rete non si apre, oppure compare «Accesso negato».",
+    "controlli": [
+      "Altri siti o la posta funzionano? Se no, vedi la guida «Non ho Internet».",
+      "Il problema c'è per tutte le cartelle o per una sola?"
+    ],
+    "passi": [
+      {
+        "t": "Apri «Esplora file» (la cartella gialla nella barra in basso) e riprova ad aprire la cartella dal percorso che usi di solito."
+      },
+      {
+        "t": "Riavvia il computer: Start, pulsante di accensione, «Riavvia il sistema». Poi riprova."
+      },
+      {
+        "t": "Se compare un messaggio, fai uno screenshot oppure scrivi il testo esatto. Non provare a cambiare permessi o password."
+      }
+    ],
+    "ok": "La cartella si apre e vedi i file.",
+    "stop": "Non copiare i file su chiavette o altri computer per aggirare il problema.",
+    "richiesta": "Se la cartella non si apre, apri una richiesta scegliendo «Internet e rete» e scrivi il percorso della cartella e il messaggio. Se compare «accesso negato» fermati subito e scrivici senza riprovare.",
+    "vedi": [
+      "internet",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "cartella",
+      "cartella di rete",
+      "cartella condivisa",
+      "accesso negato",
+      "percorso",
+      "non si apre",
+      "condivisa"
+    ]
+  },
+  {
+    "id": "accesso-remoto",
+    "cat": "rete",
+    "d": "Non riesco a collegarmi da remoto",
+    "intro": "Da casa o fuori sede non riesci ad accedere ai tuoi programmi o ai tuoi file di lavoro.",
+    "controlli": [
+      "Da casa funziona Internet? Prova ad aprire un sito qualsiasi.",
+      "Stai usando proprio il collegamento che ti ha indicato il CED?"
+    ],
+    "passi": [
+      {
+        "t": "Apri un sito qualsiasi per controllare che Internet funzioni."
+      },
+      {
+        "t": "Chiudi il programma o la pagina del collegamento e riaprili."
+      },
+      {
+        "t": "Controlla di aver scritto bene il nome utente. Non scrivere la password a nessuno."
+      },
+      {
+        "t": "Aspetta qualche minuto e riprova una sola volta."
+      }
+    ],
+    "ok": "Il collegamento riesce e vedi i tuoi programmi o file.",
+    "stop": "Non provare più volte di seguito con password diverse: l'account può bloccarsi. Non usare collegamenti che non ti ha dato il CED.",
+    "richiesta": "Se non funziona, apri una richiesta scegliendo «Internet e rete» e scrivi da dove ti colleghi (casa o altro luogo), che collegamento usi, il messaggio che compare e l'ora del tentativo.",
+    "verifica": "Dipende dal sistema di accesso remoto in uso (VPN, desktop virtuale, altro): sostituire i passi generici con quelli reali.",
+    "vedi": [
+      "internet",
+      "password-dimenticata"
+    ],
+    "parole": [
+      "remoto",
+      "da casa",
+      "smart working",
+      "vpn",
+      "collegarmi",
+      "desktop remoto"
+    ]
+  },
+  {
+    "id": "password-dimenticata",
+    "cat": "accessi",
+    "d": "Ho dimenticato la password, è scaduta o non viene accettata",
+    "intro": "Non riesci ad accedere perché la password non funziona.",
+    "controlli": [
+      "Il tasto «Blocco maiuscole» è spento? Di solito ha una luce sulla tastiera.",
+      "Stai usando l'account di lavoro, non uno personale?"
+    ],
+    "passi": [
+      {
+        "t": "Riscrivi la password lentamente, controllando le maiuscole. Se c'è l'icona a forma di occhio, usala per vedere cosa scrivi."
+      },
+      {
+        "t": "Se è la password di Microsoft 365 (Outlook, Teams, questo portale), nella pagina di accesso clicca «Password dimenticata?» e segui le istruzioni.",
+        "mancante": "Schermata della pagina di accesso con «Password dimenticata?» evidenziato (solo se la reimpostazione è attiva)."
+      },
+      {
+        "t": "Se «Password dimenticata?» non compare o non funziona, apri una richiesta scegliendo «Password e accesso»."
+      }
+    ],
+    "ok": "Riesci ad accedere con la nuova password.",
+    "stop": "Non dire la tua password a nessuno, nemmeno al CED: non te la chiederemo mai. Dopo alcuni tentativi sbagliati l'account può bloccarsi: non insistere.",
+    "richiesta": "Apri una richiesta scegliendo «Password e accesso» e scrivi il tuo nome utente (mai la password), se stai provando dal PC o dal telefono e il messaggio che compare.",
+    "verifica": "Confermare se la reimpostazione autonoma della password è attiva in Microsoft Entra e se vale anche per la password di Windows.",
+    "vedi": [
+      "mfa-richiesta"
+    ],
+    "parole": [
+      "password",
+      "dimenticata",
+      "scaduta",
+      "non accettata",
+      "bloccato",
+      "account",
+      "accesso",
+      "credenziali",
+      "non riesco ad accedere"
+    ]
+  },
+  {
+    "id": "mfa-richiesta",
+    "cat": "accessi",
+    "d": "Mi compare una richiesta di approvazione sul telefono",
+    "intro": "Dopo aver scritto la password, il telefono mostra una notifica o chiede un codice.",
+    "passi": [
+      {
+        "t": "Se in questo momento stai accedendo tu, approva la richiesta sul telefono o scrivi il codice richiesto."
+      },
+      {
+        "t": "Se non stavi accedendo, NON approvare: scegli «Nega» (o «Non sono io»)."
+      },
+      {
+        "t": "Avvisa subito il CED: qualcuno potrebbe conoscere la tua password."
+      }
+    ],
+    "ok": "Se eri tu, l'accesso va a buon fine. Se non eri tu, l'accesso resta bloccato.",
+    "stop": "Non approvare mai una richiesta che non hai avviato tu, anche se arriva più volte di seguito o ti sembra «solo per farla smettere». Non dare a nessuno il codice che compare sul telefono.",
+    "richiesta": "Se la richiesta non era tua, chiamaci subito (il numero è nella pagina «Contatti»). Se invece non ti arriva la richiesta quando accedi, apri una richiesta scegliendo «Password e accesso».",
+    "vedi": [
+      "password-dimenticata",
+      "avviso-sicurezza"
+    ],
+    "verifica": "Confermare quali metodi di verifica a due passaggi sono attivi (app, SMS, chiamata) e i testi dei pulsanti dell'app usata.",
+    "parole": [
+      "mfa",
+      "autenticazione",
+      "approva",
+      "approvazione",
+      "codice",
+      "notifica",
+      "verifica in due passaggi",
+      "authenticator"
+    ]
+  },
+  {
+    "id": "blocca-pc",
+    "cat": "sicurezza",
+    "d": "Come bloccare il PC quando mi allontano",
+    "intro": "Se ti alzi lasciando il PC acceso, chiunque potrebbe leggere o usare i tuoi dati e quelli del Comune.",
+    "passi": [
+      {
+        "t": "Prima di alzarti premi insieme il tasto Windows e il tasto L."
+      },
+      {
+        "t": "Lo schermo mostra la schermata di blocco. Il lavoro resta aperto, ma nessuno può usarlo."
+      },
+      {
+        "t": "Quando torni, premi un tasto, scrivi la tua password e continua."
+      }
+    ],
+    "ok": "Compare la schermata di blocco con l'ora e l'immagine di sfondo.",
+    "stop": "Non lasciare mai il PC sbloccato, nemmeno per pochi minuti, se ci sono persone che non lavorano con te.",
+    "richiesta": "Se la schermata di blocco non compare o non riesci a sbloccare, apri una richiesta scegliendo «Password e accesso».",
+    "parole": [
+      "blocca",
+      "bloccare pc",
+      "bloccare schermo",
+      "allontano",
+      "schermata di blocco",
+      "win+l",
+      "sicurezza"
+    ]
+  },
+  {
+    "id": "mail-sospetta",
+    "cat": "sicurezza",
+    "d": "Ho ricevuto un'e-mail sospetta",
+    "intro": "Un messaggio ti sembra strano o non te lo aspettavi: potrebbe essere un tentativo di truffa (phishing).",
+    "controlli": [
+      "Il mittente è sconosciuto o l'indirizzo è strano?",
+      "Il messaggio ha fretta, minaccia, o chiede password, codici o soldi?",
+      "Ci sono errori di italiano, link strani (avvicina il mouse senza cliccare) o allegati che non aspettavi?"
+    ],
+    "passi": [
+      {
+        "t": "Non cliccare sui link e non aprire gli allegati."
+      },
+      {
+        "t": "Non rispondere e non inoltrare il messaggio ai colleghi."
+      },
+      {
+        "t": "Lascia il messaggio dove si trova: serve al CED per controllarlo."
+      },
+      {
+        "t": "Apri una richiesta scegliendo «Altro» (o «Posta, Teams e Office») e scrivi mittente, oggetto e orario del messaggio."
+      }
+    ],
+    "ok": "Il CED controlla il messaggio e ti dice cosa fare.",
+    "stop": "Se hai già cliccato un link, aperto un allegato o scritto dati, non perdere tempo: vedi la guida «Ho cliccato un link sospetto» e chiama subito.",
+    "richiesta": "Apri una richiesta anche se sei quasi sicuro che sia una truffa: serve a proteggere anche i colleghi che hanno ricevuto lo stesso messaggio.",
+    "vedi": [
+      "link-cliccato",
+      "posta-non-arriva"
+    ],
+    "verifica": "Verificare se in Outlook è attivo un pulsante «Segnala» (phishing) e, in caso, inserirlo qui con uno screenshot.",
+    "parole": [
+      "mail sospetta",
+      "email sospetta",
+      "phishing",
+      "truffa",
+      "spam",
+      "allegato strano",
+      "link strano"
+    ]
+  },
+  {
+    "id": "link-cliccato",
+    "cat": "sicurezza",
+    "d": "Ho cliccato un link sospetto",
+    "intro": "Hai cliccato su un link di un messaggio strano, o aperto un allegato, e ora hai un dubbio.",
+    "passi": [
+      {
+        "t": "Non scrivere password, codici o dati nella pagina che si è aperta. Se li hai già scritti, dillo subito al CED."
+      },
+      {
+        "t": "Chiudi la pagina con la X in alto a destra della finestra."
+      },
+      {
+        "t": "Se è stato scaricato un file, non aprirlo."
+      },
+      {
+        "t": "Chiama subito il CED (il numero è nella pagina «Contatti») e racconta cosa hai cliccato e a che ora. Non aprire soltanto una richiesta: serve una telefonata."
+      },
+      {
+        "t": "Aspetta le indicazioni del CED prima di continuare a lavorare con quel PC."
+      }
+    ],
+    "ok": "Il CED sa cosa è successo e ti dice se serve fare altro.",
+    "stop": "Se vedi finestre strane, file che cambiano nome o il PC che si comporta in modo anomalo, scollega il cavo di rete (o spegni il Wi-Fi) e chiama subito. Non cercare di risolvere da solo.",
+    "richiesta": "Dopo la telefonata, apri una richiesta scegliendo «Altro» e scrivi quello che hai raccontato al telefono.",
+    "vedi": [
+      "mail-sospetta",
+      "avviso-sicurezza"
+    ],
+    "verifica": "Confermare con il CED la procedura ufficiale (spegnere o solo scollegare dalla rete) e il numero di reperibilità.",
+    "parole": [
+      "ho cliccato",
+      "link",
+      "cliccato",
+      "allegato aperto",
+      "virus",
+      "malware"
+    ]
+  },
+  {
+    "id": "avviso-sicurezza",
+    "cat": "sicurezza",
+    "d": "Compare un avviso di sicurezza o un messaggio strano sullo schermo",
+    "intro": "Si apre una finestra che parla di virus, ti dice di chiamare un numero o di installare qualcosa.",
+    "passi": [
+      {
+        "t": "Non cliccare sui pulsanti dentro il messaggio e non telefonare a numeri che compaiono sullo schermo."
+      },
+      {
+        "t": "Scatta una foto allo schermo con il telefono, oppure usa Windows + Maiusc + S, per mostrare il messaggio al CED."
+      },
+      {
+        "t": "Se è una finestra del browser, chiudila con la X in alto a destra della finestra, non dentro il messaggio."
+      },
+      {
+        "t": "Apri una richiesta scegliendo «Altro» e allega la foto o lo screenshot."
+      }
+    ],
+    "ok": "Il messaggio sparisce e il CED sa cosa ti è comparso.",
+    "stop": "Non installare nulla e non scrivere password o dati nel messaggio. Se la finestra non si chiude o continua a ricomparire, chiama subito il CED.",
+    "richiesta": "Apri una richiesta anche se il messaggio sparisce: scrivi cosa dice, a che ora è comparso e che sito o programma stavi usando.",
+    "vedi": [
+      "link-cliccato",
+      "screenshot-allegati"
+    ],
+    "parole": [
+      "avviso",
+      "virus",
+      "pop-up",
+      "popup",
+      "finestra strana",
+      "allarme",
+      "sicurezza",
+      "antivirus"
+    ]
+  },
+  {
+    "id": "screenshot-allegati",
+    "cat": "portale",
+    "d": "Come fare una foto dello schermo e allegarla alla richiesta",
+    "intro": "Un'immagine dell'errore aiuta il tecnico a capire subito il problema, senza bisogno di molte domande.",
+    "passi": [
+      {
+        "t": "Quando compare il problema o il messaggio d'errore, premi insieme i tasti Windows + Maiusc + S. Lo schermo si scurisce e in alto compare una barra.",
+        "mancante": "Barra dello Strumento di cattura (Windows + Maiusc + S) con il rettangolo di selezione, acquisita su un PC di prova con sfondo neutro."
+      },
+      {
+        "t": "Con il mouse disegna un rettangolo attorno a ciò che vuoi far vedere. Quando rilasci il mouse l'immagine è copiata."
+      },
+      {
+        "t": "Nel portale apri «Nuova richiesta» e scegli l'argomento. Poi premi insieme Ctrl + V.",
+        "nota": "Funziona in qualunque punto della pagina della nuova richiesta.",
+        "img": "img/faq/screenshot-allegati-01-riquadro.webp",
+        "alt": "Il riquadro «Hai uno screenshot dell'errore?» della pagina Nuova richiesta, con le istruzioni Win+Maiusc+S e Ctrl+V",
+        "w": 1100,
+        "h": 125
+      },
+      {
+        "t": "Sotto il riquadro «Hai uno screenshot dell'errore?» compare l'immagine con il nome «screenshot-» seguito da data e ora. Se hai sbagliato, clicca «Rimuovi» e ripeti.",
+        "mancante": "Schermata con l'allegato «screenshot-…» già incollato nell'elenco sotto il riquadro e il pulsante «Rimuovi» (da acquisire dal portale con un utente di prova)."
+      }
+    ],
+    "ok": "L'immagine compare nell'elenco degli allegati, prima di inviare la richiesta.",
+    "stop": "Prima di allegare controlla che nell'immagine non si vedano password o dati che non c'entrano con il problema.",
+    "richiesta": "Se Ctrl + V non funziona, clicca il riquadro «Hai uno screenshot dell'errore?» e scegli un file salvato sul computer. Se non riesci neanche così, descrivi il messaggio a parole nella richiesta.",
+    "vedi": [
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "screenshot",
+      "schermata",
+      "foto dello schermo",
+      "allegare",
+      "allegato",
+      "immagine",
+      "cattura",
+      "incolla"
+    ]
+  },
+  {
+    "id": "aprire-richiesta",
+    "cat": "portale",
+    "d": "Come aprire una richiesta di assistenza",
+    "intro": "Se i controlli delle guide non bastano, apri una richiesta: ha un numero e puoi seguirne lo stato.",
+    "controlli": [
+      "Cosa succede e da quando.",
+      "L'eventuale messaggio d'errore (meglio con uno screenshot).",
+      "Il nome del computer, se il problema riguarda il PC.",
+      "Il tuo telefono o interno, per essere richiamato."
+    ],
+    "passi": [
+      {
+        "t": "Clicca «Nuova richiesta» nel menu in alto."
+      },
+      {
+        "t": "Clicca la casella che somiglia di più al tuo problema. Se non sai quale scegliere, scegli «Altro / non so».",
+        "img": "img/faq/aprire-richiesta-01-argomenti.webp",
+        "alt": "La pagina Nuova richiesta con le caselle degli argomenti: Il mio computer, Stampante e scanner, Internet e rete, Posta, Teams e Office, Password e accesso, Programmi dell'ente, Altro",
+        "w": 1100,
+        "h": 899
+      },
+      {
+        "t": "Nella casella «Cosa è successo?» scrivi il problema con parole tue. I pulsanti sotto («Da quando succede?», «Cosa stavi facendo?», «Vedi un messaggio d'errore?») ti aiutano a non dimenticare nulla.",
+        "img": "img/faq/aprire-richiesta-02-descrizione.webp",
+        "alt": "Il modulo con la casella «Cosa è successo?» e i pulsanti che aiutano a descrivere il problema",
+        "w": 1100,
+        "h": 342
+      },
+      {
+        "t": "Scrivi il tuo telefono o interno. Se hai uno screenshot, premi Ctrl + V."
+      },
+      {
+        "t": "Clicca «Invia richiesta».",
+        "img": "img/faq/aprire-richiesta-03-invia.webp",
+        "alt": "Il pulsante «Invia richiesta» in fondo al modulo",
+        "w": 1100,
+        "h": 190
+      },
+      {
+        "t": "Compare «Richiesta inviata» con il numero: annotalo."
+      }
+    ],
+    "ok": "Vedi la pagina «Richiesta inviata» con il numero e ricevi una e-mail di conferma.",
+    "stop": "Non scrivere la tua password nella richiesta, nemmeno se un tecnico sembra chiedertela: non lo farà.",
+    "richiesta": "Per problemi urgenti che bloccano il lavoro di tutto l'ufficio chiama anche il CED (numero nella pagina «Contatti»).",
+    "vedi": [
+      "stato-richiesta",
+      "screenshot-allegati",
+      "nome-pc"
+    ],
+    "parole": [
+      "aprire richiesta",
+      "nuova richiesta",
+      "ticket",
+      "segnalazione",
+      "come scrivere",
+      "cosa scrivere",
+      "assistenza"
+    ]
+  },
+  {
+    "id": "stato-richiesta",
+    "cat": "portale",
+    "d": "Come controllare lo stato di una richiesta",
+    "intro": "Vuoi sapere a che punto è una richiesta che hai già aperto.",
+    "passi": [
+      {
+        "t": "Clicca «Le mie richieste» nel menu in alto.",
+        "img": "img/faq/stato-richiesta-01-elenco.webp",
+        "alt": "L'elenco «Le mie richieste» con numero, oggetto, date e stato",
+        "w": 1100,
+        "h": 546
+      },
+      {
+        "t": "Guarda la colonna «Stato»: «In attesa» (presa in carico a breve), «In lavorazione» (un tecnico ci sta lavorando), «In sospeso» (ferma in attesa di qualcosa, per esempio una tua risposta), «Risolta» o «Chiusa»."
+      },
+      {
+        "t": "Clicca il numero o l'oggetto per aprire i dettagli e leggere gli aggiornamenti."
+      },
+      {
+        "t": "Per vedere anche le richieste concluse clicca «Chiuse» o «Tutte» sopra l'elenco."
+      }
+    ],
+    "ok": "Vedi lo stato aggiornato e gli ultimi messaggi del tecnico.",
+    "stop": "Non aprire una nuova richiesta per lo stesso problema: aggiungi un messaggio a quella che hai già.",
+    "richiesta": "Se la richiesta è ferma da tempo, scrivi un messaggio dal suo dettaglio (vedi la guida «Come rispondere al CED»).",
+    "vedi": [
+      "rispondere-al-ced"
+    ],
+    "parole": [
+      "stato",
+      "richiesta",
+      "ticket",
+      "le mie richieste",
+      "a che punto",
+      "in lavorazione",
+      "risolta"
+    ]
+  },
+  {
+    "id": "rispondere-al-ced",
+    "cat": "portale",
+    "d": "Come rispondere al CED o aggiungere informazioni",
+    "intro": "Il tecnico ti ha scritto, oppure ti è venuto in mente qualcosa da aggiungere a una richiesta aperta.",
+    "passi": [
+      {
+        "t": "Clicca «Le mie richieste» e poi la richiesta che ti interessa."
+      },
+      {
+        "t": "Leggi gli ultimi messaggi sotto «Aggiornamenti»."
+      },
+      {
+        "t": "In fondo alla pagina, nella casella «Vuoi aggiungere informazioni?», scrivi il messaggio e clicca «Invia messaggio».",
+        "img": "img/faq/rispondere-al-ced-01-messaggio.webp",
+        "alt": "Il dettaglio di una richiesta con gli aggiornamenti e la casella per scrivere un messaggio",
+        "w": 1100,
+        "h": 755
+      },
+      {
+        "t": "Se la richiesta risulta «Risolta» e il problema è davvero risolto, clicca «Risolto, grazie». Se non lo è, clicca «Non è risolto, riapri»."
+      }
+    ],
+    "ok": "Il messaggio compare tra gli aggiornamenti e arriva direttamente al tecnico.",
+    "stop": "Non rispondere alla e-mail di avviso: la risposta non arriva al tecnico. Usa sempre il portale. Non scrivere password.",
+    "richiesta": "Per un problema nuovo, diverso da quello della richiesta, apri una nuova richiesta.",
+    "vedi": [
+      "stato-richiesta",
+      "aprire-richiesta"
+    ],
+    "parole": [
+      "rispondere",
+      "messaggio",
+      "aggiungere informazioni",
+      "tecnico",
+      "riaprire",
+      "risolto"
+    ]
+  }
 ]

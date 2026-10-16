@@ -24,7 +24,7 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js",
+    "test": "node --test test/e2e.test.js test/faq.test.js test/faq-browser.test.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js"
   },
@@ -36,5 +36,8 @@
     "memorystore": "^1.6.8",
     "multer": "^2.4.0",
     "openid-client": "^5.7.1"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.14.0"
   }
 }

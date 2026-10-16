@@ -50,7 +50,28 @@ Le icone sono simboli SVG in `public/index.html` (blocco `<svg class="sprite">`)
 
 ## Domande frequenti – `content/faq.json`
 
-Elenco di coppie `{"d": "domanda", "r": "risposta"}`. Compaiono nella pagina «Guide».
+Elenco di guide, mostrate nella pagina «Guide» con ricerca, filtri per argomento e link diretti (`#faq/<id>`). Il formato semplice `{"d": "domanda", "r": "risposta"}` continua a funzionare; una guida completa usa questi campi:
+
+```json
+{ "id": "stampante-offline", "cat": "stampanti",
+  "d": "La stampante risulta «Offline»",
+  "intro": "Il problema, in una frase.",
+  "controlli": ["Cosa guardare prima di cominciare."],
+  "passi": [
+    { "t": "Un'azione per passo.", "nota": "Dettaglio facoltativo.",
+      "img": "img/faq/stampante-offline-01.webp", "alt": "Descrizione dell'immagine", "w": 900, "h": 400 }
+  ],
+  "ok": "Cosa dovresti vedere se è andato tutto bene.",
+  "stop": "Quando fermarti e non insistere.",
+  "richiesta": "Quando aprire una richiesta e cosa scrivere.",
+  "vedi": ["coda-stampa"], "parole": ["offline", "non raggiungibile"] }
+```
+
+- `id`: minuscole, numeri e trattini; è il link diretto e deve essere unico. `cat`: argomento del filtro (`computer`, `stampanti`, `posta`, `rete`, `accessi`, `sicurezza`, `portale`, oppure un nome tuo).
+- `intro`, `ok`, `stop`, `richiesta` sono obbligatori nelle guide con `passi`. `controlli`, `vedi` e `parole` (sinonimi per la ricerca) sono facoltativi.
+- Immagini: file in `public/img/faq/` (WebP o PNG, max 200 KB), con `alt` e le dimensioni `w`/`h` reali. Un clic le ingrandisce. Usa solo schermate anonime, senza nomi, indirizzi o dati riservati: `public/` è servito anche senza accesso.
+- Campi `mancante` (passo: immagine ancora da acquisire) e `verifica` (guida: punto da controllare) non compaiono agli utenti; `node scripts/verifica-faq.js --report` li raccoglie in `docs/faq-da-completare.md`.
+- `npm run lint` controlla id, campi, immagini e collegamenti; `content/suggerimenti.json` può riusare una guida con `"guida": "<id>"` al posto di `titolo` e `passi`.
 
 ## Consigli prima di inviare – `content/suggerimenti.json`
 

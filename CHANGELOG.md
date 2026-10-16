@@ -6,6 +6,7 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e i
 
 ### Aggiunto
 
+- Guide (FAQ) 2.0: 30 guide con passi numerati, controlli, risultato atteso, «quando fermarti» e «quando aprire una richiesta»; ricerca istantanea, filtri per argomento, link diretti `#faq/<id>`, immagini ingrandibili (`<dialog>` nativo), collegamento dai consigli del modulo. Formato `{ d, r }` ancora valido. Nuovi `public/faq.js`, `scripts/verifica-faq.js` (anche in `npm run lint`) e test (`test/faq.test.js`, `test/faq-browser.test.js`, quest'ultimo con `puppeteer-core` e Chrome, saltato se assenti). Elenco di immagini e verifiche ancora aperte in `docs/faq-da-completare.md`.
 - Guida alla fiducia della CA interna sui PC Windows in dominio (`docs/https-ca-dominio.md`): distribuzione del solo certificato pubblico, impronta esatta, ambito GPO e Computers, browser e diagnosi su una singola postazione, con limiti delle verifiche espliciti.
 - Guida al flusso dei ticket per i tecnici GLPI (`docs/flusso-ticket-tecnici.md`): Risposta, note private, Attività, stati, ricerca dei ticket chiusi e distinzione tra chiusura automatica ed eliminazione.
 - Esempio CSS opzionale per l'altezza minima della nuova Risposta nei ticket GLPI 11.0.8, con istruzioni per la personalizzazione nativa dell'entità, prove osservate e rollback.
