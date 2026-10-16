@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it">
+<html lang="it" __APPEARANCE__>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,6 +11,8 @@
 <link rel="apple-touch-icon" href="__BASE__/img/icon-192.png">
 <link rel="stylesheet" href="__BASE__/style.css?v=__V__">
 <link rel="stylesheet" href="__BASE__/ente.css?v=__V__">
+<link rel="stylesheet" href="__BASE__/readability.css?v=__V__">
+<link rel="stylesheet" href="__BASE__/appearance.css?v=__V__">
 </head>
 <body data-accesso="{{testi.pulsanteAccesso}}">
 <svg class="sprite" width="0" height="0" aria-hidden="true"><defs>
@@ -29,7 +31,8 @@
   <a href="{{ente.sito}}" rel="noopener">{{ente.nome}}</a>
   <div class="r">
     <a href="#richieste" id="slim-richieste" hidden>Le mie richieste</a>
-    <span class="utente" id="slim-utente" hidden></span>
+    <a class="utente" id="slim-utente" href="#profilo" hidden></a>
+    <button type="button" id="aspetto" class="esci" aria-haspopup="dialog" hidden>Aa · Aspetto</button>
     <button type="button" id="esci" class="esci" hidden>Esci</button>
   </div>
 </div></div>
@@ -68,6 +71,16 @@
   </section>
 
   <div id="app" hidden>
+    <div id="aspetto-avviso" class="appearance-notice" role="alert" hidden><span id="aspetto-avviso-testo"></span> <button type="button" id="aspetto-rivedi" aria-haspopup="dialog">Apri Aspetto</button></div>
+    <section id="v-profilo" class="main" hidden>
+      <h2 class="titolo">Il mio profilo</h2>
+      <div class="form largo">
+        <p id="profilo-nome"></p><p id="profilo-email"></p>
+        <h3>Aspetto e leggibilità</h3>
+        <p>Scegli il tuo tema, le dimensioni e la spaziatura. Le preferenze seguono il tuo account.</p>
+        <p><button type="button" class="send" id="profilo-aspetto" aria-haspopup="dialog">Aa · Aspetto</button></p>
+      </div>
+    </section>
 
     <section id="v-nuova" hidden>
       <div class="intro"><div class="wrap">
@@ -212,6 +225,23 @@
     <div class="pw">{{crediti.testo}} <a href="{{crediti.link}}" rel="noopener"><b>{{crediti.autore}}</b></a></div>
   </div>
 </footer>
+<dialog id="aspetto-pannello" aria-labelledby="aspetto-titolo" aria-describedby="aspetto-info">
+  <div class="appearance-heading"><h2 id="aspetto-titolo">Aspetto e leggibilità</h2><button type="button" id="aspetto-chiudi" autofocus>Chiudi <span aria-hidden="true">×</span></button></div>
+  <p id="aspetto-info">Anteprima immediata. Il contenuto della richiesta rimane al suo posto.</p>
+  <fieldset class="theme-fieldset"><legend>Tema personale</legend><div id="temi" class="theme-grid"></div></fieldset>
+  <div class="appearance-controls">
+    <label for="aspetto-testo">Dimensione testo <output id="testo-valore" for="aspetto-testo">100%</output><input id="aspetto-testo" type="range" min="100" max="150" step="10" value="100"></label>
+    <label for="aspetto-icone">Dimensione icone <output id="icone-valore" for="aspetto-icone">100%</output><input id="aspetto-icone" type="range" min="80" max="150" step="10" value="100"></label>
+    <label class="appearance-check"><input id="aspetto-spazio" type="checkbox"> Spaziatura ampia</label>
+    <label class="appearance-check"><input id="aspetto-movimenti" type="checkbox"> Riduci i movimenti</label>
+    <button type="button" id="aspetto-sistema">Usa la preferenza di movimento del sistema</button>
+  </div>
+  <p id="aspetto-stato" role="status" aria-live="polite"></p>
+  <p id="aspetto-errore" class="errore" role="alert" hidden></p>
+  <div class="appearance-actions"><button type="button" id="aspetto-reset">Ripristina Classico Bondeno</button><button type="button" id="aspetto-riprova" hidden>Riprova salvataggio</button><button type="button" class="send" id="aspetto-fatto">Fatto</button></div>
+</dialog>
+<script src="__BASE__/appearance-model.js?v=__V__" defer></script>
+<script src="__BASE__/appearance.js?v=__V__" defer></script>
 <script src="__BASE__/app.js?v=__V__" defer></script>
 </body>
 </html>

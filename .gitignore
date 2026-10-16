@@ -19,6 +19,7 @@ deploy/glpi/mail-ticket.txt
 # Dipendenze, log, backup, dati
 node_modules/
 uploads/
+data/
 *.log
 backup/
 backups/

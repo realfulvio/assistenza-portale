@@ -6,12 +6,14 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e i
 
 ### Aggiunto
 
+- Banner, percorso visivo e screenshot aggiornati della demo con dati inventati, con diagramma del ruolo di GLPI e sorgenti SVG delle composizioni.
 - Guida alla fiducia della CA interna sui PC Windows in dominio (`docs/https-ca-dominio.md`): distribuzione del solo certificato pubblico, impronta esatta, ambito GPO e Computers, browser e diagnosi su una singola postazione, con limiti delle verifiche espliciti.
 - Guida al flusso dei ticket per i tecnici GLPI (`docs/flusso-ticket-tecnici.md`): Risposta, note private, Attività, stati, ricerca dei ticket chiusi e distinzione tra chiusura automatica ed eliminazione.
 - Esempio CSS opzionale per l'altezza minima della nuova Risposta nei ticket GLPI 11.0.8, con istruzioni per la personalizzazione nativa dell'entità, prove osservate e rollback.
 
 ### Modificato
 
+- README riorganizzato per spiegare il portale, il percorso del dipendente, il lavoro dei tecnici, i vantaggi e l'accesso alla demo locale; mantenuti requisiti, installazione, guide, sicurezza e crediti. Nessuna modifica al comportamento del portale.
 - Guida di creazione della CA: corretti i riferimenti generali ad autofirmati e durata del certificato; rimossa l'indicazione di disabilitare la revoca. Distribuzione e diagnosi client consolidate nella nuova guida di dominio; guida tecnici precedente mantenuta come indice verso il flusso aggiornato.
 - Collegamenti dal README e nuovo indice delle guide. Solo documentazione e personalizzazione opzionale del backend GLPI: codice e versione del portale invariati.
 

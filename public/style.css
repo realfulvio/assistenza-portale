@@ -189,7 +189,7 @@ footer .pw b{color:#7fd0f5}
   .numero{font-size:44px}
 }
 .reveal{animation:up .6s both}@keyframes up{from{opacity:0;transform:translateY(18px)}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* La preferenza di movimento, anche di sistema, e' gestita in appearance.css. */
 
 /* modulo colorato */
 .chosen{display:flex;gap:12px;align-items:center;margin-bottom:14px;font-weight:700;font-size:20px;color:var(--c)}

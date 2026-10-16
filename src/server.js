@@ -11,6 +11,7 @@ const rateLimit = require('express-rate-limit');
 const config = require('./config');
 const glpi = require('./glpi-client');
 const auth = require('./auth');
+const preferences = require('./preferences');
 const { upload, verificaFile } = require('./uploads');
 const { pcValido, ipPulito } = require('./contenuto');
 
@@ -83,9 +84,19 @@ api.get('/me', (req, res) => {
   res.set('Cache-Control', 'no-store');
   if (!req.session.user) return res.status(401).json({ errore: 'Non autenticato' });
   const { name, email } = req.session.user;
-  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie:config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, placeholder }) => ({ id, nome, icona, sotto, titolo, colore, placeholder })) });
+  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, appearance: preferences.read(req.session.user), limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie:config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, placeholder }) => ({ id, nome, icona, sotto, titolo, colore, placeholder })) });
 });
 api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
+api.get('/preferenze', serveLogin, (req, res) => {
+  res.set('Cache-Control', 'no-store').json(preferences.read(req.session.user));
+});
+api.put('/preferenze', serveLogin, csrf, (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try { require('../public/appearance-model').validate(req.body); }
+  catch { return res.status(400).json({ errore: 'Preferenze non valide: controlla tema, dimensioni e spaziatura.' }); }
+  try { res.json({ preferences: preferences.write(req.session.user, req.body), available: true }); }
+  catch { res.status(503).json({ errore: 'Aspetto applicato, ma non salvato sul tuo account. Riprova: puoi continuare a usare il portale.' }); }
+});
 api.get('/faq', serveLogin, (req, res) => res.json(JSON.parse(fs.readFileSync(config.faqPath, 'utf8'))));
 // Consigli prima di inviare (content/suggerimenti.json, riletto a ogni richiesta; se manca: nessun consiglio)
 api.get('/suggerimenti', serveLogin, (req, res) => {
@@ -180,7 +191,7 @@ router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
 // __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
-const versione = ['style.css', 'app.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+const versione = ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
   .replaceAll('__BASE__', config.base).replaceAll('__V__', versione);
@@ -188,7 +199,9 @@ const pagina = (req, res) => {
   // ?pc=NOMEPC dall'icona sul desktop (nome del parametro: PC_PARAM): se valido resta in sessione e finisce nel ticket
   const pc = config.pcParam ? pcValido(req.query[config.pcParam]) : null;
   if (pc) req.session.pc = pc;
-  res.set('Cache-Control', 'no-store').type('html').send(indice);
+  const p = req.session.user ? preferences.read(req.session.user).preferences : require('../public/appearance-model').defaults();
+  const attrs = `data-theme="${p.theme}" data-text="${p.text}" data-icon="${p.icon}" data-roomy="${p.roomy}" data-motion="${p.motion === null ? 'system' : p.motion ? 'reduce' : 'full'}"`;
+  res.set('Cache-Control', 'no-store').type('html').send(indice.replace('__APPEARANCE__', attrs));
 };
 router.get(['/', '/errore', '/non-consentito'], pagina);
 

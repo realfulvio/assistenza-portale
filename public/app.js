@@ -47,6 +47,7 @@
     return a;
   };
   function mostraLogin() {
+    window.Appearance.clear();
     if (location.hash.startsWith('#richiesta/')) {
       try { sessionStorage.setItem('dopoLogin', location.search + location.hash); } catch { /* ignorato */ }
     }
@@ -57,7 +58,7 @@
   }
 
   // ---------- viste ----------
-  const VISTE = ['nuova', 'conferma', 'richieste', 'dettaglio', 'faq', 'contatti'];
+  const VISTE = ['nuova', 'conferma', 'richieste', 'dettaglio', 'faq', 'contatti', 'profilo'];
   function vai(v, navId) {
     VISTE.forEach((x) => { $('v-' + x).hidden = x !== v; });
     document.querySelectorAll('#nav a[href^="#"]').forEach((a) => a.removeAttribute('aria-current'));
@@ -74,6 +75,7 @@
     else if (h.startsWith('richiesta/')) { vai('dettaglio', 'richieste'); await caricaDettaglio(h.split('/')[1]); }
     else if (h === 'faq') { vai('faq'); await caricaFaq(); }
     else if (h === 'contatti') { vai('contatti'); }
+    else if (h === 'profilo') { vai('profilo'); }
     else location.hash = '#nuova';
   }
 
@@ -118,6 +120,7 @@
     const f = $('blocco-form');
     f.style.setProperty('--c', c.colore || '#005e8e');
     $('ci').replaceChildren(icona(c.icona));
+    window.Appearance.refresh();
     $('cn').textContent = c.titolo || c.nome;
     $('scelta').hidden = false; $('scegli-prima').hidden = true;
     $('descrizione').placeholder = c.placeholder || 'Descrivi il problema con parole tue.';
@@ -331,6 +334,7 @@
       disegnaRichieste();
     }));
     $('esci').addEventListener('click', async () => {
+      window.Appearance.clear();
       try { const r = await api('/../auth/logout', { method: 'POST' }); location.href = r.redirect; } catch { location.href = BASE + '/'; }
     });
     $('form-msg').addEventListener('submit', async (ev) => {
@@ -344,10 +348,15 @@
     try {
       me = await api('/me');
     } catch { return; }
+    window.Appearance.init(api, me.appearance);
+    if (!me) return;
     $('schermata').hidden = true; $('app').hidden = false;
     for (const id of ['nav', 'slim-richieste', 'slim-utente', 'esci']) $(id).hidden = false;
     $('slim-utente').textContent = me.nome; $('slim-utente').title = me.email;
+    $('aspetto').hidden = false;
+    $('profilo-nome').textContent = me.nome; $('profilo-email').textContent = me.email;
     disegnaTile(); inizializzaForm();
+    window.Appearance.refresh();
     $('aiuto-all').textContent = `Fino a ${me.limiti.maxFiles} file, ${Math.round(me.limiti.maxFileBytes / 1048576)} MB ciascuno (immagini, PDF, Word, Excel, testo, zip, e-mail).`;
     try { $('telefono').value = localStorage.getItem('tel') || ''; } catch { /* ignorato */ }
     if (/\/(errore|non-consentito)$/.test(location.pathname)) history.replaceState(null, '', BASE + '/');

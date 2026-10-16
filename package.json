@@ -24,7 +24,8 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js",
+    "test": "node --test test/e2e.test.js test/preferences.test.js",
+    "test:aspetto": "node scripts/test-aspetto-browser.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js"
   },

@@ -1,0 +1,7 @@
+# Drop-in proposto per portale-assistenza.service. NON applicato automaticamente.
+# Preparare prima /var/lib/portale-assistenza con proprietario uguale a User= del servizio.
+# Copiare, dopo revisione e autorizzazione, in:
+# /etc/systemd/system/portale-assistenza.service.d/aspetto.conf
+[Service]
+Environment=PREFERENCES_DIR=/var/lib/portale-assistenza/preferences
+ReadWritePaths=/var/lib/portale-assistenza

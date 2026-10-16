@@ -59,7 +59,7 @@ router.get('/callback', async (req, res, next) => {
     const pc = req.session.pc; // nome del PC (?pc=) da conservare dopo il login
     req.session.regenerate((err) => {
       if (err) return next(err);
-      req.session.user = { oid: cl.oid || cl.sub, name: cl.name || email, email };
+      req.session.user = { oid: cl.oid || cl.sub, tenant: cl.tid || '', name: cl.name || email, email };
       if (pc) req.session.pc = pc;
       req.session.idToken = tokenSet.id_token;
       req.session.save(() => res.redirect(config.base + '/'));

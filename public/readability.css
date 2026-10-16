@@ -1,0 +1,56 @@
+/* Generato da scripts/genera-leggibilita.js; non modificare a mano. */
+body{font-size:calc(17px * var(--text-scale,1))}
+.slim{font-size:calc(13px * var(--text-scale,1))}
+.center h1{font-size:calc(22px * var(--text-scale,1))}
+.center small{font-size:calc(13px * var(--text-scale,1))}
+.nav .in{font-size:calc(15px * var(--text-scale,1))}
+.intro h2{font-size:calc(38px * var(--text-scale,1))}
+.intro p.l{font-size:calc(18px * var(--text-scale,1))}
+.hw b{font-size:calc(18px * var(--text-scale,1))}
+.hw span{font-size:calc(16px * var(--text-scale,1))}
+.hw:not(:last-child):after{font-size:calc(26px * var(--text-scale,1))}
+h3.s{font-size:calc(22px * var(--text-scale,1))}
+h3.s i{font-size:calc(17px * var(--text-scale,1))}
+.wrap>form>p.sub{font-size:calc(16px * var(--text-scale,1))}
+.tile b{font-size:calc(23px * var(--text-scale,1))}
+.tile small{font-size:calc(15px * var(--text-scale,1))}
+.tile .go{font-size:calc(13px * var(--text-scale,1))}
+h3{font-size:calc(13px * var(--text-scale,1))}
+.titolo{font-size:calc(30px * var(--text-scale,1))}
+label{font-size:calc(15px * var(--text-scale,1))}
+.hint{font-size:calc(14px * var(--text-scale,1))}
+.bar small{font-size:calc(14px * var(--text-scale,1))}
+.send{font-size:calc(16px * var(--text-scale,1))}
+.ok-ico{font-size:calc(30px * var(--text-scale,1))}
+.conferma h2{font-size:calc(28px * var(--text-scale,1))}
+.numero{font-size:calc(56px * var(--text-scale,1))}
+th{font-size:calc(12px * var(--text-scale,1))}
+.filtro{font-size:calc(15px * var(--text-scale,1))}
+.stato,.st-b{font-size:calc(13px * var(--text-scale,1))}
+.timeline time{font-size:calc(13px * var(--text-scale,1))}
+.box h2{font-size:calc(28px * var(--text-scale,1))}
+.ms{font-size:calc(16px * var(--text-scale,1))}
+footer{font-size:calc(14px * var(--text-scale,1))}
+footer .pw{font-size:calc(13px * var(--text-scale,1))}
+@media(max-width:760px){
+.top h2{font-size:calc(26px * var(--text-scale,1))}
+.center h1{font-size:calc(19px * var(--text-scale,1))}
+.numero{font-size:calc(44px * var(--text-scale,1))}
+}
+.chosen{font-size:calc(20px * var(--text-scale,1))}
+label span{font-size:calc(14px * var(--text-scale,1))}
+.ex{font-size:calc(15px * var(--text-scale,1))}
+.ex button{font-size:calc(15px * var(--text-scale,1))}
+.drop{font-size:calc(16px * var(--text-scale,1))}
+.send{font-size:calc(19px * var(--text-scale,1))}
+.stato,.st-b{font-size:calc(14px * var(--text-scale,1))}
+body{font-size:calc(18px * var(--text-scale,1))}
+@media(max-width:860px){
+.intro h2{font-size:calc(28px * var(--text-scale,1))}
+}
+.tile input:checked+.card .go:before{font-size:calc(13px * var(--text-scale,1))}
+.drop .drop-alt{font-size:calc(14px * var(--text-scale,1))}
+.consiglio .pre{font-size:calc(13px * var(--text-scale,1))}
+.consiglio .tit{font-size:calc(17px * var(--text-scale,1))}
+.esito-domanda{font-size:calc(18px * var(--text-scale,1))}
+.credito-alto{font-size:calc(12px * var(--text-scale,1))}

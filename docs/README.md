@@ -2,6 +2,7 @@
 
 ## Installazione e accesso
 
+- [Componenti e dati della richiesta](architettura.md)
 - [Installazione del portale](installazione.md)
 - [Preparazione di GLPI e delle API](glpi.md)
 - [Accesso Microsoft Entra ID](accesso-microsoft-entra.md)

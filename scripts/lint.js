@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.join(__dirname, '..');
-const salta = new Set(['node_modules', '.git', 'screenshots', 'docs']);
+const salta = new Set(['node_modules', '.git', 'screenshots', 'docs', 'data']);
 const file = [];
 (function giro(dir) {
   for (const n of fs.readdirSync(dir, { withFileTypes: true })) {
