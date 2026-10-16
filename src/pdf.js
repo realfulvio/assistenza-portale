@@ -7,6 +7,7 @@ const PDFDocument = require('pdfkit');
 const config = require('./config');
 const { elencoNomi } = require('./ticket-dettaglio');
 
+const ENTE = config.ente || {}; // in alcune installazioni i testi dell'ente non sono in config
 const F = path.join(__dirname, 'fonti'); // WOFF di Titillium Web (SIL OFL, vedi public/fonts): i lettori PDF incorporano meglio il WOFF del WOFF2
 const C = { blu: '#0a5c8f', scuro: '#0b2a55', oro: '#e6b93c', testo: '#1a2b3c', grigio: '#6a7b8d', grigio2: '#44566a', riga: '#e3e8ee', box: '#f0f7fc', boxBordo: '#cfe3f3', tondo: '#e3eff8', pill: '#e8edf3' };
 const I = {
@@ -49,7 +50,7 @@ function icona(doc, d, x, y, size, colore, spessore = 2) {
 function genera(d, chi) {
   return new Promise((ok, ko) => {
     const doc = new PDFDocument({ size: 'A4', margins: { top: px(44), bottom: px(36), left: px(52), right: px(52) }, bufferPages: true,
-      info: { Title: `Richiesta #${d.id} – ${d.titolo}`, Author: (config.ente.servizio && config.ente.servizio.nome) || 'Assistenza Informatica', Creator: 'Portale Assistenza' } });
+      info: { Title: `Richiesta #${d.id} – ${d.titolo}`, Author: (ENTE.servizio && ENTE.servizio.nome) || 'Assistenza Informatica', Creator: 'Portale Assistenza' } });
     const parti = [];
     doc.on('data', (b) => parti.push(b)); doc.on('end', () => ok(Buffer.concat(parti))); doc.on('error', ko);
     doc.registerFont('R', path.join(F, 'titillium-web-latin-400-normal.woff'));
@@ -61,14 +62,14 @@ function genera(d, chi) {
 
     // --- intestazione
     let y = doc.page.margins.top;
-    const logo = config.ente.grafica && config.ente.grafica.logo ? path.join(config.root, 'public', config.ente.grafica.logo) : '';
+    const logo = ENTE.grafica && ENTE.grafica.logo ? path.join(config.root, 'public', ENTE.grafica.logo) : '';
     if (/\.(png|jpe?g)$/i.test(logo) && fs.existsSync(logo)) {
       doc.save().circle(L + px(26), y + px(26), px(26)).clip().image(logo, L, y, { width: px(52), height: px(52) }).restore();
     } else {
       doc.circle(L + px(26), y + px(26), px(26)).fill(C.blu);
       icona(doc, I.chat, L + px(14), y + px(14), px(24), '#ffffff', 2);
     }
-    const servizio = (config.ente.servizio && config.ente.servizio.nome) || 'Assistenza Informatica';
+    const servizio = (ENTE.servizio && ENTE.servizio.nome) || 'Assistenza Informatica';
     doc.font('B').fontSize(px(20)).fillColor(C.scuro).text(servizio, L + px(66), y + px(12), { width: W - px(200), lineBreak: false });
     const num = String(d.id);
     doc.font('B').fontSize(px(28));
