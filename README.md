@@ -34,13 +34,16 @@ Molti uffici chiedono assistenza al servizio informatico **per telefono o per ma
 - riceve subito il **numero della richiesta**;
 - vede lo stato in **«Le mie richieste»** (In attesa, In lavorazione, In sospeso, Risolta, Chiusa) e può aggiungere messaggi;
 - quando il ticket è risolto, dalla mail può rispondere **«Risolto, grazie»** o **«Non è risolto, riapri»**;
-- i tecnici lavorano in **GLPI**, che resta il loro strumento: il dipendente non entra mai in GLPI.
+- i tecnici lavorano in **GLPI**, che resta il loro strumento: il dipendente non entra mai in GLPI;
+- sotto il menu una sottile **barra «Live»** mostra a tutti i dipendenti il lavoro del servizio: richieste del periodo, risolte, in lavorazione, tempo medio di presa in carico (solo numeri aggregati, aggiornati ogni 5 minuti).
 
 È pensato per chi usa poco il computer: testi semplici, caselle grandi e colorate, niente gergo tecnico.
 
 | Le mie richieste | Dettaglio di una richiesta |
 |---|---|
 | ![Le mie richieste](screenshots/desktop-richieste.png) | ![Dettaglio](screenshots/desktop-richiesta.png) |
+
+![Barra «Live» con i contatori delle richieste](screenshots/live/barra-live.png)
 
 Funziona anche su telefono: vedi [screenshots/](screenshots/).
 
@@ -115,7 +118,8 @@ Tutto quello che riguarda il tuo ente sta in **un solo file**, `config/ente.json
 
 - nome dell'ente, nome del servizio, sottotitolo, e-mail e telefono per le urgenze, link «Torna al sito»;
 - logo/stemma (metti il file in `public/img/` e indica il nome);
-- colori (predefiniti: blu `#005e8e`, barra `#001a4d`, sfondo `#f2f2f2`).
+- colori (predefiniti: blu `#005e8e`, barra `#001a4d`, sfondo `#f2f2f2`);
+- barra «Live» dei contatori (`barraLive`: attiva, periodo `anno` / `mese` / `da_data`, durata della cache).
 
 Le **categorie** dei problemi (nome, descrizione, icona, colore, categoria GLPI collegata) stanno in `config/categorie.json`; le **domande frequenti** in `content/faq.json`. → [docs/personalizzazione.md](docs/personalizzazione.md)
 

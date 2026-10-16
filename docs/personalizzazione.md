@@ -31,6 +31,21 @@ Copia `config/ente.example.json` in `config/ente.json`.
 - Colori in `grafica`: `colorePrimario` (`#005e8e`), `colorePrimarioScuro` (`#004a70`), `coloreBarra` (`#001a4d`), `coloreSfondo` (`#f2f2f2`). Solo codici esadecimali. Controlla il contrasto con il testo bianco (almeno 4.5:1, es. con https://webaim.org/resources/contrastchecker/).
 - Il logo del servizio (scudo con cuffia) è in `public/img/logo-servizio*.svg`; favicon in `public/favicon.ico` e `public/img/icon-192.png`, `icon-512.png`.
 
+## Barra «Live» – `barraLive` in `config/ente.json`
+
+Sotto il menu principale una barra sottile mostra i numeri del servizio, presi da GLPI con l'utente di servizio del portale (sola lettura, solo numeri aggregati, nessun dato personale): richieste del periodo con l'andamento degli ultimi 7 giorni, risolte, in lavorazione (stati da «Nuovo» a «In attesa», senza filtro di periodo), tempo medio di presa in carico e, a rotazione, ultima soluzione, richieste di oggi e percentuale di risolte.
+
+```json
+"barraLive": { "attiva": true, "periodo": "anno", "daData": "", "cacheSecondi": 300 }
+```
+
+- `periodo`: `anno` (dal 1° gennaio, predefinito), `mese` (dal 1° del mese) oppure `da_data` con `daData` nel formato `AAAA-MM-GG` (es. la data di avvio del portale). Il testo si adegua: «nel 2026», «a ottobre», «dal 01/10/2026».
+- `attiva: false` nasconde la barra; `cacheSecondi` (minimo 10, predefinito 300) è ogni quanto il portale interroga GLPI. A ogni aggiornamento la sessione API viene chiusa (`killSession`).
+- Le stesse opzioni si possono impostare nel `.env` (`STATS_BAR`, `STATS_PERIODO`, `STATS_DA_DATA`, `STATS_CACHE_SEC`), che ha la precedenza.
+- La cache è in memoria: per svuotarla subito riavvia il servizio (`sudo systemctl restart portale-assistenza`).
+- L'endpoint è `GET /assistenza/api/stats` (solo utenti autenticati). Se GLPI non risponde restituisce `{"ok":false}` e la barra si nasconde senza mostrare errori.
+- Con «movimento ridotto» (preferenza del sistema o «Aspetto») non ci sono animazioni; sotto i 900 px spariscono andamento e messaggi, sotto i 600 px restano solo LIVE, risolte e in lavorazione.
+
 ## Categorie – `config/categorie.json`
 
 Copia `config/categorie.example.json` in `config/categorie.json`. Per ogni categoria:

@@ -10,6 +10,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const config = require('./config');
 const glpi = require('./glpi-client');
+const stats = require('./stats');
 const auth = require('./auth');
 const { upload, verificaFile } = require('./uploads');
 const { pcValido, ipPulito } = require('./contenuto');
@@ -87,6 +88,14 @@ api.get('/me', (req, res) => {
 });
 api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
 api.get('/faq', serveLogin, (req, res) => res.json(JSON.parse(fs.readFileSync(config.faqPath, 'utf8'))));
+// Barra «Live»: numeri aggregati dei ticket (cache lato server). Se GLPI non risponde: 200 con { ok: false }
+api.get('/stats', serveLogin, async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    const { dati, daCache } = await stats.statistiche();
+    res.set('X-Cache', daCache ? 'HIT' : 'MISS').json(dati);
+  } catch { res.json({ ok: false }); }
+});
 // Consigli prima di inviare (content/suggerimenti.json, riletto a ogni richiesta; se manca: nessun consiglio)
 api.get('/suggerimenti', serveLogin, (req, res) => {
   try { res.json(JSON.parse(fs.readFileSync(path.join(config.root, 'content', 'suggerimenti.json'), 'utf8'))); } catch { res.json([]); }
@@ -180,7 +189,7 @@ router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
 // __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
-const versione = ['style.css', 'app.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+const versione = ['style.css', 'app.js', 'stats-bar.css', 'stats-bar.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
   .replaceAll('__BASE__', config.base).replaceAll('__V__', versione);
