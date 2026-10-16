@@ -22,6 +22,21 @@ Aggiornamento di interfaccia: nuova pagina «Nuova richiesta», richieste a conv
 - Tutti i colori dell'interfaccia passano da variabili dei temi; i colori dell'ente in `config/ente.json` valgono per il tema Classico.
 - Font Press Start 2P (licenza SIL OFL) in locale per il tema Retro: nessuna richiesta a CDN.
 
+### Corretto durante la stabilizzazione (non ancora rilasciata)
+
+- Archivio persistente incluso nell'unità systemd standard (`StateDirectory`, directory private), con istruzioni di migrazione e backup di preferenze e foto.
+- Limite di frequenza condiviso tra upload e aggiornamento forzato della foto Microsoft, legato all'identità OIDC.
+- Aggiornamento di `sharp` a 0.35.5 e requisito Node almeno 20.19.
+- Contrasti della categoria selezionata, dei crediti e del numero Live di Hawaii e degli orari nelle conversazioni di Giardino; focus visibile; layout Retro e categorie delle guide con caratteri ingranditi su mobile.
+- PDF: descrizioni e singoli messaggi lunghi continuano su più pagine senza sovrapporsi al piè di pagina.
+- Messaggi/conferme del portale attribuiti al richiedente in GLPI; firme storiche conservate quando l'autore è ancora l'account API; riconciliazione dell'autore visualizzato degli esiti, anche con nomi OIDC/GLPI in ordine diverso.
+- Nessun retry automatico delle scritture GLPI dopo timeout o risposta persa, per evitare duplicati.
+- Cronologia GLPI paginata, compresi gli eventi oltre i primi 200; nomi letti in blocchi; visibilità dei contenuti pubblici controllata esplicitamente.
+- Profilo API documentato con il diritto di vedere le attività pubbliche.
+- Token CSRF non validi con caratteri multibyte restituiscono 403.
+- Controllo `verifica:rilascio` sull'HTML effettivamente servito e sui CSS/script, con prove negative per riprodurre il porting incompleto.
+- QA browser aggiornata alla UI v2, dipendenze di sviluppo dichiarate, controlli dei CSS generati nel lint e test browser/PDF previsti in CI.
+
 ### Versioni precedenti (1.x)
 
 Portale per aprire e seguire richieste su GLPI con accesso OpenID Connect, consigli prima dell'invio, nome del PC e dati tecnici nel ticket, conferma della soluzione dalla mail, personalizzazione dell'ente e, tra le novità di fine ciclo, guide 2.0, barra «Live», foto profilo e preferenze di aspetto per account.

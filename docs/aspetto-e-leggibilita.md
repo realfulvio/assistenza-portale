@@ -1,8 +1,8 @@
 # Aspetto personale e leggibilità
 
-Il tema predefinito è **Classico Bondeno**. Conserva i font locali Titillium Web e Lora, le categorie con i colori configurati, le icone originali e la disposizione del portale. Le skin aggiuntive sono in `public/appearance.css`; non duplicano le pagine. Le icone delle skin sono centralizzate in `public/theme-icons.svg`, adattate dall'HTML di riferimento fornito per il progetto. Il laboratorio non viene distribuito.
+Il tema predefinito è **Classico**. Conserva i font locali Titillium Web e Lora, le categorie configurate e le preferenze esistenti. Le skin aggiuntive sono in `public/appearance.css`; non duplicano le pagine. Le icone delle skin sono centralizzate in `public/theme-icons.svg`, adattate dall'HTML di riferimento fornito per il progetto. Il laboratorio non viene distribuito.
 
-Il nome utente nella barra apre **Il mio profilo**. Il pulsante **Aa · Aspetto** apre lo stesso pannello anche durante la compilazione. Cambiare aspetto aggiorna attributi CSS e riferimenti SVG: il modulo e gli allegati non vengono ricreati. Il pannello si usa con Tab, frecce sui temi e sui cursori, Spazio per le caselle, Esc per chiudere. Il focus torna al pulsante di apertura.
+Il nome utente nella barra apre **Il mio profilo**. Il pulsante **Aa · Aspetto** apre lo stesso pannello anche durante la compilazione. Cambiare aspetto aggiorna attributi CSS e riferimenti SVG: il modulo e gli allegati non vengono ricreati. Il pannello si usa con Tab, Invio e Spazio sui temi, frecce sui cursori e Spazio per le caselle, Esc per chiudere. Il focus torna al pulsante di apertura.
 
 Testo 100–150% a scatti di 10, icone 80–150% a scatti di 10, spaziatura normale/ampia. Il movimento segue inizialmente il sistema; può essere ridotto o riattivato esplicitamente. Il ripristino riporta al tema Classico, testo e icone al 100%, spaziatura normale e movimento di sistema.
 
@@ -21,7 +21,13 @@ Non esisteva un database dei profili: le sessioni esistenti sono temporanee. Le 
 
 Nessuna migrazione SQL e nessuna modifica GLPI. Le preferenze vengono create al primo salvataggio; gli utenti preesistenti partono dal Classico. Salvare la directory delle preferenze insieme ai backup del portale. Per un singolo processo/istanza Node il filesystem persistente è sufficiente. Per più server occorre un archivio condiviso o un adattatore database; non usare dischi effimeri.
 
-Il servizio di esempio usa `ProtectSystem=strict`: la directory deve essere esplicitamente scrivibile. È fornito un drop-in **da rivedere e applicare solo dopo autorizzazione**, `deploy/aspetto-systemd.conf.example`. Preparare una directory privata con proprietario uguale all'utente del servizio e impostare `PREFERENCES_DIR`; il drop-in non rimuove le protezioni del servizio. Non sono stati eseguiti comandi Debian, restart, deploy, push o modifiche al servizio operativo.
+Il servizio standard v2 include `StateDirectory=portale-assistenza` (0700),
+`PREFERENCES_DIR=/var/lib/portale-assistenza/preferences` e
+`AVATAR_DIR=/var/lib/portale-assistenza/avatars`. Systemd crea l'archivio con il
+proprietario del servizio e lo rende scrivibile mantenendo `ProtectSystem=strict`.
+Il drop-in `deploy/aspetto-systemd.conf.example` serve solo per unità precedenti
+o personalizzate. Per percorsi diversi impostare anche `ReadWritePaths`.
+Per migrazione dei dati e ripristino vedere [aggiornamento e backup](aggiornamento-e-backup.md).
 
 Rollback futuro: ripristinare i file applicativi precedenti e l'eventuale drop-in precedente. I JSON possono essere conservati per un successivo aggiornamento e non influenzano i ticket. Non cancellarli durante un semplice rollback.
 
@@ -32,16 +38,22 @@ npm run lint
 npm test
 ```
 
-Il controllo browser usa dipendenze soltanto di sviluppo, senza introdurre risorse esterne nel portale:
+Il controllo browser usa dipendenze di sviluppo dichiarate nel lockfile:
 
-```powershell
-npm install --no-save --package-lock=false playwright @axe-core/playwright
-$env:QA_BROWSER = 'chrome' # oppure msedge; browser installato localmente
+```bash
+npm ci
+npx playwright install chromium
 npm run test:aspetto
 ```
 
-Il test browser avvia esclusivamente un server su loopback con `DEMO=1`, GLPI simulato e archivio temporaneo. Il secondo account è iniettato solo dal test nel processo effimero, senza aggiungere accessi speciali all'applicazione. Genera schermate e rapporto in `screenshots/appearance`. Non usa il backend operativo.
+Per usare Chrome o Edge già installato, impostare `QA_BROWSER=chrome` o `msedge`.
+Il controllo avvia solo un server su loopback con `DEMO=1`, GLPI simulato e archivi
+temporanei. Le identità di test sono iniettate soltanto nel processo di prova.
+Schermate e rapporto vengono salvati in `artifacts/v2-browser/`, escluso da Git.
+La matrice copre tutti gli 11 temi a 1440, 390 e 320 px, dimensioni normali e
+massime, pagine del portale, invio, messaggio, PDF, foto, persistenza e logout.
+Le violazioni axe WCAG AA causano il fallimento del controllo.
 
-Dopo modifiche a `style.css` rigenerare `public/readability.css` con `node scripts/genera-leggibilita.js`: serve a scalare anche le misure espresse in pixel mantenendo i valori originali al 100%.
-
-I risultati e gli eventuali limiti della verifica di questa consegna sono in `screenshots/appearance/README.md`.
+Dopo modifiche a `style.css`, rigenerare `public/readability.css` con
+`node scripts/genera-leggibilita.js`; dopo modifiche alle palette usare
+`node scripts/genera-temi.js`. Il lint controlla anche questi file generati.

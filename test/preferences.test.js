@@ -7,6 +7,7 @@ process.env.DEMO = '1';
 process.env.BASE_PATH = '/assistenza';
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'portale-preferences-test-'));
 process.env.PREFERENCES_DIR = directory;
+process.env.AVATAR_DIR = path.join(directory, 'avatars');
 const app = require('../src/server');
 const store = require('../src/preferences');
 const model = require('../public/appearance-model');

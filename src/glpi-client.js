@@ -14,6 +14,7 @@ class GlpiError extends Error {
 
 let sessionToken = null;
 let sessionAt = 0;
+const totaleRighe = Symbol('totaleRighe');
 const SESSION_TTL = 20 * 60 * 1000; // rinnovo preventivo
 
 async function raw(method, path, { body, headers = {}, session = true, timeoutMs = config.glpi.timeoutMs } = {}) {
@@ -31,6 +32,10 @@ async function raw(method, path, { body, headers = {}, session = true, timeoutMs
     const codice = Array.isArray(data) && typeof data[0] === 'string' ? ' ' + data[0] + (data[1] ? ': ' + String(data[1]).slice(0, 120) : '') : ''; // codice e messaggio di GLPI, mai dati utente
     throw new GlpiError(`GLPI ${method} ${path.split('?')[0]} -> ${res.status}${codice}`, res.status);
   }
+  if (Array.isArray(data)) {
+    const m = /\/(\d+)$/.exec(res.headers.get('content-range') || '');
+    if (m) Object.defineProperty(data, totaleRighe, { value: Number(m[1]) });
+  }
   return data;
 }
 
@@ -45,7 +50,9 @@ async function getSession() {
 async function call(method, path, opts) {
   for (let i = 0; ; i++) {
     try { return await raw(method, path, opts); } catch (err) {
-      const ritenta = err.status === 401 || err.name === 'TimeoutError' || err.name === 'TypeError';
+      // Un POST potrebbe essere già arrivato a GLPI anche se la risposta si perde.
+      // Ripeterlo dopo un timeout può creare due ticket/messaggi/allegati.
+      const ritenta = err.status === 401 || (method === 'GET' && ['TimeoutError', 'TypeError'].includes(err.name));
       if (i === 0 && ritenta) { sessionToken = null; continue; }
       throw err;
     }
@@ -140,11 +147,27 @@ async function elencoTicket(userId) {
   return rows(r).map((x) => ({ id: Number(x['2']), titolo: x['1'], aperta: x['15'], aggiornata: x['19'], stato: stato(x['12']), chiusa: !aperto(x['12']) }));
 }
 
+// Tutte le pagine: il limite predefinito di GLPI non deve tagliare i messaggi
+// recenti o nascondere un richiedente oltre la prima pagina di Ticket_User.
+async function elencoCompleto(percorso) {
+  const out = [], pagina = 200, massimo = 10000;
+  while (out.length < massimo) {
+    let parte;
+    try { parte = await call('GET', percorso + '?' + q({ range: `${out.length}-${out.length + pagina - 1}`, sort: 'id', order: 'ASC' })); }
+    catch (e) { if (e.status === 416 && out.length) return out; throw e; }
+    if (!Array.isArray(parte)) throw new GlpiError('Elenco GLPI non valido', 502);
+    out.push(...parte);
+    const totale = parte[totaleRighe];
+    if (!parte.length || (totale !== undefined ? out.length >= totale : parte.length < pagina)) return out;
+  }
+  throw new GlpiError('Cronologia GLPI oltre il limite di sicurezza', 502);
+}
+
 // Controllo di proprieta' LATO SERVER: il ticket deve avere userId come richiedente
 async function ticketEUtenti(userId, ticketId) {
   let t;
   try { t = await call('GET', `/Ticket/${ticketId}`); } catch (e) { if (e.status === 404 || e.status === 403) return null; throw e; }
-  const utenti = (await call('GET', `/Ticket/${ticketId}/Ticket_User`)) || [];
+  const utenti = await elencoCompleto(`/Ticket/${ticketId}/Ticket_User`);
   const mio = utenti.some((u) => Number(u.type) === 1 && Number(u.users_id) === Number(userId));
   return mio ? { t, utenti } : null;
 }
@@ -153,20 +176,22 @@ async function ticketDi(userId, ticketId) {
   return r ? r.t : null;
 }
 
-// Nome, cognome ed email di piu' utenti con UNA sola ricerca (niente N+1). L'email resta sul server (serve solo per la foto).
+// Nomi ed email in blocchi di 50 (niente N+1). Le email restano sul server, solo per le foto.
 async function utentiInBlocco(ids) {
-  const unici = [...new Set(ids.map(Number).filter((x) => x > 0))].slice(0, 50);
-  if (!unici.length) return {};
-  const par = { 'forcedisplay[0]': '2', 'forcedisplay[1]': '34', 'forcedisplay[2]': '9', 'forcedisplay[3]': '5', 'forcedisplay[4]': '1', range: '0-49' };
-  unici.forEach((id, i) => {
-    if (i) par[`criteria[${i}][link]`] = 'OR';
-    par[`criteria[${i}][field]`] = '2'; par[`criteria[${i}][searchtype]`] = 'equals'; par[`criteria[${i}][value]`] = String(id);
-  });
+  const unici = [...new Set(ids.map(Number).filter((x) => x > 0))];
   const out = {};
-  for (const x of rows(await call('GET', '/search/User?' + q(par)))) {
-    const email = [].concat(x['5'] || []).map(String).find((e) => e.includes('@')) || '';
-    const nome = [x['34'], x['9']].filter(Boolean).join(' ').trim() || String(x['1'] || '');
-    out[Number(x['2'])] = { nome, email: email.toLowerCase() };
+  for (let offset = 0; offset < unici.length; offset += 50) {
+    const par = { 'forcedisplay[0]': '2', 'forcedisplay[1]': '34', 'forcedisplay[2]': '9', 'forcedisplay[3]': '5', 'forcedisplay[4]': '1', range: '0-49' };
+    unici.slice(offset, offset + 50).forEach((id, i) => {
+      if (i) par[`criteria[${i}][link]`] = 'OR';
+      par[`criteria[${i}][field]`] = '2'; par[`criteria[${i}][searchtype]`] = 'equals'; par[`criteria[${i}][value]`] = String(id);
+    });
+    for (const x of rows(await call('GET', '/search/User?' + q(par)))) {
+      const email = [].concat(x['5'] || []).map(String).find((e) => e.includes('@')) || '';
+      const login = String(x['1'] || '');
+      const nome = [x['34'], x['9']].filter(Boolean).join(' ').trim() || (!login.includes('@') ? login : '') || 'Assistenza';
+      out[Number(x['2'])] = { nome, email: email.toLowerCase() };
+    }
   }
   return out;
 }
@@ -177,14 +202,13 @@ const facoltativo = async (p) => { try { return (await p) || []; } catch { retur
 async function dettaglioGrezzo(userId, ticketId) {
   const base = await ticketEUtenti(userId, ticketId);
   if (!base) return null;
-  const r = '?' + q({ range: '0-199' });
   const [followups, solutions, tasks, logs] = await Promise.all([
-    call('GET', `/Ticket/${ticketId}/ITILFollowup${r}`),
-    facoltativo(call('GET', `/Ticket/${ticketId}/ITILSolution${r}`)),
-    facoltativo(call('GET', `/Ticket/${ticketId}/TicketTask${r}`)),
-    facoltativo(call('GET', `/Ticket/${ticketId}/Log${r}`))
+    elencoCompleto(`/Ticket/${ticketId}/ITILFollowup`),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/ITILSolution`)),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/TicketTask`)),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/Log`))
   ]);
-  const pub = (a) => (a || []).filter((x) => Number(x.is_private) === 0);
+  const pub = (a) => (a || []).filter((x) => [0, '0', false].includes(x.is_private));
   const fPub = pub(followups), tPub = pub(tasks);
   const presa = (logs || []).filter((l) => [150, 12].includes(Number(l.id_search_option))).map((l) => ({ id_search_option: l.id_search_option, user_name: l.user_name, old_value: l.old_value }));
   const ids = [...base.utenti.map((u) => u.users_id), base.t.users_id_recipient, ...fPub.map((f) => f.users_id),
@@ -206,7 +230,7 @@ async function esitoSoluzione(userId, ticketId, nome, esito) {
   if (!t) return null;
   if (Number(t.status) !== 5) return 'stato';
   const testo = esito === 'risolto' ? 'Il richiedente conferma che il problema è risolto.' : 'L\'utente segnala che il problema non è risolto.';
-  const input = { itemtype: 'Ticket', items_id: ticketId, is_private: 0, content: `<p><b>${esc(nome)} (dal portale):</b></p><p>${testo}</p>` };
+  const input = { itemtype: 'Ticket', items_id: ticketId, users_id: userId, is_private: 0, content: `<p><b>${esc(nome)} (dal portale):</b></p><p>${testo}</p>` };
   if (esito === 'risolto') input.add_close = 1; else input.add_reopen = 1;
   await call('POST', '/ITILFollowup', { body: { input } });
   return 'ok';
@@ -214,7 +238,7 @@ async function esitoSoluzione(userId, ticketId, nome, esito) {
 
 async function aggiungiMessaggio(userId, ticketId, nome, testo) {
   const html = `<p><b>${esc(nome)} (dal portale):</b></p><p>${esc(testo).replace(/\n/g, '<br>')}</p>`;
-  await call('POST', '/ITILFollowup', { body: { input: { itemtype: 'Ticket', items_id: ticketId, is_private: 0, content: html } } });
+  await call('POST', '/ITILFollowup', { body: { input: { itemtype: 'Ticket', items_id: ticketId, users_id: userId, is_private: 0, content: html } } });
 }
 
 // In modalita' DEMO (o GLPI_MOCK=1, usato dai test) si usa un GLPI finto in memoria

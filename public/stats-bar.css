@@ -12,7 +12,7 @@
 .live-spark{margin-left:6px;overflow:visible}
 .live-spark polyline{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
 .live.on .live-spark polyline{animation:live-draw 2.2s ease-out forwards}
-.live b.live-oro{color:var(--accent);animation:live-glow 3s ease-in-out 2s infinite}
+.live b.live-oro{color:var(--liveaccent,var(--accent));animation:live-glow 3s ease-in-out 2s infinite}
 
 /* Messaggi a rotazione, allineati a destra */
 .live-msg{margin-left:auto;width:250px;justify-content:flex-end;overflow:hidden}

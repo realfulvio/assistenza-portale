@@ -49,7 +49,7 @@ function icona(doc, d, x, y, size, colore, spessore = 2) {
  */
 function genera(d, chi) {
   return new Promise((ok, ko) => {
-    const doc = new PDFDocument({ size: 'A4', margins: { top: px(44), bottom: px(36), left: px(52), right: px(52) }, bufferPages: true,
+    const doc = new PDFDocument({ size: 'A4', margins: { top: px(44), bottom: px(80), left: px(52), right: px(52) }, bufferPages: true,
       info: { Title: `Richiesta #${d.id} – ${d.titolo}`, Author: (ENTE.servizio && ENTE.servizio.nome) || 'Assistenza Informatica', Creator: 'Portale Assistenza' } });
     const parti = [];
     doc.on('data', (b) => parti.push(b)); doc.on('end', () => ok(Buffer.concat(parti))); doc.on('error', ko);
@@ -57,7 +57,7 @@ function genera(d, chi) {
     doc.registerFont('S', path.join(F, 'titillium-web-latin-600-normal.woff'));
     doc.registerFont('B', path.join(F, 'titillium-web-latin-700-normal.woff'));
     const L = doc.page.margins.left, W = doc.page.width - L - doc.page.margins.right;
-    const fondo = () => doc.page.height - doc.page.margins.bottom - px(28); // spazio per il piè di pagina
+    const fondo = () => doc.page.height - doc.page.margins.bottom; // spazio per il piè di pagina
     const nome = (id) => (id && d.persone[id] ? d.persone[id].nome : 'Sistema');
 
     // --- intestazione
@@ -152,21 +152,46 @@ function genera(d, chi) {
     const multiGiorno = new Set(d.eventi.map((e) => gg(e.data))).size > 1;
     for (const e of d.eventi) {
       const [azione, ic] = AZIONI[e.tipo];
-      const testo = e.testo && e.tipo !== 'presa' && e.tipo !== 'chiusura' ? e.testo : '';
-      doc.font('R').fontSize(px(13.5));
-      const hTesto = testo ? doc.heightOfString(testo, { width: wC - px(8), lineGap: 1 }) : 0;
-      const h = px(11 + 20 + 11) + hTesto;
-      if (y + h > fondo()) { doc.addPage(); y = doc.page.margins.top; intestazione(); }
-      const ruolo = e.chi ? d.persone[e.chi].ruolo : 'sistema';
-      doc.font('S').fontSize(px(13.5)).fillColor(C.grigio2).text(multiGiorno ? `${gg(e.data).slice(0, 5)} ${hhmm(e.data)}` : hhmm(e.data), L, y + px(11), { width: col[0] - px(4), lineBreak: false });
-      doc.circle(xA + px(8 + 11), y + px(11 + 10), px(11)).fill(ruolo === 'tecnico' ? '#f3dc93' : ruolo === 'sistema' ? C.pill : '#cfe3f3');
-      icona(doc, ruolo === 'tecnico' ? I.wrench : ruolo === 'sistema' ? I.sys : I.user, xA + px(8 + 5), y + px(11 + 4), px(12), C.scuro, 2.6);
-      doc.font('B').fontSize(px(13.5)).fillColor(C.scuro).text(e.chi ? nome(e.chi) : 'Sistema', xA + px(8 + 30), y + px(11), { width: col[1] - px(44), lineBreak: false, ellipsis: true });
-      icona(doc, ic, xB + px(8), y + px(13), px(15), C.blu, 2);
-      doc.font('B').fontSize(px(13.5)).fillColor(C.blu).text(azione, xB + px(8 + 21), y + px(11), { lineBreak: false });
-      if (testo) doc.font('R').fontSize(px(13.5)).fillColor('#33475b').text(testo, xB + px(8), y + px(11 + 20), { width: wC - px(8), lineGap: 1 });
-      y += h;
-      doc.rect(L, y, W, 0.6).fill(C.riga);
+      let resto = e.testo && e.tipo !== 'presa' && e.tipo !== 'chiusura' ? e.testo : '';
+      let continua = false;
+      // Ogni porzione rimane sopra il piè di pagina. Una singola risposta può
+      // essere più alta di un intero foglio: non basta spostare la riga una volta.
+      do {
+        doc.font('R').fontSize(px(13.5));
+        const opzioni = { width: wC - px(8), lineGap: 1 };
+        const minimo = px(42) + (resto ? doc.heightOfString('Ag', opzioni) : 0);
+        if (y + minimo > fondo()) { doc.addPage(); y = doc.page.margins.top; intestazione(); }
+        doc.font('R').fontSize(px(13.5));
+        const spazio = fondo() - y - px(42);
+        let quanti = resto.length;
+        if (resto && doc.heightOfString(resto, opzioni) > spazio) {
+          let lo = 1, hi = resto.length;
+          while (lo < hi) {
+            const mid = Math.ceil((lo + hi) / 2);
+            if (doc.heightOfString(resto.slice(0, mid), opzioni) <= spazio) lo = mid;
+            else hi = mid - 1;
+          }
+          quanti = lo;
+          const taglio = resto.slice(0, quanti).search(/\s+\S*$/);
+          if (taglio > 0) quanti = taglio;
+          // Non separare le due metà di una coppia surrogate Unicode.
+          if (/[\uD800-\uDBFF]/.test(resto[quanti - 1])) quanti--;
+        }
+        const testo = resto.slice(0, quanti).trimEnd();
+        resto = resto.slice(quanti).trimStart();
+        const h = px(42) + (testo ? doc.heightOfString(testo, opzioni) : 0);
+        const ruolo = e.chi ? d.persone[e.chi].ruolo : 'sistema';
+        doc.font('S').fontSize(px(13.5)).fillColor(C.grigio2).text(multiGiorno ? `${gg(e.data).slice(0, 5)} ${hhmm(e.data)}` : hhmm(e.data), L, y + px(11), { width: col[0] - px(4), lineBreak: false });
+        doc.circle(xA + px(8 + 11), y + px(11 + 10), px(11)).fill(ruolo === 'tecnico' ? '#f3dc93' : ruolo === 'sistema' ? C.pill : '#cfe3f3');
+        icona(doc, ruolo === 'tecnico' ? I.wrench : ruolo === 'sistema' ? I.sys : I.user, xA + px(8 + 5), y + px(11 + 4), px(12), C.scuro, 2.6);
+        doc.font('B').fontSize(px(13.5)).fillColor(C.scuro).text(e.chi ? nome(e.chi) : 'Sistema', xA + px(8 + 30), y + px(11), { width: col[1] - px(44), lineBreak: false, ellipsis: true });
+        icona(doc, ic, xB + px(8), y + px(13), px(15), C.blu, 2);
+        doc.font('B').fontSize(px(13.5)).fillColor(C.blu).text(azione + (continua ? ' (continua)' : ''), xB + px(8 + 21), y + px(11), { lineBreak: false });
+        if (testo) doc.font('R').fontSize(px(13.5)).fillColor('#33475b').text(testo, xB + px(8), y + px(31), opzioni);
+        y += h;
+        doc.rect(L, y, W, 0.6).fill(C.riga);
+        continua = true;
+      } while (resto);
     }
 
     // --- piè di pagina su ogni pagina: «data e ora · generato da …» e «n / N»
@@ -175,7 +200,7 @@ function genera(d, chi) {
     const tot = doc.bufferedPageRange().count;
     for (let i = 0; i < tot; i++) {
       doc.switchToPage(i);
-      const yf = doc.page.height - doc.page.margins.bottom - px(18);
+      const yf = doc.page.height - px(54);
       const mb = doc.page.margins.bottom; doc.page.margins.bottom = 0; // scrivere nel margine senza creare pagine
       doc.rect(L, yf - px(12), W, 0.6).fill('#dde3ea');
       icona(doc, I.cal, L, yf, px(13), C.grigio, 2);

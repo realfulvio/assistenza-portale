@@ -4,7 +4,7 @@
 // quindi non entrano ne' nella cronologia ne' in «Gestita da».
 
 const STATI = { 1: 'In attesa', 2: 'In lavorazione', 3: 'In lavorazione', 4: 'In sospeso', 5: 'Risolta', 6: 'Chiusa' };
-const pubblico = (x) => Number(x && x.is_private) === 0;
+const pubblico = (x) => !!x && [0, '0', false].includes(x.is_private);
 const num = (v) => (v === null || v === undefined || v === '' ? null : Number(v));
 const dataValida = (s) => (s && !String(s).startsWith('0000') ? String(s) : null);
 const ms = (s) => { const d = dataValida(s); return d ? new Date(d.replace(' ', 'T')).getTime() : NaN; };
@@ -13,7 +13,13 @@ const daHtml = (s) => String(s || '').replace(/&lt;/g, '<').replace(/&gt;/g, '>'
   .replace(/<br\s*\/?>|<\/p>/g, '\n').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/&#0?39;/g, "'").replace(/&quot;/g, '"')
   .replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 // I messaggi scritti dal portale iniziano con «Nome (dal portale):»: l'autore e' gia' mostrato a parte
-const senzaFirma = (t) => t.replace(/^[^\n]{1,120}\(dal portale\):\s*/, '').trim();
+const senzaFirma = (t, nome, richiedente = false) => {
+  const m = /^([^\n]{1,120})\(dal portale\):\s*/.exec(t);
+  // Le vecchie risposte erano attribuite all'account API: non perdere il nome
+  // contenuto nella firma quando non coincide con l'autore restituito da GLPI.
+  // Per un richiedente verificato il nome OIDC può avere un ordine diverso da GLPI.
+  return m && (richiedente || m[1].trim() === String(nome || '').trim()) ? t.slice(m[0].length).trim() : t;
+};
 
 function iniziali(nome) {
   return String(nome || '').trim().split(/\s+/).slice(0, 2).map((p) => p.charAt(0).toUpperCase()).join('') || '?';
@@ -79,16 +85,22 @@ function componi(raw, userId) {
     const st = Number(s.status); // 2 in attesa, 3 approvata, 4 rifiutata
     if ((st === 3 || st === 4) && dataValida(s.date_approval)) {
       const quando = ms(s.date_approval);
-      const chi = persona(s.users_id_approval) || chiApre;
-      // il followup scritto insieme all'approvazione/rifiuto diventa il testo dell'evento, non un messaggio a parte
-      const f = followups.find((x) => !usati.has(x) && Math.abs(ms(x.date_creation || x.date) - quando) <= 5000 && num(x.users_id) === chi);
+      const vicini = followups.filter((x) => !usati.has(x) && Math.abs(ms(x.date_creation || x.date) - quando) <= 5000);
+      // GLPI 11 registra l'approvazione con l'account della sessione API anche
+      // quando il followup ha l'autore corretto. Riconciliare solo la risposta
+      // pubblica del richiedente con il testo esatto dell'esito scritto dal server.
+      const testoEsito = st === 3 ? 'Il richiedente conferma che il problema è risolto.' : "L'utente segnala che il problema non è risolto.";
+      const risposta = !richiedenti.includes(num(s.users_id_approval)) && vicini.find((x) => richiedenti.includes(num(x.users_id)) && senzaFirma(daHtml(x.content), (users[num(x.users_id)] || {}).nome, true) === testoEsito);
+      const chi = persona(risposta ? risposta.users_id : s.users_id_approval) || chiApre;
+      // Il followup dell'esito diventa il testo dell'evento, non un messaggio doppio.
+      const f = risposta || vicini.find((x) => num(x.users_id) === chi);
       if (f) usati.add(f);
-      eventi.push({ tipo: st === 3 ? 'approvazione' : 'rifiuto', chi, data: dataValida(s.date_approval), testo: f ? senzaFirma(daHtml(f.content)) : '' });
+      eventi.push({ tipo: st === 3 ? 'approvazione' : 'rifiuto', chi, data: dataValida(s.date_approval), testo: f ? senzaFirma(daHtml(f.content), (users[num(f.users_id)] || {}).nome, richiedenti.includes(num(f.users_id))) : '' });
     }
   }
   for (const f of followups) {
     if (usati.has(f)) continue;
-    eventi.push({ tipo: 'messaggio', chi: persona(f.users_id), data: dataValida(f.date_creation || f.date), testo: senzaFirma(daHtml(f.content)) });
+    eventi.push({ tipo: 'messaggio', chi: persona(f.users_id), data: dataValida(f.date_creation || f.date), testo: senzaFirma(daHtml(f.content), (users[num(f.users_id)] || {}).nome, richiedenti.includes(num(f.users_id))) });
   }
   for (const k of tasks) {
     const testo = daHtml(k.content);

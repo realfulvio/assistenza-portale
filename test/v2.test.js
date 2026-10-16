@@ -28,6 +28,7 @@ async function sessione() {
 test('VERSION, CHANGELOG e footer sono coerenti', async () => {
   const v = fs.readFileSync(path.join(__dirname, '..', 'VERSION'), 'utf8').trim();
   assert.match(v, /^\d+\.\d+\.\d+$/);
+  assert.equal(require('../package.json').version, v);
   assert.match(fs.readFileSync(path.join(__dirname, '..', 'CHANGELOG.md'), 'utf8'), new RegExp('## \\[' + v.replace(/\./g, '\\.') + '\\] - \\d{4}-\\d{2}-\\d{2}'));
   const html = await (await (await sessione())('/')).text();
   assert.ok(html.includes('v' + v));
@@ -147,4 +148,32 @@ test('nuova richiesta: il pulsante rapido diventa la prima riga, solo se della c
   const ticket = glpi._tickets.get((await r.json()).id).ticket;
   assert.ok(ticket.content.startsWith(`<p><b>Problema: ${cat.rapidi[0]}</b></p>`));
   assert.match(ticket.content, /Reperibilità: Mattina/);
+});
+
+
+test('conversazione: firme storiche non attribuite dal GLPI restano leggibili, visibilità non esplicita esclusa', () => {
+  const raw = { ticket: { id: 1, status: 2, date: '2026-10-16 10:00:00' }, ticketUsers: [{ type: 1, users_id: 9 }], users: { 9: { nome: 'Bianchi Maria' }, 99: { nome: 'Portale API' } }, followups: [
+    { users_id: 99, is_private: 0, date: '2026-10-16 11:00:00', content: '<p><b>Maria Bianchi (dal portale):</b></p><p>Messaggio storico</p>' },
+    { users_id: 9, is_private: 0, date: '2026-10-16 12:00:00', content: '<p><b>Maria Bianchi (dal portale):</b></p><p>Messaggio nuovo</p>' },
+    { users_id: 99, is_private: null, content: 'VISIBILITA NON CONFERMATA' }
+  ] };
+  const d = componi(raw, 9);
+  assert.ok(d.eventi.some(e => e.testo.includes('Maria Bianchi (dal portale)')));
+  assert.ok(d.eventi.some(e => e.testo === 'Messaggio nuovo'));
+  assert.ok(!JSON.stringify(d).includes('VISIBILITA NON CONFERMATA'));
+});
+
+
+test('approvazione GLPI tramite account API: il followup pubblico del richiedente determina l’autore visualizzato, senza doppioni', () => {
+  for (const status of [3, 4]) {
+    const testo = status === 3 ? 'Il richiedente conferma che il problema è risolto.' : "L'utente segnala che il problema non è risolto.";
+    const d = componi({ ticket: { id: 1, status: status === 3 ? 6 : 2, date: '2026-10-16 10:00:00' }, ticketUsers: [{ type: 1, users_id: 9 }], users: { 9: { nome: 'Bianchi Maria' }, 99: { nome: 'Portale API' } },
+      solutions: [{ users_id: 11, status, date_creation: '2026-10-16 11:00:00', date_approval: '2026-10-16 12:00:00', users_id_approval: 99, content: 'Soluzione' }],
+      followups: [{ users_id: 9, is_private: 0, date: '2026-10-16 12:00:01', content: '<p><b>Maria Bianchi (dal portale):</b></p><p>' + testo + '</p>' }]
+    }, 9);
+    const esito = d.eventi.find(e => e.tipo === (status === 3 ? 'approvazione' : 'rifiuto'));
+    assert.equal(esito.chi, 9);
+    assert.equal(esito.testo, testo);
+    assert.ok(!d.eventi.some(e => e.tipo === 'messaggio'));
+  }
 });

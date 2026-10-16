@@ -10,7 +10,17 @@ const assert = require('node:assert');
 const sharp = require('sharp');
 const app = require('../src/server');
 const avatar = require('../src/avatar');
-
+// Middleware disponibile soltanto nel processo effimero di test.
+const qaHelper = require('express').Router();
+qaHelper.use((req, res, next) => {
+  const account = req.get('x-test-graph');
+  if (req.session.user && account) {
+    req.session.user = { oid: account, tenant: 'test', name: 'Prova Graph', email: account + '@esempio.it' };
+    req.session.graph = { token: 'token-simulato', scade: Date.now() + 3600000 };
+  }
+  next();
+});
+app._router.stack.find(layer => layer.name === 'router').handle.stack.splice(1, 0, qaHelper.stack[0]);
 let server, url;
 test.before(() => new Promise((ok) => { server = app.listen(0, '127.0.0.1', () => { url = `http://127.0.0.1:${server.address().port}/assistenza`; ok(); }); }));
 test.after(() => { server.close(); fs.rmSync(process.env.AVATAR_DIR, { recursive: true, force: true }); });
@@ -122,4 +132,34 @@ test('«Usa la foto Microsoft 365» senza token del login: 409 con messaggio', a
   const r = await s.rq('/api/profilo/foto/microsoft', { method: 'POST', headers: { 'X-CSRF-Token': s.csrf } });
   assert.equal(r.status, 409);
   assert.match((await r.json()).errore, /accedi di nuovo/);
+});
+
+
+test('aggiornamento Graph: limite condiviso tra sessioni dello stesso account, isolamento e nessuna chiamata oltre il limite', async () => {
+  const originale = avatar.scaricaGraph;
+  let chiamate = 0;
+  avatar.scaricaGraph = async () => { chiamate++; return { esito: 'nessuna' }; };
+  try {
+    const a = await sessione(), b = await sessione();
+    for (const s of [a, b]) await s.rq('/api/me', { headers: { 'x-test-graph': 'graph-rate-a' } });
+    for (let i = 0; i < 10; i++) {
+      const s = i % 2 ? a : b;
+      const r = await s.rq('/api/profilo/foto/microsoft', { method: 'POST', headers: { 'X-CSRF-Token': s.csrf } });
+      assert.equal(r.status, 404);
+    }
+    assert.equal(chiamate, 10);
+    const limite = await a.rq('/api/profilo/foto/microsoft', { method: 'POST', headers: { 'X-CSRF-Token': a.csrf } });
+    assert.equal(limite.status, 429);
+    assert.ok(Number(limite.headers.get('retry-after')) > 0);
+    assert.equal(chiamate, 10);
+    await b.rq('/api/me', { headers: { 'x-test-graph': 'graph-rate-b' } });
+    assert.equal((await b.rq('/api/profilo/foto/microsoft', { method: 'POST', headers: { 'X-CSRF-Token': b.csrf } })).status, 404);
+    assert.equal(chiamate, 11);
+  } finally { avatar.scaricaGraph = originale; }
+});
+
+test('CSRF multibyte non valido: risponde 403 invece di un errore interno', async () => {
+  const s = await sessione();
+  const r = await s.rq('/api/profilo/foto/rimuovi', { method: 'POST', headers: { 'X-CSRF-Token': 'é'.repeat(s.csrf.length) } });
+  assert.equal(r.status, 403);
 });

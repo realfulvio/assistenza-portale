@@ -71,7 +71,8 @@ function csrfToken(req) {
 }
 function csrf(req, res, next) {
   const t = req.get('x-csrf-token') || '';
-  const ok = req.session.csrf && t.length === req.session.csrf.length && crypto.timingSafeEqual(Buffer.from(t), Buffer.from(req.session.csrf));
+  const dato = Buffer.from(t), atteso = Buffer.from(req.session.csrf || '');
+  const ok = atteso.length > 0 && dato.length === atteso.length && crypto.timingSafeEqual(dato, atteso);
   if (!ok) return res.status(403).json({ errore: 'Sessione non valida. Ricarica la pagina e riprova.' });
   next();
 }
@@ -120,7 +121,7 @@ api.get('/suggerimenti', serveLogin, (req, res) => {
 // --- Foto profilo: sempre e solo quella dell'utente in sessione (mai un id dal client)
 const limiteFoto = rateLimit({
   windowMs: 60 * 60_000, limit: 10, standardHeaders: true, legacyHeaders: false,
-  keyGenerator: (req) => 'foto:' + req.session.user.email,
+  keyGenerator: (req) => 'foto:' + preferences.key(req.session.user),
   handler: (req, res) => res.status(429).json({ errore: 'Hai cambiato foto molte volte: riprova tra un po\'.' })
 });
 const caricaFoto = multer({ storage: multer.memoryStorage(), limits: { files: 1, fileSize: avatar.opzioni.maxByte, fields: 0, parts: 2 } }).single('foto');
@@ -159,7 +160,7 @@ api.post('/profilo/foto', corpoFoto, serveLogin, csrf, limiteFoto, (req, res, ne
 api.post('/profilo/foto/rimuovi', serveLogin, csrf, (req, res, next) => {
   try { avatar.rimuovi(req.session.user); res.json(infoFoto(req)); } catch (e) { next(e); }
 });
-api.post('/profilo/foto/microsoft', serveLogin, csrf, async (req, res, next) => {
+api.post('/profilo/foto/microsoft', serveLogin, csrf, limiteFoto, async (req, res, next) => {
   try {
     const g = req.session.graph;
     if (!g || !g.token || g.scade < Date.now() + 60_000) return res.status(409).json({ errore: 'Per usare la foto di Microsoft 365 esci e accedi di nuovo, poi riprova.' });

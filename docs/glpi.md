@@ -26,6 +26,7 @@ Crea un profilo dedicato, ad esempio **«Portale (API)»**, interfaccia *Standar
 |---|---|---|
 | Ticket | leggere tutti, creare, aggiornare | creare i ticket e leggere quelli dei richiedenti |
 | Followup (Seguiti) | vedere i pubblici, aggiungere a tutti i ticket | timeline e messaggi dal portale (mai le note private) |
+| Attività dei ticket (Task) | vedere le pubbliche (`SEEPUBLIC`) | leggere le attività pubbliche nella conversazione; nessun diritto sulle attività private necessario |
 | Utenti | leggere, creare, aggiornare | trovare il richiedente per e-mail e crearlo se manca |
 | Documenti | leggere, creare, aggiornare | allegati |
 | Categorie ITIL, Profili | leggere | categorie e profilo Self-Service |
@@ -37,6 +38,17 @@ Poi crea l'utente di servizio (es. `portale-api`) con questo profilo sull'entit�
 curl -s -H "App-Token: <APP_TOKEN>" -H "Authorization: user_token <USER_TOKEN>" http://127.0.0.1/apirest.php/initSession
 ```
 Risposta attesa: `{"session_token":"..."}`. Errori tipici: `ERROR_WRONG_APP_TOKEN_PARAMETER` (app token o IP del client API), `ERROR_GLPI_LOGIN_USER_TOKEN` (token utente).
+
+Con GLPI 11.0.8 il diritto di vedere i ticket non basta per leggere le attività:
+il profilo API deve avere anche **vedere le attività pubbliche**. Dopo l'aggiornamento,
+controlla nel portale un ticket con un'attività pubblica e una privata: deve comparire
+solo la pubblica. Non concedere il diritto di vedere le private per questo scopo.
+
+Il portale scrive messaggi ed esiti pubblici con `users_id` del richiedente verificato
+lato server. Nell'audit delle soluzioni GLPI 11 continua a registrare l'account
+della sessione API per approvazioni/rifiuti: la conversazione del portale riconcilia
+l'esito con il followup pubblico corrispondente del richiedente. Non modifica né
+impersona la sessione GLPI e non riscrive lo storico esistente.
 
 ## 4. Profilo Self-Service
 

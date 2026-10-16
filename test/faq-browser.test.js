@@ -16,6 +16,7 @@ function trovaChrome() {
     'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
     '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser',
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'];
+  try { c.push(require('playwright').chromium.executablePath()); } catch { /* browser opzionale */ }
   return c.find((p) => p && fs.existsSync(p));
 }
 let puppeteer = null;

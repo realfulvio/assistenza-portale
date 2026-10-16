@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.join(__dirname, '..');
-const salta = new Set(['node_modules', '.git', 'screenshots', 'docs', 'data']);
+const salta = new Set(['node_modules', '.git', 'screenshots', 'docs', 'data', '.cache', 'artifacts']);
 const file = [];
 (function giro(dir) {
   for (const n of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -25,6 +25,10 @@ for (const f of file) {
     errori++;
     console.error('ERRORE in', path.relative(root, f), '\n', String(e.stderr || e.message).trim());
   }
+}
+for (const script of ['genera-temi.js', 'genera-leggibilita.js']) {
+  try { execFileSync(process.execPath, [path.join(__dirname, script), '--verifica'], { stdio: 'pipe' }); }
+  catch (e) { errori++; console.error(String(e.stdout || '') + String(e.stderr || e.message)); }
 }
 // Contenuto delle guide: id, campi obbligatori, immagini, collegamenti
 const guide = require('./verifica-faq').verifica(root);

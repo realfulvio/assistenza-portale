@@ -26,3 +26,16 @@ L'installazione di produzione non usa questo repository così com'è: è una lin
 - Il rollback automatico dello script di rilascio si attivava due volte; corretto, ma da provare.
 - Nella barra «Live» e in altri punti restano colori fissi: verificare il contrasto sui temi scuri.
 - Riepilogo PDF: i font sono i WOFF di Titillium Web in `src/fonti/` (licenza SIL OFL, come quelli in `public/fonts/`).
+
+
+## Ripresa sul minipc (16 ottobre 2026)
+
+Il lavoro di stabilizzazione continua nel ramo `fix/v2-stabilizzazione` nella copia
+`/srv/dev/projects/assistenza-portale` sul minipc. I problemi riproducibili e le
+verifiche sono descritti nel [report di stabilizzazione](v2-stabilizzazione.md).
+La v2 resta non pubblicata e la PR originale resta sospesa: i risultati sul
+repository non dimostrano che il porting della linea Express 5/MSAL in produzione
+sia corretto. Il repository non contiene lo script di quel porting/rollback.
+Prima del rilascio serve ancora il collaudo della copia effettiva di destinazione,
+con accesso Entra e GLPI reali. Il nuovo comando `verifica:rilascio` può controllare
+in sola lettura l'HTML e le risorse servite da quella copia.

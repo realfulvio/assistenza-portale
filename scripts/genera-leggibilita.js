@@ -22,4 +22,8 @@ function extract(source) {
   }
   return result;
 }
-fs.writeFileSync(path.join(directory, 'readability.css'), '/* Generato da scripts/genera-leggibilita.js; non modificare a mano. */\n' + extract(css));
+const generated = '/* Generato da scripts/genera-leggibilita.js; non modificare a mano. */\n' + extract(css);
+const target = path.join(directory, 'readability.css');
+if (process.argv.includes('--verifica')) {
+  if (fs.readFileSync(target, 'utf8') !== generated) { console.error('readability.css non aggiornato: eseguire node scripts/genera-leggibilita.js'); process.exitCode = 1; }
+} else fs.writeFileSync(target, generated);

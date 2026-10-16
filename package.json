@@ -1,13 +1,13 @@
 {
   "name": "assistenza-portale",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Portale web per aprire e seguire richieste di assistenza informatica su GLPI, con accesso OpenID Connect (es. Microsoft Entra ID). Pensato per Comuni ed Enti pubblici.",
   "author": "Luca Accorsi (https://github.com/realfulvio)",
   "license": "EUPL-1.2",
   "private": true,
   "main": "src/server.js",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0"
   },
   "repository": {
     "type": "git",
@@ -24,10 +24,11 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js",
+    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js test/rilascio.test.js test/glpi-client.test.js test/pdf-layout.test.js",
     "test:aspetto": "node scripts/test-aspetto-browser.js",
     "lint": "node scripts/lint.js",
-    "template-mail": "node scripts/genera-template-mail.js"
+    "template-mail": "node scripts/genera-template-mail.js",
+    "verifica:rilascio": "node scripts/verifica-rilascio.js"
   },
   "dependencies": {
     "express": "^4.22.3",
@@ -38,9 +39,11 @@
     "multer": "^2.4.0",
     "openid-client": "^5.7.1",
     "pdfkit": "^0.17.2",
-    "sharp": "^0.34.4"
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "playwright": "^1.64.1",
     "puppeteer-core": "^25.14.0"
   }
 }

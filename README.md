@@ -90,7 +90,7 @@ Schermate acquisite dalla **demo locale**, con «Comune di Esempio», persone e 
 
 ## Prova la demo sul tuo computer
 
-La demo si avvia **sul tuo computer**, con un accesso simulato e richieste inventate: non servono account Microsoft né un server GLPI. Non è un servizio pubblico online. Serve solo [Node.js](https://nodejs.org/) 20 o superiore.
+La demo si avvia **sul tuo computer**, con un accesso simulato e richieste inventate: non servono account Microsoft né un server GLPI. Non è un servizio pubblico online. Serve solo [Node.js](https://nodejs.org/) 20.19 o superiore.
 
 ```bash
 git clone https://github.com/realfulvio/assistenza-portale.git
@@ -99,7 +99,7 @@ npm install
 npm run demo
 ```
 
-Apri **http://127.0.0.1:3000/assistenza/** e premi «Entra nella demo». Trovi tre richieste di esempio e puoi aprirne di nuove. I dati spariscono quando chiudi il programma (Ctrl+C).
+Apri **http://127.0.0.1:3000/assistenza/** e premi «Entra nella demo». Trovi tre richieste di esempio e puoi aprirne di nuove. I ticket simulati spariscono quando chiudi il programma (Ctrl+C). Preferenze e foto della demo restano invece nelle rispettive directory locali (`data/` o percorsi configurati).
 
 *Verifica effettuata*: demo avviata su Windows 11 con Node 22; apertura, invio di una richiesta sintetica e consultazione delle richieste verificati nel browser. Le notifiche e-mail e un backend GLPI reale non sono inclusi nella demo.
 
@@ -116,7 +116,7 @@ Apri **http://127.0.0.1:3000/assistenza/** e premi «Entra nella demo». Trovi t
 | Un server Linux | Debian 12 o 13 (provato su Debian 13). Può essere lo stesso server di GLPI. |
 | GLPI 11 con MariaDB | Provato con GLPI 11.0.8 e MariaDB 11.8. GLPI 10 non è stato provato. |
 | Apache | Come reverse proxy HTTPS (va bene anche lo stesso Apache di GLPI). |
-| Node.js 20 o superiore | Su Debian 13 è nel pacchetto `nodejs`. |
+| Node.js 20.19 o superiore | Su Debian 13 è nel pacchetto `nodejs`. |
 | Account di lavoro con OpenID Connect | Microsoft 365 / Entra ID (esempio principale) o un altro provider OIDC. |
 | Una casella e-mail per le notifiche | Invio diretto Microsoft 365 oppure un server SMTP. |
 | Un nome DNS e un certificato HTTPS | Es. `portale.tuoente.it`. Microsoft Entra accetta solo indirizzi https. |
@@ -182,7 +182,7 @@ No. Il portale cerca l'utente in GLPI per e-mail e, se non c'è, lo crea con il 
 Sì: sono file JSON (vedi [docs/personalizzazione.md](docs/personalizzazione.md)).
 
 **Il portale salva dati?**
-No, tutto resta in GLPI. Gli allegati passano in memoria e vanno direttamente a GLPI.
+Richieste, utenti e allegati restano in GLPI; gli allegati passano soltanto in memoria. Dalla v2 il portale conserva anche le preferenze personali e le foto profilo in directory locali persistenti (`PREFERENCES_DIR` e `AVATAR_DIR`), da includere nei [backup](docs/aggiornamento-e-backup.md).
 
 **Funziona con GLPI 10?**
 Non è stato provato. L'API REST usata (`/apirest.php`) esiste anche in GLPI 10, ma alcuni dettagli potrebbero cambiare.

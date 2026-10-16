@@ -8,6 +8,10 @@ After=network.target
 [Service]
 User=portale
 WorkingDirectory=/opt/portale-assistenza
+StateDirectory=portale-assistenza
+StateDirectoryMode=0700
+Environment=PREFERENCES_DIR=/var/lib/portale-assistenza/preferences
+Environment=AVATAR_DIR=/var/lib/portale-assistenza/avatars
 EnvironmentFile=/opt/portale-assistenza/.env
 ExecStart=/usr/bin/node src/server.js
 Restart=always
