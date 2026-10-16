@@ -57,7 +57,7 @@
   }
 
   // ---------- viste ----------
-  const VISTE = ['nuova', 'conferma', 'richieste', 'dettaglio', 'faq', 'contatti'];
+  const VISTE = ['nuova', 'conferma', 'richieste', 'dettaglio', 'faq', 'contatti', 'profilo'];
   function vai(v, navId) {
     VISTE.forEach((x) => { $('v-' + x).hidden = x !== v; });
     document.querySelectorAll('#nav a[href^="#"]').forEach((a) => a.removeAttribute('aria-current'));
@@ -74,6 +74,7 @@
     else if (h.startsWith('richiesta/')) { vai('dettaglio', 'richieste'); await caricaDettaglio(h.split('/')[1]); }
     else if (h === 'faq' || h.startsWith('faq/')) { vai('faq'); await caricaFaq(FaqLogica.idDaHash(h)); }
     else if (h === 'contatti') { vai('contatti'); }
+    else if (h === 'profilo') { vai('profilo'); }
     else location.hash = '#nuova';
   }
 
@@ -450,6 +451,7 @@
     $('schermata').hidden = true; $('app').hidden = false;
     for (const id of ['nav', 'slim-richieste', 'slim-utente', 'esci']) $(id).hidden = false;
     $('slim-utente').textContent = me.nome; $('slim-utente').title = me.email;
+    $('profilo-nome').textContent = me.nome; $('profilo-email').textContent = me.email;
     disegnaTile(); inizializzaForm();
     $('aiuto-all').textContent = `Fino a ${me.limiti.maxFiles} file, ${Math.round(me.limiti.maxFileBytes / 1048576)} MB ciascuno (immagini, PDF, Word, Excel, testo, zip, e-mail).`;
     try { $('telefono').value = localStorage.getItem('tel') || ''; } catch { /* ignorato */ }

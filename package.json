@@ -24,7 +24,7 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js",
+    "test": "node --test test/e2e.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js"
   },
@@ -35,7 +35,8 @@
     "helmet": "^8.3.0",
     "memorystore": "^1.6.8",
     "multer": "^2.4.0",
-    "openid-client": "^5.7.1"
+    "openid-client": "^5.7.1",
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "puppeteer-core": "^25.14.0"

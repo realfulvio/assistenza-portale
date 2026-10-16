@@ -35,6 +35,7 @@ Molti uffici chiedono assistenza al servizio informatico **per telefono o per ma
 - vede lo stato in **«Le mie richieste»** (In attesa, In lavorazione, In sospeso, Risolta, Chiusa) e può aggiungere messaggi;
 - quando il ticket è risolto, dalla mail può rispondere **«Risolto, grazie»** o **«Non è risolto, riapri»**;
 - i tecnici lavorano in **GLPI**, che resta il loro strumento: il dipendente non entra mai in GLPI;
+- in **«Il mio profilo»** può mettere una foto personale oppure usare quella di Microsoft 365 (altrimenti si vedono le iniziali);
 - sotto il menu una sottile **barra «Live»** mostra a tutti i dipendenti il lavoro del servizio: richieste del periodo, risolte, in lavorazione, tempo medio di presa in carico (solo numeri aggregati, aggiornati ogni 5 minuti).
 
 È pensato per chi usa poco il computer: testi semplici, caselle grandi e colorate, niente gergo tecnico.
