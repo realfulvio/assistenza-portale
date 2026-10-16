@@ -159,7 +159,7 @@ function genera(d, chi) {
       do {
         doc.font('R').fontSize(px(13.5));
         const opzioni = { width: wC - px(8), lineGap: 1 };
-        const minimo = px(42) + (resto ? doc.heightOfString('Ag', opzioni) : 0);
+        const minimo = px(42) + (resto || multiGiorno ? doc.heightOfString('Ag', opzioni) : 0);
         if (y + minimo > fondo()) { doc.addPage(); y = doc.page.margins.top; intestazione(); }
         doc.font('R').fontSize(px(13.5));
         const spazio = fondo() - y - px(42);
@@ -179,9 +179,13 @@ function genera(d, chi) {
         }
         const testo = resto.slice(0, quanti).trimEnd();
         resto = resto.slice(quanti).trimStart();
-        const h = px(42) + (testo ? doc.heightOfString(testo, opzioni) : 0);
+        // Su piu' giorni l'ora va su due righe (gg/mm e hh:mm): la riga deve contenerle entrambe, anche senza testo
+        doc.font('S').fontSize(px(13.5));
+        const altezzaOra = multiGiorno ? px(11) + 2 * doc.heightOfString('Ag') + px(10) : 0;
+        doc.font('R').fontSize(px(13.5));
+        const h = Math.max(altezzaOra, px(42) + (testo ? doc.heightOfString(testo, opzioni) : 0));
         const ruolo = e.chi ? d.persone[e.chi].ruolo : 'sistema';
-        doc.font('S').fontSize(px(13.5)).fillColor(C.grigio2).text(multiGiorno ? `${gg(e.data).slice(0, 5)} ${hhmm(e.data)}` : hhmm(e.data), L, y + px(11), { width: col[0] - px(4), lineBreak: false });
+        doc.font('S').fontSize(px(13.5)).fillColor(C.grigio2).text(multiGiorno ? `${gg(e.data).slice(0, 5)}\n${hhmm(e.data)}` : hhmm(e.data), L, y + px(11), { width: col[0] - px(4) });
         doc.circle(xA + px(8 + 11), y + px(11 + 10), px(11)).fill(ruolo === 'tecnico' ? '#f3dc93' : ruolo === 'sistema' ? C.pill : '#cfe3f3');
         icona(doc, ruolo === 'tecnico' ? I.wrench : ruolo === 'sistema' ? I.sys : I.user, xA + px(8 + 5), y + px(11 + 4), px(12), C.scuro, 2.6);
         doc.font('B').fontSize(px(13.5)).fillColor(C.scuro).text(e.chi ? nome(e.chi) : 'Sistema', xA + px(8 + 30), y + px(11), { width: col[1] - px(44), lineBreak: false, ellipsis: true });
