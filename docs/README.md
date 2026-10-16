@@ -32,3 +32,5 @@ Le guide sul flusso dei ticket e sul CSS riguardano il backend GLPI, senza modif
 
 - [Report delle correzioni e delle prove del 16 ottobre 2026](v2-stabilizzazione.md).
 - [Note del precedente rollback e vincoli prima del rilascio](v2-sospesa.md).
+- [Produzione e repository: differenze, riproduzione del guasto e strada scelta](produzione-vs-repo.md).
+- [Fase B: rilascio in produzione con staging, verifiche e rollback automatico](fase-b.md).

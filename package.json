@@ -24,11 +24,12 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js test/rilascio.test.js test/glpi-client.test.js test/pdf-layout.test.js",
+    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js test/rilascio.test.js test/glpi-client.test.js test/pdf-layout.test.js test/accesso.test.js",
     "test:aspetto": "node scripts/test-aspetto-browser.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js",
-    "verifica:rilascio": "node scripts/verifica-rilascio.js"
+    "verifica:rilascio": "node scripts/verifica-rilascio.js",
+    "verifica:deploy": "node scripts/verifica-deploy.js"
   },
   "dependencies": {
     "express": "^4.22.3",
