@@ -44,6 +44,11 @@ il profilo API deve avere anche **vedere le attività pubbliche**. Dopo l'aggior
 controlla nel portale un ticket con un'attività pubblica e una privata: deve comparire
 solo la pubblica. Non concedere il diritto di vedere le private per questo scopo.
 
+Se il diritto manca la pagina della richiesta funziona lo stesso (senza le attività) e
+il log del servizio mostra, al massimo una volta l'ora:
+`avviso GLPI: lettura attività pubbliche (TicketTask) non riuscita (401): lettura negata, controlla i diritti del profilo API`.
+Per controllarlo: `journalctl -u portale-assistenza | grep 'avviso GLPI'`.
+
 Il portale scrive messaggi ed esiti pubblici con `users_id` del richiedente verificato
 lato server. Nell'audit delle soluzioni GLPI 11 continua a registrare l'account
 della sessione API per approvazioni/rifiuti: la conversazione del portale riconcilia

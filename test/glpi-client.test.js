@@ -98,3 +98,20 @@ test('client HTTP: risposta persa dopo un POST non ripete un messaggio forse gi�
     assert.equal(calls.filter(c => c.method === 'POST').length, 1);
   } finally { interrompiPost = false; }
 });
+
+test('client HTTP: attività pubbliche negate dal profilo API, pagina utilizzabile e un solo avviso nel log', async () => {
+  const avvisi = [];
+  const warn = console.warn;
+  console.warn = (...a) => avvisi.push(a.join(' '));
+  taskStatus = 401;
+  try {
+    const d = await glpi.dettaglio(9, 42);
+    assert.ok(d && d.eventi.length, 'il dettaglio resta disponibile');
+    assert.ok(!d.eventi.some(e => e.tipo === 'attivita'));
+    await glpi.dettaglio(9, 42);
+    const mie = avvisi.filter(t => t.includes('TicketTask'));
+    assert.equal(mie.length, 1, 'avviso ripetuto al massimo una volta l’ora');
+    assert.match(mie[0], /lettura negata, controlla i diritti del profilo API/);
+    assert.ok(!/Maria|Bianchi|Ticket di prova/.test(mie[0]), 'nessun dato del ticket nel log');
+  } finally { console.warn = warn; taskStatus = 200; }
+});

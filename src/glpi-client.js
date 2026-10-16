@@ -196,7 +196,21 @@ async function utentiInBlocco(ids) {
   return out;
 }
 
-const facoltativo = async (p) => { try { return (await p) || []; } catch { return []; } };
+// Letture accessorie del dettaglio (soluzioni, attivita' pubbliche, storico): se GLPI le nega la pagina resta
+// utilizzabile, ma il log lo segnala (al massimo una volta l'ora per tipo, senza dati del ticket o dell'utente).
+// Caso tipico: il profilo dell'utente API senza il diritto «Attività > Vedere le attività pubbliche» (docs/glpi.md).
+const ultimoAvviso = new Map();
+async function facoltativo(p, cosa) {
+  try { return (await p) || []; } catch (e) {
+    const adesso = Date.now();
+    if (adesso - (ultimoAvviso.get(cosa) || 0) >= 3600_000) {
+      ultimoAvviso.set(cosa, adesso);
+      const negato = [401, 403].includes(e.status) || /RIGHT/.test(e.message);
+      console.warn(new Date().toISOString(), `avviso GLPI: lettura ${cosa} non riuscita (${e.status || e.name})` + (negato ? ': lettura negata, controlla i diritti del profilo API (docs/glpi.md)' : '') + '. La richiesta viene mostrata senza questi dati.');
+    }
+    return [];
+  }
+}
 
 // Dati grezzi del dettaglio (solo dopo il controllo di proprieta'). La composizione e' in ticket-dettaglio.js
 async function dettaglioGrezzo(userId, ticketId) {
@@ -204,9 +218,9 @@ async function dettaglioGrezzo(userId, ticketId) {
   if (!base) return null;
   const [followups, solutions, tasks, logs] = await Promise.all([
     elencoCompleto(`/Ticket/${ticketId}/ITILFollowup`),
-    facoltativo(elencoCompleto(`/Ticket/${ticketId}/ITILSolution`)),
-    facoltativo(elencoCompleto(`/Ticket/${ticketId}/TicketTask`)),
-    facoltativo(elencoCompleto(`/Ticket/${ticketId}/Log`))
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/ITILSolution`), 'soluzioni (ITILSolution)'),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/TicketTask`), 'attività pubbliche (TicketTask)'),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/Log`), 'storico (Log)')
   ]);
   const pub = (a) => (a || []).filter((x) => [0, '0', false].includes(x.is_private));
   const fPub = pub(followups), tPub = pub(tasks);
