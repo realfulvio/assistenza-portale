@@ -119,7 +119,7 @@ Tutto quello che riguarda il tuo ente sta in **un solo file**, `config/ente.json
 - nome dell'ente, nome del servizio, sottotitolo, e-mail e telefono per le urgenze, link «Torna al sito»;
 - logo/stemma (metti il file in `public/img/` e indica il nome);
 - colori (predefiniti: blu `#005e8e`, barra `#001a4d`, sfondo `#f2f2f2`);
-- barra «Live» dei contatori (`barraLive`: attiva, periodo `anno` / `mese` / `da_data`, durata della cache).
+- barra «Live» dei contatori (`barraLive`: attiva, periodo `giorni` (predefinito: ultimi 30) / `anno` / `mese` / `da_data`, durata della cache).
 
 Le **categorie** dei problemi (nome, descrizione, icona, colore, categoria GLPI collegata) stanno in `config/categorie.json`; le **domande frequenti** in `content/faq.json`. → [docs/personalizzazione.md](docs/personalizzazione.md)
 
