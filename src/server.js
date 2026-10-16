@@ -81,8 +81,16 @@ function serveLogin(req, res, next) {
   next();
 }
 
-router.use('/auth', rateLimit({ windowMs: 60_000, limit: 30, standardHeaders: true, legacyHeaders: false }));
+const limiteAccesso = rateLimit({ windowMs: 60_000, limit: 30, standardHeaders: true, legacyHeaders: false });
+router.use('/auth', limiteAccesso);
 router.use('/auth', (req, res, next) => (req.method === 'POST' ? csrf(req, res, next) : next()), auth);
+// Indirizzo di ritorno dell'accesso: se quello gia' registrato nell'app Entra (OIDC_REDIRECT_URI) non e' <base>/auth/callback,
+// per esempio dopo la migrazione da un'altra installazione, la stessa gestione risponde anche su quel percorso:
+// non serve cambiare la registrazione dell'app.
+const ritorno = (() => { try { return new URL(config.oidc.redirectUri).pathname.replace(/\/+$/, ''); } catch { return ''; } })();
+if (ritorno && ritorno !== config.base + '/auth/callback' && ritorno.startsWith(config.base + '/')) {
+  router.get(ritorno.slice(config.base.length), limiteAccesso, (req, res, next) => { req.url = '/callback' + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''); auth(req, res, next); });
+}
 
 // --- API
 const api = express.Router();
