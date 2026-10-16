@@ -20,7 +20,7 @@ Legenda: **[testato]** = provato dall'autore su Debian 13 / GLPI 11.0.8; **[non 
 
 ```bash
 sudo apt install nodejs npm      # [testato su Debian 13: Node 20.19] (npm serve solo per scaricare le dipendenze)
-node -v                          # deve essere 20 o superiore
+node -v                          # deve essere almeno 20.19 (consigliato Node 22 o superiore)
 ```
 
 ## 2. Utente di sistema e cartella
@@ -37,7 +37,7 @@ cd /tmp
 git clone https://github.com/realfulvio/assistenza-portale.git        # [non testato finche' il repository non e' pubblico]
 sudo cp -r assistenza-portale/. /opt/portale-assistenza/
 cd /opt/portale-assistenza
-sudo npm install --omit=dev                                           # [testato in locale]
+sudo npm ci --omit=dev                                           # [testato in locale]
 ```
 
 In alternativa scarica lo ZIP da GitHub (*Code > Download ZIP*) e copialo con `scp`.
@@ -67,6 +67,12 @@ systemctl status portale-assistenza                 # deve dire "active (running
 curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000/assistenza/   # deve rispondere 200
 ```
 
+L'unità v2 crea `/var/lib/portale-assistenza` con proprietario `portale` e permessi
+0700 tramite `StateDirectory`. Preferenze e foto sono scrivibili qui anche con
+`ProtectSystem=strict`; non serve un drop-in per l'unità standard. Controllare che
+`.env` non imposti percorsi diversi. Per directory personalizzate, preparare
+proprietario e permessi e aggiungere `ReadWritePaths` per quei soli percorsi.
+
 **Errore tipico**: il servizio si riavvia di continuo. Guarda il log:
 ```bash
 sudo journalctl -u portale-assistenza -n 30
@@ -82,7 +88,10 @@ Vedi [apache-reverse-proxy.md](apache-reverse-proxy.md).
 1. Apri `https://<tuo-portale>/assistenza/` e accedi.
 2. Apri una richiesta con uno screenshot, annota il numero.
 3. In GLPI controlla: richiedente, categoria, gruppo assegnato, allegato, mail ricevuta.
-4. Elimina il ticket di prova.
+4. Salvare un tema, uscire e rientrare: la scelta deve restare. Caricare e rimuovere una foto.
+5. Controllare nel portale un'attività pubblica di GLPI e l'assenza di una privata.
+6. Eseguire `npm run verifica:rilascio -- http://127.0.0.1:3000/assistenza/` e ripetere sull'URL HTTPS; controllare visivamente desktop/mobile e PDF.
+7. Eliminare il ticket di prova e predisporre il [backup](aggiornamento-e-backup.md) anche dei profili.
 
 ## Aggiornare il portale
 

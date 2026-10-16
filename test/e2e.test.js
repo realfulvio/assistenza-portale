@@ -103,7 +103,7 @@ test("personalizzazione dell'ente: segnaposto sostituiti e colori serviti", asyn
   assert.ok(!/\{\{[\w.]+\}\}/.test(html), 'segnaposto non sostituiti');
   assert.ok(html.includes('https://github.com/realfulvio'));
   const css = await (await s.rq('/ente.css')).text();
-  assert.match(css, /--p:#005e8e/);
+  assert.match(css, /--primary:#005e8e/);
 });
 
 test("modalita' demo: richieste di esempio visibili", async () => {
@@ -120,7 +120,7 @@ test('nome PC da ?pc=, IP da X-Forwarded-For (ultimo valore) e browser nel ticke
   const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0';
   const r = await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf, 'user-agent': ua, 'x-forwarded-for': '6.6.6.6, 10.20.30.40' }, body: form(ok) });
   const { id } = await r.json();
-  const c = glpi._tickets.get(id).contenuto;
+  const c = glpi._tickets.get(id).ticket.content;
   assert.match(c, /PC: PC-UFF-01 · IP: 10\.20\.30\.40 · Browser: Edge 141 su Windows 10\/11/);
   assert.ok(!c.includes('6.6.6.6'));
 });
@@ -130,7 +130,7 @@ test('nome PC non valido ignorato', async () => {
   await s.rq('/?pc=' + encodeURIComponent('<script>x</script>'));
   const me = await login(s);
   const { id } = await (await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf }, body: form(ok) })).json();
-  assert.ok(!glpi._tickets.get(id).contenuto.includes('PC:'));
+  assert.ok(!glpi._tickets.get(id).ticket.content.includes('PC:'));
 });
 
 test('esito della soluzione: risolto chiude, riapri rimette in lavorazione, solo se Risolta', async () => {
@@ -140,15 +140,15 @@ test('esito della soluzione: risolto chiude, riapri rimette in lavorazione, solo
   const esito = (id, e) => s.rq(`/api/richieste/${id}/esito`, { method: 'POST', headers: h, body: JSON.stringify({ esito: e }) });
   const a = await nuovo();
   assert.equal((await esito(a, 'risolto')).status, 409);
-  glpi._tickets.get(a).st = 5;
+  glpi._risolvi(a);
   assert.equal((await esito(a, 'boh')).status, 400);
   assert.equal((await esito(a, 'risolto')).status, 200);
   assert.equal((await (await s.rq('/api/richieste/' + a)).json()).stato, 'Chiusa');
-  const b = await nuovo(); glpi._tickets.get(b).st = 5;
+  const b = await nuovo(); glpi._risolvi(b);
   assert.equal((await esito(b, 'riapri')).status, 200);
   assert.equal((await (await s.rq('/api/richieste/' + b)).json()).stato, 'In lavorazione');
   const altro = await glpi.risolviRichiedente({ email: 'altro3@esempio.it' });
-  glpi._tickets.get(b).st = 5;
+  glpi._risolvi(b);
   assert.equal(await glpi.esitoSoluzione(altro, b, 'X', 'risolto'), null);
 });
 

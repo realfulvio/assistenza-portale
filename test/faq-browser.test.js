@@ -16,6 +16,7 @@ function trovaChrome() {
     'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
     '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser',
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'];
+  try { c.push(require('playwright').chromium.executablePath()); } catch { /* browser opzionale */ }
   return c.find((p) => p && fs.existsSync(p));
 }
 let puppeteer = null;
@@ -60,11 +61,11 @@ test('guide: si caricano tutte, senza errori JavaScript', { skip: salta, timeout
 
 test('guide: il resto del portale continua a funzionare', { skip: salta, timeout: 60000 }, async () => {
   const p = await pagina('#nuova');
-  await p.waitForSelector('#tiles .card');
-  assert.ok((await p.$$('#tiles .card')).length >= 5);
+  await p.waitForSelector('#tiles .tile');
+  assert.ok((await p.$$('#tiles .tile')).length >= 5);
   await p.goto(url + '#richieste', { waitUntil: 'networkidle0' });
-  await p.waitForSelector('#righe tr');
-  assert.ok((await p.$$('#righe tr')).length >= 1);
+  await p.waitForSelector('#righe .lrow');
+  assert.ok((await p.$$('#righe .lrow')).length >= 1);
   await p.goto(url + '#contatti', { waitUntil: 'networkidle0' });
   assert.equal(await p.$eval('#v-contatti', (e) => e.hidden), false);
   assert.deepEqual(p.errori, []);
@@ -242,8 +243,8 @@ test('errore nel caricamento delle guide: messaggio chiaro, nessun errore non ge
 
 test('consigli del modulo: puntano alla guida giusta, con titolo e primi passi presi dalla guida', { skip: salta, timeout: 60000 }, async () => {
   const p = await pagina('#nuova');
-  await p.waitForSelector('#tiles .card');
-  await p.evaluate(() => document.querySelector('#tiles input[value=stampante]').click());
+  await p.waitForSelector('#tiles .tile');
+  await p.evaluate(() => document.querySelector('#tiles .tile[data-id=stampante]').click());
   await p.type('#descrizione', 'la stampante risulta offline e non stampa');
   await p.waitForSelector('#consigli:not([hidden]) .consiglio', { timeout: 6000 });
   const link = await p.$$eval('#consigli .consiglio a', (a) => a.map((x) => x.getAttribute('href')));

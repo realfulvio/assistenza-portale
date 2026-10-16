@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160">
+  <view id="fog" viewBox="0 0 480 160"/><view id="hawaii" viewBox="0 160 480 160"/><view id="mountain" viewBox="0 320 480 160"/>
+  <g fill="none" stroke="#46614c" stroke-width="3">
+    <path d="M0 138q120-12 240 0t240 0M0 150h480M50 130v-28l24-18 24 18v28M64 130v-18h20v18M200 130v-44h20v44M204 86V67h12v19M310 135V80m-20 23 20-23 20 23M390 134V88m-20 23 20-23 20 23"/>
+    <path d="M0 58h170m20 0h230M40 76h300m30 0h110M0 99h130m30 0h160M20 117h210m30 0h220" stroke="#9aa99a" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0 160)" fill="none" stroke="#00685f" stroke-width="4" stroke-linecap="round">
+    <path d="M10 146q90-24 180 0t180 0 110 0M330 135q15-60-2-108M330 32q-45-38-70 0 42-10 70 0M330 32q48-38 80 0-45-12-80 0M330 32q-52 2-62 50 36-32 62-50M330 32q48 0 60 45-36-28-60-45"/>
+    <circle cx="120" cy="46" r="25" stroke="#c3643c"/><path d="M120 7V0m0 92v-8M81 46H70m100 0h-10M92 18l-8-8m64 64 8 8m-64-8-8 8m64-64 8-8" stroke="#c3643c"/>
+  </g>
+  <g transform="translate(0 320)" fill="none" stroke="#285b48" stroke-width="3" stroke-linejoin="round">
+    <path d="M0 150 112 12l72 98 72-105L370 150M76 57l36 12 20-30M224 50l32 15 26-19M298 150l83-92 99 92M350 92l30 12 22-13"/>
+    <path d="M25 150V87M7 129l18-35 18 35M62 150v-46m-16 33 16-29 16 29M402 150v-46m-18 33 18-29 18 29M440 150V80m-20 44 20-37 20 37"/>
+    <path d="m190 143 30-26 30 26m-51-6v20h42v-20m-29 20v-16h14v16" stroke="#6e7755"/>
+  </g>
+</svg>

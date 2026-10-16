@@ -2,6 +2,7 @@
 // Usa solo l'utente di servizio: i dipendenti non accedono mai a GLPI.
 const config = require('./config');
 const { contenutoTicket } = require('./contenuto');
+const { componi } = require('./ticket-dettaglio');
 
 const STATI = { 1: 'In attesa', 2: 'In lavorazione', 3: 'In lavorazione', 4: 'In sospeso', 5: 'Risolta', 6: 'Chiusa' };
 const stato = (n) => STATI[Number(n)] || 'In attesa';
@@ -13,6 +14,7 @@ class GlpiError extends Error {
 
 let sessionToken = null;
 let sessionAt = 0;
+const totaleRighe = Symbol('totaleRighe');
 const SESSION_TTL = 20 * 60 * 1000; // rinnovo preventivo
 
 async function raw(method, path, { body, headers = {}, session = true, timeoutMs = config.glpi.timeoutMs } = {}) {
@@ -30,6 +32,10 @@ async function raw(method, path, { body, headers = {}, session = true, timeoutMs
     const codice = Array.isArray(data) && typeof data[0] === 'string' ? ' ' + data[0] + (data[1] ? ': ' + String(data[1]).slice(0, 120) : '') : ''; // codice e messaggio di GLPI, mai dati utente
     throw new GlpiError(`GLPI ${method} ${path.split('?')[0]} -> ${res.status}${codice}`, res.status);
   }
+  if (Array.isArray(data)) {
+    const m = /\/(\d+)$/.exec(res.headers.get('content-range') || '');
+    if (m) Object.defineProperty(data, totaleRighe, { value: Number(m[1]) });
+  }
   return data;
 }
 
@@ -44,7 +50,9 @@ async function getSession() {
 async function call(method, path, opts) {
   for (let i = 0; ; i++) {
     try { return await raw(method, path, opts); } catch (err) {
-      const ritenta = err.status === 401 || err.name === 'TimeoutError' || err.name === 'TypeError';
+      // Un POST potrebbe essere già arrivato a GLPI anche se la risposta si perde.
+      // Ripeterlo dopo un timeout può creare due ticket/messaggi/allegati.
+      const ritenta = err.status === 401 || (method === 'GET' && ['TimeoutError', 'TypeError'].includes(err.name));
       if (i === 0 && ritenta) { sessionToken = null; continue; }
       throw err;
     }
@@ -105,11 +113,11 @@ function nomeCognome(mail, name) {
   return { firstname: parti[0] || cap(loc[0]), realname: parti[0] || cap(loc[0]) };
 }
 
-async function creaTicket({ userId, categoria, descrizione, telefono, reperibilita, pc, ip, ua }) {
+async function creaTicket({ userId, categoria, sottotipo, descrizione, telefono, reperibilita, pc, ip, ua }) {
   const sintesi = descrizione.replace(/\s+/g, ' ').trim().slice(0, 60);
   const input = {
     name: `[${categoria.nome}] ${sintesi}${descrizione.length > 60 ? '…' : ''}`,
-    content: contenutoTicket({ descrizione, telefono, reperibilita, pc, ip, ua }),
+    content: contenutoTicket({ sottotipo, descrizione, telefono, reperibilita, pc, ip, ua }),
     type: categoria.tipo, priority: 3, urgency: 3, impact: 3,
     _users_id_requester: userId
   };
@@ -139,23 +147,93 @@ async function elencoTicket(userId) {
   return rows(r).map((x) => ({ id: Number(x['2']), titolo: x['1'], aperta: x['15'], aggiornata: x['19'], stato: stato(x['12']), chiusa: !aperto(x['12']) }));
 }
 
+// Tutte le pagine: il limite predefinito di GLPI non deve tagliare i messaggi
+// recenti o nascondere un richiedente oltre la prima pagina di Ticket_User.
+async function elencoCompleto(percorso) {
+  const out = [], pagina = 200, massimo = 10000;
+  while (out.length < massimo) {
+    let parte;
+    try { parte = await call('GET', percorso + '?' + q({ range: `${out.length}-${out.length + pagina - 1}`, sort: 'id', order: 'ASC' })); }
+    catch (e) { if (e.status === 416 && out.length) return out; throw e; }
+    if (!Array.isArray(parte)) throw new GlpiError('Elenco GLPI non valido', 502);
+    out.push(...parte);
+    const totale = parte[totaleRighe];
+    if (!parte.length || (totale !== undefined ? out.length >= totale : parte.length < pagina)) return out;
+  }
+  throw new GlpiError('Cronologia GLPI oltre il limite di sicurezza', 502);
+}
+
 // Controllo di proprieta' LATO SERVER: il ticket deve avere userId come richiedente
-async function ticketDi(userId, ticketId) {
+async function ticketEUtenti(userId, ticketId) {
   let t;
   try { t = await call('GET', `/Ticket/${ticketId}`); } catch (e) { if (e.status === 404 || e.status === 403) return null; throw e; }
-  const utenti = await call('GET', `/Ticket/${ticketId}/Ticket_User`);
-  const mio = (utenti || []).some((u) => Number(u.type) === 1 && Number(u.users_id) === Number(userId));
-  return mio ? t : null;
+  const utenti = await elencoCompleto(`/Ticket/${ticketId}/Ticket_User`);
+  const mio = utenti.some((u) => Number(u.type) === 1 && Number(u.users_id) === Number(userId));
+  return mio ? { t, utenti } : null;
+}
+async function ticketDi(userId, ticketId) {
+  const r = await ticketEUtenti(userId, ticketId);
+  return r ? r.t : null;
+}
+
+// Nomi ed email in blocchi di 50 (niente N+1). Le email restano sul server, solo per le foto.
+async function utentiInBlocco(ids) {
+  const unici = [...new Set(ids.map(Number).filter((x) => x > 0))];
+  const out = {};
+  for (let offset = 0; offset < unici.length; offset += 50) {
+    const par = { 'forcedisplay[0]': '2', 'forcedisplay[1]': '34', 'forcedisplay[2]': '9', 'forcedisplay[3]': '5', 'forcedisplay[4]': '1', range: '0-49' };
+    unici.slice(offset, offset + 50).forEach((id, i) => {
+      if (i) par[`criteria[${i}][link]`] = 'OR';
+      par[`criteria[${i}][field]`] = '2'; par[`criteria[${i}][searchtype]`] = 'equals'; par[`criteria[${i}][value]`] = String(id);
+    });
+    for (const x of rows(await call('GET', '/search/User?' + q(par)))) {
+      const email = [].concat(x['5'] || []).map(String).find((e) => e.includes('@')) || '';
+      const login = String(x['1'] || '');
+      const nome = [x['34'], x['9']].filter(Boolean).join(' ').trim() || (!login.includes('@') ? login : '') || 'Assistenza';
+      out[Number(x['2'])] = { nome, email: email.toLowerCase() };
+    }
+  }
+  return out;
+}
+
+// Letture accessorie del dettaglio (soluzioni, attivita' pubbliche, storico): se GLPI le nega la pagina resta
+// utilizzabile, ma il log lo segnala (al massimo una volta l'ora per tipo, senza dati del ticket o dell'utente).
+// Caso tipico: il profilo dell'utente API senza il diritto «Attività > Vedere le attività pubbliche» (docs/glpi.md).
+const ultimoAvviso = new Map();
+async function facoltativo(p, cosa) {
+  try { return (await p) || []; } catch (e) {
+    const adesso = Date.now();
+    if (adesso - (ultimoAvviso.get(cosa) || 0) >= 3600_000) {
+      ultimoAvviso.set(cosa, adesso);
+      const negato = [401, 403].includes(e.status) || /RIGHT/.test(e.message);
+      console.warn(new Date().toISOString(), `avviso GLPI: lettura ${cosa} non riuscita (${e.status || e.name})` + (negato ? ': lettura negata, controlla i diritti del profilo API (docs/glpi.md)' : '') + '. La richiesta viene mostrata senza questi dati.');
+    }
+    return [];
+  }
+}
+
+// Dati grezzi del dettaglio (solo dopo il controllo di proprieta'). La composizione e' in ticket-dettaglio.js
+async function dettaglioGrezzo(userId, ticketId) {
+  const base = await ticketEUtenti(userId, ticketId);
+  if (!base) return null;
+  const [followups, solutions, tasks, logs] = await Promise.all([
+    elencoCompleto(`/Ticket/${ticketId}/ITILFollowup`),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/ITILSolution`), 'soluzioni (ITILSolution)'),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/TicketTask`), 'attività pubbliche (TicketTask)'),
+    facoltativo(elencoCompleto(`/Ticket/${ticketId}/Log`), 'storico (Log)')
+  ]);
+  const pub = (a) => (a || []).filter((x) => [0, '0', false].includes(x.is_private));
+  const fPub = pub(followups), tPub = pub(tasks);
+  const presa = (logs || []).filter((l) => [150, 12].includes(Number(l.id_search_option))).map((l) => ({ id_search_option: l.id_search_option, user_name: l.user_name, old_value: l.old_value }));
+  const ids = [...base.utenti.map((u) => u.users_id), base.t.users_id_recipient, ...fPub.map((f) => f.users_id),
+    ...(solutions || []).flatMap((s) => [s.users_id, s.users_id_approval]), ...tPub.flatMap((k) => [k.users_id, k.users_id_tech]),
+    ...presa.map((l) => { const m = /\((\d+)\)\s*$/.exec(String(l.user_name || '')); return m ? m[1] : 0; })];
+  return { ticket: base.t, ticketUsers: base.utenti, followups: fPub, solutions: solutions || [], tasks: tPub, logs: presa, users: await utentiInBlocco(ids) };
 }
 
 async function dettaglio(userId, ticketId) {
-  const t = await ticketDi(userId, ticketId);
-  if (!t) return null;
-  const fu = await call('GET', `/Ticket/${ticketId}/ITILFollowup?` + q({ range: '0-99' }));
-  const timeline = (fu || []).filter((f) => Number(f.is_private) === 0)
-    .map((f) => ({ data: f.date_creation || f.date, testo: daHtml(f.content) }));
-  return { id: Number(t.id), titolo: t.name, aperta: t.date, aggiornata: t.date_mod, stato: stato(t.status), chiusa: !aperto(t.status),
-    descrizione: daHtml(t.content), timeline };
+  const raw = await dettaglioGrezzo(userId, ticketId);
+  return raw ? { ...componi(raw, userId), _users: raw.users } : null;
 }
 
 // Esito della soluzione indicato dal richiedente (pulsanti nella mail «Chiamata risolta»).
@@ -166,7 +244,7 @@ async function esitoSoluzione(userId, ticketId, nome, esito) {
   if (!t) return null;
   if (Number(t.status) !== 5) return 'stato';
   const testo = esito === 'risolto' ? 'Il richiedente conferma che il problema è risolto.' : 'L\'utente segnala che il problema non è risolto.';
-  const input = { itemtype: 'Ticket', items_id: ticketId, is_private: 0, content: `<p><b>${esc(nome)} (dal portale):</b></p><p>${testo}</p>` };
+  const input = { itemtype: 'Ticket', items_id: ticketId, users_id: userId, is_private: 0, content: `<p><b>${esc(nome)} (dal portale):</b></p><p>${testo}</p>` };
   if (esito === 'risolto') input.add_close = 1; else input.add_reopen = 1;
   await call('POST', '/ITILFollowup', { body: { input } });
   return 'ok';
@@ -174,10 +252,10 @@ async function esitoSoluzione(userId, ticketId, nome, esito) {
 
 async function aggiungiMessaggio(userId, ticketId, nome, testo) {
   const html = `<p><b>${esc(nome)} (dal portale):</b></p><p>${esc(testo).replace(/\n/g, '<br>')}</p>`;
-  await call('POST', '/ITILFollowup', { body: { input: { itemtype: 'Ticket', items_id: ticketId, is_private: 0, content: html } } });
+  await call('POST', '/ITILFollowup', { body: { input: { itemtype: 'Ticket', items_id: ticketId, users_id: userId, is_private: 0, content: html } } });
 }
 
 // In modalita' DEMO (o GLPI_MOCK=1, usato dai test) si usa un GLPI finto in memoria
 module.exports = (config.demo || process.env.GLPI_MOCK === '1') ? require('./glpi-mock') : {
-  risolviRichiedente, creaTicket, allega, elencoTicket, dettaglio, aggiungiMessaggio, esitoSoluzione, ticketDi, killSession, call, GlpiError
+  risolviRichiedente, creaTicket, allega, elencoTicket, dettaglio, dettaglioGrezzo, aggiungiMessaggio, esitoSoluzione, ticketDi, killSession, call, GlpiError
 };

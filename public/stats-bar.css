@@ -1,18 +1,18 @@
 /* Barra «Live» sotto il menu principale: contatori aggregati dei ticket (stats-bar.js) */
-.live{position:relative;overflow:hidden;background:#071c38;color:#c9d6e6;font-size:12px;line-height:1;border-bottom:1px solid rgba(230,185,60,.35)}
+.live{position:relative;overflow:hidden;background:var(--bar);color:var(--bartext);font-size:12px;line-height:1;border-bottom:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
 .live[hidden]{display:none}
 .live .in{max-width:1180px;margin:0 auto;padding:0 24px;height:30px;display:flex;align-items:center;white-space:nowrap;overflow:hidden}
 .live b{color:#fff;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
 .live-v{display:inline-flex;align-items:center;gap:4px;flex:none}
-.live-v+.live-v:not(.live-msg)::before{content:"";width:3px;height:3px;border-radius:50%;background:#e6b93c;margin:0 10px 0 6px;flex:none}
+.live-v+.live-v:not(.live-msg)::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--accent);margin:0 10px 0 6px;flex:none}
 .live-v[hidden]{display:none}
 
-.live-tag{color:#4ade80;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;gap:6px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:live-pulse 1.8s ease-out infinite}
+.live-tag{color:var(--live);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;gap:6px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--live);animation:live-pulse 1.8s ease-out infinite}
 .live-spark{margin-left:6px;overflow:visible}
-.live-spark polyline{fill:none;stroke:#e6b93c;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.live-spark polyline{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
 .live.on .live-spark polyline{animation:live-draw 2.2s ease-out forwards}
-.live b.live-oro{color:#e6b93c;animation:live-glow 3s ease-in-out 2s infinite}
+.live b.live-oro{color:var(--liveaccent,var(--accent));animation:live-glow 3s ease-in-out 2s infinite}
 
 /* Messaggi a rotazione, allineati a destra */
 .live-msg{margin-left:auto;width:250px;justify-content:flex-end;overflow:hidden}
@@ -21,11 +21,11 @@
 .live-msg-t.entra{opacity:0;transform:translateY(6px);transition:none}
 
 /* Linea di avanzamento: percentuale delle richieste risolte */
-.live-prog{height:2px;background:#0f2c52}
-.live-prog i{display:block;height:100%;width:0;background:#e6b93c;box-shadow:0 0 8px rgba(230,185,60,.8);transition:width 1.8s cubic-bezier(.33,1,.68,1)}
+.live-prog{height:2px;background:color-mix(in srgb,var(--bar) 70%,#fff 12%)}
+.live-prog i{display:block;height:100%;width:0;background:var(--accent);box-shadow:0 0 8px color-mix(in srgb,var(--accent) 80%,transparent);transition:width 1.8s cubic-bezier(.33,1,.68,1)}
 
 /* Riflesso che attraversa la barra */
-.live::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0,rgba(255,255,255,.07) 15%,transparent 30%);transform:translateX(-30%);animation:live-shine 6s ease-in-out infinite;pointer-events:none}
+.live::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0,color-mix(in srgb,var(--bartext) 7%,transparent) 15%,transparent 30%);transform:translateX(-30%);animation:live-shine 6s ease-in-out infinite;pointer-events:none}
 
 /* Ingresso delle voci: fade + slide, sfalsate di 0,1 s */
 .live .live-v{opacity:0;transform:translateY(4px)}
@@ -36,9 +36,9 @@
 .live.on .live-v:nth-child(5){animation-delay:.4s}
 .live.on .live-v:nth-child(6){animation-delay:.5s}
 
-@keyframes live-pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.7)}70%{box-shadow:0 0 0 6px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+@keyframes live-pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--live) 70%,transparent)}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
 @keyframes live-draw{to{stroke-dashoffset:0}}
-@keyframes live-glow{0%,100%{text-shadow:0 0 0 rgba(230,185,60,0)}50%{text-shadow:0 0 8px rgba(230,185,60,.9)}}
+@keyframes live-glow{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 8px color-mix(in srgb,var(--accent) 90%,transparent)}}
 @keyframes live-shine{to{transform:translateX(130%)}}
 @keyframes live-in{to{opacity:1;transform:none}}
 

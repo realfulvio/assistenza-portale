@@ -2,6 +2,7 @@
 
 ## Installazione e accesso
 
+- [Componenti e dati della richiesta](architettura.md)
 - [Installazione del portale](installazione.md)
 - [Preparazione di GLPI e delle API](glpi.md)
 - [Accesso Microsoft Entra ID](accesso-microsoft-entra.md)
@@ -26,3 +27,10 @@
 - [Risoluzione dei problemi](risoluzione-problemi.md)
 
 Le guide sul flusso dei ticket e sul CSS riguardano il backend GLPI, senza modifiche al codice del portale. Ogni installazione deve verificare i propri permessi, criteri e automazioni; i limiti delle prove sono indicati nelle guide pertinenti.
+
+## Stabilizzazione della v2
+
+- [Report delle correzioni e delle prove del 16 ottobre 2026](v2-stabilizzazione.md).
+- [Note del precedente rollback e vincoli prima del rilascio](v2-sospesa.md).
+- [Produzione e repository: differenze, riproduzione del guasto e strada scelta](produzione-vs-repo.md).
+- [Fase B: rilascio in produzione con staging, verifiche e rollback automatico](fase-b.md).

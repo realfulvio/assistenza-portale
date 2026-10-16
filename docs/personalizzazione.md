@@ -46,6 +46,17 @@ Sotto il menu principale una barra sottile mostra i numeri del servizio, presi d
 - L'endpoint è `GET /assistenza/api/stats` (solo utenti autenticati). Se GLPI non risponde restituisce `{"ok":false}` e la barra si nasconde senza mostrare errori.
 - Con «movimento ridotto» (preferenza del sistema o «Aspetto») non ci sono animazioni; sotto i 900 px spariscono andamento e messaggi, sotto i 600 px restano solo LIVE, risolte e in lavorazione.
 
+## Foto profilo
+
+In «Il mio profilo» ogni dipendente vede la propria foto (anche piccola nella barra in alto, accanto al nome). Precedenza: **foto personale** caricata dal portale > **foto di Microsoft 365** > **iniziali**.
+
+- **Microsoft 365**: al login, se l'utente non ha una foto personale e l'ultima sincronizzazione ha più di `AVATAR_SYNC_GIORNI` giorni (predefinito 7), il portale chiede la foto a Microsoft Graph (`/me/photo/$value`) con il token del login. Serve lo scope `User.Read` in `OIDC_SCOPE` (nessun permesso amministrativo). Se Microsoft non ha foto si usano le iniziali; altri errori vengono ignorati senza bloccare l'accesso. Il token resta solo nella sessione lato server.
+- **Foto personale**: JPG, PNG o WebP fino a 3 MB e 25 megapixel. Il server decodifica davvero l'immagine (non si fida di estensione o tipo dichiarato), prende il primo fotogramma, ritaglia un quadrato centrato, riduce a 128×128 e salva in WebP qualità 80 senza EXIF né altri metadati (pochi KB). L'originale non viene conservato. Massimo 10 operazioni l'ora per account, condivise tra caricamenti manuali e aggiornamenti forzati da Microsoft 365.
+- **Dove stanno**: `AVATAR_DIR` (predefinito accanto a `PREFERENCES_DIR`, altrimenti `data/avatars`), un file `<hash>.webp` e un piccolo `<hash>.json` (origine e date) per utente. Il nome è un hash dell'identità generato dal server. Nessuna foto in database.
+- **Endpoint** (sempre la foto dell'utente in sessione, mai di un altro): `GET /api/profilo/foto` (WebP, `Cache-Control: private`, ETag; 404 se non c'è), `GET /api/profilo/foto/info`, `POST /api/profilo/foto` (campo `foto`), `POST /api/profilo/foto/rimuovi`, `POST /api/profilo/foto/microsoft`. Le POST richiedono il token CSRF del portale.
+- **Elaborazione**: libreria [sharp](https://sharp.pixelplumbing.com/) (dipendenza npm con binari precompilati, nessun pacchetto di sistema).
+- **Web server**: il portale rifiuta con 413 i corpi oltre 3 MB sulla rotta di upload già dagli header, prima di login e parsing. Con Apache come reverse proxy un `LimitRequestBody` in `<Location>` non ferma in modo affidabile le richieste proxate, quindi il limite resta nel portale.
+
 ## Categorie – `config/categorie.json`
 
 Copia `config/categorie.example.json` in `config/categorie.json`. Per ogni categoria:

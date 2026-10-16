@@ -1,0 +1,57 @@
+/* Dettagli dei temi di «Aspetto». I colori sono in theme.css; qui solo forme, decorazioni e preferenze di leggibilità. */
+:root{--text-scale:1;--icon-scale:1}
+html[data-text="110"]{--text-scale:1.1}html[data-text="120"]{--text-scale:1.2}html[data-text="130"]{--text-scale:1.3}html[data-text="140"]{--text-scale:1.4}html[data-text="150"]{--text-scale:1.5}
+html[data-icon="80"]{--icon-scale:.8}html[data-icon="90"]{--icon-scale:.9}html[data-icon="110"]{--icon-scale:1.1}html[data-icon="120"]{--icon-scale:1.2}html[data-icon="130"]{--icon-scale:1.3}html[data-icon="140"]{--icon-scale:1.4}html[data-icon="150"]{--icon-scale:1.5}
+
+/* Retro: titolo a pixel e ombre piene */
+html[data-theme=retro] .htitle{font-family:"Press Start 2P",ui-monospace,Consolas,monospace;font-size:calc(20px * var(--text-scale));line-height:1.35}
+html[data-theme=retro] :is(.tile,.panel,.form,.box){box-shadow:4px 4px 0 #ff2e93}
+html[data-theme=retro] .center h1{font-family:"Press Start 2P",ui-monospace,monospace;font-size:calc(15px * var(--text-scale));line-height:1.4}
+/* Spazio: un velo di stelle nella testata */
+html[data-theme=spazio] .center{background:radial-gradient(1px 1px at 12% 30%,#fff9 50%,transparent),radial-gradient(1px 1px at 37% 70%,#fff8 50%,transparent),radial-gradient(1.5px 1.5px at 66% 22%,#ffd24aaa 50%,transparent),radial-gradient(1px 1px at 88% 60%,#fff9 50%,transparent),var(--head)}
+/* Giardino e Hawaii: angoli morbidi */
+html:is([data-theme=giardino],[data-theme=hawaii]) .tico{border-radius:50%}
+
+/* Temi della 1.x: stesse decorazioni, sulle nuove caselle */
+html[data-theme=contrast] :is(.tile,.form,.box,.faq details,table,.sp-box,.drop,.panel,.bubble){border:2px solid #000}
+html[data-theme=contrast] :is(a,button){text-decoration:underline;text-underline-offset:3px}
+html[data-theme=contrast] .tile[aria-pressed=true]{outline:3px solid #000;outline-offset:3px}
+html[data-theme=cyber] .center{background:repeating-linear-gradient(0deg,transparent 0 5px,#5df3ef0c 5px 6px),var(--head);border-bottom:3px solid #f762cb}
+html[data-theme=cyber] main{background-image:linear-gradient(#5df3ef08 1px,transparent 1px),linear-gradient(90deg,#5df3ef08 1px,transparent 1px);background-size:28px 28px}
+html[data-theme=cyber] .tile{border:1px solid #5df3ef;border-top:4px solid #f762cb;background:linear-gradient(135deg,#23213d,#111426);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+html[data-theme=cyber] .tico{border:1px solid #5df3ef;border-radius:0;box-shadow:0 0 18px #5df3ef25}
+html[data-theme=mountain] .center{background:linear-gradient(145deg,transparent 65%,#ffffff18 65% 80%,transparent 80%),linear-gradient(35deg,transparent 65%,#ffffff12 65% 85%,transparent 85%),var(--head)}
+html[data-theme=mountain] .tile{background:linear-gradient(160deg,#fffef8,#edf0e5);border-radius:3px 3px 16px 3px;box-shadow:3px 4px 0 #d6ddcf}
+html[data-theme=mountain] .tico{border:2px solid #798b64;border-radius:50% 50% 12% 12%}
+html[data-theme=terminal] :is(h1,h2,.tile-t b,.htitle){font-family:Consolas,'Courier New',monospace}
+html[data-theme=terminal] .center{background:repeating-linear-gradient(0deg,#0002 0 1px,transparent 1px 4px),var(--head)}
+html[data-theme=terminal] .tile{border:1px dashed #8bb495;border-top:4px solid var(--c)}
+html[data-theme=terminal] .tico{border:1px solid #8bb495;border-radius:0;background:transparent}
+html[data-theme=fog] .center{background:linear-gradient(170deg,transparent 15%,#ffffff20 60%,#ffffff08),var(--head)}
+html[data-theme=fog] .tile{background:linear-gradient(#ffffffee,#eef0e9);box-shadow:0 8px 24px #5f705415}
+html[data-theme=fog] .tico{border-radius:50%;border-bottom:3px solid #8b9c7d}
+html:is([data-theme=fog],[data-theme=mountain]) .hero{position:relative;isolation:isolate;overflow:hidden}
+html:is([data-theme=fog],[data-theme=mountain]) .hero::before{content:'';position:absolute;z-index:-1;right:0;bottom:0;width:55%;height:100%;background-position:right bottom;background-size:contain;background-repeat:no-repeat;opacity:.09;pointer-events:none}
+html[data-theme=fog] .hero::before{background-image:url('theme-landscapes.svg#fog')}
+html[data-theme=mountain] .hero::before{background-image:url('theme-landscapes.svg#mountain')}
+
+/* Testo e icone più grandi: contenitori elastici, nessun ritaglio */
+html:not([data-text="100"]) h3.s i{width:auto;height:auto;min-width:2em;min-height:2em;padding:.1em}
+html:not([data-text="100"]) .tiles{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+html:not([data-text="100"]) :is(.nav .in,.slim .in,.slim .r){flex-wrap:wrap;overflow:visible}
+html:not([data-text="100"]) .nav a{white-space:normal}
+html:not([data-text="100"]) .slim .utente{max-width:none;white-space:normal;overflow-wrap:anywhere}
+html:not([data-text="100"]) .center .in{flex-wrap:wrap}
+.selpill #ci svg,.tico svg{width:calc(32px * var(--icon-scale));height:calc(32px * var(--icon-scale))}
+.selpill #ci svg{width:calc(20px * var(--icon-scale));height:calc(20px * var(--icon-scale))}
+html[data-roomy=true] :is(.tile,.form,.sp-box,.faq details,.panel){line-height:1.7}
+
+/* Movimento ridotto: scelta in «Aspetto» oppure preferenza del sistema. Si vedono gli stati finali. */
+html[data-motion=reduce] *,html[data-motion=reduce] *::before,html[data-motion=reduce] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+html[data-motion=reduce] :is(.tile:hover,.tile:hover .tico,.send:hover,.logo:hover,.btn1:hover,.btn2:hover,.thm:hover,.bubble:hover){transform:none}
+@media(prefers-reduced-motion:reduce){
+  html[data-motion=system] *,html[data-motion=system] *::before,html[data-motion=system] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  html[data-motion=system] :is(.tile:hover,.tile:hover .tico,.send:hover,.logo:hover,.btn1:hover,.btn2:hover,.thm:hover,.bubble:hover){transform:none}
+}
+/* Scheda nascosta: animazioni continue in pausa (impostato da temi.js con visibilitychange) */
+html.in-pausa *,html.in-pausa *::before,html.in-pausa *::after{animation-play-state:paused!important}
