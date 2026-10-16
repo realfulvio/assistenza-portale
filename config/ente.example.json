@@ -26,9 +26,10 @@
     "urgenze": "Per urgenze che bloccano il lavoro di un intero ufficio, telefona all'assistenza indicando il numero della richiesta."
   },
   "barraLive": {
-    "_nota": "Barra con i contatori dei ticket sotto il menu. periodo: anno (dal 1° gennaio) | mese (dal 1° del mese) | da_data (dalla data in daData, AAAA-MM-GG). Si possono sovrascrivere con STATS_* nel file .env",
+    "_nota": "Barra con i contatori dei ticket sotto il menu. periodo: giorni (ultimi N giorni, predefinito 30) | anno (dal 1° gennaio) | mese (dal 1° del mese) | da_data (dalla data in daData, AAAA-MM-GG). Si possono sovrascrivere con STATS_* nel file .env",
     "attiva": true,
-    "periodo": "anno",
+    "periodo": "giorni",
+    "giorni": 30,
     "daData": "",
     "cacheSecondi": 300
   },

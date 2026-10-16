@@ -46,6 +46,9 @@ test('calcolo: periodo, risolte, percentuale, sparkline, oggi, presa in carico',
   assert.equal(d.oggi_ricevute, 2);
   assert.equal(d.oggi_risolte, 1);
   assert.equal(d.ultima_risolta_min, 45);
+  const g = stats.calcola({ periodo: 'giorni', giorni: 30 }, { righe, inLavorazione: 0, ultimaSoluzione: null }, ora);
+  assert.equal(g.periodo.etichetta, 'negli ultimi 30 giorni');
+  assert.equal(g.ricevute, 4); // dal 17/09 compreso
   assert.equal(stats.calcola({ periodo: 'mese' }, { righe, inLavorazione: 0, ultimaSoluzione: null }, ora).ricevute, 4);
   assert.equal(stats.calcola({ periodo: 'da_data', daData: '2026-10-15' }, { righe, inLavorazione: 0, ultimaSoluzione: null }, ora).periodo.etichetta, 'dal 15/10/2026');
   const vuoto = stats.calcola(o, { righe: [], inLavorazione: 0, ultimaSoluzione: null }, ora);

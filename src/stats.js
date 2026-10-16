@@ -10,22 +10,25 @@ const e = {
   STATS_BAR: process.env.STATS_BAR ?? (b.attiva === false ? '0' : '1'),
   STATS_PERIODO: process.env.STATS_PERIODO || b.periodo,
   STATS_DA_DATA: process.env.STATS_DA_DATA || b.daData,
-  STATS_CACHE_SEC: process.env.STATS_CACHE_SEC || b.cacheSecondi
+  STATS_CACHE_SEC: process.env.STATS_CACHE_SEC || b.cacheSecondi,
+  STATS_GIORNI: process.env.STATS_GIORNI || b.giorni
 };
-const PERIODI = ['anno', 'mese', 'da_data'];
+const PERIODI = ['giorni', 'anno', 'mese', 'da_data'];
 const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
 const GIORNO = 24 * 3600 * 1000;
 const PAGINA = 1000; // righe per pagina nelle ricerche GLPI
 const MAX_RIGHE = 50000; // limite di sicurezza
 
 const opzioni = () => {
-  const periodo = PERIODI.includes(e.STATS_PERIODO) ? e.STATS_PERIODO : 'anno';
+  const periodo = PERIODI.includes(e.STATS_PERIODO) ? e.STATS_PERIODO : 'giorni';
+  const giorni = Number.isInteger(Number(e.STATS_GIORNI)) && Number(e.STATS_GIORNI) >= 1 ? Number(e.STATS_GIORNI) : 30;
   const daData = /^\d{4}-\d{2}-\d{2}$/.test(e.STATS_DA_DATA || '') ? e.STATS_DA_DATA : '';
   const sec = Number(e.STATS_CACHE_SEC);
   return {
     attiva: e.STATS_BAR !== '0',
-    periodo: periodo === 'da_data' && !daData ? 'anno' : periodo, // data mancante o non valida: si usa l'anno
+    periodo: periodo === 'da_data' && !daData ? 'giorni' : periodo, // data mancante o non valida: ultimi N giorni
     daData,
+    giorni,
     cacheMs: (Number.isFinite(sec) && sec >= 10 ? sec : 300) * 1000
   };
 };
@@ -40,6 +43,10 @@ const leggiData = (s) => {
 };
 
 function inizioPeriodo(o, ora) {
+  if (o.periodo === 'giorni' || !o.periodo) {
+    const n = o.giorni || 30;
+    return { da: new Date(giorno(ora).getTime() - (n - 1) * GIORNO), etichetta: `negli ultimi ${n} giorni` };
+  }
   if (o.periodo === 'mese') return { da: new Date(ora.getFullYear(), ora.getMonth(), 1), etichetta: 'a ' + MESI[ora.getMonth()] };
   if (o.periodo === 'da_data') {
     const [a, m, g] = o.daData.split('-').map(Number);
