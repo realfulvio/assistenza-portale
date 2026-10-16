@@ -187,6 +187,21 @@ No, tutto resta in GLPI. Gli allegati passano in memoria e vanno direttamente a 
 **Funziona con GLPI 10?**
 Non è stato provato. L'API REST usata (`/apirest.php`) esiste anche in GLPI 10, ma alcuni dettagli potrebbero cambiare.
 
+## Versioni
+
+Il numero è nel file `VERSION` (unica fonte) e compare nel piè di pagina; le novità sono nel [CHANGELOG](CHANGELOG.md). Si usa il [versionamento semantico](https://semver.org/lang/it/):
+
+- **MAJOR** cambia l'interfaccia o rompe la compatibilità;
+- **MINOR** aggiunge funzioni;
+- **PATCH** corregge errori.
+
+### Novità della 2.0
+
+- **Temi animati** (Classico, Hawaii, Spazio, Giardino, Retro, più quelli della 1.x) con pannello «Aspetto»: tema, dimensioni e spaziatura seguono l'account. Le palette sono in `scripts/genera-temi.js`, che controlla anche i contrasti (`node scripts/genera-temi.js`).
+- **Nuova richiesta** con pulsanti rapidi per argomento (`rapidi` in `config/categorie.json`) e conferma animata.
+- **Richieste a conversazione** con avanzamento, «Gestita da» e foto, solo con contenuti pubblici.
+- **Riepilogo PDF** e stampa di ogni richiesta, generati dal portale.
+
 ## Come contribuire
 
 Segnalazioni e proposte sono benvenute: leggi [CONTRIBUTING.md](CONTRIBUTING.md). Per i problemi usa le *Issues* del repository.

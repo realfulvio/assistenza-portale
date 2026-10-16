@@ -2,6 +2,30 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.0.0] - 2026-10-16
+
+Aggiornamento di interfaccia: nuova pagina «Nuova richiesta», richieste a conversazione, riepilogo PDF, temi animati e foto profilo. Nessuna modifica a regole, notifiche o configurazione di GLPI.
+
+### Aggiunto
+
+- **Versioni**: file `VERSION` come fonte unica, mostrata nel piè di pagina; cliccando la versione si apre il pannello «Novità». Regole nel README, sezione «Versioni».
+- **Temi animati** Classico, Hawaii, Spazio, Giardino e Retro, con icona di testata, indicatore di avanzamento, decorazione sopra il piè di pagina e particelle di conferma. I temi 1.x (Scuro, Contrasto elevato, Cyberpunk, Montagna, Terminale, Nebbia padana) restano, con gli stessi id e le preferenze già salvate. Palette in `scripts/genera-temi.js` (genera `public/theme.css` e verifica i contrasti, minimo 4,5:1).
+- **Pannello Aspetto** sotto la barra: Tema, Dimensioni (Piccole/Normali/Grandi) e Spaziatura (Compatta/Normale/Ampia), salvati nell'account. Le altre opzioni di leggibilità restano in «Altre opzioni».
+- **Nuova richiesta** ridisegnata: testata con avanzamento, quattro passi, sette caselle, pulsanti rapidi per categoria (`rapidi` e `temaColore` in `config/categorie.json`; il pulsante scelto diventa la prima riga del ticket), «Quando sei raggiungibile?» e conferma animata.
+- **Richieste a conversazione**: avanzamento a quattro tappe, «Gestita da», tecnici a sinistra, tu a destra, sistema al centro, con foto o iniziali. Solo contenuti pubblici: note e attività private non compaiono e non determinano «Gestita da». Lettura degli utenti in blocco, nessuna email esposta.
+- **Riepilogo PDF** A4 (`GET /api/richieste/:id/pdf`, `pdfkit`, nessun browser) e **Stampa** in bianco e nero.
+- Foto profilo, barra «Live» e guide (vedi sotto).
+- `.gitattributes` con fine riga LF per script e file di configurazione.
+
+### Modificato
+
+- Tutti i colori dell'interfaccia passano da variabili dei temi; i colori dell'ente in `config/ente.json` valgono per il tema Classico.
+- Font Press Start 2P (licenza SIL OFL) in locale per il tema Retro: nessuna richiesta a CDN.
+
+### Versioni precedenti (1.x)
+
+Portale per aprire e seguire richieste su GLPI con accesso OpenID Connect, consigli prima dell'invio, nome del PC e dati tecnici nel ticket, conferma della soluzione dalla mail, personalizzazione dell'ente e, tra le novità di fine ciclo, guide 2.0, barra «Live», foto profilo e preferenze di aspetto per account.
+
 ## [Unreleased]
 
 ### Aggiunto

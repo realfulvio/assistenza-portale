@@ -15,6 +15,8 @@ const avatar = require('./avatar');
 const multer = require('multer');
 const auth = require('./auth');
 const preferences = require('./preferences');
+const pdf = require('./pdf');
+const versione = require('./versione');
 const { upload, verificaFile } = require('./uploads');
 const { pcValido, ipPulito } = require('./contenuto');
 
@@ -87,7 +89,8 @@ api.get('/me', (req, res) => {
   res.set('Cache-Control', 'no-store');
   if (!req.session.user) return res.status(401).json({ errore: 'Non autenticato' });
   const { name, email } = req.session.user;
-  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, appearance: preferences.read(req.session.user), limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie:config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, placeholder }) => ({ id, nome, icona, sotto, titolo, colore, placeholder })) });
+  avatar.registraEmail(req.session.user);
+  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, versione: versione.numero, appearance: preferences.read(req.session.user), limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie: config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi }) => ({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi: Array.isArray(rapidi) ? rapidi.map(String).slice(0, 8) : [] })) });
 });
 api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
 api.get('/preferenze', serveLogin, (req, res) => {
@@ -198,15 +201,17 @@ api.post('/richieste', serveLogin, csrf, limiteInvio, (req, res, next) => upload
     const descrizione = String(b.descrizione || '').trim();
     const telefono = String(b.telefono || '').trim();
     const reperibilita = String(b.reperibilita || '').trim();
+    const sottotipo = String(b.sottotipo || '').trim();
     if (!categoria) return res.status(400).json({ errore: 'Scegli un argomento.' });
     if (descrizione.length < 15 || descrizione.length > 4000) return res.status(400).json({ errore: 'La descrizione deve avere da 15 a 4000 caratteri.' });
     if (telefono && !/^[0-9+()\s./-]{3,25}$/.test(telefono)) return res.status(400).json({ errore: 'Il numero di telefono non sembra valido.' });
     if (reperibilita.length > 200) return res.status(400).json({ errore: 'Reperibilità troppo lunga (max 200 caratteri).' });
+    if (sottotipo && !(categoria.rapidi || []).includes(sottotipo)) return res.status(400).json({ errore: 'Scelta rapida non valida per questo argomento.' });
     const files = req.files || [];
     verificaFile(files);
     const userId = await utenteGlpi(req);
     const { name, email } = req.session.user;
-    const id = await glpi.creaTicket({ userId, categoria, descrizione, telefono, reperibilita, nome: name, email, pc: req.session.pc || null, ip: ipPulito(req.ip), ua: req.get('user-agent') });
+    const id = await glpi.creaTicket({ userId, categoria, sottotipo, descrizione, telefono, reperibilita, nome: name, email, pc: req.session.pc || null, ip: ipPulito(req.ip), ua: req.get('user-agent') });
     let allegatiFalliti = 0;
     for (const f of files) { try { await glpi.allega(id, f); } catch { allegatiFalliti++; } }
     log('ticket creato', id, 'cat', categoria.id, 'allegati', files.length, 'falliti', allegatiFalliti);
@@ -223,11 +228,50 @@ function idTicket(req, res, next) {
   req.tid = Number(req.params.id);
   next();
 }
+// --- Dettaglio pubblico di una richiesta (pagina, stampa, PDF): il controllo di proprieta' e' nel client GLPI
+const firmaFoto = (req, k) => crypto.createHmac('sha256', config.sessionSecret).update('foto:' + k + ':' + req.session.user.email).digest('base64url').slice(0, 32);
+async function dettaglioPubblico(req) {
+  const d = await glpi.dettaglio(await utenteGlpi(req), req.tid);
+  if (!d) return null;
+  const users = d._users || {};
+  delete d._users;
+  for (const p of Object.values(d.persone)) {
+    const f = p.ruolo === 'tu' ? (avatar.info(req.session.user).v ? { k: null, v: avatar.info(req.session.user).v } : null) : avatar.fotoPerEmail((users[p.id] || {}).email);
+    p.foto = !f ? null : f.k ? `${config.base}/api/foto/${f.k}.${firmaFoto(req, f.k)}?v=${f.v}` : `${config.base}/api/profilo/foto?v=${f.v}`;
+  }
+  return d;
+}
+// Foto di un'altra persona di un ticket: solo con il token emesso nel dettaglio per questa sessione
+api.get('/foto/:token', serveLogin, (req, res) => {
+  const m = /^([a-f0-9]{64})\.([A-Za-z0-9_-]{32})$/.exec(req.params.token);
+  const atteso = m && firmaFoto(req, m[1]);
+  if (!m || !crypto.timingSafeEqual(Buffer.from(m[2]), Buffer.from(atteso))) return res.status(404).end();
+  const buf = avatar.leggiChiave(m[1]);
+  if (!buf) return res.status(404).set('Cache-Control', 'no-store').end();
+  const etag = '"' + crypto.createHash('sha256').update(buf).digest('base64url').slice(0, 27) + '"';
+  res.set({ 'Cache-Control': 'private, max-age=86400', ETag: etag, 'Content-Type': 'image/webp', 'X-Content-Type-Options': 'nosniff' });
+  if (req.get('if-none-match') === etag) return res.status(304).end();
+  res.send(buf);
+});
+// Riepilogo PDF (A4) generato sul server, in memoria: nessun file temporaneo
+const limitePdf = rateLimit({ windowMs: 10 * 60_000, limit: 30, standardHeaders: true, legacyHeaders: false, keyGenerator: (req) => 'pdf:' + req.session.user.email,
+  handler: (req, res) => res.status(429).json({ errore: 'Troppi PDF in poco tempo: riprova tra qualche minuto.' }) });
+
 api.get('/richieste/:id', serveLogin, idTicket, async (req, res, next) => {
   try {
-    const d = await glpi.dettaglio(await utenteGlpi(req), req.tid); // il controllo di proprieta' e' nel client
+    const d = await dettaglioPubblico(req);
     if (!d) return res.status(404).json({ errore: 'Richiesta non trovata.' });
     res.set('Cache-Control', 'no-store'); res.json(d);
+  } catch (e) { next(e); }
+});
+api.get('/richieste/:id/pdf', serveLogin, idTicket, limitePdf, async (req, res, next) => {
+  try {
+    const d = await dettaglioPubblico(req);
+    if (!d) return res.status(404).json({ errore: 'Richiesta non trovata.' });
+    const buf = await pdf.genera(d, req.session.user.name);
+    res.set({ 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="${pdf.nomeFile(d)}"`, 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
+    log('pdf richiesta', d.id);
+    res.send(buf);
   } catch (e) { next(e); }
 });
 api.post('/richieste/:id/messaggi', serveLogin, csrf, idTicket, async (req, res, next) => {
@@ -255,16 +299,16 @@ router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
 // __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
-const versione = ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+const versioneFile = versione.numero + ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js', 'theme.css', 'temi.css', 'temi.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
-  .replaceAll('__BASE__', config.base).replaceAll('__V__', versione);
+  .replaceAll('__BASE__', config.base).replaceAll('__V__', versioneFile).replaceAll('__VERSIONE__', versione.numero).replaceAll('__DATA_VERSIONE__', versione.dataBreve);
 const pagina = (req, res) => {
   // ?pc=NOMEPC dall'icona sul desktop (nome del parametro: PC_PARAM): se valido resta in sessione e finisce nel ticket
   const pc = config.pcParam ? pcValido(req.query[config.pcParam]) : null;
   if (pc) req.session.pc = pc;
   const p = req.session.user ? preferences.read(req.session.user).preferences : require('../public/appearance-model').defaults();
-  const attrs = `data-theme="${p.theme}" data-text="${p.text}" data-icon="${p.icon}" data-roomy="${p.roomy}" data-motion="${p.motion === null ? 'system' : p.motion ? 'reduce' : 'full'}"`;
+  const attrs = Object.entries(require('../public/appearance-model').attributes(p)).map(([k, v]) => `data-${k}="${escHtml(v)}"`).join(' ');
   res.set('Cache-Control', 'no-store').type('html').send(indice.replace('__APPEARANCE__', attrs));
 };
 router.get(['/', '/errore', '/non-consentito'], pagina);
@@ -272,7 +316,7 @@ router.get(['/', '/errore', '/non-consentito'], pagina);
 // Colori dell'ente (config/ente.json) come variabili CSS: solo colori esadecimali validi
 const colore = (v, d) => (/^#[0-9a-fA-F]{3,8}$/.test(String(v || '')) ? v : d);
 const g = config.ente.grafica || {};
-const enteCss = `:root{--p:${colore(g.colorePrimario, '#005e8e')};--pd:${colore(g.colorePrimarioScuro, '#004a70')};--navy:${colore(g.coloreBarra, '#001a4d')};--bg:${colore(g.coloreSfondo, '#f2f2f2')}}\n`;
+const enteCss = `:root,html[data-theme=classic]{--primary:${colore(g.colorePrimario, '#005e8e')};--head:${colore(g.colorePrimario, '#005e8e')};--herotext:${colore(g.colorePrimarioScuro, '#004a70')};--top:${colore(g.coloreBarra, '#001a4d')};--foot:${colore(g.coloreBarra, '#001a4d')};--bg:${colore(g.coloreSfondo, '#f2f2f2')}}\n`;
 router.get('/ente.css', (req, res) => res.set('Cache-Control', 'no-cache').type('css').send(enteCss));
 router.use(express.static(path.join(config.root, 'public'), {
   index: false, maxAge: config.prod ? '1h' : 0,

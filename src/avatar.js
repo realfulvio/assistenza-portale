@@ -137,6 +137,33 @@ function sincronizzaAlLogin(user, token) {
   module.exports.sincronizza(user, token).catch(() => { /* ignorato: si riprova al prossimo accesso */ });
 }
 
+// Foto delle persone nei ticket (tecnici e altri richiedenti): GLPI conosce l'email, il portale la chiave della foto.
+// Al login si registra «hash(email) -> chiave» (nessuna email in chiaro su disco).
+const hashEmail = (email) => crypto.createHash('sha256').update(String(email || '').trim().toLowerCase()).digest('hex');
+const fileEmail = (email) => path.join(opzioni.dir, 'email-' + hashEmail(email) + '.json');
+function registraEmail(user) {
+  if (!user || !user.email) return;
+  try {
+    const k = id(user), f = fileEmail(user.email);
+    try { if (JSON.parse(fs.readFileSync(f, 'utf8')).k === k) return; } catch { /* non ancora registrata */ }
+    scrivi(f, JSON.stringify({ k }) + '\n');
+  } catch { /* la foto nei ticket e' facoltativa */ }
+}
+// Chiave e versione della foto di un'email, solo se la foto esiste
+function fotoPerEmail(email) {
+  if (!email) return null;
+  try {
+    const k = JSON.parse(fs.readFileSync(fileEmail(email), 'utf8')).k;
+    if (!/^[a-f0-9]{64}$/.test(k)) return null;
+    const st = fs.statSync(path.join(opzioni.dir, k + '.webp'));
+    return { k, v: Math.floor(st.mtimeMs) };
+  } catch { return null; }
+}
+function leggiChiave(k) {
+  if (!/^[a-f0-9]{64}$/.test(String(k))) return null;
+  try { return fs.readFileSync(path.join(opzioni.dir, k + '.webp')); } catch { return null; }
+}
+
 function leggi(user) {
   try { return fs.readFileSync(file(user, '.webp')); } catch { return null; }
 }
@@ -147,4 +174,4 @@ function info(user) {
   return { origine: c ? s.origine : 'none', sincronizzato: s.sincronizzato, v: c && s.modificato ? Date.parse(s.modificato) : null };
 }
 
-module.exports = { opzioni, stato, info, leggi, elabora, salvaManuale, rimuovi, sincronizza, sincronizzaAlLogin, scaricaGraph, ErroreFoto };
+module.exports = { opzioni, stato, info, leggi, registraEmail, fotoPerEmail, leggiChiave, hashEmail, elabora, salvaManuale, rimuovi, sincronizza, sincronizzaAlLogin, scaricaGraph, ErroreFoto };

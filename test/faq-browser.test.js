@@ -60,8 +60,8 @@ test('guide: si caricano tutte, senza errori JavaScript', { skip: salta, timeout
 
 test('guide: il resto del portale continua a funzionare', { skip: salta, timeout: 60000 }, async () => {
   const p = await pagina('#nuova');
-  await p.waitForSelector('#tiles .card');
-  assert.ok((await p.$$('#tiles .card')).length >= 5);
+  await p.waitForSelector('#tiles .tile');
+  assert.ok((await p.$$('#tiles .tile')).length >= 5);
   await p.goto(url + '#richieste', { waitUntil: 'networkidle0' });
   await p.waitForSelector('#righe tr');
   assert.ok((await p.$$('#righe tr')).length >= 1);
@@ -242,8 +242,8 @@ test('errore nel caricamento delle guide: messaggio chiaro, nessun errore non ge
 
 test('consigli del modulo: puntano alla guida giusta, con titolo e primi passi presi dalla guida', { skip: salta, timeout: 60000 }, async () => {
   const p = await pagina('#nuova');
-  await p.waitForSelector('#tiles .card');
-  await p.evaluate(() => document.querySelector('#tiles input[value=stampante]').click());
+  await p.waitForSelector('#tiles .tile');
+  await p.evaluate(() => document.querySelector('#tiles .tile[data-id=stampante]').click());
   await p.type('#descrizione', 'la stampante risulta offline e non stampa');
   await p.waitForSelector('#consigli:not([hidden]) .consiglio', { timeout: 6000 });
   const link = await p.$$eval('#consigli .consiglio a', (a) => a.map((x) => x.getAttribute('href')));

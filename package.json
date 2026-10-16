@@ -24,7 +24,7 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js",
+    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js",
     "test:aspetto": "node scripts/test-aspetto-browser.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js"
@@ -37,6 +37,7 @@
     "memorystore": "^1.6.8",
     "multer": "^2.4.0",
     "openid-client": "^5.7.1",
+    "pdfkit": "^0.17.2",
     "sharp": "^0.34.4"
   },
   "devDependencies": {

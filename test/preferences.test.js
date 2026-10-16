@@ -49,11 +49,11 @@ test('API: login, CSRF, valori ammessi, HTML iniziale, nuova sessione e logout',
   const initial = await request('/');
   assert.equal(initial.headers.get('cache-control'), 'no-store');
   const html = await initial.text();
-  assert.match(html, /data-theme="hawaii" data-text="150" data-icon="80" data-roomy="true" data-motion="full"/);
+  assert.match(html, /data-theme="hawaii" data-text="150" data-icon="80" data-roomy="true" data-size="m" data-density="a" data-motion="full"/);
   assert.doesNotMatch(html, /__APPEARANCE__/);
   cookie = ''; // altro browser, stesso account
   await request('/auth/login'); me = await (await request('/api/me')).json();
-  assert.deepEqual((await (await request('/api/preferenze')).json()).preferences, chosen);
+  assert.deepEqual((await (await request("/api/preferenze")).json()).preferences, model.validate(chosen));
   // Errore reale del filesystem: il percorso e' temporaneamente un file.
   // Opera esclusivamente nella directory effimera creata da questo test.
   const backup = directory + '-saved';

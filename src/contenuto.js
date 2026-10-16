@@ -36,11 +36,11 @@ function browserBreve(ua) {
   return r || 'sconosciuto';
 }
 
-// Contenuto del ticket: descrizione, poi (se indicati) telefono e reperibilita', poi PC, IP e browser
-function contenutoTicket({ descrizione, telefono, reperibilita, pc, ip, ua }) {
+// Contenuto del ticket: (se scelto) il problema rapido come prima riga, la descrizione, poi telefono e reperibilita', poi PC, IP e browser
+function contenutoTicket({ sottotipo, descrizione, telefono, reperibilita, pc, ip, ua }) {
   const contatti = [telefono && `Telefono: ${esc(telefono)}`, reperibilita && `Reperibilità: ${esc(reperibilita)}`].filter(Boolean).join(' · ');
   const tecnici = [pc && `PC: ${esc(pc)}`, ip && `IP: ${esc(ip)}`, `Browser: ${esc(browserBreve(ua))}`].filter(Boolean).join(' · ');
-  return `<p>${esc(descrizione).replace(/\n/g, '<br>')}</p>` + (contatti ? `<p>${contatti}</p>` : '') + `<p>${tecnici}</p>`;
+  return (sottotipo ? `<p><b>Problema: ${esc(sottotipo)}</b></p>` : '') + `<p>${esc(descrizione).replace(/\n/g, '<br>')}</p>` + (contatti ? `<p>${contatti}</p>` : '') + `<p>${tecnici}</p>`;
 }
 
 module.exports = { esc, pcValido, ipPulito, browserBreve, contenutoTicket };

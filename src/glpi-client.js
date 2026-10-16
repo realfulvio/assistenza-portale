@@ -2,6 +2,7 @@
 // Usa solo l'utente di servizio: i dipendenti non accedono mai a GLPI.
 const config = require('./config');
 const { contenutoTicket } = require('./contenuto');
+const { componi } = require('./ticket-dettaglio');
 
 const STATI = { 1: 'In attesa', 2: 'In lavorazione', 3: 'In lavorazione', 4: 'In sospeso', 5: 'Risolta', 6: 'Chiusa' };
 const stato = (n) => STATI[Number(n)] || 'In attesa';
@@ -105,11 +106,11 @@ function nomeCognome(mail, name) {
   return { firstname: parti[0] || cap(loc[0]), realname: parti[0] || cap(loc[0]) };
 }
 
-async function creaTicket({ userId, categoria, descrizione, telefono, reperibilita, pc, ip, ua }) {
+async function creaTicket({ userId, categoria, sottotipo, descrizione, telefono, reperibilita, pc, ip, ua }) {
   const sintesi = descrizione.replace(/\s+/g, ' ').trim().slice(0, 60);
   const input = {
     name: `[${categoria.nome}] ${sintesi}${descrizione.length > 60 ? '…' : ''}`,
-    content: contenutoTicket({ descrizione, telefono, reperibilita, pc, ip, ua }),
+    content: contenutoTicket({ sottotipo, descrizione, telefono, reperibilita, pc, ip, ua }),
     type: categoria.tipo, priority: 3, urgency: 3, impact: 3,
     _users_id_requester: userId
   };
@@ -140,22 +141,61 @@ async function elencoTicket(userId) {
 }
 
 // Controllo di proprieta' LATO SERVER: il ticket deve avere userId come richiedente
-async function ticketDi(userId, ticketId) {
+async function ticketEUtenti(userId, ticketId) {
   let t;
   try { t = await call('GET', `/Ticket/${ticketId}`); } catch (e) { if (e.status === 404 || e.status === 403) return null; throw e; }
-  const utenti = await call('GET', `/Ticket/${ticketId}/Ticket_User`);
-  const mio = (utenti || []).some((u) => Number(u.type) === 1 && Number(u.users_id) === Number(userId));
-  return mio ? t : null;
+  const utenti = (await call('GET', `/Ticket/${ticketId}/Ticket_User`)) || [];
+  const mio = utenti.some((u) => Number(u.type) === 1 && Number(u.users_id) === Number(userId));
+  return mio ? { t, utenti } : null;
+}
+async function ticketDi(userId, ticketId) {
+  const r = await ticketEUtenti(userId, ticketId);
+  return r ? r.t : null;
+}
+
+// Nome, cognome ed email di piu' utenti con UNA sola ricerca (niente N+1). L'email resta sul server (serve solo per la foto).
+async function utentiInBlocco(ids) {
+  const unici = [...new Set(ids.map(Number).filter((x) => x > 0))].slice(0, 50);
+  if (!unici.length) return {};
+  const par = { 'forcedisplay[0]': '2', 'forcedisplay[1]': '34', 'forcedisplay[2]': '9', 'forcedisplay[3]': '5', 'forcedisplay[4]': '1', range: '0-49' };
+  unici.forEach((id, i) => {
+    if (i) par[`criteria[${i}][link]`] = 'OR';
+    par[`criteria[${i}][field]`] = '2'; par[`criteria[${i}][searchtype]`] = 'equals'; par[`criteria[${i}][value]`] = String(id);
+  });
+  const out = {};
+  for (const x of rows(await call('GET', '/search/User?' + q(par)))) {
+    const email = [].concat(x['5'] || []).map(String).find((e) => e.includes('@')) || '';
+    const nome = [x['34'], x['9']].filter(Boolean).join(' ').trim() || String(x['1'] || '');
+    out[Number(x['2'])] = { nome, email: email.toLowerCase() };
+  }
+  return out;
+}
+
+const facoltativo = async (p) => { try { return (await p) || []; } catch { return []; } };
+
+// Dati grezzi del dettaglio (solo dopo il controllo di proprieta'). La composizione e' in ticket-dettaglio.js
+async function dettaglioGrezzo(userId, ticketId) {
+  const base = await ticketEUtenti(userId, ticketId);
+  if (!base) return null;
+  const r = '?' + q({ range: '0-199' });
+  const [followups, solutions, tasks, logs] = await Promise.all([
+    call('GET', `/Ticket/${ticketId}/ITILFollowup${r}`),
+    facoltativo(call('GET', `/Ticket/${ticketId}/ITILSolution${r}`)),
+    facoltativo(call('GET', `/Ticket/${ticketId}/TicketTask${r}`)),
+    facoltativo(call('GET', `/Ticket/${ticketId}/Log${r}`))
+  ]);
+  const pub = (a) => (a || []).filter((x) => Number(x.is_private) === 0);
+  const fPub = pub(followups), tPub = pub(tasks);
+  const presa = (logs || []).filter((l) => [150, 12].includes(Number(l.id_search_option))).map((l) => ({ id_search_option: l.id_search_option, user_name: l.user_name, old_value: l.old_value }));
+  const ids = [...base.utenti.map((u) => u.users_id), base.t.users_id_recipient, ...fPub.map((f) => f.users_id),
+    ...(solutions || []).flatMap((s) => [s.users_id, s.users_id_approval]), ...tPub.flatMap((k) => [k.users_id, k.users_id_tech]),
+    ...presa.map((l) => { const m = /\((\d+)\)\s*$/.exec(String(l.user_name || '')); return m ? m[1] : 0; })];
+  return { ticket: base.t, ticketUsers: base.utenti, followups: fPub, solutions: solutions || [], tasks: tPub, logs: presa, users: await utentiInBlocco(ids) };
 }
 
 async function dettaglio(userId, ticketId) {
-  const t = await ticketDi(userId, ticketId);
-  if (!t) return null;
-  const fu = await call('GET', `/Ticket/${ticketId}/ITILFollowup?` + q({ range: '0-99' }));
-  const timeline = (fu || []).filter((f) => Number(f.is_private) === 0)
-    .map((f) => ({ data: f.date_creation || f.date, testo: daHtml(f.content) }));
-  return { id: Number(t.id), titolo: t.name, aperta: t.date, aggiornata: t.date_mod, stato: stato(t.status), chiusa: !aperto(t.status),
-    descrizione: daHtml(t.content), timeline };
+  const raw = await dettaglioGrezzo(userId, ticketId);
+  return raw ? { ...componi(raw, userId), _users: raw.users } : null;
 }
 
 // Esito della soluzione indicato dal richiedente (pulsanti nella mail «Chiamata risolta»).
@@ -179,5 +219,5 @@ async function aggiungiMessaggio(userId, ticketId, nome, testo) {
 
 // In modalita' DEMO (o GLPI_MOCK=1, usato dai test) si usa un GLPI finto in memoria
 module.exports = (config.demo || process.env.GLPI_MOCK === '1') ? require('./glpi-mock') : {
-  risolviRichiedente, creaTicket, allega, elencoTicket, dettaglio, aggiungiMessaggio, esitoSoluzione, ticketDi, killSession, call, GlpiError
+  risolviRichiedente, creaTicket, allega, elencoTicket, dettaglio, dettaglioGrezzo, aggiungiMessaggio, esitoSoluzione, ticketDi, killSession, call, GlpiError
 };
