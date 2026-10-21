@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160">
+  <view id="mountain" viewBox="0 0 480 160"/>
+  <g fill="none" stroke="#285b48" stroke-width="3" stroke-linejoin="round">
+    <path d="M0 150 112 12l72 98 72-105L370 150M76 57l36 12 20-30M224 50l32 15 26-19M298 150l83-92 99 92M350 92l30 12 22-13"/>
+    <path d="M25 150V87M7 129l18-35 18 35M62 150v-46m-16 33 16-29 16 29M402 150v-46m-18 33 18-29 18 29M440 150V80m-20 44 20-37 20 37"/>
+    <path d="m190 143 30-26 30 26m-51-6v20h42v-20m-29 20v-16h14v16" stroke="#6e7755"/>
+  </g>
+</svg>

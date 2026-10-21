@@ -1,0 +1,31 @@
+{
+  "aggiornato": "2026-01-01",
+  "sezioni": [
+    {
+      "titolo": "Sede principale",
+      "voci": [
+        { "nome": "Centralino", "numero": "100" },
+        { "nome": "Fax protocollo", "numero": "190" },
+        { "nome": "Anagrafe", "numero": "121", "nota": "Mario Rossi" },
+        { "nome": "Ufficio tecnico", "numero": "131", "nota": "Anna Verdi, lun./merc./ven." },
+        { "nome": "Segretario generale", "numero": "110" },
+        { "nome": "Sala riunioni", "numero": "140" }
+      ]
+    },
+    {
+      "titolo": "Polizia locale",
+      "voci": [
+        { "nome": "Centrale operativa", "numero": "600", "nota": "Emergenze", "esterno": true },
+        { "nome": "Segreteria", "numero": "307" },
+        { "nome": "Comandante", "numero": "301", "nota": "Luigi Bianchi" }
+      ]
+    },
+    {
+      "titolo": "Scuole",
+      "voci": [
+        { "nome": "Scuola primaria", "numero": "810001" },
+        { "nome": "Scuola dell'infanzia", "numero": "810002" }
+      ]
+    }
+  ]
+}

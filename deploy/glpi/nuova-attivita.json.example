@@ -1,0 +1,17 @@
+{
+  "card_id": "markdown_editable",
+  "x": 0,
+  "y": 6,
+  "width": 12,
+  "height": 3,
+  "card_options": {
+    "color": "#dbeafe",
+    "widgettype": "bigNumber",
+    "number": "+",
+    "label": "Nuova attività",
+    "alt": "Nuova attività",
+    "url": "/front/ticket.form.php",
+    "icon": "ti ti-square-plus",
+    "id": "bn_nuova_attivita"
+  }
+}

@@ -1,0 +1,2787 @@
+{
+  "matrix": [
+    "1440-classic-100",
+    "1440-dark-100",
+    "1440-contrast-100",
+    "1440-cyber-100",
+    "1440-hawaii-100",
+    "1440-mountain-100",
+    "1440-terminal-100",
+    "1440-fog-100",
+    "1440-classic-150",
+    "1440-dark-150",
+    "1440-contrast-150",
+    "1440-cyber-150",
+    "1440-hawaii-150",
+    "1440-mountain-150",
+    "1440-terminal-150",
+    "1440-fog-150",
+    "390-classic-100",
+    "390-dark-100",
+    "390-contrast-100",
+    "390-cyber-100",
+    "390-hawaii-100",
+    "390-mountain-100",
+    "390-terminal-100",
+    "390-fog-100",
+    "390-classic-150",
+    "390-dark-150",
+    "390-contrast-150",
+    "390-cyber-150",
+    "390-hawaii-150",
+    "390-mountain-150",
+    "390-terminal-150",
+    "390-fog-150",
+    "320-classic-100",
+    "320-dark-100",
+    "320-contrast-100",
+    "320-cyber-100",
+    "320-hawaii-100",
+    "320-mountain-100",
+    "320-terminal-100",
+    "320-fog-100",
+    "320-classic-150",
+    "320-dark-150",
+    "320-contrast-150",
+    "320-cyber-150",
+    "320-hawaii-150",
+    "320-mountain-150",
+    "320-terminal-150",
+    "320-fog-150"
+  ],
+  "accessibility": [
+    {
+      "context": "1440-classic-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-classic-100",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "label[for=\"cat-posta\"] > .card > .go"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.26 (foreground color: #c75b00, background color: #ffffff, font size: 9.8pt (13px), font weight: bold). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-dark-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-dark-100",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-contrast-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-contrast-100",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-cyber-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-cyber-100",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".credito-alto"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#form > .s"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#form > .sub"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "1440-hawaii-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-hawaii-100",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".credito-alto"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".wrap > h2"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".l"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "1440-mountain-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-mountain-100",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".credito-alto"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".wrap > h2"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".l"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "1440-terminal-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-terminal-100",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".credito-alto"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "1440-fog-100-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "1440-fog-100",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".credito-alto"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".wrap > h2"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".l"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-classic-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "390-classic-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "390-dark-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "390-dark-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "390-contrast-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "#aspetto-titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              "#aspetto-info"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              ".theme-fieldset > legend"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-contrast-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "390-cyber-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "#aspetto-titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              "#aspetto-info"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              ".theme-fieldset > legend"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-cyber-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#form > .s"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#form > .sub"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-hawaii-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "#aspetto-titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              "#aspetto-info"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              ".theme-fieldset > legend"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-hawaii-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".wrap > h2"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".l"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-mountain-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "#aspetto-titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              "#aspetto-info"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              ".theme-fieldset > legend"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-mountain-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".wrap > h2"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".l"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-terminal-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "#aspetto-titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              "#aspetto-info"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              ".theme-fieldset > legend"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-terminal-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-fog-150-dialog",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "#aspetto-titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              "#aspetto-info"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          },
+          {
+            "target": [
+              ".theme-fieldset > legend"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "390-fog-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".wrap > h2"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".l"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(1) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(2) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(3) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              ".hw:nth-child(4) > span"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-stampante\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-rete\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-posta\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-password\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-gestionali\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > b"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "label[for=\"cat-altro\"] > .card > .go"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "classic-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "classic-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "classic-faq-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "classic-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "classic-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "dark-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "dark-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "dark-faq-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "dark-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "dark-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "contrast-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "contrast-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "contrast-faq-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "contrast-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "contrast-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": []
+    },
+    {
+      "context": "cyber-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#v-richieste > .titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "cyber-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".indietro"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "cyber-faq-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#v-faq > .titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#v-faq > .sub"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "cyber-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#v-contatti > .titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "cyber-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              "#v-profilo > .titolo"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "hawaii-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "hawaii-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "hawaii-faq-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "hawaii-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "hawaii-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "mountain-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "mountain-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "mountain-faq-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "mountain-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "mountain-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "terminal-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "terminal-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "terminal-faq-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "terminal-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "terminal-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "fog-richieste-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "fog-richiesta/104-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "fog-faq-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "fog-contatti-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    },
+    {
+      "context": "fog-profilo-150",
+      "violations": [],
+      "contrastNeedsReview": [
+        [
+          {
+            "target": [
+              "h1"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          },
+          {
+            "target": [
+              ".in > div > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+          }
+        ]
+      ]
+    }
+  ],
+  "contrasts": [
+    {
+      "theme": "classic",
+      "pairs": [
+        {
+          "foreground": "#191919",
+          "background": "#fff",
+          "role": "txt/surface",
+          "ratio": 17.58
+        },
+        {
+          "foreground": "#191919",
+          "background": "#f2f2f2",
+          "role": "txt/field",
+          "ratio": 15.71
+        },
+        {
+          "foreground": "#455a64",
+          "background": "#fff",
+          "role": "m/surface",
+          "ratio": 7.24
+        },
+        {
+          "foreground": "#455a64",
+          "background": "#f2f7fb",
+          "role": "m/soft",
+          "ratio": 6.72
+        },
+        {
+          "foreground": "#005e8e",
+          "background": "#fff",
+          "role": "accent/surface",
+          "ratio": 7.02
+        },
+        {
+          "foreground": "#005e8e",
+          "background": "#f2f7fb",
+          "role": "accent/soft",
+          "ratio": 6.51
+        },
+        {
+          "foreground": "#fff",
+          "background": "#005e8e",
+          "role": "button-text/button",
+          "ratio": 7.02
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "pairs": [
+        {
+          "foreground": "#edf5f9",
+          "background": "#1c2c38",
+          "role": "txt/surface",
+          "ratio": 12.97
+        },
+        {
+          "foreground": "#edf5f9",
+          "background": "#14232e",
+          "role": "txt/field",
+          "ratio": 14.53
+        },
+        {
+          "foreground": "#c3d4de",
+          "background": "#1c2c38",
+          "role": "m/surface",
+          "ratio": 9.4
+        },
+        {
+          "foreground": "#c3d4de",
+          "background": "#273e4c",
+          "role": "m/soft",
+          "ratio": 7.34
+        },
+        {
+          "foreground": "#91dcff",
+          "background": "#1c2c38",
+          "role": "accent/surface",
+          "ratio": 9.47
+        },
+        {
+          "foreground": "#91dcff",
+          "background": "#273e4c",
+          "role": "accent/soft",
+          "ratio": 7.39
+        },
+        {
+          "foreground": "#10212d",
+          "background": "#91dcff",
+          "role": "button-text/button",
+          "ratio": 10.87
+        }
+      ]
+    },
+    {
+      "theme": "contrast",
+      "pairs": [
+        {
+          "foreground": "#000",
+          "background": "#fff",
+          "role": "txt/surface",
+          "ratio": 21
+        },
+        {
+          "foreground": "#000",
+          "background": "#fff",
+          "role": "txt/field",
+          "ratio": 21
+        },
+        {
+          "foreground": "#181818",
+          "background": "#fff",
+          "role": "m/surface",
+          "ratio": 17.76
+        },
+        {
+          "foreground": "#181818",
+          "background": "#fff",
+          "role": "m/soft",
+          "ratio": 17.76
+        },
+        {
+          "foreground": "#000",
+          "background": "#fff",
+          "role": "accent/surface",
+          "ratio": 21
+        },
+        {
+          "foreground": "#000",
+          "background": "#fff",
+          "role": "accent/soft",
+          "ratio": 21
+        },
+        {
+          "foreground": "#fff",
+          "background": "#000",
+          "role": "button-text/button",
+          "ratio": 21
+        }
+      ]
+    },
+    {
+      "theme": "cyber",
+      "pairs": [
+        {
+          "foreground": "#eefcff",
+          "background": "#15172b",
+          "role": "txt/surface",
+          "ratio": 16.82
+        },
+        {
+          "foreground": "#eefcff",
+          "background": "#0d1020",
+          "role": "txt/field",
+          "ratio": 17.99
+        },
+        {
+          "foreground": "#c8cee8",
+          "background": "#15172b",
+          "role": "m/surface",
+          "ratio": 11.31
+        },
+        {
+          "foreground": "#c8cee8",
+          "background": "#23213d",
+          "role": "m/soft",
+          "ratio": 9.92
+        },
+        {
+          "foreground": "#5df3ef",
+          "background": "#15172b",
+          "role": "accent/surface",
+          "ratio": 13.06
+        },
+        {
+          "foreground": "#5df3ef",
+          "background": "#23213d",
+          "role": "accent/soft",
+          "ratio": 11.45
+        },
+        {
+          "foreground": "#101326",
+          "background": "#5df3ef",
+          "role": "button-text/button",
+          "ratio": 13.59
+        }
+      ]
+    },
+    {
+      "theme": "hawaii",
+      "pairs": [
+        {
+          "foreground": "#263f3b",
+          "background": "#fffdf6",
+          "role": "txt/surface",
+          "ratio": 11.11
+        },
+        {
+          "foreground": "#263f3b",
+          "background": "#f5efdf",
+          "role": "txt/field",
+          "ratio": 9.85
+        },
+        {
+          "foreground": "#465e55",
+          "background": "#fffdf6",
+          "role": "m/surface",
+          "ratio": 6.89
+        },
+        {
+          "foreground": "#465e55",
+          "background": "#e5f1e8",
+          "role": "m/soft",
+          "ratio": 6.04
+        },
+        {
+          "foreground": "#00685f",
+          "background": "#fffdf6",
+          "role": "accent/surface",
+          "ratio": 6.56
+        },
+        {
+          "foreground": "#00685f",
+          "background": "#e5f1e8",
+          "role": "accent/soft",
+          "ratio": 5.75
+        },
+        {
+          "foreground": "#fff",
+          "background": "#00685f",
+          "role": "button-text/button",
+          "ratio": 6.68
+        }
+      ]
+    },
+    {
+      "theme": "mountain",
+      "pairs": [
+        {
+          "foreground": "#293e35",
+          "background": "#fffef8",
+          "role": "txt/surface",
+          "ratio": 11.33
+        },
+        {
+          "foreground": "#293e35",
+          "background": "#edf0e5",
+          "role": "txt/field",
+          "ratio": 9.92
+        },
+        {
+          "foreground": "#4e6154",
+          "background": "#fffef8",
+          "role": "m/surface",
+          "ratio": 6.57
+        },
+        {
+          "foreground": "#4e6154",
+          "background": "#e8eee3",
+          "role": "m/soft",
+          "ratio": 5.62
+        },
+        {
+          "foreground": "#285b48",
+          "background": "#fffef8",
+          "role": "accent/surface",
+          "ratio": 7.75
+        },
+        {
+          "foreground": "#285b48",
+          "background": "#e8eee3",
+          "role": "accent/soft",
+          "ratio": 6.63
+        },
+        {
+          "foreground": "#fff",
+          "background": "#244f43",
+          "role": "button-text/button",
+          "ratio": 9.23
+        }
+      ]
+    },
+    {
+      "theme": "terminal",
+      "pairs": [
+        {
+          "foreground": "#d8f8de",
+          "background": "#102016",
+          "role": "txt/surface",
+          "ratio": 14.84
+        },
+        {
+          "foreground": "#d8f8de",
+          "background": "#07130c",
+          "role": "txt/field",
+          "ratio": 16.62
+        },
+        {
+          "foreground": "#b5dbbe",
+          "background": "#102016",
+          "role": "m/surface",
+          "ratio": 11.16
+        },
+        {
+          "foreground": "#b5dbbe",
+          "background": "#193122",
+          "role": "m/soft",
+          "ratio": 9.2
+        },
+        {
+          "foreground": "#91ec9f",
+          "background": "#102016",
+          "role": "accent/surface",
+          "ratio": 11.85
+        },
+        {
+          "foreground": "#91ec9f",
+          "background": "#193122",
+          "role": "accent/soft",
+          "ratio": 9.78
+        },
+        {
+          "foreground": "#07130c",
+          "background": "#91ec9f",
+          "role": "button-text/button",
+          "ratio": 13.28
+        }
+      ]
+    },
+    {
+      "theme": "fog",
+      "pairs": [
+        {
+          "foreground": "#303c35",
+          "background": "#fafbf7",
+          "role": "txt/surface",
+          "ratio": 11.08
+        },
+        {
+          "foreground": "#303c35",
+          "background": "#ecefe7",
+          "role": "txt/field",
+          "ratio": 9.91
+        },
+        {
+          "foreground": "#515f55",
+          "background": "#fafbf7",
+          "role": "m/surface",
+          "ratio": 6.48
+        },
+        {
+          "foreground": "#515f55",
+          "background": "#e7ebe3",
+          "role": "m/soft",
+          "ratio": 5.58
+        },
+        {
+          "foreground": "#3d5944",
+          "background": "#fafbf7",
+          "role": "accent/surface",
+          "ratio": 7.45
+        },
+        {
+          "foreground": "#3d5944",
+          "background": "#e7ebe3",
+          "role": "accent/soft",
+          "ratio": 6.42
+        },
+        {
+          "foreground": "#fff",
+          "background": "#465b4e",
+          "role": "button-text/button",
+          "ratio": 7.33
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "Classico: font, colori e misure di titoli, categorie, icone, textarea e invio confrontati con il CSS originale.",
+    "Tastiera: Tab contenuto nel dialog, Esc e ritorno del focus; movimento iniziale da sistema.",
+    "48 combinazioni di tema, viewport e dimensioni; campi, categoria e allegato conservati.",
+    "Persistenza dopo reload e accesso dello stesso account da un contesto browser distinto.",
+    "Errore salvataggio, anteprima utilizzabile, riprova e ripristino completo.",
+    "Invio tramite UI con allegato e risposta nel backend GLPI mock.",
+    "Logout e cambio account nello stesso browser; preferenze di A e B isolate."
+  ],
+  "errors": [],
+  "environment": {
+    "browser": "chrome",
+    "version": "155.0.8059.85",
+    "node": "v22.23.2",
+    "platform": "win32",
+    "generatedAt": "2026-10-16T07:57:33.047Z"
+  }
+}

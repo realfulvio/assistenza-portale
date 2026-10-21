@@ -1,0 +1,17 @@
+[
+  {
+    "nome": "Documentazione",
+    "descrizione": "Guide della tua organizzazione",
+    "url": "https://example.org/guide"
+  },
+  {
+    "nome": "Intranet",
+    "descrizione": "Servizi e applicazioni",
+    "url": "https://example.org/intranet"
+  },
+  {
+    "nome": "Sito istituzionale",
+    "descrizione": "Informazioni e servizi online",
+    "url": "https://example.org"
+  }
+]

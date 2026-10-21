@@ -1,0 +1,183 @@
+/* Assistente animato (public/mascotte.js). Colori dai temi (--primary, --accent, --card, --text, --line, --herotext…):
+   cambia costume con il tema. Il movimento ridotto di «Aspetto» e del sistema è già gestito da appearance.css
+   (ferma ogni animazione e transizione): qui restano solo gli stati finali, leggibili. */
+.mascotte{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;font-family:"Titillium Web","Segoe UI",system-ui,sans-serif;font-size:calc(16px * var(--text-scale,1));line-height:1.4;color:var(--text);animation:msc-entra .7s .6s cubic-bezier(.2,1.4,.4,1) backwards}
+html.msc-attiva{scroll-padding-bottom:110px}
+html.msc-attiva .foot{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+
+/* ---- pulsante con il personaggio */
+.msc-btn{display:block;width:150px;height:157px;padding:0;border:0;background:none;cursor:pointer;color:inherit;filter:drop-shadow(0 4px 8px #0000004d);transition:transform .2s}
+.msc-btn:hover{transform:scale(1.06) rotate(-2deg)}
+.msc-btn:focus-visible{outline:3px solid var(--focus,var(--primary));outline-offset:3px;border-radius:50%}
+.msc-svg{display:block;width:100%;height:100%;overflow:visible}
+.msc-disco{fill:var(--card);stroke:var(--primary);stroke-width:4}
+.msc-pelle{fill:#f2caa0}.msc-collo{fill:#e3b184}
+.msc-camicia{fill:#f8fafc;stroke:#cfd6de;stroke-width:1.500}.msc-colletto{fill:#e8edf2}
+.msc-cravatta{fill:var(--primary)}
+.msc-capelli{fill:#8a8a8a}.msc-ciuffo{fill:none;stroke:#8a8a8a;stroke-width:2;stroke-linecap:round}
+.msc-bianco{fill:#fff}.msc-pupilla{fill:#2b2b2b}
+.msc-palp{fill:#e0ad80}.msc-palp-linea{fill:none;stroke:#5a3a22;stroke-width:1.800;stroke-linecap:round}
+.msc-chiude{fill:#e0ad80;transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0)}
+.msc-borsa{fill:none;stroke:#c98f68;stroke-width:1.600;stroke-linecap:round}
+.msc-occhiali rect{fill:#ffffff26;stroke:#33363b;stroke-width:2}.msc-occhiali path{fill:none;stroke:#33363b;stroke-width:2}
+.msc-sopracciglia{fill:none;stroke:#6b6b6b;stroke-width:2.200;stroke-linecap:round}
+.msc-naso{fill:none;stroke:#c98f68;stroke-width:1.800;stroke-linecap:round}
+.msc-baffi{fill:#6e6e6e}.msc-bocca{fill:none;stroke:#7a3b2a;stroke-width:2;stroke-linecap:round}
+.msc-mug{fill:var(--accent)}.msc-manico{fill:none;stroke:var(--accent);stroke-width:3}
+.msc-vapore{fill:none;stroke:#9aa7b2;stroke-width:2.400;stroke-linecap:round;opacity:.8}
+.msc-acc{fill:var(--accent)}
+.msc-zzz{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+
+/* ---- costumi: uno per tema («Classico» e «Contrasto elevato» restano senza) */
+.msc-c{display:none}
+[data-theme=spazio] .msc-c-spazio,[data-theme=autunno] .msc-c-autunno,[data-theme=giardino] .msc-c-giardino,[data-theme=dark] .msc-c-dark,[data-theme=mountain] .msc-c-mountain{display:inline}
+.msc-casco{fill:#bfd6ff33;stroke:#dfe9ff;stroke-width:3}.msc-lampo{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;opacity:.7}.msc-anello{fill:var(--accent)}.msc-stella{fill:#ffd24a}
+.msc-paglia{fill:#f1d98a}.msc-paglia2{fill:#e2c26a}.msc-nastro{fill:#2f7d4f}.msc-stelo{fill:none;stroke:#2f7d4f;stroke-width:2.600;stroke-linecap:round}.msc-foglia1{fill:#4caf6e}.msc-foglia2{fill:#5cc27d}
+.msc-sciarpa{fill:#c0392b}.msc-fogliaa{fill:#e8751a}
+.msc-berretto{fill:#2c3e8f}.msc-codaberretto{fill:none;stroke:#2c3e8f;stroke-width:9;stroke-linecap:round}.msc-orlo{fill:#e8eefc}.msc-luna{fill:#91dcff}
+.msc-tesa{fill:#6f6238}.msc-cappello{fill:#8a7a4a}.msc-fascia{fill:var(--accent)}.msc-piuma path{fill:#c0392b}
+[data-theme=contrast] .msc-camicia,[data-theme=contrast] .msc-pelle,[data-theme=contrast] .msc-capelli{stroke:#000;stroke-width:2.500}
+[data-theme=contrast] .msc-disco{stroke-width:6}[data-theme=contrast] .msc-pupilla,[data-theme=contrast] .msc-baffi{fill:#000}
+
+/* ---- animazione: un ciclo di 16 s (sorso di caffè, testa che cala, sbadiglio e Zzz, risveglio) più respiro, battito di ciglia e vapore */
+.msc-testa{transform-origin:60px 80px;animation:msc-testa 16s ease-in-out infinite}
+.msc-tazza{animation:msc-sorso 16s ease-in-out infinite}
+.msc-busto{transform-origin:60px 114px;animation:msc-respiro 4s ease-in-out infinite}
+.msc-pal{animation:msc-batte 4.700s ease-in-out infinite}
+.msc-pal2{animation:msc-assopisce 16s ease-in-out infinite}
+.msc-vapore{stroke-dasharray:11 13;animation:msc-vapore 2.600s linear infinite}.msc-vapore.v2{animation-delay:-1.300s}
+.msc-zzz{animation:msc-zzz 16s ease-in-out infinite}
+.msc-stella{transform-box:fill-box;transform-origin:center;animation:msc-brilla 2.400s ease-in-out infinite}.msc-stella.s2{animation-delay:-1.200s}
+.msc-germoglio{transform-origin:60px 12px;animation:msc-dondola 3.500s ease-in-out infinite}
+.msc-cade{animation:msc-cade 8s linear infinite}
+.msc-pompon{transform-origin:84px 14px;animation:msc-dondola 3s ease-in-out infinite}
+.msc-luna{animation:msc-brilla 3.500s ease-in-out infinite}
+.msc-piuma{transform-origin:78px 18px;animation:msc-dondola 3.200s ease-in-out infinite}
+/* fumetto aperto: l'impiegato è attento (occhi più aperti, niente sorso né sonnellino) */
+.mascotte[data-aperta=true] .msc-testa,.mascotte[data-aperta=true] .msc-tazza,.mascotte[data-aperta=true] .msc-pal2,.mascotte[data-aperta=true] .msc-zzz{animation:none}
+.msc-palpebra{transition:transform .25s}.mascotte[data-aperta=true] .msc-palpebra{transform:translateY(-2.500px)}
+
+@keyframes msc-entra{from{opacity:0;transform:translateY(40px) scale(.8)}}
+@keyframes msc-testa{0%,28%{transform:none}36%,46%{transform:rotate(-3deg) translateY(-1px)}56%,66%{transform:none}74%,86%{transform:rotate(6deg) translateY(2px)}90%{transform:rotate(-2deg)}94%,100%{transform:none}}
+@keyframes msc-sorso{0%,28%{transform:none}38%,46%{transform:translate(-12px,-19px) rotate(-8deg)}58%,100%{transform:none}}
+@keyframes msc-respiro{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.025)}}
+@keyframes msc-batte{0%,90%,100%{transform:scaleY(0)}93%,96%{transform:scaleY(1)}}
+@keyframes msc-assopisce{0%,70%{transform:scaleY(0)}76%,86%{transform:scaleY(1)}91%,100%{transform:scaleY(0)}}
+@keyframes msc-vapore{0%{stroke-dashoffset:24;opacity:0}25%{opacity:.8}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes msc-zzz{0%,70%{opacity:0;transform:translate(0,5px)}78%,86%{opacity:1;transform:translate(0,-2px)}92%,100%{opacity:0;transform:translate(0,-9px)}}
+@keyframes msc-brilla{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@keyframes msc-dondola{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes msc-cade{0%{transform:translate(98px,6px) rotate(0);opacity:0}10%{opacity:1}50%{transform:translate(104px,56px) rotate(160deg)}90%{opacity:1}100%{transform:translate(98px,108px) rotate(330deg);opacity:0}}
+
+/* ---- invito «Serve una mano?» */
+.msc-nota{position:absolute;right:32px;bottom:calc(100% - 4px);box-sizing:border-box;width:max-content;max-width:min(230px,calc(100vw - 64px));margin:0;white-space:normal;overflow-wrap:anywhere;pointer-events:none;background:var(--primary);color:var(--onprimary,#fff);font-weight:700;font-size:calc(15px * var(--text-scale,1));padding:9px 15px;border-radius:14px;box-shadow:0 3px 8px #001a4d16;animation:msc-nota .5s cubic-bezier(.2,1.4,.4,1) both}
+.msc-nota:after{content:"";position:absolute;right:18px;bottom:-5px;width:10px;height:10px;background:var(--primary);transform:rotate(45deg)}
+@keyframes msc-nota{from{opacity:0;transform:translateY(8px) scale(.9)}}
+.mascotte[data-aperta=true] .msc-nota{display:none}
+
+/* ---- Finestra chat: una sola area scorrevole, scrittura sempre visibile. */
+.msc-fumetto{position:absolute;right:0;bottom:calc(100% + 8px);display:flex;flex-direction:column;width:min(440px,calc(100vw - 32px));height:min(660px,calc(100dvh - 215px));box-sizing:border-box;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 55px #00000038,0 3px 12px #00000014;overflow:hidden;animation:msc-apri .2s ease-out;transform-origin:calc(100% - 75px) 100%;isolation:isolate}
+.msc-fumetto[hidden]{display:none}
+.msc-fumetto:focus{outline:none}
+.msc-fumetto:focus-visible{outline:3px solid var(--focus,var(--primary));outline-offset:3px}
+.msc-fumetto *{box-sizing:border-box}
+.msc-testata{display:flex;align-items:center;gap:10px;flex:none;min-height:72px;padding:12px 10px 12px 16px;background:var(--primary);color:var(--onprimary,#fff)}
+.msc-testata-icona{display:grid;place-items:center;flex:none;width:35px;height:35px;border:1px solid currentColor;border-radius:11px}
+.msc-testata-icona svg{width:20px;height:20px}
+.msc-testata-testo{min-width:0;flex:1}
+.msc-testata h2{margin:0;color:inherit;font:inherit;font-size:1.0625em;font-weight:700;line-height:1.2;letter-spacing:0;text-transform:none}
+.msc-testata-testo>span{display:block;margin-top:3px;font-size:.72em;line-height:1.25;opacity:.88}
+.msc-badge{flex:none;padding:3px 6px;border:1px solid currentColor;border-radius:6px;font-size:.65em;font-weight:700;line-height:1}
+.msc-x,.msc-nuova{display:grid;place-items:center;flex:none;width:36px;height:40px;min-height:40px;padding:0;border:0;border-radius:9px;background:transparent;color:inherit;cursor:pointer}
+.msc-x:hover,.msc-nuova:hover{background:#ffffff1f}
+.msc-x:focus-visible,.msc-nuova:focus-visible{outline:2px solid currentColor;outline-offset:0}
+.msc-nuova:disabled{opacity:.45;cursor:wait}
+.msc-in{display:flex;flex:1;min-height:0;padding:0;overflow:hidden}
+.msc-chat{display:flex;flex-direction:column;width:100%;min-height:0}
+.msc-messaggi{position:relative;display:flex;flex-direction:column;gap:12px;flex:1;min-height:0;padding:18px 16px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;background:var(--soft,var(--card))}
+.msc-messaggi:focus-visible{outline:2px solid var(--focus,var(--primary));outline-offset:-3px}
+.msc-messaggio{flex:none;min-width:0;margin:0;padding:12px 14px;border-radius:14px;overflow-wrap:anywhere;font-size:.9375em;line-height:1.5}
+.msc-autore{display:block;margin:0 0 5px;font-size:.75em;font-weight:700;line-height:1.2}
+.msc-messaggio-testo{margin:0;white-space:pre-wrap;color:inherit;font:inherit}
+.msc-risposta{align-self:flex-start;width:calc(100% - 12px);border:1px solid var(--line);border-bottom-left-radius:4px;background:var(--card);color:var(--text)}
+.msc-risposta .msc-autore{color:var(--herotext,var(--primary))}
+.msc-utente{align-self:flex-end;max-width:88%;border-bottom-right-radius:4px;background:var(--primary);color:var(--onprimary,#fff)}
+.msc-utente .msc-autore{opacity:.8}
+.msc-benvenuto{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:auto 0;padding:8px 4px}
+.msc-benvenuto-icona{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--card);color:var(--herotext,var(--primary));border:1px solid var(--line)}
+.msc-benvenuto-icona svg{width:23px;height:23px}
+.msc-benvenuto h3{margin:0;font-size:1.35em;line-height:1.2;color:var(--herotext,var(--primary));font-weight:700;letter-spacing:0;text-transform:none}
+.msc-benvenuto p{margin:0;color:var(--muted);font-size:.9em;line-height:1.5}
+.msc-esempi{display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px}
+.msc-esempio{width:100%;min-height:42px;padding:9px 12px;text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font:inherit;font-size:.83em;cursor:pointer}
+.msc-esempio:hover{border-color:var(--primary);color:var(--herotext,var(--primary))}
+.msc-chat-extra:empty{display:none}
+.msc-blocco{margin-top:12px}
+.msc-blocco h3{margin:0 0 7px;font-size:.77em;font-weight:700;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--muted)}
+.msc-blocco ul{list-style:none;margin:0;padding:0}
+.msc-num{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:6px}
+.msc-nome{display:flex;flex-direction:column;min-width:0;font-weight:600;overflow-wrap:anywhere}
+.msc-nome small{margin-top:3px;font-size:.8em;font-weight:400;color:var(--muted)}
+.msc-n{flex:none;color:var(--herotext,var(--primary));font-size:1.05em;font-weight:700;font-variant-numeric:tabular-nums;text-decoration:none}
+.msc-numeri{display:flex;flex:none;flex-direction:column;align-items:flex-end;gap:5px}
+.msc-cellulare{color:var(--herotext,var(--primary));font-size:.78em;text-decoration:underline;line-height:1.5}
+a.msc-n{text-decoration:underline}
+.msc-fonti{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.msc-fonte{display:flex;align-items:center;gap:8px;min-height:38px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;color:var(--herotext,var(--primary));font-size:.86em;font-weight:600;line-height:1.35;text-decoration:none;overflow-wrap:anywhere}
+.msc-fonte svg{flex:none;width:16px;height:16px}
+.msc-fonte:hover{border-color:var(--primary);text-decoration:underline}
+.msc-opzioni{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.msc-chat-b{min-height:40px;margin:0;padding:8px 11px;border:1px solid var(--primary);border-radius:9px;background:var(--card);color:var(--herotext,var(--primary));font:inherit;font-size:.85em;font-weight:600;line-height:1.3;cursor:pointer}
+.msc-chat-b:hover{background:var(--soft,var(--card))}
+.msc-chat-b:disabled{opacity:.5;cursor:default}
+.msc-categoria{margin:12px 0 8px;font-size:.85em;font-weight:600;color:var(--herotext,var(--primary))}
+.msc-testo-copia{display:block;max-width:100%;margin:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--soft,var(--card));color:var(--text);font:inherit;font-size:.9em;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.msc-copia{margin-top:9px}
+.msc-ticket-card{padding-top:9px}
+.msc-ticket-card>small{display:block;margin:5px 0;color:var(--muted)}
+.msc-ticket-card>p{margin:6px 0;white-space:pre-wrap}
+.msc-attesa{align-self:flex-start;margin:0;padding:9px 2px;color:var(--muted);font-size:.85em}
+.msc-scrittura{flex:none;padding:12px 14px 10px;border-top:1px solid var(--line);background:var(--card)}
+.msc-chat-form{display:flex;align-items:center;gap:8px;width:100%;margin:0;padding:0;border:0;background:none;box-shadow:none}
+.msc-chat-form textarea{display:block;flex:1;min-width:0;width:100%;height:64px;min-height:64px;max-height:64px;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--text);font:inherit;font-size:1em;line-height:1.4;resize:none;box-shadow:none}
+.msc-chat-form textarea::placeholder{color:var(--muted);opacity:1}
+.msc-chat-form textarea:focus-visible{outline:2px solid var(--focus,var(--primary));outline-offset:1px;border-color:var(--primary)}
+.msc-invia{display:flex;align-items:center;justify-content:center;flex:none;min-height:44px;height:44px;margin:0;padding:0 13px;border:0;border-radius:10px;background:var(--primary);color:var(--onprimary,#fff);font:inherit;font-size:.85em;font-weight:700;cursor:pointer}
+.msc-invia:disabled{opacity:.5;cursor:wait}
+.msc-aiuto{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:38px;margin:9px 0 0;padding:5px 2px;border:0;border-radius:7px;background:transparent;color:var(--herotext,var(--primary));font:inherit;font-size:.8em;font-weight:600;line-height:1.3;cursor:pointer}
+.msc-aiuto svg{flex:none;width:15px;height:15px}
+.msc-aiuto:hover{text-decoration:underline}
+.msc-aiuto:disabled{opacity:.5;cursor:wait}
+.msc-ai-avviso{display:block;margin-top:4px;color:var(--muted);font-size:.66em;line-height:1.4;text-align:center}
+.msc-chat-piedi{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 18px;flex:none;padding:3px 12px;border-top:1px solid var(--line);background:var(--card)}
+.msc-chat-piedi a{display:inline-flex;align-items:center;min-height:34px;color:var(--herotext,var(--primary));font-size:.75em;font-weight:600;text-decoration:underline}
+.msc-chat-errore{margin:0 0 9px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.8em;line-height:1.4;color:var(--text);background:var(--soft,var(--card))}
+.msc-chat-errore:empty{display:none}
+.msc-vh{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+.msc-chat-b:focus-visible,.msc-invia:focus-visible,.msc-aiuto:focus-visible,.msc-esempio:focus-visible,.msc-fonte:focus-visible{outline:2px solid var(--focus,var(--primary));outline-offset:2px}
+.msc-login{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:12px;padding:24px;margin:auto 0}
+.msc-login h3{margin:0;font-size:1.3em;line-height:1.3}
+.msc-login p{margin:0;line-height:1.5;color:var(--muted)}
+.msc-login-btn{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:9px;background:var(--primary);color:var(--onprimary,#fff);font-weight:700;text-decoration:none}
+.msc-nascondi{min-height:34px;padding:0;border:0;background:transparent;color:var(--muted);font:inherit;font-size:.8em;text-decoration:underline;cursor:pointer}
+@keyframes msc-apri{from{opacity:0;transform:translateY(8px) scale(.98)}}
+
+/* ---- «Mostra l'assistente» nel piè di pagina */
+.msc-mostra{height:32px;border:1px solid #ffffff40;border-radius:999px;background:transparent;color:var(--foottext,#fff);font:700 13px "Titillium Web",sans-serif;padding:0 14px;cursor:pointer}
+.msc-mostra:hover{text-decoration:underline}
+
+@media(max-width:600px){
+  .mascotte{right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+  .msc-btn{width:100px;height:105px}
+  .msc-fumetto{position:fixed;left:8px;right:8px;width:auto;bottom:calc(121px + env(safe-area-inset-bottom,0px));height:min(660px,calc(100dvh - 137px - env(safe-area-inset-bottom,0px)));border-radius:16px;transform-origin:calc(100% - 50px) 100%}
+  .msc-testata{gap:8px;min-height:64px;padding:10px 8px 10px 12px}
+  .msc-testata-icona{display:none}
+  .msc-testata-testo>span{font-size:.7em}
+  .msc-messaggi{padding:14px 12px}
+  .msc-scrittura{padding:10px 12px 8px}
+  .msc-nota{right:38px}
+  html.msc-attiva .foot{padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-height:650px){.msc-testata{min-height:56px;padding-top:6px;padding-bottom:6px}.msc-ai-avviso{display:none}.msc-benvenuto-icona{display:none}.msc-benvenuto{gap:7px}.msc-esempio{min-height:34px;padding:7px 10px}.msc-messaggi{padding-top:10px;padding-bottom:10px}.msc-chat-form textarea{height:52px;min-height:52px;max-height:52px}.msc-aiuto{min-height:30px;margin-top:5px}.msc-chat-piedi a{min-height:30px}}
+@media(forced-colors:active){.msc-disco{stroke:CanvasText;fill:Canvas}.msc-fumetto,.msc-messaggio,.msc-fonte{border-color:CanvasText}.msc-testata,.msc-utente,.msc-invia{background:Canvas;color:CanvasText}}
+@media print{.mascotte,.msc-mostra{display:none!important}html.msc-attiva .foot{padding-bottom:0}}
