@@ -1,0 +1,21 @@
+.footer-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;width:100%;padding:4px 0 14px;border-bottom:1px solid #ffffff30}
+.footer-nav,.footer-open-source{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px}
+.footer-links a,.footer-map summary{color:inherit;text-decoration:none;min-height:36px;display:inline-flex;align-items:center;gap:8px;border-radius:6px}
+.footer-links a:hover,.footer-map summary:hover{text-decoration:underline;text-underline-offset:4px;color:#fff}
+.footer-github{font-weight:700;transition:transform .18s ease,color .18s ease}
+.footer-github:hover{transform:translateY(-2px)}
+.footer-license{font-size:12px;letter-spacing:.03em;border:1px solid #ffffff50;padding:0 9px}
+.footer-map{position:relative;text-align:left}
+.footer-map summary{cursor:pointer;list-style:none}
+.footer-map summary::-webkit-details-marker{display:none}
+.footer-map summary span{display:inline-block;transition:transform .18s ease}
+.footer-map[open] summary span{transform:rotate(180deg)}
+.footer-map-panel{position:absolute;bottom:calc(100% + 10px);left:0;width:230px;max-width:calc(100vw - 48px);padding:10px;background:var(--card);color:var(--text);border:1px solid var(--accent);border-radius:12px;box-shadow:0 12px 30px #0005;z-index:10;animation:footer-reveal .18s ease-out both}
+.footer-map-panel a{display:flex;padding:6px 12px;min-height:40px}
+.footer-map-panel a:hover{background:var(--soft);color:var(--text)}
+.foot .in{row-gap:10px}
+@keyframes footer-reveal{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:641px) and (max-width:1500px){html.msc-attiva .foot .in{padding-right:190px}}
+@media(max-width:640px){.footer-links{justify-content:center;gap:8px}.footer-nav,.footer-open-source{justify-content:center;gap:8px 16px}.footer-map-panel{left:auto;right:0}.footer-links a,.footer-map summary{min-height:44px}.foot .ente{flex-basis:100%}}
+@media(max-width:640px){html.msc-attiva .foot{padding-bottom:calc(130px + env(safe-area-inset-bottom,0px))}}
+@media(prefers-reduced-motion:reduce){.footer-github,.footer-map summary span{transition:none}.footer-github:hover{transform:none}.footer-map-panel{animation:none}}
