@@ -2,6 +2,20 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.4.0] - 2026-10-21
+
+### Novità per gli utenti
+
+- L'assistente ricorda meglio i dettagli già forniti e distingue controlli da eseguire e tentativi già completati.
+- Risposte più pertinenti su posta, allegati, stampanti, telefono e accesso ai gestionali.
+- Domande più brevi, al massimo due dettagli mancanti per turno, e indicazioni più chiare quando manca una guida.
+- La preparazione del testo resta separata dall'invio della richiesta, che spetta all'utente.
+
+### Distribuzione
+
+- Schede, istruzioni ed esempi didattici configurabili in file locali; nella distribuzione soltanto esempi inventati.
+- Modello e servizio di inferenza configurabili, con controlli di coerenza e test di regressione.
+
 ## [2.3.1] - 2026-10-21
 
 ### Novità per gli utenti

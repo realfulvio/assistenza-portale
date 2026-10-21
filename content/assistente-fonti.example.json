@@ -1,0 +1,11 @@
+{
+  "fonti": [
+    {
+      "id": "outlook-allegati-microsoft",
+      "titolo": "Microsoft: apertura e salvataggio degli allegati in Outlook",
+      "url": "https://support.microsoft.com/en-us/outlook/mail/open-save-and-edit-attachments-received-in-outlook",
+      "verificata": "2026-10-21",
+      "testo": "Microsoft documenta il salvataggio e download degli allegati sia in Outlook classico sia in Outlook nel browser. Nel browser sono previste le opzioni Download e Download all. Limite di questa fonte: conferma la funzione generale, senza accertare la causa di un mancato salvataggio specifico e senza autorizzare ad aggirare le protezioni."
+    }
+  ]
+}
