@@ -25,9 +25,10 @@ test('rilascio: verifica HTML e risorse del server reale, senza autenticazione',
   try {
     const result = await verificaUrl(`http://127.0.0.1:${server.address().port}/assistenza/`);
     assert.deepEqual(result.errori, []);
-    assert.equal(result.assets.length, 23);
+    assert.equal(result.assets.length, 24);
     assert.ok(result.assets.some(a => a.url.includes('/mascotte.js')));
     assert.ok(result.assets.some(a => a.url.includes('/link-utili.css')));
+    assert.ok(result.assets.some(a => a.url.includes('/footer.css')));
   } finally { server.close(); }
 });
 

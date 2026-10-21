@@ -2,6 +2,20 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.3.1] - 2026-10-21
+
+### Novità per gli utenti
+
+- Footer con icona GitHub, collegamento al progetto open source, licenza e crediti.
+- Accesso rapido a Guide e FAQ, Contatti e mappa espandibile delle pagine del portale.
+- Link utili ordinati per nome, con icone SVG locali e risorse secondarie accessibili al mouse, da tastiera e su telefono.
+- Collegamenti raggruppati per gli accessi alternativi a uno stesso servizio.
+
+### Distribuzione
+
+- Esempi generici per calendari, tutorial e postazioni virtuali; configurazioni dell'organizzazione mantenute in un file locale escluso da Git.
+- Il rilascio conserva anche config/link-utili.json.
+
 ## [2.1.0] - 2026-10-21
 
 ### Novità per gli utenti

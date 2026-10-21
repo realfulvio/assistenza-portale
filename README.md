@@ -92,6 +92,14 @@ Puoi anche [scaricare lo ZIP dei sorgenti](https://github.com/realfulvio/assiste
 
 I file locali di questa tabella sono esclusi da Git. Le FAQ in `content/faq.json` sono invece versionate: prima di pubblicarle occorre sostituire qualsiasi contenuto interno. [Preparare una distribuzione pubblica](docs/pubblicazione-sicura.md).
 
+### Link utili e footer
+
+Copia `config/link-utili.example.json` in `config/link-utili.json` e configura i servizi della tua organizzazione, poi riavvia il portale. Le schede sono ordinate automaticamente per nome. Ogni voce può avere `nome`, `descrizione`, `url`, `icona` e un elenco `risorse` di collegamenti con `nome` e `url`. Senza URL principale, la scheda apre le risorse, ad esempio gli accessi alla postazione virtuale. Gli indirizzi accettano soltanto HTTP(S), senza credenziali incorporate.
+
+Le icone SVG sono incluse nel codice: `applicazioni` (predefinita), `calendario`, `libro`, `mondo`, `posta`, `schermo`, `pagamenti` e `mappa`. Le risorse compaiono al passaggio del mouse e al focus; sui dispositivi touch restano visibili. Le animazioni rispettano la preferenza di movimento ridotto.
+
+Il footer include Guide e FAQ, Contatti, una mappa espandibile, il progetto GitHub e la licenza. Crediti e versione mantengono le fonti configurate. Le informative o dichiarazioni specifiche di un'organizzazione vanno definite per la relativa installazione: gli esempi pubblici non includono testi o indirizzi dell'istanza operativa.
+
 ## Sviluppo e verifiche
 
 ```bash

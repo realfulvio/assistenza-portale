@@ -20,3 +20,31 @@ test('link configurabili: escape HTML, protocolli e credenziali', () => {
     assert.equal(html(dir), '');
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('icone locali, ordine alfabetico e risorse accessibili senza un URL principale', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'link-test-'));
+  fs.mkdirSync(path.join(dir, 'config'));
+  const file = path.join(dir, 'config/link-utili.example.json');
+  try {
+    const dati = [
+      { nome: 'Zeta', descrizione: 'Accesso remoto', icona: '<script>', risorse: [{ nome: '<Tutorial>', url: 'https://example.org/?a=1&b=2' }] },
+      { nome: 'Alfa', icona: 'calendario', url: 'https://example.org/calendario' }
+    ];
+    fs.writeFileSync(file, JSON.stringify(dati));
+    const out = html(dir);
+    assert.ok(out.indexOf('<strong>Alfa') < out.indexOf('<strong>Zeta'));
+    assert.equal((out.match(/<svg /g) || []).length, 2);
+    assert.match(out, /<button[^>]+aria-expanded="false" aria-controls="link-risorse-1"/);
+    assert.match(out, /class="resources-drawer" id="link-risorse-1"/);
+    assert.match(out, /&lt;Tutorial&gt;/);
+    assert.match(out, /a=1&amp;b=2/);
+    assert.ok(!out.includes('<script>'));
+    for (const url of ['javascript:alert(1)', 'file:///etc/passwd', 'https://utente:password@example.org']) {
+      dati[0].risorse[0].url = url;
+      fs.writeFileSync(file, JSON.stringify(dati));
+      assert.throws(() => html(dir));
+    }
+    fs.writeFileSync(file, JSON.stringify([{ nome: 'Vuoto' }]));
+    assert.throws(() => html(dir));
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});

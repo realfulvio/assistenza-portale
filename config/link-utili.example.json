@@ -1,17 +1,38 @@
 [
   {
+    "nome": "Calendario",
+    "descrizione": "Appuntamenti e prenotazioni",
+    "icona": "calendario",
+    "url": "https://example.org/calendario",
+    "risorse": [
+      { "nome": "Tutorial", "url": "https://example.org/calendario/tutorial" }
+    ]
+  },
+  {
     "nome": "Documentazione",
     "descrizione": "Guide della tua organizzazione",
+    "icona": "libro",
     "url": "https://example.org/guide"
   },
   {
     "nome": "Intranet",
     "descrizione": "Servizi e applicazioni",
+    "icona": "applicazioni",
     "url": "https://example.org/intranet"
   },
   {
     "nome": "Sito istituzionale",
     "descrizione": "Informazioni e servizi online",
+    "icona": "mondo",
     "url": "https://example.org"
+  },
+  {
+    "nome": "Smart working",
+    "descrizione": "Accesso alla postazione virtuale",
+    "icona": "schermo",
+    "risorse": [
+      { "nome": "Da casa", "url": "https://example.org/postazione/da-casa" },
+      { "nome": "Dalla rete dell’organizzazione", "url": "https://example.org/postazione/rete" }
+    ]
   }
 ]

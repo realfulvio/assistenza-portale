@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="__BASE__/remota.css?v=__V__-ticket1">
 <link rel="stylesheet" href="__BASE__/link-utili.css?v=__V__">
 <link rel="stylesheet" href="__BASE__/assistente-link.css?v=__V__">
+<link rel="stylesheet" href="__BASE__/footer.css?v=__V__">
 </head>
 <body data-accesso="{{testi.pulsanteAccesso}}">
 <svg class="sprite" width="0" height="0" aria-hidden="true"><defs>
@@ -354,6 +355,25 @@
 <footer>
   <div class="deco" id="deco" aria-hidden="true"></div>
   <div class="foot"><div class="in">
+    <div class="footer-links">
+      <nav aria-label="Collegamenti del footer" class="footer-nav">
+        <a href="#faq">Guide e FAQ</a>
+        <a href="#contatti">Contatti</a>
+        <details class="footer-map">
+          <summary>Mappa del portale <span aria-hidden="true">⌃</span></summary>
+          <nav aria-label="Mappa del portale" class="footer-map-panel">
+            <a href="#nuova">Nuova richiesta</a><a href="#richieste">Le mie richieste</a>
+            <a href="#faq">Guide e FAQ</a><a href="#remota">Assistenza remota</a>
+            <a href="#link-utili">Link utili</a><a href="#contatti">Contatti</a>
+            <a href="#profilo">Il mio profilo</a>
+          </nav>
+        </details>
+      </nav>
+      <div class="footer-open-source">
+        <a class="footer-github" href="https://github.com/realfulvio/assistenza-portale" target="_blank" rel="noopener noreferrer" aria-label="Progetto open source su GitHub (si apre in una nuova scheda)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.7-1.3-1.7-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg><span>Progetto open source</span></a>
+        <a class="footer-license" href="https://github.com/realfulvio/assistenza-portale/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" aria-label="Licenza EUPL 1.2 (si apre in una nuova scheda)">EUPL-1.2</a>
+      </div>
+    </div>
     <button type="button" class="ver" id="ver" aria-expanded="false" aria-controls="novita" aria-label="Novità del portale, versione __VERSIONE__"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z M7.5 7.5h.01"/></svg>v__VERSIONE__ · Novità</button>
     <span class="ente">{{ente.nome}} · {{ente.piede}}</span>
     <span class="pw">{{crediti.testo}} <b>{{crediti.autore}}</b></span>

@@ -1,5 +1,5 @@
 // Controlla i file effettivamente serviti (anche dopo un porting), senza login né scritture.
-const stili = ['theme.css', 'ente.css', 'style.css', 'readability.css', 'appearance.css', 'stats-bar.css', 'avatar.css', 'temi.css', 'mascotte.css', 'remota.css', 'link-utili.css', 'assistente-link.css'];
+const stili = ['theme.css', 'ente.css', 'style.css', 'readability.css', 'appearance.css', 'stats-bar.css', 'avatar.css', 'temi.css', 'mascotte.css', 'remota.css', 'link-utili.css', 'assistente-link.css', 'footer.css'];
 const script = ['appearance-model.js', 'temi.js', 'appearance.js', 'faq.js', 'numeri-interni.js', 'app.js', 'stats-bar.js', 'avatar.js', 'numeri-interni.js', 'mascotte.js', 'risorse-hover.js', 'link-utili.js'];
 function risorse(html, tag, attribute) {
   return [...html.replace(/<!--[\s\S]*?-->/g, '').matchAll(new RegExp('<' + tag + '\\b[^>]*>', 'gi'))].flatMap(([markup]) => {

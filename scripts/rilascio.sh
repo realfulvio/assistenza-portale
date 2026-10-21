@@ -8,7 +8,7 @@
 #     --riavvio CMD     comando che riavvia il servizio (es. "systemctl restart portale-assistenza")
 #     --dati "DIR ..."  cartelle dati da includere nel backup (es. /var/lib/portale-assistenza)
 #     --backup DIR      dove scrivere backup e script di rollback (predefinito: <app>-backup)
-#     --conserva "F ..." file dell'istanza da riportare nella nuova versione (predefinito: .env config/ente.json config/categorie.json content/numeri-interni.json)
+#     --conserva "F ..." file dell'istanza da riportare nella nuova versione (predefinito: .env config/ente.json config/categorie.json config/link-utili.json content/numeri-interni.json)
 #     --controllo CMD   controllo aggiuntivo dopo il riavvio (es. assenza di errori nel log); uscita diversa da 0 = rollback
 #     --attesa S        secondi di attesa che il servizio risponda (predefinito 40)
 #     --prova-errore    collaudo: fa fallire il controllo dopo il passaggio per provare il rollback
@@ -16,7 +16,7 @@
 #        3 = controlli falliti, rollback eseguito e versione precedente di nuovo in servizio; 4 = rollback fallito (intervenire a mano).
 set -Eeuo pipefail
 nuova= app= url= riavvio= dati= backup= controllo= attesa=40 prova=0
-conserva=".env config/ente.json config/categorie.json content/numeri-interni.json"
+conserva=".env config/ente.json config/categorie.json config/link-utili.json content/numeri-interni.json"
 while [ $# -gt 0 ]; do
   case "$1" in
     --nuova) nuova="$2"; shift ;; --app) app="$2"; shift ;; --url) url="$2"; shift ;; --riavvio) riavvio="$2"; shift ;;
