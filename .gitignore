@@ -65,3 +65,9 @@ authorized_keys*
 # Script SQL generici revisionati: non sono dump
 !deploy/glpi/profilo-tecnico-ticket.sql
 !deploy/glpi/trigger-anti-duplicati.sql
+
+# Materiale didattico dell istanza: nel repository solo esempi inventati
+content/assistente-conoscenza.json
+content/assistente-esempi.json
+content/assistente-istruzioni.txt
+content/assistente-fonti.json

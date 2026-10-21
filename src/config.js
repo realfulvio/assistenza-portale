@@ -72,6 +72,13 @@ const config = {
   ente: ente.dati,
   enteFile: ente.file,
   categorie: categorie.dati,
+  // Assistente locale: dati dell'istanza separati dagli esempi pubblici.
+  assistenteEsempi: e.ASSISTENTE_ESEMPI === '1',
+  assistenteRisposteGuidate: e.ASSISTENTE_RISPOSTE_GUIDATE !== '0',
+  assistenteKeepAlive: e.ASSISTENTE_KEEP_ALIVE === '0' ? 0 : (e.ASSISTENTE_KEEP_ALIVE || '15m'),
+  assistenteAiUrl: e.ASSISTENTE_AI_URL || 'http://127.0.0.1:11435',
+  assistenteModello: e.ASSISTENTE_MODELLO || 'qwen3.5:4b-q4_K_M',
+  assistenteEmbedding: e.ASSISTENTE_EMBEDDING || 'embeddinggemma-2:270m',
   faqPath: path.join(root, 'content', 'faq.json'),
   // Numeri interni dell'ente: file locale non versionato (se manca la sezione non compare; in DEMO si usa l'esempio)
   numeriInterniPath: e.NUMERI_INTERNI_FILE || path.join(root, 'content', 'numeri-interni.json'),

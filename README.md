@@ -115,3 +115,7 @@ Su Linux i test PDF richiedono anche `pdftotext` del pacchetto `poppler-utils`. 
 ## Licenza e crediti
 
 **EUPL-1.2**, con i crediti e le licenze dei componenti in [LICENSE](LICENSE) e [NOTICE](NOTICE). Sviluppato dal **Servizio Sistemi Informativi**. Progetto personale dell’autore, non prodotto ufficiale di alcun ente. GLPI e gli altri prodotti citati appartengono ai rispettivi titolari.
+
+## Contenuti dell assistente locale
+
+Vedere [configurazione e limiti degli esempi didattici](docs/assistente-contenuti.md). I contenuti dell organizzazione restano in file locali esclusi da Git.

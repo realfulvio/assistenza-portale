@@ -1,0 +1,41 @@
+{
+  "versione": 1,
+  "origine": "Scenari interamente inventati per la distribuzione.",
+  "esempi": [
+    {
+      "id": "stampa-permessi",
+      "titolo": "Stampante dimostrativa con autorizzazione mancante",
+      "domanda": "La stampante Ufficio Esempio dice che non sono autorizzato.",
+      "risposta_esemplificativa": "Indica il nome della stampante nella richiesta al supporto. Non posso concedere permessi.",
+      "limite_evidenza": "Scenario inventato, nessun dispositivo o intervento reale.",
+      "parole": [
+        "stampante",
+        "autorizzato"
+      ]
+    },
+    {
+      "id": "posta-bloccata",
+      "titolo": "Posta dimostrativa bloccata",
+      "domanda": "Il programma di posta non invia messaggi.",
+      "risposta_esemplificativa": "Quale applicazione usi? Che cosa succede quando provi a inviare?",
+      "limite_evidenza": "Scenario inventato: nessuna diagnosi o verifica di un servizio reale.",
+      "parole": [
+        "posta",
+        "outlook",
+        "invia"
+      ]
+    },
+    {
+      "id": "telefono-audio",
+      "titolo": "Telefono dimostrativo con audio disturbato",
+      "domanda": "La cornetta del telefono dimostrativo si sente male.",
+      "risposta_esemplificativa": "Come si sente in vivavoce sullo stesso telefono? Descrivi la differenza al supporto.",
+      "limite_evidenza": "Scenario inventato: il confronto raccoglie un sintomo, non prova la causa.",
+      "parole": [
+        "telefono",
+        "cornetta",
+        "audio"
+      ]
+    }
+  ]
+}
