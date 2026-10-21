@@ -1,0 +1,251 @@
+[
+  {
+    "categoria": "computer",
+    "parole": [
+      "lento",
+      "lentissimo",
+      "bloccato",
+      "si blocca",
+      "impallato",
+      "non risponde"
+    ],
+    "guida": "pc-lento-bloccato"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "non si accende",
+      "schermo nero",
+      "monitor",
+      "non parte",
+      "non si avvia"
+    ],
+    "guida": "monitor-nero"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "secondo monitor",
+      "secondo schermo",
+      "doppio schermo",
+      "due monitor"
+    ],
+    "guida": "secondo-monitor"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "audio",
+      "non sento",
+      "casse",
+      "cuffie",
+      "volume"
+    ],
+    "guida": "audio"
+  },
+  {
+    "categoria": "computer",
+    "parole": [
+      "nome del pc",
+      "nome del computer",
+      "nome dispositivo"
+    ],
+    "guida": "nome-pc"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "non stampa",
+      "stampante",
+      "stampa",
+      "inceppat",
+      "incastrat",
+      "carta",
+      "toner"
+    ],
+    "guida": "stampante-non-stampa"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "offline",
+      "non raggiungibile"
+    ],
+    "guida": "stampante-offline"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "coda di stampa",
+      "coda",
+      "stampa bloccata",
+      "annulla stampa"
+    ],
+    "guida": "coda-stampa"
+  },
+  {
+    "categoria": "stampante",
+    "parole": [
+      "scanner",
+      "scansione",
+      "scansion",
+      "scannerizz"
+    ],
+    "guida": "scansione"
+  },
+  {
+    "categoria": "rete",
+    "parole": [
+      "internet",
+      "non va internet",
+      "connessione",
+      "rete",
+      "wifi",
+      "wi-fi",
+      "cavo",
+      "non naviga"
+    ],
+    "guida": "internet"
+  },
+  {
+    "categoria": "rete",
+    "parole": [
+      "cartella di rete",
+      "cartella condivisa",
+      "unita di rete",
+      "accesso negato",
+      "percorso"
+    ],
+    "guida": "cartella-rete"
+  },
+  {
+    "categoria": "rete",
+    "parole": [
+      "da remoto",
+      "da casa",
+      "vpn",
+      "smart working"
+    ],
+    "guida": "accesso-remoto"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "outlook",
+      "non si apre",
+      "disconnesso"
+    ],
+    "guida": "outlook-non-si-apre"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "non ricevo",
+      "non arriva",
+      "posta non arriva",
+      "mail non arrivano"
+    ],
+    "guida": "posta-non-arriva"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "allegato",
+      "allegati",
+      "file troppo grande",
+      "non riesco a inviare"
+    ],
+    "guida": "allegato-troppo-grande"
+  },
+  {
+    "categoria": "posta",
+    "parole": [
+      "teams",
+      "microfono",
+      "webcam",
+      "videocamera",
+      "non mi sentono",
+      "non mi vedono",
+      "riunione"
+    ],
+    "guida": "teams-audio-video"
+  },
+  {
+    "categoria": "password",
+    "parole": [
+      "password",
+      "dimenticat",
+      "scadut",
+      "bloccat",
+      "account",
+      "non riesco ad accedere",
+      "credenziali"
+    ],
+    "guida": "password-dimenticata"
+  },
+  {
+    "categoria": "password",
+    "parole": [
+      "mfa",
+      "approva",
+      "approvazione",
+      "codice",
+      "autenticazione",
+      "verifica in due passaggi"
+    ],
+    "guida": "mfa-richiesta"
+  },
+  {
+    "categoria": "gestionali",
+    "parole": [
+      "programma",
+      "gestionale",
+      "protocollo",
+      "atti",
+      "contabilita",
+      "anagrafe",
+      "non si apre",
+      "errore"
+    ],
+    "titolo": "Un programma dell'ente non si apre o dà errore",
+    "passi": [
+      "Chiudi il programma e riaprilo.",
+      "Riavvia il computer.",
+      "Se compare un messaggio di errore, fai uno screenshot (Win+Maiusc+S) e incollalo qui sotto con Ctrl+V."
+    ],
+    "link": "#faq"
+  },
+  {
+    "categoria": "altro",
+    "parole": [
+      "installare",
+      "installazione",
+      "nuovo programma",
+      "software"
+    ],
+    "guida": "installare-programma"
+  },
+  {
+    "categoria": "altro",
+    "parole": [
+      "mail sospetta",
+      "phishing",
+      "truffa",
+      "link sospetto",
+      "virus",
+      "allegato sospetto"
+    ],
+    "guida": "mail-sospetta"
+  },
+  {
+    "categoria": "altro",
+    "parole": [
+      "avviso",
+      "pop-up",
+      "popup",
+      "finestra strana",
+      "allarme"
+    ],
+    "guida": "avviso-sicurezza"
+  }
+]

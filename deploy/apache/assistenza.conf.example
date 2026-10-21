@@ -1,0 +1,23 @@
+# Vhost HTTPS separato per il portale (reverse proxy verso Node su 127.0.0.1:3000).
+# Sostituisci i segnaposto <...>. Non modifica il vhost di GLPI.
+# Attiva:    sudo a2enmod ssl proxy proxy_http headers
+#            sudo cp deploy/apache/assistenza.conf.example /etc/apache2/conf-available/assistenza.conf
+#            sudo a2enconf assistenza && sudo apachectl configtest && sudo systemctl restart apache2
+# Disattiva: sudo a2disconf assistenza && sudo systemctl restart apache2
+<VirtualHost *:443>
+    ServerName <portale.tuoente.it>
+
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/certs/<portale>.crt
+    SSLCertificateKeyFile /etc/ssl/private/<portale>.key
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+
+    ProxyPreserveHost On
+    ProxyPass        /assistenza http://127.0.0.1:3000/assistenza
+    ProxyPassReverse /assistenza http://127.0.0.1:3000/assistenza
+    RequestHeader set X-Forwarded-Proto "https"
+    RedirectMatch ^/$ /assistenza/
+
+    ErrorLog ${APACHE_LOG_DIR}/assistenza-error.log
+    CustomLog ${APACHE_LOG_DIR}/assistenza-access.log combined
+</VirtualHost>

@@ -1,0 +1,63 @@
+# Segreti e configurazione locale: MAI nel repository
+.env
+.env.*
+!.env.example
+*.key
+*.crt
+*.pem
+*.p12
+*.pfx
+config/ente.json
+config/categorie.json
+*secret*.conf
+!deploy/apache/glpi-oidc-secret.conf.example
+
+# Modelli mail generati per il tuo ente (npm run template-mail)
+deploy/glpi/mail-ticket.html
+deploy/glpi/mail-ticket.txt
+
+# Dipendenze, log, backup, dati
+node_modules/
+uploads/
+data/
+*.log
+backup/
+backups/
+*.sql.gz
+*.dump
+
+# Dati locali, materiale riservato e file generati
+avatars/
+data/avatars/
+PROMPT-v2.md
+docs/design-v2/
+*.pdf
+
+# Strumenti e risultati delle prove locali
+.cache/
+artifacts/
+
+# Immagini e testi dell'istanza (stemma, logo, foto, elenco dei termini riservati): restano solo sul server
+public/img/stemma-*
+!public/img/stemma-esempio.svg
+public/img/logo-*
+!public/img/logo-servizio.svg
+!public/img/logo-servizio-bianco.svg
+public/img/istanza/
+config/termini-riservati.txt
+
+# Elenco dei numeri interni dell'ente (nomi e numeri di telefono): resta solo sul server
+content/numeri-interni.json
+
+# Personalizzazioni e strumenti riservati
+config/link-utili.json
+private-downloads/
+*.zip
+*.tar
+*.tar.gz
+*.sql
+id_rsa*
+id_ed25519*
+known_hosts*
+authorized_keys*
+.ssh/

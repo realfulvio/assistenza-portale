@@ -1,0 +1,114 @@
+/* Generato da scripts/genera-leggibilita.js; non modificare a mano. */
+body{font-size:calc(18px * var(--text-scale,1))}
+.slim{font-size:calc(13px * var(--text-scale,1))}
+.center h1{font-size:calc(22px * var(--text-scale,1))}
+.center small{font-size:calc(13px * var(--text-scale,1))}
+.nav .in{font-size:calc(15px * var(--text-scale,1))}
+.credito-alto{font-size:calc(12px * var(--text-scale,1))}
+.htitle{font-size:calc(36px * var(--text-scale,1))}
+.hsub{font-size:calc(18px * var(--text-scale,1))}
+.sp-t{font-size:calc(15px * var(--text-scale,1))}
+h3.s{font-size:calc(22px * var(--text-scale,1))}
+h3.s i{font-size:calc(16px * var(--text-scale,1))}
+.tile-t b{font-size:calc(18px * var(--text-scale,1))}
+.tile-t small{font-size:calc(14px * var(--text-scale,1))}
+.selpill{font-size:calc(15px * var(--text-scale,1))}
+.hint-up{font-size:calc(16px * var(--text-scale,1))}
+label,.lbl,legend{font-size:calc(15px * var(--text-scale,1))}
+label span{font-size:calc(14px * var(--text-scale,1))}
+input:not([type=radio]):not([type=file]):not([type=checkbox]):not([type=range]),textarea{font-size:calc(16px * var(--text-scale,1))}
+.hint{font-size:calc(14px * var(--text-scale,1))}
+.conta{font-size:calc(14px * var(--text-scale,1))}
+.conta small{font-size:calc(13px * var(--text-scale,1))}
+.fascia{font-size:calc(14px * var(--text-scale,1))}
+#nr-form .fascia input[type=time]{font-size:calc(15px * var(--text-scale,1))}
+.fb-n{font-size:calc(11px * var(--text-scale,1))}
+.drop{font-size:calc(15px * var(--text-scale,1))}
+.drop-a b{font-size:calc(16px * var(--text-scale,1))}
+.keys{font-size:calc(14px * var(--text-scale,1))}
+.key{font-size:calc(13px * var(--text-scale,1))}
+.drop-alt{font-size:calc(14px * var(--text-scale,1))}
+.drop-b .hint{font-size:calc(13px * var(--text-scale,1))}
+.allegati .nome{font-size:calc(15px * var(--text-scale,1))}
+.allegati button{font-size:calc(14px * var(--text-scale,1))}
+.ex{font-size:calc(14px * var(--text-scale,1))}
+.ex button{font-size:calc(14px * var(--text-scale,1))}
+.nr-send small{font-size:calc(14px * var(--text-scale,1))}
+.send{font-size:calc(17px * var(--text-scale,1))}
+.btn1,.btn2{font-size:calc(15px * var(--text-scale,1))}
+.done-t b{font-size:calc(26px * var(--text-scale,1))}
+.done-t>span{font-size:calc(18px * var(--text-scale,1))}
+.done-t strong{font-size:calc(22px * var(--text-scale,1))}
+.done-t small{font-size:calc(14px * var(--text-scale,1))}
+h3{font-size:calc(13px * var(--text-scale,1))}
+.titolo{font-size:calc(30px * var(--text-scale,1))}
+.filtro{font-size:calc(15px * var(--text-scale,1))}
+.lr-sub{font-size:calc(17px * var(--text-scale,1))}
+.lr-agg{font-size:calc(14px * var(--text-scale,1))}
+.cnt{font-size:calc(12px * var(--text-scale,1))}
+.lr-nuova{font-size:calc(15px * var(--text-scale,1))}
+.lhead{font-size:calc(12px * var(--text-scale,1))}
+.lr-n{font-size:calc(20px * var(--text-scale,1))}
+.lr-ot b{font-size:calc(17px * var(--text-scale,1))}
+.lr-ot small{font-size:calc(13px * var(--text-scale,1))}
+.lr-d{font-size:calc(15px * var(--text-scale,1))}
+.lr-stato{font-size:calc(14px * var(--text-scale,1))}
+.lr-conf{font-size:calc(13px * var(--text-scale,1))}
+.lr-vuoto span{font-size:calc(18px * var(--text-scale,1))}
+.stato,.st-b{font-size:calc(14px * var(--text-scale,1))}
+.esito-domanda{font-size:calc(18px * var(--text-scale,1))}
+.esito-azioni .send{font-size:calc(16px * var(--text-scale,1))}
+.tk-meta{font-size:calc(15px * var(--text-scale,1))}
+.pav{font-size:calc(9px * var(--text-scale,1))}
+.pav.m{font-size:calc(8px * var(--text-scale,1))}
+.pav.l{font-size:calc(13px * var(--text-scale,1))}
+.st b{font-size:calc(15px * var(--text-scale,1))}
+.st small{font-size:calc(13px * var(--text-scale,1))}
+.chiusa{font-size:calc(15px * var(--text-scale,1))}
+.sep{font-size:calc(13px * var(--text-scale,1))}
+.b-h strong{font-size:calc(15px * var(--text-scale,1))}
+.badge{font-size:calc(12px * var(--text-scale,1))}
+.azione{font-size:calc(14px * var(--text-scale,1))}
+.ora{font-size:calc(13px * var(--text-scale,1))}
+.b-t{font-size:calc(16px * var(--text-scale,1))}
+.sis{font-size:calc(13px * var(--text-scale,1))}
+.faq summary{font-size:calc(18px * var(--text-scale,1))}
+.faq .faq-cat{font-size:calc(13px * var(--text-scale,1))}
+.faq-blocco h4{font-size:calc(15px * var(--text-scale,1))}
+.faq-passi ol>li:before{font-size:calc(17px * var(--text-scale,1))}
+.faq-passi ol>li>span{font-size:calc(18px * var(--text-scale,1))}
+.faq-nota{font-size:calc(14px * var(--text-scale,1))}
+.faq .faq-vedi,.faq .faq-link{font-size:calc(15px * var(--text-scale,1))}
+.consiglio .pre{font-size:calc(13px * var(--text-scale,1))}
+.consiglio .tit{font-size:calc(17px * var(--text-scale,1))}
+.box h2{font-size:calc(28px * var(--text-scale,1))}
+.ms{font-size:calc(16px * var(--text-scale,1))}
+.foot{font-size:calc(13px * var(--text-scale,1))}
+.ver{font-size:calc(13px * var(--text-scale,1))}
+.nv-d{font-size:calc(13px * var(--text-scale,1))}
+.novita li{font-size:calc(15px * var(--text-scale,1))}
+.appearance-heading h2{font-size:calc(18px * var(--text-scale,1))}
+.dw-info{font-size:calc(13px * var(--text-scale,1))}
+.dw-sez legend{font-size:calc(12px * var(--text-scale,1))}
+.thm .nm b{font-size:calc(16px * var(--text-scale,1))}
+.thm .nm small{font-size:calc(12px * var(--text-scale,1))}
+.dw-tre small{font-size:calc(12px * var(--text-scale,1))}
+.dw-altri summary{font-size:calc(14px * var(--text-scale,1))}
+.appearance-controls label{font-size:calc(14px * var(--text-scale,1))}
+.appearance-controls button,.dw-azioni button{font-size:calc(14px * var(--text-scale,1))}
+#aspetto-stato{font-size:calc(13px * var(--text-scale,1))}
+@media(max-width:860px){
+.lr-lbl{font-size:calc(12px * var(--text-scale,1))}
+}
+@media(max-width:760px){
+.center h1{font-size:calc(19px * var(--text-scale,1))}
+.htitle{font-size:calc(28px * var(--text-scale,1))}
+}
+.nu-sez h4{font-size:calc(15px * var(--text-scale,1))}
+.nu-nota{font-size:calc(14px * var(--text-scale,1))}
+.nu-num{font-size:calc(20px * var(--text-scale,1))}
+.nu-cell{font-size:calc(14px * var(--text-scale,1))}
+.nu-badge{font-size:calc(13px * var(--text-scale,1))}
+@media(max-width:600px){
+.nu-num{font-size:calc(19px * var(--text-scale,1))}
+}

@@ -1,0 +1,62 @@
+<div style="margin:0;padding:0;background:#f2f2f2">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f2f2f2;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#191919">
+<tr><td align="center" style="padding:0">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:640px">
+    <tr><td style="background:{{COLORE_BARRA}};color:#ffffff;font-size:12px;padding:6px 20px">{{ENTE}}</td></tr>
+    <tr><td style="background:{{COLORE}};color:#ffffff;padding:18px 20px">
+      <div style="font-size:22px;font-weight:bold;line-height:1.2">{{SERVIZIO}}</div>
+      <div style="font-size:13px;margin-top:2px">{{SOTTOTITOLO}}</div>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:16px 20px 0 20px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="background:#fff4ce;border-left:6px solid #b58900;padding:14px 16px;font-size:16px;line-height:1.4;color:#191919">
+          <strong><span style="font-size:20px">&#9888;</span>&nbsp; NON RISPONDERE A QUESTA MAIL.</strong><br>
+          <strong>Per scrivere al tecnico o aggiungere informazioni usa il portale:</strong><br>
+          <a href="{{URL_PORTALE}}" style="color:{{COLORE}};font-weight:bold">{{URL_PORTALE_TESTO}}</a>
+        </td>
+      </tr></table>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:20px 20px 8px 20px">
+      <div style="font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#455a64;font-weight:bold">##ticket.action##</div>
+      <div style="font-size:22px;line-height:1.25;color:{{COLORE}};font-weight:bold;margin:6px 0 4px 0">##ticket.title##</div>
+      <div style="font-size:14px;color:#455a64">Richiesta n. ##ticket.id##</div>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:8px 20px 4px 20px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:15px;border-top:1px solid #e3e8ec">
+        <tr><td style="padding:9px 0;width:140px;color:#455a64;border-bottom:1px solid #e3e8ec">Richiedente</td><td style="padding:9px 0;border-bottom:1px solid #e3e8ec"><strong>##IFticket.authors####ticket.authors####ENDIFticket.authors####ELSEticket.authors##--##ENDELSEticket.authors##</strong></td></tr>
+        <tr><td style="padding:9px 0;color:#455a64;border-bottom:1px solid #e3e8ec">Categoria</td><td style="padding:9px 0;border-bottom:1px solid #e3e8ec">##IFticket.category####ticket.category####ENDIFticket.category####ELSEticket.category##Nessuna categoria##ENDELSEticket.category##</td></tr>
+        <tr><td style="padding:9px 0;color:#455a64;border-bottom:1px solid #e3e8ec">Stato</td><td style="padding:9px 0;border-bottom:1px solid #e3e8ec"><span style="background:#e0e7ff;color:#14407f;font-weight:bold;font-size:13px;padding:2px 10px;border-radius:12px">##ticket.status##</span></td></tr>
+        <tr><td style="padding:9px 0;color:#455a64;border-bottom:1px solid #e3e8ec">Aperta il</td><td style="padding:9px 0;border-bottom:1px solid #e3e8ec">##ticket.creationdate##</td></tr>
+        ##IFticket.assigntousers##<tr><td style="padding:9px 0;color:#455a64;border-bottom:1px solid #e3e8ec">Assegnata a</td><td style="padding:9px 0;border-bottom:1px solid #e3e8ec">##ticket.assigntousers##</td></tr>##ENDIFticket.assigntousers##
+        ##IFticket.assigntogroups##<tr><td style="padding:9px 0;color:#455a64;border-bottom:1px solid #e3e8ec">Gruppo</td><td style="padding:9px 0;border-bottom:1px solid #e3e8ec">##ticket.assigntogroups##</td></tr>##ENDIFticket.assigntogroups##
+      </table>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:16px 20px 4px 20px">
+      <div style="font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#455a64;font-weight:bold;margin-bottom:8px">Descrizione</div>
+      <div style="font-size:15px;line-height:1.5">##ticket.content##</div>
+    </td></tr>
+    ##IFticket.storestatus=5##<tr><td style="background:#ffffff;padding:12px 20px 4px 20px">
+      <div style="background:#d8f1df;border-left:4px solid #00732f;padding:12px 14px">
+        <div style="font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#00732f;font-weight:bold;margin-bottom:6px">Soluzione</div>
+        <div style="font-size:15px;line-height:1.5">##ticket.solution.description##</div>
+      </div>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:14px 20px 0 20px">
+      <div style="font-size:16px;font-weight:bold;margin-bottom:10px;color:#191919">Il problema è risolto?</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 8px 0"><tr><td bgcolor="{{COLORE}}" style="background:{{COLORE}};border-radius:4px;border-bottom:4px solid {{COLORE_BARRA}}"><a href="{{URL_PORTALE}}?azione=risolto#richiesta/##ticket.id##" style="display:inline-block;padding:14px 26px;font-size:17px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Segoe UI',Arial,Helvetica,sans-serif">Risolto, grazie</a></td></tr></table>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 8px 0"><tr><td bgcolor="#ffffff" style="background:#ffffff;border-radius:4px;border:2px solid {{COLORE}};border-bottom:4px solid {{COLORE_BARRA}}"><a href="{{URL_PORTALE}}?azione=riapri#richiesta/##ticket.id##" style="display:inline-block;padding:14px 26px;font-size:17px;font-weight:bold;color:{{COLORE}};text-decoration:none;font-family:'Segoe UI',Arial,Helvetica,sans-serif">Non è risolto, riapri</a></td></tr></table>
+      <div style="font-size:13px;color:#455a64;margin-top:2px">Si apre il portale: ti chiederemo una conferma con un clic.</div>
+    </td></tr>##ENDIFticket.storestatus##
+    <tr><td style="background:#ffffff;padding:22px 20px 4px 20px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 8px 0"><tr><td bgcolor="{{COLORE}}" style="background:{{COLORE}};border-radius:4px;border-bottom:4px solid {{COLORE_BARRA}}"><a href="{{URL_PORTALE}}#richiesta/##ticket.id##" style="display:inline-block;padding:18px 44px;font-size:20px;font-weight:bold;color:#ffffff;text-decoration:none;font-family:'Segoe UI',Arial,Helvetica,sans-serif">Apri la richiesta</a></td></tr></table>
+      <div style="font-size:14px;color:#455a64;margin-top:4px">Per rispondere o aggiungere informazioni usa il portale.</div>
+    </td></tr>
+    <tr><td style="background:#ffffff;padding:6px 20px 22px 20px;font-size:12px;color:#455a64">Per i tecnici: <a href="##ticket.url##" style="color:{{COLORE}}">apri in GLPI</a></td></tr>
+    <tr><td style="background:#ffffff;padding:0 20px 22px 20px;font-size:14px;color:#191919;border-top:1px solid #e3e8ec">
+      <div style="padding-top:14px"><strong>{{UFFICIO}}</strong><br>{{ENTE}}</div>
+    </td></tr>
+    <tr><td style="background:{{COLORE_BARRA}};color:#ffffff;font-size:16px;font-weight:bold;padding:18px 20px;line-height:1.5">Non rispondere a questa mail. Per scrivere al tecnico o aggiungere informazioni usa il portale: <a href="{{URL_PORTALE}}" style="color:#ffffff;text-decoration:underline">{{URL_PORTALE_TESTO}}</a></td></tr>
+  </table>
+</td></tr>
+</table>
+</div>

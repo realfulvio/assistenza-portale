@@ -1,0 +1,8 @@
+# Compatibilità con unità precedenti alla v2: la nuova unità include già queste direttive.
+# Copiare solo per aggiornare una unità personalizzata esistente in:
+# /etc/systemd/system/portale-assistenza.service.d/aspetto.conf
+[Service]
+StateDirectory=portale-assistenza
+StateDirectoryMode=0700
+Environment=PREFERENCES_DIR=/var/lib/portale-assistenza/preferences
+Environment=AVATAR_DIR=/var/lib/portale-assistenza/avatars
