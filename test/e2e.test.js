@@ -165,4 +165,3 @@ test('rate limit sull\'invio', async () => {
   for (let i = 0; i < 35; i++) ultimo = (await s.rq('/api/richieste', { method: 'POST', headers: { 'x-csrf-token': me.csrf }, body: form(ok) })).status;
   assert.equal(ultimo, 429);
 });
-

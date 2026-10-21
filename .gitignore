@@ -61,3 +61,7 @@ id_ed25519*
 known_hosts*
 authorized_keys*
 .ssh/
+
+# Script SQL generici revisionati: non sono dump
+!deploy/glpi/profilo-tecnico-ticket.sql
+!deploy/glpi/trigger-anti-duplicati.sql
