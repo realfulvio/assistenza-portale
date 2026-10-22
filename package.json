@@ -1,6 +1,6 @@
 {
   "name": "assistenza-portale",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Portale web per aprire e seguire richieste di assistenza informatica su GLPI, con accesso OpenID Connect (es. Microsoft Entra ID). Pensato per Comuni ed Enti pubblici.",
   "author": "Servizio Sistemi Informativi",
   "license": "EUPL-1.2",
