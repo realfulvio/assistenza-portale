@@ -2,6 +2,17 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.4.1] - 2026-10-22
+
+### Novità per gli utenti
+
+- Aggiornato il pacchetto di assistenza SSH distribuito dall'organizzazione: installazione offline, attesa del servizio e strumento di disattivazione.
+- Il download degli strumenti resta riservato agli utenti autenticati.
+
+### Distribuzione
+
+- I pacchetti operativi e le relative configurazioni restano separati dai sorgenti pubblici.
+
 ## [2.4.0] - 2026-10-21
 
 ### Novità per gli utenti
