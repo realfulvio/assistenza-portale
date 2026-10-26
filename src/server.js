@@ -100,7 +100,7 @@ api.get('/me', (req, res) => {
   if (!req.session.user) return res.status(401).json({ errore: 'Non autenticato' });
   const { name, email } = req.session.user;
   avatar.registraEmail(req.session.user);
-  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, versione: versione.numero, appearance: preferences.read(req.session.user), limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie: config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi }) => ({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi: Array.isArray(rapidi) ? rapidi.map(String).slice(0, 8) : [] })) });
+  res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, versione: versione.numero, appearance: preferences.read(req.session.user), adminUrl: config.admin.url && config.admin.emails.includes(email) ? config.admin.url : null, limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie: config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi }) => ({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi: Array.isArray(rapidi) ? rapidi.map(String).slice(0, 8) : [] })) });
 });
 api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
 api.get('/preferenze', serveLogin, (req, res) => {
