@@ -43,6 +43,20 @@
     }
   }
 
+  // Halloween: lanterne-zucca che tremolano e pipistrelli che attraversano la fascia (CSS in appearance.css)
+  function scenaHalloween(t) {
+    const hero = document.querySelector('.hero'); if (!hero) return;
+    hero.querySelector(':scope > .hw-anim')?.remove();
+    if (t !== 'halloween') return;
+    const box = document.createElement('div'); box.className = 'hw-anim'; box.setAttribute('aria-hidden', 'true');
+    for (let n = 0; n < 4; n++) [[98, 14], [276, 10], [327, 10], [430, 8]].forEach(([x, b], k) => box.append(span('hw-luce', { x: n * 480 + x + 'px', b: b + 'px', dl: -((n * 4 + k) * 0.37).toFixed(2) + 's' })));
+    for (let b = 0; b < 4; b++) {
+      const v = span('hw-bat', { y: 10 + b * 22 + 'px', dur: 13 + b * 3 + 's', dl: -(b * 4.3).toFixed(1) + 's' });
+      v.append(document.createElement('i')); box.append(v);
+    }
+    hero.prepend(box);
+  }
+
   let fatti = 0;
   function progresso(n) {
     fatti = n;
@@ -58,6 +72,7 @@
     const p = $('hero-prog');
     if (p) { p.className = 'hero-prog prog-' + t; html(p, PROGRESSO[t]); }
     decorazione(t);
+    scenaHalloween(t);
     progresso(fatti);
   }
 
