@@ -2,6 +2,12 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [Non rilasciato]
+
+### Novità per gli utenti
+
+- Il tema **Spazio** è sostituito da **Halloween**: zucca in testata, fantasma che avanza a ogni passo, icone delle categorie a tema, cimitero con lanterne-zucca, fantasmi e pipistrelli animati, cappello da strega sulla mascotte. Chi aveva scelto Spazio vede il Classico.
+
 ## [2.4.1] - 2026-10-22
 
 ### Novità per gli utenti
