@@ -315,7 +315,7 @@ router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
 // __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
-const versioneFile = versione.numero + ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js', 'theme.css', 'temi.css', 'temi.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+const versioneFile = versione.numero + ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'halloween-scena.svg', 'halloween-fila.svg', 'halloween-cimitero.svg', 'halloween-fantasma.svg', 'halloween-pipistrello.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js', 'theme.css', 'temi.css', 'temi.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
   .replaceAll('__BASE__', config.base).replaceAll('__V__', versioneFile).replace('__LINK_UTILI__', require('./link-utili').html(config.root));

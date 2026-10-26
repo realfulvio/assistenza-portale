@@ -40,7 +40,7 @@ test('VERSION, CHANGELOG e footer sono coerenti', async () => {
 
 test('temi: 7 temi, id invariati, temi tolti ricadono sul Classico, nessuna richiesta esterna', () => {
   const ids = model.themes.map((t) => t[0]);
-  assert.deepEqual(ids.slice().sort(), ['autunno', 'classic', 'contrast', 'dark', 'giardino', 'mountain', 'spazio']);
+  assert.deepEqual(ids.slice().sort(), ['autunno', 'classic', 'contrast', 'dark', 'giardino', 'halloween', 'mountain']);
   const vecchie = { theme: 'dark', text: 120, icon: 100, roomy: true, motion: null };
   assert.deepEqual(model.validate(vecchie), { ...vecchie, size: 'm', density: 'a' });
   for (const theme of ['cyber', 'terminal', 'retro', 'hawaii', 'fog']) assert.equal(model.validate({ ...vecchie, theme }).theme, 'classic', theme);
