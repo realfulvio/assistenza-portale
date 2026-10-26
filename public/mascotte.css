@@ -30,8 +30,9 @@ html.msc-attiva .foot{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)
 
 /* ---- costumi: uno per tema («Classico» e «Contrasto elevato» restano senza) */
 .msc-c{display:none}
-[data-theme=spazio] .msc-c-spazio,[data-theme=autunno] .msc-c-autunno,[data-theme=giardino] .msc-c-giardino,[data-theme=dark] .msc-c-dark,[data-theme=mountain] .msc-c-mountain{display:inline}
-.msc-casco{fill:#bfd6ff33;stroke:#dfe9ff;stroke-width:3}.msc-lampo{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;opacity:.7}.msc-anello{fill:var(--accent)}.msc-stella{fill:#ffd24a}
+[data-theme=halloween] .msc-c-halloween,[data-theme=autunno] .msc-c-autunno,[data-theme=giardino] .msc-c-giardino,[data-theme=dark] .msc-c-dark,[data-theme=mountain] .msc-c-mountain{display:inline}
+/* Halloween: cappello da strega e pipistrelli */
+.msc-tesastrega{fill:#1c0f2a}.msc-cappellostrega{fill:#2b1745}.msc-nastrostrega{fill:#ff8a1f}.msc-fibbia{fill:#b57bff}.msc-pipi{fill:#ff8a1f}
 .msc-paglia{fill:#f1d98a}.msc-paglia2{fill:#e2c26a}.msc-nastro{fill:#2f7d4f}.msc-stelo{fill:none;stroke:#2f7d4f;stroke-width:2.600;stroke-linecap:round}.msc-foglia1{fill:#4caf6e}.msc-foglia2{fill:#5cc27d}
 .msc-sciarpa{fill:#c0392b}.msc-fogliaa{fill:#e8751a}
 .msc-berretto{fill:#2c3e8f}.msc-codaberretto{fill:none;stroke:#2c3e8f;stroke-width:9;stroke-linecap:round}.msc-orlo{fill:#e8eefc}.msc-luna{fill:#91dcff}
@@ -47,7 +48,7 @@ html.msc-attiva .foot{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)
 .msc-pal2{animation:msc-assopisce 16s ease-in-out infinite}
 .msc-vapore{stroke-dasharray:11 13;animation:msc-vapore 2.600s linear infinite}.msc-vapore.v2{animation-delay:-1.300s}
 .msc-zzz{animation:msc-zzz 16s ease-in-out infinite}
-.msc-stella{transform-box:fill-box;transform-origin:center;animation:msc-brilla 2.400s ease-in-out infinite}.msc-stella.s2{animation-delay:-1.200s}
+.msc-pipi{transform-box:fill-box;transform-origin:center;animation:msc-brilla 2.400s ease-in-out infinite}.msc-pipi.s2{animation-delay:-1.200s}
 .msc-germoglio{transform-origin:60px 12px;animation:msc-dondola 3.500s ease-in-out infinite}
 .msc-cade{animation:msc-cade 8s linear infinite}
 .msc-pompon{transform-origin:84px 14px;animation:msc-dondola 3s ease-in-out infinite}

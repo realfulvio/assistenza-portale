@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const { verificaUrl } = require('./verifica-rilascio');
 
-const TEMI = ['classic', 'spazio', 'giardino', 'autunno'];
+const TEMI = ['classic', 'halloween', 'giardino', 'autunno'];
 const VARIABILI = ['--primary', '--bg', '--card', '--text', '--muted', '--line', '--accent', '--top', '--head', '--bar', '--foot', '--hero', '--herotext', '--soft', '--dk'];
 const VISTE = { desktop: { width: 1440, height: 900 }, telefono: { width: 390, height: 844 } };
 

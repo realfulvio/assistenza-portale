@@ -48,7 +48,7 @@
 .d-filo{position:absolute;bottom:0;left:var(--x);width:4px;height:var(--h);background:var(--c);border-radius:4px 4px 0 0;transform-origin:50% 100%;animation-delay:var(--dl)}
 .d-terra{position:absolute;left:0;right:0;bottom:0;height:10px;background:linear-gradient(transparent,#8c3b1238)}
 .d-foglia{position:absolute;left:var(--x);bottom:var(--y);width:var(--s);height:var(--s);background:var(--c);border-radius:0 100% 0 100%;animation:vento var(--dur) linear infinite,rotola 3s ease-in-out infinite alternate;animation-delay:var(--dl),0s}
-.deco-spazio{background:var(--bg)}
+.deco-halloween{background:var(--bg)}
 
 /* Particelle della conferma */
 .part.f-cerchio{border-radius:50%}
