@@ -11,7 +11,7 @@ const path = require('path');
 const temi = {
   // Classico: i valori della 1.x prevalgono (blu #005e8e, barra #001a4d, sfondo #f2f2f2)
   classic: { top: '#001a4d', head: '#005e8e', bar: '#071c38', accent: '#e6b93c', primary: '#005e8e', bg: '#f2f2f2', card: '#ffffff', text: '#191919', muted: '#455a64', line: '#dde3ea', soft: '#f2f7fb', hero: '#ffffff', herotext: '#005e8e', r: '8px', foot: '#001a4d', dk: '#0b2a55' },
-  spazio: { top: '#0d0b2e', head: '#262072', bar: '#07061f', accent: '#ffd24a', primary: '#6352e0', bg: '#14123d', card: '#1e1c52', text: '#eceaff', muted: '#b4b0e0', line: '#34308a', soft: '#17154a', hero: '#1a1850', herotext: '#ffffff', r: '14px', foot: '#07061f', dk: '#0b1030' },
+  halloween: { top: '#14081f', head: '#3a1a5c', bar: '#0d0614', accent: '#ff8a1f', primary: '#8a45d6', bg: '#1a1024', card: '#271838', text: '#f6ecff', muted: '#cdbbe3', line: '#4a2c6b', soft: '#1f1330', hero: '#2a1640', herotext: '#ffb15c', r: '14px', foot: '#0d0614', dk: '#1f0d00' },
   giardino: { top: '#1f5a38', head: '#2f7d4f', bar: '#163f28', accent: '#f2b134', primary: '#2a7347', bg: '#f2f8ec', card: '#ffffff', text: '#1d3a2a', muted: '#4c6656', line: '#d8e6cf', soft: '#f7fbf3', hero: '#e6f3da', herotext: '#225f3a', r: '16px', foot: '#163f28', dk: '#163f28' },
   autunno: { top: '#5a2d0c', head: '#a84c17', bar: '#3b1d09', accent: '#f2a93b', primary: '#a84c17', bg: '#fbf3e6', card: '#ffffff', text: '#3b2412', muted: '#765a44', line: '#ecd9bf', soft: '#fff9ef', hero: '#fbe7c8', herotext: '#9a4216', r: '16px', foot: '#3b1d09', dk: '#3b1d09' },
   // Temi della 1.x: stessi id, palette ricavate da quelle esistenti
@@ -19,7 +19,7 @@ const temi = {
   contrast: { top: '#000000', head: '#000000', bar: '#000000', accent: '#ffd400', primary: '#000000', bg: '#ffffff', card: '#ffffff', text: '#000000', muted: '#181818', line: '#000000', soft: '#ffffff', hero: '#ffffff', herotext: '#000000', r: '0px', foot: '#000000', dk: '#000000' },
   mountain: { top: '#173c34', head: '#244f43', bar: '#10291f', accent: '#c9a227', primary: '#244f43', bg: '#eef1eb', card: '#fffef8', text: '#293e35', muted: '#4e6154', line: '#c9d3c2', soft: '#e8eee3', hero: '#fffef8', herotext: '#285b48', r: '4px', foot: '#173c34', dk: '#173c34' },
 };
-const scuri = ['spazio', 'dark'];
+const scuri = ['halloween', 'dark'];
 
 // Colori delle categorie: chiari sui temi scuri (come nel file di riferimento)
 const categorie = { blu: ['#1f6fbf', '#6ab0ff'], viola: ['#7a3fa6', '#c394f0'], verde: ['#177a43', '#5fdc94'], arancio: ['#a9530f', '#ffa766'], rosso: ['#c0224a', '#ff7f9f'], acqua: ['#0b7474', '#58dede'], grigio: ['#5b6b7d', '#b9c4d2'] };

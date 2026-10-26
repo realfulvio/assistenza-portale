@@ -44,7 +44,7 @@ test('API: login, CSRF, valori ammessi, HTML iniziale, nuova sessione e logout',
   assert.equal((await request('/api/preferenze')).status, 401);
   await request('/auth/login');
   let me = await (await request('/api/me')).json();
-  const chosen = { theme: 'spazio', text: 150, icon: 80, roomy: true, motion: false };
+  const chosen = { theme: 'halloween', text: 150, icon: 80, roomy: true, motion: false };
   const put = (body, csrf = me.csrf) => request('/api/preferenze', { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf }, body: JSON.stringify(body) });
   assert.equal((await put(chosen, '')).status, 403);
   for (const patch of [{ theme: 'unknown' }, { text: 99 }, { text: 151 }, { text: 115 }, { text: '150' }, { icon: 79 }, { icon: 151 }, { roomy: 'true' }, { motion: 'yes' }, { oid: 'other' }, { userId: 'other' }]) {
@@ -55,7 +55,7 @@ test('API: login, CSRF, valori ammessi, HTML iniziale, nuova sessione e logout',
   const initial = await request('/');
   assert.equal(initial.headers.get('cache-control'), 'no-store');
   const html = await initial.text();
-  assert.match(html, /data-theme="spazio" data-text="150" data-icon="80" data-roomy="true" data-size="m" data-density="a" data-motion="full"/);
+  assert.match(html, /data-theme="halloween" data-text="150" data-icon="80" data-roomy="true" data-size="m" data-density="a" data-motion="full"/);
   assert.doesNotMatch(html, /__APPEARANCE__/);
   cookie = ''; // altro browser, stesso account
   await request('/auth/login'); me = await (await request('/api/me')).json();

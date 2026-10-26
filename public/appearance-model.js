@@ -4,7 +4,7 @@
   // [id, nome, nota, tre colori del campione]. Gli id esistenti non cambiano: le preferenze salvate restano valide.
   const themes = [
     ['classic', 'Classico', 'Blu e oro', ['#005e8e', '#e6b93c', '#001a4d']],
-    ['spazio', 'Spazio', 'Razzo e stelle', ['#262072', '#7c6cf0', '#ffd24a']],
+    ['halloween', 'Halloween', 'Zucche e fantasmi', ['#3a1a5c', '#ff8a1f', '#150a22']],
     ['giardino', 'Giardino', 'Pianta che fiorisce', ['#2f7d4f', '#f2b134', '#ff8fb1']],
     ['autunno', 'Autunno', 'Foglie che cadono', ['#b5541b', '#f2a93b', '#5a2d0c']],
     ['dark', 'Scuro', 'Superfici scure, luce gentile', ['#124c66', '#91dcff', '#101c25']],
@@ -12,7 +12,7 @@
     ['mountain', 'Montagna', 'Cime, abete e roccia', ['#244f43', '#c9a227', '#e2e9d4']]
   ];
   // Temi tolti dal selettore: chi li aveva scelti ricade sul Classico, senza errori.
-  const retired = ['cyber', 'terminal', 'retro', 'hawaii', 'fog'];
+  const retired = ['spazio', 'cyber', 'terminal', 'retro', 'hawaii', 'fog'];
   const sizes = [['s', 'Piccole', 0.92], ['m', 'Normali', 1], ['l', 'Grandi', 1.1]];
   const densities = [['c', 'Compatta', 12], ['n', 'Normale', 20], ['a', 'Ampia', 30]];
   const defaults = () => ({ theme: 'classic', text: 100, icon: 100, roomy: false, motion: null, size: 'm', density: 'n' });

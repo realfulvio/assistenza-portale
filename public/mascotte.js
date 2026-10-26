@@ -38,14 +38,14 @@
 
   // ---------------------------------------------------------------- disegno
   const COSTUMI = {
-    spazio: '<g class="msc-c msc-c-spazio"><circle class="msc-casco" cx="60" cy="46" r="37"/><path class="msc-lampo" d="M30 30a34 34 0 0 1 20 -14"/><rect class="msc-anello" x="32" y="76" width="56" height="7" rx="3.5"/></g>',
+    halloween: '<g class="msc-c msc-c-halloween"><ellipse class="msc-tesastrega" cx="60" cy="27" rx="38" ry="7"/><path class="msc-cappellostrega" d="M43 27Q52 14 61 3Q63 1 69 5Q66 14 77 27Q60 33 43 27z"/><path class="msc-nastrostrega" d="M45 23q15 6 30 0l1.500 4.500q-16.500 6-33 0z"/><rect class="msc-fibbia" x="55" y="22" width="10" height="8" rx="1.500"/></g>',
     giardino: '<g class="msc-c msc-c-giardino"><ellipse class="msc-paglia2" cx="60" cy="26" rx="36" ry="7"/><path class="msc-paglia" d="M42 26q0 -14 18 -14t18 14q-18 5 -36 0z"/><path class="msc-nastro" d="M42.5 22q17.500 6 35 0l.8 4q-18 6 -36.600 0z"/><g class="msc-germoglio"><path class="msc-stelo" d="M60 12V6"/><path class="msc-foglia1" d="M60 8q-10 0 -12 -8q10 0 12 8z"/><path class="msc-foglia2" d="M60 7q10 -1 12 -8q-10 1 -12 8z"/></g></g>',
     autunno: '<g class="msc-c msc-c-autunno"><path class="msc-sciarpa" d="M40 80q20 9 40 0l2 8q-22 10 -44 0z"/><path class="msc-sciarpa" d="M46 88l-3 17 9 -2 1 -14z"/></g>',
     dark: '<g class="msc-c msc-c-dark"><path class="msc-berretto" d="M33 30q0 -24 27 -24q22 0 28 22q-22 -6 -30 4z"/><rect class="msc-orlo" x="29" y="24" width="62" height="9" rx="4.5"/><g class="msc-pompon"><path class="msc-codaberretto" d="M80 12q16 2 18 22"/><circle class="msc-acc" cx="98" cy="36" r="5"/></g></g>',
     mountain: '<g class="msc-c msc-c-mountain"><ellipse class="msc-tesa" cx="60" cy="26" rx="37" ry="7"/><path class="msc-cappello" d="M38 26q2 -20 22 -20t22 20q-22 7 -44 0z"/><path class="msc-fascia" d="M39 22q21 7 42 0l1 5q-22 7 -44 0z"/><g class="msc-piuma"><path d="M78 18q14 -4 20 -18q-14 4 -20 18z"/></g></g>'
   };
   const FUORI = {
-    spazio: '<g class="msc-c msc-c-spazio msc-stelle"><path class="msc-stella s1" d="M104 22l2.400 5.600 5.600 2.400-5.600 2.400-2.400 5.600-2.400-5.600-5.600-2.400 5.600-2.400z"/><path class="msc-stella s2" d="M14 28l1.600 3.600 3.600 1.600-3.600 1.600-1.600 3.600-1.600-3.600-3.600-1.600 3.600-1.600z"/></g>',
+    halloween: '<g class="msc-c msc-c-halloween msc-stelle"><g transform="translate(96 22)"><path class="msc-pipi s1" d="M0 0q2.500-4 6-2q2-3 4 0q2-3 4 0q3.500-2 6 2q-3.500 0-5 3.500q-2-2.500-4-1.500l-1.500 3-1.500-3q-2-1-4 1.500q-1.500-3.500-5-3.500z"/></g><g transform="translate(8 32) scale(.8)"><path class="msc-pipi s2" d="M0 0q2.500-4 6-2q2-3 4 0q2-3 4 0q3.500-2 6 2q-3.500 0-5 3.500q-2-2.500-4-1.500l-1.500 3-1.500-3q-2-1-4 1.500q-1.500-3.500-5-3.500z"/></g></g>',
     autunno: '<g class="msc-c msc-c-autunno"><g class="msc-cade"><path class="msc-fogliaa" d="M0 -7q8 -3 11 3q-4 9 -11 4q-8 -1 0 -7z"/></g></g>',
     dark: '<g class="msc-c msc-c-dark"><path class="msc-luna" d="M16 14A11 11 0 1 0 16 36A16 16 0 0 1 16 14z"/></g>'
   };
@@ -71,8 +71,8 @@
     '<g class="msc-occhiali"><rect x="39.500" y="38" width="19" height="17" rx="5.500"/><rect x="61.500" y="38" width="19" height="17" rx="5.500"/><path d="M58.500 45h3"/></g>' +
     '<path class="msc-sopracciglia" d="M42 38l14 1.500M64 39.500l14 -1.500"/><path class="msc-naso" d="M60 49q-3 8 1.500 9.500"/>' +
     '<path class="msc-baffi" d="M49 62q11 -5 22 0q-4 5 -11 2q-7 3 -11 -2z"/><path class="msc-bocca" d="M53 70q7 -3 14 0"/>' +
-    COSTUMI.spazio + COSTUMI.giardino + COSTUMI.dark + COSTUMI.mountain + '</g>' +
-    FUORI.spazio + FUORI.autunno + FUORI.dark +
+    COSTUMI.halloween + COSTUMI.giardino + COSTUMI.dark + COSTUMI.mountain + '</g>' +
+    FUORI.halloween + FUORI.autunno + FUORI.dark +
     '<g class="msc-zzz"><path d="M88 34h9l-9 11h9"/><path d="M101 17h7l-7 8h7"/></g>' +
     '</svg>';
 
