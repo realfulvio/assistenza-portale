@@ -7,7 +7,7 @@
   const system = matchMedia('(prefers-reduced-motion: reduce)');
   const base = document.querySelector('meta[name=base]').content;
   const iconIds = ['pc', 'pr', 'nt', 'ml', 'ky', 'ap', 'ot'];
-  const varianti = ['mountain']; // temi con icone proprie (theme-icons.svg)
+  const varianti = ['mountain', 'halloween']; // temi con icone proprie (theme-icons.svg)
   const SPUNTA = '<svg class="spunta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   let state = model.defaults(), request, active = false, revision = 0, running = false, timer, opener;
   const dialog = $('aspetto-pannello');
