@@ -62,6 +62,7 @@
   function schermata(titolo, testo, azioni) {
     $('app').hidden = true; $('schermata').hidden = false;
     for (const id of ['nav', 'slim-richieste', 'slim-utente', 'esci']) $(id).hidden = true;
+    $('slim-admin').hidden = true;
     $('schermata-titolo').textContent = titolo;
     $('schermata-testo').replaceChildren(el('p', { textContent: testo }));
     $('schermata-azioni').replaceChildren(...azioni);
@@ -758,6 +759,7 @@
     if (!me) return;
     $('schermata').hidden = true; $('app').hidden = false;
     for (const id of ['nav', 'slim-richieste', 'slim-utente', 'esci']) $(id).hidden = false;
+    if (me.adminUrl) { $('slim-admin').href = me.adminUrl; $('slim-admin').hidden = false; }
     $('slim-utente').textContent = me.nome; $('slim-utente').title = me.email;
     $('aspetto').hidden = false;
     $('profilo-nome').textContent = me.nome; $('profilo-email').textContent = me.email;

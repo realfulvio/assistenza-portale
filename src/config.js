@@ -51,6 +51,12 @@ const config = {
     allowedDomain: (e.OIDC_ALLOWED_EMAIL_DOMAIN || '').toLowerCase()
   },
 
+  // Voce «Admin panel»: visibile solo agli amministratori elencati (email, separate da virgola) e solo se c'e' l'indirizzo
+  admin: {
+    emails: (e.ADMIN_EMAILS || '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean),
+    url: /^https:\/\//i.test(e.ADMIN_PANEL_URL || '') ? e.ADMIN_PANEL_URL.trim() : ''
+  },
+
   glpi: {
     url: (e.GLPI_URL || '').replace(/\/+$/, ''),
     appToken: e.GLPI_APP_TOKEN || '',

@@ -2,6 +2,12 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [Non rilasciato]
+
+### Novità per gli utenti
+
+- Voce «Admin panel» nella barra in alto, visibile solo agli amministratori indicati nella configurazione del server (`ADMIN_EMAILS`, `ADMIN_PANEL_URL`).
+
 ## [2.4.1] - 2026-10-22
 
 ### Novità per gli utenti
