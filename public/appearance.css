@@ -8,6 +8,17 @@ html[data-theme=halloween] .center{background:radial-gradient(1px 1px at 12% 30%
 /* Giardino: angoli morbidi */
 html[data-theme=giardino] .tico{border-radius:50%}
 
+/* Halloween: cimitero con lanterne-zucca e fantasmi dietro la fascia della pagina, fila di lapidi sopra il piè di pagina */
+html[data-theme=halloween] .hero{position:relative;isolation:isolate;overflow:hidden}
+html[data-theme=halloween] .hero .wrap{padding-bottom:84px}
+html[data-theme=halloween] .hero::before{content:'';position:absolute;z-index:-1;inset:0;background:url('halloween-scena.svg') right 8px top 10px/300px auto no-repeat,url('halloween-cimitero.svg') left bottom/480px 70px repeat-x;pointer-events:none}
+html[data-theme=halloween] .hero::after{content:'';position:absolute;z-index:-1;right:12%;bottom:58px;width:34px;height:40px;background:url('halloween-fantasma.svg') center/contain no-repeat;opacity:.5;pointer-events:none;animation:hw-fluttua 5s ease-in-out infinite alternate}
+@keyframes hw-fluttua{0%{transform:translate(0,6px) rotate(-4deg)}100%{transform:translate(-14px,-16px) rotate(4deg)}}
+@media(max-width:700px){html[data-theme=halloween] .hero::before{background:url('halloween-cimitero.svg') left bottom/480px 70px repeat-x}}
+html[data-theme=halloween] .deco{background:var(--bg) url('halloween-fila.svg') repeat-x left bottom/240px 30px}
+html[data-theme=halloween] .tico{border-radius:14px;border:1px solid color-mix(in srgb,var(--c) 45%,transparent)}
+html[data-theme=halloween] .tile{background:linear-gradient(165deg,var(--card),#21122f)}
+
 /* Temi della 1.x: stesse decorazioni, sulle nuove caselle */
 html[data-theme=contrast] :is(.tile,.form,.box,.faq details,table,.sp-box,.drop,.panel,.bubble){border:2px solid #000}
 html[data-theme=contrast] :is(a,button){text-decoration:underline;text-underline-offset:3px}
