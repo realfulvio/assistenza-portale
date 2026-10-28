@@ -4,6 +4,23 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { html } = require('../src/link-utili');
+test('immagini locali e schede in fondo rispettano il percorso base senza accettare URL esterni', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'link-test-'));
+  fs.mkdirSync(path.join(dir, 'config'));
+  const file = path.join(dir, 'config/link-utili.example.json');
+  const dati = [{ nome: 'Alfa', url: 'https://example.org', immagine: 'img/link-utili/icona.png', inFondo: true }, { nome: 'Zeta', url: 'https://example.org' }];
+  try {
+    fs.writeFileSync(file, JSON.stringify(dati));
+    const out = html(dir, '/help');
+    assert.ok(out.indexOf('<strong>Zeta') < out.indexOf('<strong>Alfa'));
+    assert.match(out, /src="\/help\/img\/link-utili\/icona.png"/);
+    for (const immagine of ['https://example.org/a.png', '//example.org/a.png', 'img/../a.png', 'img/a.png" onerror="alert(1)', null]) {
+      dati[0].immagine = immagine;
+      fs.writeFileSync(file, JSON.stringify(dati));
+      assert.throws(() => html(dir));
+    }
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
 test('link configurabili: escape HTML, protocolli e credenziali', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'link-test-'));
   fs.mkdirSync(path.join(dir, 'config'));

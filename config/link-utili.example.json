@@ -52,6 +52,8 @@
     "nome": "Cedro",
     "descrizione": "Converti file sul PC",
     "icona": "conversione",
+    "immagine": "img/link-utili/cedro.png",
+    "inFondo": true,
     "url": "https://github.com/realfulvio/cedro"
   }
 ]

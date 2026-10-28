@@ -2,6 +2,13 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.1] - 2026-10-28
+
+### Novità per gli utenti
+
+- Cedro usa la sua icona ufficiale ed è collocato in fondo ai Link utili.
+- Immagini locali e posizionamento finale configurabili per le schede dei servizi; aggiornata l’icona VDI nelle installazioni che la prevedono.
+
 ## [2.5.0] - 2026-10-28
 
 ### Novità per gli utenti
