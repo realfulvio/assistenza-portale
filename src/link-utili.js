@@ -18,18 +18,22 @@ function indirizzo(value) {
   if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('link-utili: usare URL HTTP(S) senza credenziali');
   return esc(url.href);
 }
-function html(root) {
+function html(root, base = '/assistenza') {
   const locale = path.join(root, 'config/link-utili.json');
   const file = fs.existsSync(locale) ? locale : path.join(root, 'config/link-utili.example.json');
   const dati = JSON.parse(fs.readFileSync(file, 'utf8'));
   if (!Array.isArray(dati)) throw new Error('link-utili: serve un elenco JSON');
-  return [...dati].sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'it', { sensitivity: 'base' })).map((voce, i) => {
+  return [...dati].sort((a, b) => Number(a.inFondo === true) - Number(b.inFondo === true) || String(a.nome).localeCompare(String(b.nome), 'it', { sensitivity: 'base' })).map((voce, i) => {
     if (voce.risorse !== undefined && !Array.isArray(voce.risorse)) throw new Error('link-utili: risorse deve essere un elenco');
     const risorse = voce.risorse || [];
     if (!voce.url && !risorse.length) throw new Error('link-utili: serve un URL o almeno una risorsa');
     const id = `link-risorse-${i}`;
     const icona = Object.hasOwn(icone, voce.icona) ? icone[voce.icona] : icone.applicazioni;
-    const mark = `<span class="useful-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${icona}</svg></span>`;
+    if (voce.immagine !== undefined && (typeof voce.immagine !== 'string' || !/^img\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|svg|ico|webp)$/.test(voce.immagine))) throw new Error('link-utili: immagine deve essere un file locale sotto img/');
+    const grafica = voce.immagine
+      ? `<img src="${esc(base)}/${esc(voce.immagine)}" width="48" height="48" alt="">`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${icona}</svg>`;
+    const mark = `<span class="useful-mark" aria-hidden="true">${grafica}</span>`;
     const label = `<span class="useful-label"><strong>${esc(voce.nome)}</strong><small>${esc(voce.descrizione)}</small>${risorse.length ? '<span class="resource-cue">Risorse <span aria-hidden="true">⌄</span></span>' : ''}</span>`;
     const primary = voce.url
       ? `<a class="useful-link" href="${indirizzo(voce.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(voce.nome)} (si apre in una nuova scheda)">${mark}${label}<span class="useful-arrow" aria-hidden="true">↗</span></a>`
