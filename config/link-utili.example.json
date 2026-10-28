@@ -5,7 +5,10 @@
     "icona": "calendario",
     "url": "https://example.org/calendario",
     "risorse": [
-      { "nome": "Tutorial", "url": "https://example.org/calendario/tutorial" }
+      {
+        "nome": "Tutorial",
+        "url": "https://example.org/calendario/tutorial"
+      }
     ]
   },
   {
@@ -31,8 +34,24 @@
     "descrizione": "Accesso alla postazione virtuale",
     "icona": "schermo",
     "risorse": [
-      { "nome": "Da casa", "url": "https://example.org/postazione/da-casa" },
-      { "nome": "Dalla rete dell’organizzazione", "url": "https://example.org/postazione/rete" }
+      {
+        "nome": "Da casa",
+        "url": "https://example.org/postazione/da-casa"
+      },
+      {
+        "nome": "Dalla rete dell’organizzazione",
+        "url": "https://example.org/postazione/rete"
+      },
+      {
+        "nome": "Smart Working Istituzionale · GitHub",
+        "url": "https://github.com/realfulvio/smart-working-istituzionale"
+      }
     ]
+  },
+  {
+    "nome": "Cedro",
+    "descrizione": "Converti file sul PC",
+    "icona": "conversione",
+    "url": "https://github.com/realfulvio/cedro"
   }
 ]

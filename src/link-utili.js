@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const icone = {
+  conversione: '<path d="M20 7h-9l3-3M4 17h9l-3 3M20 7l-3 3M4 17l3-3"/><path d="M4 10a8 8 0 0 1 13-6M20 14a8 8 0 0 1-13 6"/>',
   libro: '<path d="M12 6c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v15"/>',
   calendario: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2m-8 3h2"/>',
   mondo: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',

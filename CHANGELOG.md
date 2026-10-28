@@ -2,9 +2,12 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
-## [Non rilasciato]
+## [2.5.0] - 2026-10-28
 
 ### Novità per gli utenti
+
+- Link utili: nuova scheda Cedro per la conversione dei file sul PC.
+- Nel menu Smart working è disponibile il progetto open source Smart Working Istituzionale su GitHub.
 
 - Il tema **Spazio** è sostituito da **Halloween**: zucca in testata, fantasma che avanza a ogni passo, icone delle categorie a tema, cimitero con lanterne-zucca, fantasmi e pipistrelli animati, cappello da strega sulla mascotte. Chi aveva scelto Spazio vede il Classico.
 - Voce «Admin panel» nella barra in alto, visibile solo agli amministratori indicati nella configurazione del server (`ADMIN_EMAILS`, `ADMIN_PANEL_URL`).
