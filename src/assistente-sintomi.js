@@ -1,5 +1,5 @@
 // Percorsi di raccolta dei sintomi: soltanto fatti dell'utente, nessuna diagnosi o modifica.
-const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\bstamparte\b/g, 'stampante');
 
 function tema(testo) {
   const q = norm(testo);
