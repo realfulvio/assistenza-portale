@@ -21,6 +21,50 @@ function ambiente(extra = {}) {
 }
 async function invia(s, req, body) { req.body = body; return s.gestisci(req); }
 
+test('domande generiche: risposta sempre generata, senza guide estranee o esempi storici', async () => {
+  const chiamate = [];
+  const a = ambiente({chiamaAI: async (endpoint, body) => {
+    chiamate.push({endpoint,body});
+    assert.equal(endpoint,'/api/chat');
+    return {message:{content:'Risposta generata dal modello.'}};
+  }});
+  try {
+    fs.writeFileSync(a.deps.config.faqPath,JSON.stringify([
+      {id:'pc-lento-bloccato',d:'Computer lento',passi:[{t:'Salva il lavoro e chiudi i programmi inutili.'}]},
+      {id:'outlook-non-si-apre',d:'Outlook non si avvia',passi:[{t:'Chiudi Outlook.'}]}
+    ]));
+    const lento = await invia(a.servizio,a.req(),{testo:'Il PC va lentamente con diversi programmi aperti.'});
+    assert.equal(lento.risposta,'Risposta generata dal modello.');
+    assert.deepEqual(lento.fonti.map(f=>f.titolo),['Computer lento']);
+    assert.doesNotMatch(JSON.stringify(chiamate[0].body.messages),/Outlook non si avvia|ESEMPI STORICI/);
+    const concetto = await invia(a.servizio,a.req(),{testo:'Quale differenza c’è fra memoria RAM e disco del computer?'});
+    assert.equal(concetto.risposta,'Risposta generata dal modello.');
+    assert.equal(concetto.fonti.length,1);
+    assert.match(concetto.fonti[0].url,/support\.microsoft\.com/);
+    assert.equal(chiamate.length,2);
+    assert.match(chiamate[1].body.messages[0].content,/Domanda concettuale/);
+    assert.doesNotMatch(chiamate[1].body.messages[1].content,/Computer lento|Outlook non si avvia/);
+    assert.match(chiamate[1].body.messages[1].content,/RAM contiene temporaneamente/);
+    assert.equal(chiamate[1].body.options.num_ctx,2048);
+  } finally { a.pulisci(); }
+});
+
+test('prompt generativo conserva gli avvisi della guida e omette il riavvio già tentato', async () => {
+  let prompt;
+  const a=ambiente({chiamaAI:async (endpoint,body)=>{assert.equal(endpoint,'/api/chat');prompt=body.messages;return {message:{content:'Indica quale programma si blocca.'}};}});
+  try {
+    fs.writeFileSync(a.deps.config.faqPath,JSON.stringify([{id:'pc-lento-bloccato',d:'PC bloccato',passi:[
+      {t:'Termina attività solo per il programma bloccato.',nota:'Il lavoro non salvato va perso.'},
+      {t:'Riavvia il computer.'}
+    ]}]));
+    await invia(a.servizio,a.req(),{testo:'Il computer è bloccato. Ho già riavviato.'});
+    const user=prompt[1].content;
+    assert.match(user,/lavoro non salvato va perso/);
+    assert.doesNotMatch(user,/Riavvia il computer/);
+    assert.match(user,/riavvio/);
+  } finally {a.pulisci();}
+});
+
 test('sintomi riconoscibili: prosegue tra turni senza modello, indice o accesso GLPI', async () => {
   const a = ambiente({chiamaAI: async () => { throw new Error('AI non disponibile'); },
     glpi: new Proxy({}, {get() { throw new Error('GLPI vietato'); }}),

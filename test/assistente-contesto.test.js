@@ -2,6 +2,14 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {analizza, seleziona, verifica} = require('../src/assistente-contesto');
 
+test('generazione: programma già citato e lentezza non diventano una domanda ripetuta o un blocco', () => {
+  const a=analizza('Ho già riavviato. Excel è ancora lento.');
+  assert.equal(a.fatti.programma,'Excel');
+  assert.ok(verifica('Indica quale programma stavi usando.',a).length);
+  assert.ok(verifica('Aspetta qualche minuto per evitare il blocco.',a).length);
+  assert.deepEqual(verifica('Hai già riavviato; descrivi da quando Excel è lento.',a),[]);
+});
+
 test('sintomi specifici escludono guide di invio, lentezza e cambio ente', () => {
   const casi = [
     ['La posta da Firefox non apre gli allegati.', 'allegati-apertura', []],
