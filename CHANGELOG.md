@@ -2,6 +2,14 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.6] - 2026-10-29
+
+### Novità per gli utenti
+
+- Assistente più grande: 190 × 199 pixel su PC e 120 × 126 pixel sugli schermi piccoli.
+- Più distanza dai bordi e ombra più visibile per distinguere l’assistente dal piè di pagina, mantenendolo fisso in basso a destra nella finestra.
+- Altezza della chat adattata alle nuove dimensioni, con disposizione laterale sulle finestre basse.
+
 ## [2.5.5] - 2026-10-29
 
 ### Novità per gli utenti
