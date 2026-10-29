@@ -65,6 +65,19 @@ test('lingua, credenziali e caricamento documenti: niente procedure estranee o e
     assert.deepEqual(web.fonti, []);
   } finally { a.pulisci(); }
 });
+
+test('messaggi brevi con refuso e cambio argomento mantengono il percorso corretto', async () => {
+  const a = ambiente({chiamaAI: async () => { throw new Error('Il percorso guidato non deve chiamare AI'); }});
+  try {
+    const req = a.req();
+    const stampa = await invia(a.servizio, req, {testo: 'Stamparte scomparsa'});
+    assert.match(stampa.risposta, /manca dall’elenco/);
+    const lingua = await invia(a.servizio, req, {testo: 'Windows in inglese'});
+    assert.match(lingua.risposta, /lingua dell’interfaccia/);
+    assert.doesNotMatch(lingua.risposta, /stampante|servizio.*modificare/);
+    assert.deepEqual(a.calls, []);
+  } finally { a.pulisci(); }
+});
 test('contatti precisi disponibili anche con AI fuori servizio', async () => {
   const a = ambiente({ chiamaAI: async () => { throw new Error('offline'); } });
   try {

@@ -2,6 +2,13 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.3] - 2026-10-29
+
+### Novità per gli utenti
+
+- Riconosciuti anche messaggi brevi sulla stampante con un comune refuso di digitazione.
+- Verificata la continuità della conversazione quando si passa dalla stampa alla lingua di Windows.
+
 ## [2.5.2] - 2026-10-29
 
 ### Novità per gli utenti
