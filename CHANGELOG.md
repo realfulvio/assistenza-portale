@@ -2,6 +2,15 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.5] - 2026-10-29
+
+### Novità per gli utenti
+
+- Riconosciute anche domande brevi su screenshot e audio nelle chiamate, senza richiedere parole aggiuntive per attivare l’assistente.
+- Corretto il cambio di argomento fra screenshot, audio e recupero password nella stessa conversazione.
+- Recupero password distinto dai problemi di invio della posta; informazioni sull’identità aziendale configurabili e disattivate per default, senza applicarle agli account personali.
+- Le risposte di questi percorsi continuano a essere generate da Qwen.
+
 ## [2.5.4] - 2026-10-29
 
 ### Novità per gli utenti

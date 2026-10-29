@@ -1,6 +1,7 @@
 // Fatti tratti solo dai messaggi dell'utente; istruzioni, non risposte precostituite.
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const sintomi = require('./assistente-sintomi');
+const generazione = require('./assistente-generazione');
 function analizza(domanda, storia = []) {
   const messaggi = [...storia.filter(m => m.ruolo === 'utente').slice(-3).map(m => m.testo), domanda];
   const q = norm(messaggi.join('\n'));
@@ -13,6 +14,8 @@ function analizza(domanda, storia = []) {
   else if (/cornetta|vivavoce|telefono/.test(q)) tema = 'telefono';
   else if (/sito|servizio|unimoney|unavailable/.test(q)) tema = 'web';
   tema = sintomi.tema(q) || tema;
+  const argomento = generazione.argomento(domanda) || generazione.argomento(q);
+  if (argomento === 'screenshot' || argomento === 'audio' || argomento === 'password') tema = argomento;
   const fatti = {};
   const programma = [...messaggi].reverse().map(m => /\b(Excel|Word|Teams|Outlook)\b/i.exec(m)?.[1]).find(Boolean);
   if (programma) fatti.programma = programma;
@@ -44,6 +47,7 @@ function analizza(domanda, storia = []) {
   if (/soltanto chiuso la scheda|chiuso solo la scheda/.test(q)) fatti.uscitaBrowser = 'Chiusa solo una scheda: non equivale a ESCI e chiusura di tutte le finestre';
   if (/salvat/.test(q) && /esci/.test(q) && /tutte le finestre/.test(q) && /riapert/.test(q)) fatti.proceduraMultiente = 'Interamente eseguita senza risolvere';
   const guide = {
+    'screenshot': ['screenshot-allegati'], 'audio': ['audio'], 'password': ['password-dimenticata'],
     'stampa-assente': [], 'allegati-apertura': [], 'lingua-windows': [],
     'accesso-credenziali': ['password-dimenticata'], 'documenti-caricamento': [],
     'servizio-indisponibile': [],

@@ -12,6 +12,8 @@ La generazione usa un contesto compatto per le domande generiche: fonti pertinen
 
 Il valore predefinito di `ASSISTENTE_KEEP_ALIVE` è `5m`: mantiene il modello disponibile per domande vicine, a costo di conservarne l'occupazione RAM durante quel periodo. `0` lo scarica dopo la risposta. Non aumentare i limiti di memoria per compensare questa scelta: misurare consumo e picco sull'installazione, mantenere margine per gli altri servizi e distinguere primo caricamento dalle richieste successive.
 
+`ASSISTENTE_PASSWORD_PC_M365_CONDIVISA=1` aggiunge al contesto di recupero della posta di lavoro una relazione fra credenziali PC e Microsoft 365, soltanto se confermata per l'organizzazione. È disattivata per default e non si applica agli account personali né ad altri gestionali. Il valore dell'installazione resta nel suo `.env` privato: non pubblicare dati sull'identità, tenant o configurazioni operative. L'assistente non legge né richiede la password; la relazione serve solo a formulare indicazioni corrette.
+
 Le fonti del modello non vanno esposte come risorse statiche. Il rilascio conserva i quattro file locali; il backup deve includere anche la cache dell'indice se si desidera un ripristino immediato. L'indice si aggiorna automaticamente quando cambiano i contenuti. I riferimenti a prodotti nei moduli sono riconoscitori di argomenti, non procedure amministrative: il comportamento operativo dipende dalle FAQ correnti dell'installazione.
 
 Prima della pubblicazione eseguire i test e la verifica dei file pubblicabili. Le regole testuali riducono errori noti, senza garantire la correttezza di ogni risposta nuova. Non eseguire test creando ticket reali.
