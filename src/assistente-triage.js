@@ -1,8 +1,11 @@
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const sintomi = require('./assistente-sintomi');
+const generazione = require('./assistente-generazione');
 
 function dominio(testo) {
   const q = norm(testo);
+  const argomento = generazione.argomento(q);
+  if (argomento === 'screenshot' || argomento === 'audio' || argomento === 'password') return argomento;
   const specifico = sintomi.tema(q);
   if (specifico) return specifico === 'stampa-assente' ? 'stampa' : specifico === 'allegati-apertura' ? 'posta' : specifico === 'accesso-credenziali' ? 'accesso' : specifico === 'lingua-windows' ? 'pc' : specifico === 'servizio-indisponibile' ? 'web' : 'documenti';
   if (/stamp|multifunzion|fotocopiat|toner|contenitore.{0,20}(toner|scarto)/.test(q)) return 'stampa';

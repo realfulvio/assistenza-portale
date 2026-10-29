@@ -192,7 +192,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       }
       const ricerca = [...recenti, domanda].join('\n');
       const analisi = contesto.analizza(domanda, storia);
-      const piano = !analisi.compito && generazione.piano(analisi.messaggi);
+      const piano = !analisi.compito && generazione.piano(analisi.messaggi, {passwordPcMicrosoft365: config.assistentePasswordPcMicrosoft365 === true});
       let idx, vector, graduatoria = [], scelti;
       if (piano) {
         const docs = documentiGuidati.length ? documentiGuidati : documenti();
@@ -250,7 +250,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         const r = await ai('/api/chat', { model: MODELLO, messages, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m', options: { temperature: .1, num_ctx: contestoBreve ? 2048 : 4096, num_predict: 240, num_thread: 4 } });
         const raw = String(r.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '').split('<think>')[0].replace(/\[[a-z0-9-]+\]/g, '').trim();
         if (!raw) throw errore('Non riesco a formulare una risposta. Usa la guida indicata oppure riprova.', 503);
-        const violazioni = contesto.verifica(raw, analisi);
+        const violazioni = [...contesto.verifica(raw, analisi), ...generazione.verifica(raw, piano)];
         osservaRicerca?.({generazione: tentativo + 1, testoGenerato: raw, violazioni, fatti: analisi.fatti, tema: analisi.tema});
         if (!violazioni.length) return {risposta: raw.slice(0, 1800), tipo: 'chat', fonti};
         messages.push({role: 'assistant', content: raw}, {role: 'user', content: 'Correggi la risposta rispettando i fatti e le guide gia forniti. Errori: ' + violazioni.join(' ') + ' Non commentare la correzione: scrivi soltanto la nuova risposta.'});

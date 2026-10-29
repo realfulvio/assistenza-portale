@@ -21,6 +21,43 @@ function ambiente(extra = {}) {
 }
 async function invia(s, req, body) { req.body = body; return s.gestisci(req); }
 
+test('sequenza reale breve: screenshot, chiamata audio e password non si contaminano', async () => {
+  const richieste=[];
+  const a=ambiente({chiamaAI:async(endpoint,body)=>{
+    assert.equal(endpoint,'/api/chat');richieste.push(body);
+    return {message:{content:body.messages[0].content.includes('recupero dell’accesso')
+      ? 'La password della posta è la stessa usata per accedere al PC. Se non la ricordi, contatta l’assistenza senza comunicarla.'
+      : body.messages[0].content.includes('Nuovo problema audio') ? 'Quale applicazione usi? Il problema è nell’ascolto con casse/cuffie oppure nel microfono?'
+      : 'Risposta generata dal modello.'}};
+  }});
+  try {
+    a.deps.config.assistentePasswordPcMicrosoft365=true;
+    fs.writeFileSync(a.deps.config.faqPath,JSON.stringify([
+      {id:'screenshot-allegati',d:'Screenshot',passi:[{t:'Premi Windows + Maiusc + S.'}]},
+      {id:'password-dimenticata',d:'Password dimenticata',passi:[{t:'Se il recupero non è disponibile, contatta l’assistenza.'}]}
+    ]));
+    const req=a.req();
+    for (const testo of ['come faccio uno screenshot?','come faccio uno screenshot?','non funziona l’audio nella call','no dimenticato la password della mia posta elettronica']) await invia(a.servizio,req,{testo});
+    assert.equal(richieste.length,4);
+    assert.match(richieste[0].messages[1].content,/Premi Windows/);
+    assert.doesNotMatch(richieste[2].messages[1].content,/screenshot|Premi Windows/);
+    assert.match(richieste[2].messages[0].content,/applicazione della chiamata/);
+    assert.doesNotMatch(richieste[3].messages[1].content,/screenshot|nella call/);
+    assert.match(richieste[3].messages[1].content,/password della posta di lavoro è la stessa/);
+    const ultimo=req.session.assistente.ultima;
+    assert.match(ultimo.risposta,/stessa.*PC/);
+    assert.deepEqual(ultimo.fonti.map(f=>f.titolo),['Password dimenticata']);
+  } finally {a.pulisci();}
+});
+
+test('password: relazione PC Microsoft 365 disattivata per default ed esclusa per account personali',()=>{
+  const {piano}=require('../src/assistente-generazione');
+  assert.deepEqual(piano(['Ho dimenticato la password della posta.']).fonti,[]);
+  assert.equal(piano(['Ho dimenticato la password della posta.'],{passwordPcMicrosoft365:true}).fonti.length,1);
+  assert.deepEqual(piano(['Ho dimenticato la password Gmail personale.'],{passwordPcMicrosoft365:true}).fonti,[]);
+  assert.deepEqual(piano(['Ho dimenticato la password Gmail personale.'],{passwordPcMicrosoft365:true}).guide,[]);
+});
+
 test('domande generiche: risposta sempre generata, senza guide estranee o esempi storici', async () => {
   const chiamate = [];
   const a = ambiente({chiamaAI: async (endpoint, body) => {
