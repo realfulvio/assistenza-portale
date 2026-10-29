@@ -6,6 +6,7 @@ const conoscenza = require('./assistente-conoscenza');
 const triage = require('./assistente-triage');
 const esempi = require('./assistente-esempi');
 const contesto = require('./assistente-contesto');
+const generazione = require('./assistente-generazione');
 
 const MODELLO_PREDEFINITO = 'qwen3.5:4b-q4_K_M';
 const EMBEDDING_PREDEFINITO = 'embeddinggemma-2:270m';
@@ -68,7 +69,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     return docs;
   }
   async function embed(input) {
-    const r = await ai('/api/embed', { model: EMBEDDING, input, truncate: false, keep_alive: config.assistenteKeepAlive ?? '15m', options: { num_thread: 4, num_ctx: 4096 } });
+    const r = await ai('/api/embed', { model: EMBEDDING, input, truncate: false, keep_alive: config.assistenteKeepAlive ?? '5m', options: { num_thread: 4, num_ctx: 4096 } });
     if (!Array.isArray(r.embeddings) || r.embeddings.length !== input.length || r.embeddings.some((v) => !Array.isArray(v) || !v.length || v.some((x) => !Number.isFinite(x)))) throw errore('La ricerca dell’assistente non è disponibile.', 503);
     return r.embeddings;
   }
@@ -189,18 +190,27 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         osservaRicerca?.({regola: guidata.regola, selezione: 'riferimenti espliciti della procedura, non ranking semantico', selezionati: riferimenti.map(d => ({id: d.id, tipo: d.tipo}))});
         return {risposta: guidata.risposta, tipo: 'chat', fonti: riferimenti.map(d => ({titolo: d.titolo, url: d.url}))};
       }
-      const idx = await preparaIndice();
       const ricerca = [...recenti, domanda].join('\n');
-      const [vector] = await embed([ricerca]), q = new Set(parole(ricerca));
-      const graduatoria = idx.documenti.map((d) => {
-        const p = new Set(parole(d.testo));
-        return { d, score: coseno(vector, d.vettore) + .2 * [...q].filter((x) => p.has(x)).length / Math.max(1, q.size) };
-      }).sort((a, b) => b.score - a.score);
       const analisi = contesto.analizza(domanda, storia);
-      const scelti = contesto.seleziona(graduatoria, analisi);
+      const piano = !analisi.compito && generazione.piano(analisi.messaggi);
+      let idx, vector, graduatoria = [], scelti;
+      if (piano) {
+        const docs = documentiGuidati.length ? documentiGuidati : documenti();
+        scelti = piano.guide.map(id => docs.find(d => d.id === id && d.tipo === 'guida')).filter(Boolean).map(d => ({d, score: 1}));
+        scelti.push(...(piano.fonti || []).map(d => ({d, score: 1})));
+      } else {
+        idx = await preparaIndice();
+        [vector] = await embed([ricerca]);
+        const q = new Set(parole(ricerca));
+        graduatoria = idx.documenti.map((d) => {
+          const p = new Set(parole(d.testo));
+          return { d, score: coseno(vector, d.vettore) + .2 * [...q].filter((x) => p.has(x)).length / Math.max(1, q.size) };
+        }).sort((a, b) => b.score - a.score);
+        scelti = contesto.seleziona(graduatoria, analisi);
+      }
       const scheda = scelti.find(x => x.d.tipo === 'scheda');
       osservaRicerca?.({selezionati: scelti.map(({d, score}) => ({id: d.id, tipo: d.tipo, score})), primi: graduatoria.slice(0, 5).map(({d, score}) => ({id: d.id, score}))});
-      if (!scelti.length && !analisi.tema) return { risposta: 'Non trovo una guida abbastanza pertinente. Puoi descrivere meglio il problema oppure preparare una richiesta con il pulsante qui sotto.', tipo: 'chat', fonti: [] };
+      if (!scelti.length && !analisi.tema && !piano) return { risposta: 'Non trovo una guida abbastanza pertinente. Puoi descrivere meglio il problema oppure preparare una richiesta con il pulsante qui sotto.', tipo: 'chat', fonti: [] };
       const fonti = scelti.filter(({d}) => d.url).map(({ d }) => ({ titolo: d.titolo, url: d.url }));
       const dettagli = usaGuidate && scheda && conoscenza.raccogliDettagli(scheda.d.id, domanda, storia);
       if (dettagli) {
@@ -208,15 +218,16 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         return {risposta: dettagli.risposta, tipo: 'chat', fonti};
       }
       const system = istruzioni;
-      const sceltiEsempi = usaEsempi ? esempi.seleziona(idx.documenti, ricerca, vector, coseno) : [];
+      const sceltiEsempi = usaEsempi && !piano ? esempi.seleziona(idx.documenti, ricerca, vector, coseno) : [];
       const formatoDialogo = config.assistenteEsempiFormato === 'dialogo';
       osservaRicerca?.({esempi: sceltiEsempi.map(({d, score}) => ({id: d.id, score})), formato: formatoDialogo ? 'dialogo' : 'testo', guidateAbilitate: usaGuidate});
       const fonte = d => {
         if (analisi.compito && d.tipo === 'scheda') return d.titolo + '\nScheda di raccolta dei sintomi; nessuna soluzione storica documentata.';
         if (d.tipo !== 'guida') return d.testo.split('\n').filter(riga => !riga.startsWith('Domande utili:'))
           .filter(riga => !(analisi.tema === 'allegati' && riga.startsWith('Criteri:'))).join('\n').slice(0,650);
-        let passi = d.passi.map(p => typeof p === 'string' ? p : p.t), controlli = d.controlli;
+        let passi = d.passi.map(p => typeof p === 'string' ? p : [p.t, p.nota].filter(Boolean).join(' ')), controlli = d.controlli;
         let richiesta = d.richiesta;
+        if (piano) richiesta = '';
         if (analisi.tema === 'rete-permessi' || analisi.fatti.proceduraMultiente) {passi=[];controlli=[];}
         if (analisi.fatti.proceduraMultiente) richiesta='Dati da raccogliere in questo turno: '+analisi.domande.join('; ')+'.';
         if (analisi.tema === 'posta') {
@@ -225,14 +236,18 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         }
         passi=passi.filter(p => !(analisi.tema === 'stampa-offline' && /spegni|riaccend|torna alla finestra/i.test(p)))
           .filter(p => !(analisi.fatti.riavvio && /riavvi|chiudi outlook|riaprilo da start/i.test(p)));
+        if (d.id === 'pc-lento-bloccato' && !/bloccat|non risponde|completamente ferm/.test(norm(ricerca))) passi = passi.filter(p => !/non risponde|termina attivita/.test(norm(p)));
+        if (piano && d.id === 'teams-audio-video' && /non sento|audio.{0,15}(?:assente|non funziona)/.test(norm(ricerca))) passi = passi.filter(p => !/microfono|videocamera/.test(norm(p)) || /altoparlanti|dispositivi/.test(norm(p)));
         return [d.titolo,'CONDIZIONI E ARRESTI: '+d.stop+' '+richiesta,
           'CONTROLLI ANCORA APPLICABILI: '+controlli.join(' '),'PASSI ANCORA APPLICABILI: '+passi.join(' ')].join('\n').slice(0,1600);
       };
-      const messages = [{ role: 'system', content: system }, ...(formatoDialogo ? esempi.dialoghi(sceltiEsempi) : []),
+      let messages = [{ role: 'system', content: system }, ...(formatoDialogo ? esempi.dialoghi(sceltiEsempi) : []),
         { role: 'user', content: `MESSAGGI REALI DELL'UTENTE:\n${analisi.messaggi.join('\n')}\n\nFATTI GIA NOTI (non richiederli):\n${JSON.stringify(analisi.fatti)}\n\nGUIDE CORRENTI E SCHEDE:\n${scelti.map(({ d }) => `[${d.id}] ${fonte(d)}`).join('\n\n') || 'Nessuna procedura documentata per questa domanda.'}\n\n${formatoDialogo ? '' : esempi.contesto(sceltiEsempi, analisi.fatti)}\n\nFATTI ATTUALI CONFERMATI (prevalgono sulle domande degli esempi): ${JSON.stringify(analisi.fatti)}\n\nVINCOLI DEL CASO ATTUALE:\n${analisi.regole.join('\n')}\nDETTAGLI ANCORA CHIEDIBILI: ${analisi.domande.join('; ') || 'Non aggiungere domande generiche; indica il prossimo passo documentato o la segnalazione al CED.'}\n\nDOMANDA ATTUALE:\n${domanda}\n\nScrivi direttamente all’utente la risposta, non istruzioni per un altro operatore.` }];
       if (analisi.compito) messages.push({role:'user',content:`FASE ATTUALE: ${analisi.fase}\nCOMPITO: ${analisi.compito}\nDETTAGLI MANCANTI: ${analisi.domande.join('; ') || 'nessuno'}\n${analisi.tema === 'posta' && analisi.fase === 'chiarimento' ? 'Scrivi soltanto le domande mancanti. Termina con il punto interrogativo, senza proporre controlli o passi successivi.' : 'Rispondi in al massimo due frasi dirette.'} Usa solo i messaggi reali per i fatti attuali.`});
+      if (!analisi.compito) messages = generazione.messaggi({istruzioni: system, analisi, fonti: scelti.map(({d}) => fonte(d)), piano});
       for (let tentativo = 0; tentativo < 2; tentativo++) {
-        const r = await ai('/api/chat', { model: MODELLO, messages, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '15m', options: { temperature: .1, num_ctx: 4096, num_predict: 240, num_thread: 4 } });
+        const contestoBreve = piano && messages.reduce((n,m) => n + m.content.length,0) < 4500;
+        const r = await ai('/api/chat', { model: MODELLO, messages, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m', options: { temperature: .1, num_ctx: contestoBreve ? 2048 : 4096, num_predict: 240, num_thread: 4 } });
         const raw = String(r.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '').split('<think>')[0].replace(/\[[a-z0-9-]+\]/g, '').trim();
         if (!raw) throw errore('Non riesco a formulare una risposta. Usa la guida indicata oppure riprova.', 503);
         const violazioni = contesto.verifica(raw, analisi);

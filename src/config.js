@@ -81,7 +81,7 @@ const config = {
   // Assistente locale: dati dell'istanza separati dagli esempi pubblici.
   assistenteEsempi: e.ASSISTENTE_ESEMPI === '1',
   assistenteRisposteGuidate: e.ASSISTENTE_RISPOSTE_GUIDATE !== '0',
-  assistenteKeepAlive: e.ASSISTENTE_KEEP_ALIVE === '0' ? 0 : (e.ASSISTENTE_KEEP_ALIVE || '15m'),
+  assistenteKeepAlive: e.ASSISTENTE_KEEP_ALIVE === '0' ? 0 : (e.ASSISTENTE_KEEP_ALIVE || '5m'),
   assistenteAiUrl: e.ASSISTENTE_AI_URL || 'http://127.0.0.1:11435',
   assistenteModello: e.ASSISTENTE_MODELLO || 'qwen3.5:4b-q4_K_M',
   assistenteEmbedding: e.ASSISTENTE_EMBEDDING || 'embeddinggemma-2:270m',

@@ -2,6 +2,15 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.4] - 2026-10-29
+
+### Novità per gli utenti
+
+- Risposte generate da Qwen con contesto più breve, senza ripetizioni dei fatti e senza esempi storici estranei nelle domande generiche.
+- Guide selezionate per argomento e riferimenti Microsoft per i concetti su memoria, archiviazione, condivisione e sincronizzazione.
+- Conservati programmi e verifiche già citati; una semplice lentezza non diventa un blocco nella risposta.
+- Permanenza del modello configurabile, con valore predefinito di 5 minuti; contesto ridotto per le domande brevi senza aumentare i limiti di risorse.
+
 ## [2.5.3] - 2026-10-29
 
 ### Novità per gli utenti

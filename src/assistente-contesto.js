@@ -14,6 +14,9 @@ function analizza(domanda, storia = []) {
   else if (/sito|servizio|unimoney|unavailable/.test(q)) tema = 'web';
   tema = sintomi.tema(q) || tema;
   const fatti = {};
+  const programma = [...messaggi].reverse().map(m => /\b(Excel|Word|Teams|Outlook)\b/i.exec(m)?.[1]).find(Boolean);
+  if (programma) fatti.programma = programma;
+  if (/lent/.test(q) && !/bloccat|non risponde|completamente ferm/.test(q)) fatti.sintomo = 'Lentezza riferita; non risulta un blocco del programma';
   if (/outlook.{0,25}(?:desktop|sul pc|dal pc)|programma.{0,20}outlook/.test(q)) fatti.client = 'Outlook sul PC';
   if (/outlook.{0,25}(?:browser|web)|(?:browser|web).{0,20}outlook/.test(q)) fatti.client = 'Outlook nel browser';
   if (!fatti.client && /posta|outlook|email|allegat/.test(q) && /browser|firefox|chrome|edge|webmail/.test(q)) fatti.client = 'Posta nel browser';
@@ -149,6 +152,8 @@ function seleziona(graduatoria, a) {
 }
 function verifica(testo, a) {
   const q = norm(testo), errori = [];
+  if (a.fatti.programma && /quale (?:programma|applicazione)|che programma/.test(q)) errori.push('Il programma e gia noto: usa il nome riferito dall utente senza richiederlo.');
+  if (a.fatti.sintomo && /per evitare (?:il|un) blocco|(?:il programma|excel|il pc) (?:si blocca|e bloccato)/.test(q)) errori.push('Il sintomo riferito e lentezza, non un blocco: non attribuire un blocco all utente.');
   const azioni = q.replace(/\b(?:non (?:devi |serve |occorre )?|senza |evita di )(?:riavvi\w*|riprov\w*|prova\w*|cambi\w*|sostitui\w*|spost\w*)/g, '');
   const domande = (testo.match(/[^.!?\n]*(?:\?|devo sapere|ho bisogno di sapere|dimmi|indicami|puoi dirmi|specificami|necessario verificare se|verifica se|indica se)[^.!?\n]*[.!?]?/gi) || []).map(norm).join(' ');
   if ((testo.match(/\?/g) || []).length > 2) errori.push('Troppe domande: massimo due dettagli mancanti.');
