@@ -1,4 +1,5 @@
 const fs = require('node:fs');
+const sintomi = require('./assistente-sintomi');
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 function leggiSchede(file, base, faq) {
@@ -41,6 +42,7 @@ function rispostaControllata(domanda, messaggi, base) {
     return {regola: 'intervento-non-documentato', risposta: 'Con la soluzione vuota non posso sapere quale intervento sia stato eseguito: lo stato «risolto» non lo documenta. Per ricostruirlo serve una verifica del CED. Se il problema si ripresenta, descrivi l’avviso attuale e il dispositivo interessato.', fonti: []};
   }
   if (/stamp/.test(q) && /colleg/.test(q) && /(?:io |non riesco|non stampo|non posso)/.test(q)
+    && !sintomi.tema([...precedenti, q].join('\n'))
     && /colleg\w*.{0,30}(?:riesce a stampare|stampa)|(?:riesce a stampare|stampa).{0,20}colleg/.test(q)
     && !/non.{0,12}abilitat|non.{0,12}autorizzat|accesso negat|non.{0,10}permess/.test(q)) {
     return {regola: 'stampa-altri-riescono', risposta: 'Quale stampante hai selezionato tu e che cosa succede quando invii la stampa? Il fatto che la collega stampi non indica un guasto generale: se compare un errore di abilitazione, riportalo nella richiesta al CED.', fonti: [{titolo: 'Come scegliere la stampante giusta', url: base + '/#faq/stampante-scelta'}]};
@@ -73,7 +75,7 @@ function raccogliDettagli(id, domanda, messaggi) {
   const storia = messaggi.filter(m => m.ruolo === 'utente').slice(-2).map(m => m.testo);
   const q = norm([...storia, domanda].join('\n'));
   if (id === 'scheda-outlook-salvataggio-allegati' && /(?:salv|scaric).{0,30}allegat|allegat.{0,30}(?:salv|scaric)/.test(q)) {
-    const client = /(?:outlook|programma|client).{0,20}(?:sul pc|dal pc|browser|web)|outlook (?:web|desktop)|(?:sul pc|dal browser).{0,15}outlook/.test(q);
+    const client = /(?:outlook|programma|client).{0,20}(?:sul pc|dal pc|browser|web)|outlook (?:web|desktop)|(?:sul pc|dal browser).{0,15}outlook|browser|firefox|chrome|edge|webmail/.test(q);
     const errore = /messaggio|errore|accesso negato|codice|nessun avviso|impossibile/.test(q);
     if (!client || !errore) {
       const prefix = /gia riavvi|gia.*riavvio/.test(q) ? 'Hai già riavviato senza risolvere. ' : '';

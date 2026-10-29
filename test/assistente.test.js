@@ -20,6 +20,51 @@ function ambiente(extra = {}) {
     pulisci: () => fs.rmSync(dir, { recursive: true, force: true }) };
 }
 async function invia(s, req, body) { req.body = body; return s.gestisci(req); }
+
+test('sintomi riconoscibili: prosegue tra turni senza modello, indice o accesso GLPI', async () => {
+  const a = ambiente({chiamaAI: async () => { throw new Error('AI non disponibile'); },
+    glpi: new Proxy({}, {get() { throw new Error('GLPI vietato'); }}),
+    utenteGlpi: () => { throw new Error('Identità GLPI vietata'); }});
+  try {
+    const req = a.req();
+    const primo = await invia(a.servizio, req, {testo: 'Non trovo la stampante tra quelle presenti dopo un aggiornamento.'});
+    assert.match(primo.risposta, /manca dall’elenco/);
+    const secondo = await invia(a.servizio, req, {testo: 'Ho già riavviato e la collega riesce a stampare, io non posso.'});
+    assert.match(secondo.risposta, /riavvio.*non ha risolto/);
+    assert.notEqual(primo.risposta, secondo.risposta);
+    assert.doesNotMatch(secondo.risposta, /quando invii|in coda|quale stampante hai selezionato/i);
+    assert.deepEqual(secondo.fonti, []);
+    assert.ok(!fs.existsSync(a.deps.cacheFile));
+    const posta = await invia(a.servizio, req, {testo: 'In Firefox la posta non apre gli allegati.'});
+    assert.match(posta.risposta, /apertura degli allegati/);
+    assert.doesNotMatch(posta.risposta, /stampante|invio|programma sul PC/);
+    const confronto = await invia(a.servizio, req, {testo: 'In Edge lo stesso allegato si apre, in Firefox non succede niente.'});
+    assert.match(confronto.risposta, /altro browser/);
+    assert.doesNotMatch(confronto.risposta, /\?/);
+    assert.deepEqual(a.calls, []);
+  } finally { a.pulisci(); }
+});
+
+test('lingua, credenziali e caricamento documenti: niente procedure estranee o estensioni richieste due volte', async () => {
+  const a = ambiente({chiamaAI: async () => { throw new Error('AI non disponibile'); }});
+  try {
+    const lingua = await invia(a.servizio, a.req(), {testo: 'Windows mostra i menu in inglese, ho già riavviato.'});
+    assert.match(lingua.risposta, /CED/);
+    assert.doesNotMatch(lingua.risposta, /Fusione|Impostazioni|riavvia il PC/);
+    assert.deepEqual(lingua.fonti, []);
+    const accesso = await invia(a.servizio, a.req(), {testo: 'Halley rifiuta la password e il recupero non funziona.'});
+    assert.match(accesso.risposta, /già tentato il recupero/);
+    assert.doesNotMatch(accesso.risposta, /chiudi tutte le finestre|pulsante Halley/);
+    const file = await invia(a.servizio, a.req(), {testo: 'SLpct non trova i file p7m da caricare, vedo icone bianche.'});
+    assert.match(file.risposta, /già indicato il formato p7m/);
+    assert.doesNotMatch(file.risposta, /Qual.*estensione|Non riesco a formulare/);
+    assert.match(file.risposta, /cartella/);
+    const web = await invia(a.servizio, a.req(), {testo: 'Il servizio web mostra 503 Service Unavailable e ho una scadenza urgente.'});
+    assert.match(web.risposta, /non dimostra che sia in manutenzione/);
+    assert.match(web.risposta, /scadenza urgente/);
+    assert.deepEqual(web.fonti, []);
+  } finally { a.pulisci(); }
+});
 test('contatti precisi disponibili anche con AI fuori servizio', async () => {
   const a = ambiente({ chiamaAI: async () => { throw new Error('offline'); } });
   try {
