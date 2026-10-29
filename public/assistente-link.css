@@ -27,3 +27,16 @@
 html[data-motion=reduce] #mascotte *,html[data-motion=reduce] #mascotte *:before,html[data-motion=reduce] #mascotte *:after{animation:none!important;transition:none!important}
 
 #mascotte[data-link-saluto=true] .msc-nota{display:none}
+
+/* Assistente sospeso nell'angolo della finestra. */
+#mascotte{right:28px;bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+#mascotte .msc-btn{width:190px;height:199px;filter:drop-shadow(0 4px 3px #ffffffa6) drop-shadow(0 10px 16px #001a4d45)}
+#mascotte .msc-fumetto{max-width:calc(100vw - 56px);height:min(660px,calc(100dvh - 251px - env(safe-area-inset-bottom,0px)));transform-origin:calc(100% - 95px) 100%}
+@media(max-width:600px){
+  #mascotte{right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+  #mascotte .msc-btn{width:120px;height:126px}
+  #mascotte .msc-fumetto{max-width:none;bottom:calc(152px + env(safe-area-inset-bottom,0px));height:min(660px,calc(100dvh - 168px - env(safe-area-inset-bottom,0px)));transform-origin:calc(100% - 70px) 100%}
+}
+@media(max-height:500px) and (min-width:601px){
+  #mascotte .msc-fumetto{position:fixed;bottom:12px;right:240px;height:calc(100dvh - 24px);max-width:calc(100vw - 256px)}
+}
