@@ -1,10 +1,14 @@
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const sintomi = require('./assistente-sintomi');
 
 function dominio(testo) {
   const q = norm(testo);
+  const specifico = sintomi.tema(q);
+  if (specifico) return specifico === 'stampa-assente' ? 'stampa' : specifico === 'allegati-apertura' ? 'posta' : specifico === 'accesso-credenziali' ? 'accesso' : specifico === 'lingua-windows' ? 'pc' : specifico === 'servizio-indisponibile' ? 'web' : 'documenti';
   if (/stamp|multifunzion|fotocopiat|toner|contenitore.{0,20}(toner|scarto)/.test(q)) return 'stampa';
   if (/halley|x.?desk|workspace|recupero password/.test(q)) return 'accesso';
   if (/outlook|posta|\bmail\b|allegat/.test(q)) return 'posta';
+  if (/\bpdf\b|\bp7m\b|sl\s?pct|document.{0,20}firmat/.test(q)) return 'documenti';
   if (/telefon|cornetta|vivavoce/.test(q)) return 'telefono';
   if (/sito|servizio|unimoney|unavailable/.test(q)) return 'web';
   if (/firmware|bios|\bpc\b|computer|logo lenovo/.test(q)) return 'pc';
@@ -27,6 +31,8 @@ function storiaPertinente(domanda, messaggi) {
 }
 
 function proceduraGuidata(domanda, messaggi, documenti) {
+  const sintomo = sintomi.procedura(domanda, messaggi, documenti);
+  if (sintomo) return sintomo;
   const tema = dominio(domanda) || messaggi.filter(m => m.ruolo === 'utente').map(m => dominio(m.testo)).filter(Boolean).at(-1);
   const q = norm([...messaggi.filter(m => m.ruolo === 'utente').map(m => m.testo), domanda].join('\n'));
   const schede = new Set(documenti.filter(d => d.tipo === 'scheda').map(d => d.id));

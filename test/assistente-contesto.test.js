@@ -1,6 +1,24 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {analizza, seleziona, verifica} = require('../src/assistente-contesto');
+
+test('sintomi specifici escludono guide di invio, lentezza e cambio ente', () => {
+  const casi = [
+    ['La posta da Firefox non apre gli allegati.', 'allegati-apertura', []],
+    ['Windows ha i menu in inglese.', 'lingua-windows', []],
+    ['Halley non accetta la password.', 'accesso-credenziali', ['password-dimenticata']],
+    ['SLpct non vede il documento p7m.', 'documenti-caricamento', []]
+  ];
+  const docs = ['outlook-non-si-apre','pc-lento-bloccato','xdesk-accesso-multiente','password-dimenticata'].map(id => ({d:{id,tipo:'guida'},score:1}));
+  for (const [testo,tema,guide] of casi) {
+    const a = analizza(testo);
+    assert.equal(a.tema,tema);
+    assert.deepEqual(seleziona(docs,a).map(x => x.d.id),guide);
+  }
+  assert.equal(analizza('Nella posta Firefox non salva gli allegati.').fatti.client,'Posta nel browser');
+  assert.equal(analizza('SLpct non vede il documento p7m.').fatti.estensione,'p7m');
+  assert.equal(analizza('Outlook non invia un allegato.').tema,'posta');
+});
 test('regressione: il contesto conserva i fatti utente tra i turni della posta', () => {
   const a = analizza('Nessun errore, restano in uscita. Ho gia riavviato.', [{ruolo: 'utente', testo: 'Outlook desktop non parte la posta e non vedo arrivare messaggi.'}, {ruolo: 'assistente', testo: 'La posta funziona.'}]);
   assert.equal(a.fatti.client, 'Outlook sul PC');

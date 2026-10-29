@@ -31,9 +31,9 @@ test('i passi multiente mantengono l ordine della guida',()=>{
 });
 test('servizio: dati noti sufficienti, resta soltanto l orario',()=>{
   const a=analizza('UNIMONEY mostra 503 Service Unavailable, anche due colleghi sono bloccati e la scadenza e oggi.');
-  assert.equal(a.fase,'segnalazione');
-  assert.equal(a.domande.length,1);
-  assert.ok(verifica('Descrivi meglio il problema specifico al CED.',a).length);
+  assert.equal(a.tema,'servizio-indisponibile');
+  assert.deepEqual(a.guide,[]);
+  assert.ok(a.fatti.errore && a.fatti.diffusione && a.fatti.urgenza);
 });
 
 test('X-Desk completato: due dettagli anche quando le richieste non hanno punti interrogativi',()=>{

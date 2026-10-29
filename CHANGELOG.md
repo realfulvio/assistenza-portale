@@ -2,6 +2,19 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.2] - 2026-10-29
+
+### Novità per gli utenti
+
+- L’assistente distingue stampanti assenti, apertura degli allegati, lingua di Windows, credenziali rifiutate, caricamento di documenti firmati e servizi non disponibili.
+- I dettagli già forniti restano nel contesto: browser utilizzato, prove eseguite, formato del file ed esito sui PC dei colleghi.
+- Percorsi guidati disponibili senza attendere il modello; guide collegate soltanto quando pertinenti al sintomo.
+- Nessuna diagnosi di manutenzione dedotta dal solo errore 503 e nessun invio automatico delle richieste.
+
+### Sicurezza
+
+- Dipendenza `qs` aggiornata alla 6.16.2; verifiche di sicurezza mantenute attive nella CI.
+
 ## [2.5.1] - 2026-10-28
 
 ### Novità per gli utenti

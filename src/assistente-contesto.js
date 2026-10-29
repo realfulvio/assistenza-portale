@@ -1,5 +1,6 @@
 // Fatti tratti solo dai messaggi dell'utente; istruzioni, non risposte precostituite.
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const sintomi = require('./assistente-sintomi');
 function analizza(domanda, storia = []) {
   const messaggi = [...storia.filter(m => m.ruolo === 'utente').slice(-3).map(m => m.testo), domanda];
   const q = norm(messaggi.join('\n'));
@@ -11,9 +12,13 @@ function analizza(domanda, storia = []) {
   else if (/pdf|p7m/.test(q)) tema = !/errore|non si apre|non si scarica|download|gestional/.test(q) ? 'lettura-documento' : 'pdf';
   else if (/cornetta|vivavoce|telefono/.test(q)) tema = 'telefono';
   else if (/sito|servizio|unimoney|unavailable/.test(q)) tema = 'web';
+  tema = sintomi.tema(q) || tema;
   const fatti = {};
   if (/outlook.{0,25}(?:desktop|sul pc|dal pc)|programma.{0,20}outlook/.test(q)) fatti.client = 'Outlook sul PC';
   if (/outlook.{0,25}(?:browser|web)|(?:browser|web).{0,20}outlook/.test(q)) fatti.client = 'Outlook nel browser';
+  if (!fatti.client && /posta|outlook|email|allegat/.test(q) && /browser|firefox|chrome|edge|webmail/.test(q)) fatti.client = 'Posta nel browser';
+  const estensione = /\b(p7m|pdf|docx|odt)\b/.exec(q);
+  if (estensione) fatti.estensione = estensione[1];
   if (/accesso negat/.test(q)) fatti.errore = 'Accesso negato';
   else if (/503|service unavailable/.test(q)) fatti.errore = '503 / Service Unavailable riferito dall utente';
   else if (/non succede (?:niente|nulla)/.test(q)) fatti.errore = 'Al clic per salvare non succede niente: questa e la reazione gia descritta';
@@ -36,6 +41,9 @@ function analizza(domanda, storia = []) {
   if (/soltanto chiuso la scheda|chiuso solo la scheda/.test(q)) fatti.uscitaBrowser = 'Chiusa solo una scheda: non equivale a ESCI e chiusura di tutte le finestre';
   if (/salvat/.test(q) && /esci/.test(q) && /tutte le finestre/.test(q) && /riapert/.test(q)) fatti.proceduraMultiente = 'Interamente eseguita senza risolvere';
   const guide = {
+    'stampa-assente': [], 'allegati-apertura': [], 'lingua-windows': [],
+    'accesso-credenziali': ['password-dimenticata'], 'documenti-caricamento': [],
+    'servizio-indisponibile': [],
     'toner': [], 'stampa-permessi': [], 'stampa-offline': ['stampante-offline'],
     'allegati': ['outlook-allegati-microsoft'], 'posta': ['outlook-non-si-apre'], 'multiente': ['xdesk-accesso-multiente'],
     'rete-permessi': ['cartella-rete'], 'rete': ['cartella-rete'],

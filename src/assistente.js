@@ -182,13 +182,14 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     if (occupato) throw errore('Sto rispondendo a un’altra domanda. Riprova tra poco: la ricerca nelle guide resta disponibile.', 429);
     occupato = true;
     try {
-      const idx = await preparaIndice();
-      const guidata = usaGuidate && triage.proceduraGuidata(domanda, storia, idx.documenti);
+      const documentiGuidati = usaGuidate ? documenti() : [];
+      const guidata = usaGuidate && triage.proceduraGuidata(domanda, storia, documentiGuidati);
       if (guidata) {
-        const riferimenti = guidata.guide.map(id => idx.documenti.find(d => d.id === id && d.tipo === 'guida')).filter(Boolean);
+        const riferimenti = guidata.guide.map(id => documentiGuidati.find(d => d.id === id && d.tipo === 'guida')).filter(Boolean);
         osservaRicerca?.({regola: guidata.regola, selezione: 'riferimenti espliciti della procedura, non ranking semantico', selezionati: riferimenti.map(d => ({id: d.id, tipo: d.tipo}))});
         return {risposta: guidata.risposta, tipo: 'chat', fonti: riferimenti.map(d => ({titolo: d.titolo, url: d.url}))};
       }
+      const idx = await preparaIndice();
       const ricerca = [...recenti, domanda].join('\n');
       const [vector] = await embed([ricerca]), q = new Set(parole(ricerca));
       const graduatoria = idx.documenti.map((d) => {
