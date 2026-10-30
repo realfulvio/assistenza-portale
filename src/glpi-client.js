@@ -123,7 +123,10 @@ async function creaTicket({ userId, categoria, sottotipo, descrizione, telefono,
     name: `[${categoria.nome}] ${sintesi}${descrizione.length > 60 ? '…' : ''}`,
     content: contenutoTicket({ sottotipo, descrizione, telefono, reperibilita, pc, ip, ua }),
     type: categoria.tipo, priority: 3, urgency: 3, impact: 3,
-    _users_id_requester: userId
+    _users_id_requester: userId,
+    // Senza modello esplicito GLPI 11.0.12 salva nel ticket quello dell'entità,
+    // che poi prevale sul modello del profilo di chi lo apre.
+    tickettemplates_id: 0
   };
   if (categoria.glpiId) input.itilcategories_id = categoria.glpiId;
   if (config.glpi.entityId !== null) input.entities_id = config.glpi.entityId;
