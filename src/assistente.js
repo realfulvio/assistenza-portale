@@ -7,6 +7,7 @@ const triage = require('./assistente-triage');
 const esempi = require('./assistente-esempi');
 const contesto = require('./assistente-contesto');
 const generazione = require('./assistente-generazione');
+const svago = require('./assistente-svago');
 
 const MODELLO_PREDEFINITO = 'qwen3.5:4b-q4_K_M';
 const EMBEDDING_PREDEFINITO = 'embeddinggemma-2:270m';
@@ -277,12 +278,14 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       let s = stato(req);
       if (azione === 'nuova') { req.session.assistente = null; s = stato(req); return { risposta: 'Nuova conversazione. Come posso aiutarti?', tipo: 'chat' }; }
       let out;
+      const genereSvago = azione === 'messaggio' ? svago.richiesta(domanda, s) : null;
       let controllata = azione === 'messaggio' ? conoscenza.rispostaControllata(domanda, triage.storiaPertinente(domanda, s.messaggi), base) : null;
       if (!usaGuidate && controllata && !['firmware-in-corso', 'richiesta-segreti', 'non-inviare-password', 'non-disattivare-protezioni', 'intervento-non-documentato'].includes(controllata.regola)) controllata = null;
       if (controllata) {
         osservaRicerca?.({regola: controllata.regola, selezionati: []});
         out = {tipo: 'chat', risposta: controllata.risposta, fonti: controllata.fonti};
       }
+      else if (genereSvago) out = svago.rispondi(s, genereSvago);
       else if (azione === 'ticket' || azione === 'categoria' || (s.bozza && s.bozza.passo !== 'pronta')) out = procediBozza(s, domanda, azione, body.categoria);
       else if (/(prepara|compila|apri|crea|scrivi|segnalare).{0,45}(ticket|richiesta|segnalazione)/i.test(domanda)) out = procediBozza(s, domanda, 'ticket');
       else if (/(?:stato|numero|ultima|ultimo|ultime|ultimi|mie|miei).{0,35}(?:ticket|richiest|segnalaz)|(?:ticket|richiest|segnalaz).{0,35}(?:stato|numero|risolt|chius|tecnico)|(?:ticket|richiesta|segnalazione)\s*#?\d|#\d{1,9}\b/i.test(domanda)) out = await cercaRichieste(req, domanda);
