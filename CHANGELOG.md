@@ -2,6 +2,13 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.5.7] - 2026-11-02
+
+### Novità per gli utenti
+
+- Ricerca inversa nella rubrica dell’assistente: chiedendo un interno, anche scrivendo soltanto il numero, vengono mostrate le persone e gli uffici associati.
+- Confronto esatto degli interni e indicazione esplicita dei numeri assenti dalla rubrica.
+
 ## [2.5.6] - 2026-10-29
 
 ### Novità per gli utenti
