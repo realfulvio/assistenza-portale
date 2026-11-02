@@ -151,7 +151,7 @@
 
     // ---- battute dell'ufficio, solo con assistente visibile e chat chiusa
     function togliNota() { clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } }
-    function programmaBattuta(ritardo = 20000 + Math.random() * 10000) {
+    function programmaBattuta(ritardo = 15000 + Math.random() * 5000) {
       clearTimeout(timerBattuta);
       if (document.hidden || radiceEl.hidden || stato.aperta) return;
       timerBattuta = setTimeout(mostraNota, ritardo);
