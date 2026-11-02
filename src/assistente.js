@@ -147,14 +147,20 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     return { risposta: domande[b.passo], tipo: 'bozza', ...(b.passo === 'categoria' ? { opzioni: opzioniCategorie() } : {}) };
   }
   function cercaContatti(domanda) {
+    const numeri = domanda.match(/\b\d{2,6}\b/g) || [];
     const q = parole(domanda).filter((p) => !['cerco', 'cerca', 'puoi', 'potrei', 'sapere', 'tutti', 'tutte', 'elenco', 'del', 'dell'].includes(p));
     if (!q.length) return { risposta: 'Di quale persona o ufficio cerchi il numero?', tipo: 'contatti', contatti: [] };
     const voci = contatti().flatMap((sezione) => sezione.voci.map((v) => ({ ...v, sezione: sezione.titolo })));
     const trovati = voci.filter((v) => {
+      // Per la ricerca inversa conta il numero intero, non le parole della domanda.
+      if (numeri.length) return numeri.some(n => (String(v.numero).match(/\d+/g) || []).includes(n));
       const t = norm([v.nome, v.sezione, v.nota, v.numero, v.cellulare].filter(Boolean).join(' '));
       return q.every((p) => t.includes(p));
     });
-    return { risposta: trovati.length ? `Ho trovato ${trovati.length === 1 ? 'questo contatto' : 'questi contatti'} nell’elenco del portale.` : 'Non trovo una corrispondenza precisa. Prova con il nome della persona o dell’ufficio.',
+    const rispostaNumero = trovati.length
+      ? trovati.slice(0, 12).map(v => `Il numero ${v.numero} è associato a ${v.nome}${v.nota ? ` (${v.nota})` : ''} — ${v.sezione}.`).join('\n')
+      : `Non trovo il numero ${numeri.join(', ')} nella rubrica del portale.`;
+    return { risposta: numeri.length ? rispostaNumero : trovati.length ? `Ho trovato ${trovati.length === 1 ? 'questo contatto' : 'questi contatti'} nell’elenco del portale.` : 'Non trovo una corrispondenza precisa. Prova con il nome della persona o dell’ufficio.',
       tipo: 'contatti', contatti: trovati.slice(0, 12), fonti: [{ titolo: 'Tutti i numeri interni', url: `${base}/#contatti` }] };
   }
   async function cercaRichieste(req, domanda) {

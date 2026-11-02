@@ -101,7 +101,10 @@ function cercaNumero(q) {
   const s = norm(q);
   if (/(?:non riesco|non posso).{0,20}(?:chiam|telefon)/.test(s)) return false;
   if (/telefon[oa].{0,25}(?:non funzion|funzion.{0,8}male|sente|audio|cornetta)|(?:mio |il )telefono.{0,30}(?:male|guast|blocc)/.test(s)) return false;
-  return /\bnumer[oi]\b|\bcontatt[oi]\b|(?:chi|come|posso).{0,15}chiamare|\bintern[oi]\b.{0,25}(?:di |del |dell)|\bcentralino\b/.test(s);
+  return /^\s*\d{2,6}\s*[?!.]?\s*$/.test(s)
+    || /\b(?:di chi|a chi)\b.{0,40}\b\d{2,6}\b/.test(s)
+    || /\b\d{2,6}\b.{0,40}\b(?:di chi|a chi)\b/.test(s)
+    || /\bnumer[oi]\b|\bcontatt[oi]\b|(?:chi|come|posso).{0,15}chiamare|\bintern[oi]\b.{0,25}(?:di |del |dell|\d)|\bcentralino\b/.test(s);
 }
 
 module.exports = {leggiSchede, rispostaControllata, cercaNumero, pertinenteScheda, raccogliDettagli};
