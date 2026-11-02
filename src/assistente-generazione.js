@@ -11,7 +11,7 @@ const riferimenti = {
 
 function argomento(testo) {
   const q=norm(testo);
-  if (/screen\s*shot|cattur.{0,20}scherm|foto.{0,20}scherm|istantane.{0,20}scherm/.test(q)) return 'screenshot';
+  if (/screen\s*shot|cattur.{0,20}scherm|foto.{0,60}scherm|istantane.{0,20}scherm/.test(q)) return 'screenshot';
   if (/password|credenzial/.test(q) && /dimentic|non.{0,15}ricord|pers[ao]|recuper|reimpost/.test(q)) return 'password';
   if (/audio|microfono|cuffi|altoparlant|non (?:mi )?sent/.test(q) && !/cornetta|vivavoce|telefono fisso/.test(q)) return 'audio';
   if (/\bpc\b|computer|excel/.test(q) && /lent|bloccat|non risponde/.test(q)) return 'pc';
@@ -22,6 +22,8 @@ function piano(messaggi, opzioni = {}) {
   const q = norm(messaggi.join('\n'));
   const ultima = norm(messaggi.at(-1));
   const tema=argomento(ultima) || argomento(q);
+  const apertura=ultima.replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+  if (!tema && messaggi.length === 1 && /^(?:ciao|salve|buongiorno|buonasera|ehi|buon pomeriggio|boh(?: non so(?: come spiegarmi)?)?|non so(?: come spiegarmi| da dove iniziare)?|mi serve (?:una mano|aiuto)|aiuto)$/.test(apertura)) return {tipo:'chiarimento',guide:[],fonti:[]};
   if (tema === 'password') {
     if (/gmail|yahoo|privat|personal/.test(q)) return {tipo:'recupero-personale',guide:[],fonti:[]};
     const aziendale=/posta|outlook|365|microsoft/.test(q) && !/gmail|yahoo|privat|personal|halley|x.?desk/.test(q);
@@ -48,7 +50,9 @@ function piano(messaggi, opzioni = {}) {
 }
 
 function messaggi({istruzioni, analisi, fonti, piano: p}) {
-  const modo = p?.tipo === 'recupero-accesso'
+  const modo = p?.tipo === 'chiarimento'
+    ? 'L utente ha iniziato con un saluto o una richiesta ancora priva di dettagli. Chiedi un solo dettaglio per capire che cosa desidera fare o che cosa osserva. Non inventare un problema e non proporre menu, procedure o invio di ticket.'
+    : p?.tipo === 'recupero-accesso'
     ? 'L’utente ha dimenticato la password: concentrati sul recupero dell’accesso, non su invio/ricezione della posta o scelta browser/app. Se la fonte organizzativa conferma la relazione fra account PC e posta, ricordala esplicitamente all’utente; altrimenti non presumere che le password coincidano. Non chiedere di riscrivere una password dimenticata. Non presumere scadenza o blocco e non inventare attese. Il recupero autonomo vale soltanto se disponibile; in alternativa indica l’assistenza. Non chiedere password o codici.'
     : p?.tipo === 'recupero-personale'
     ? 'L’utente parla di un account personale esterno: indica soltanto il recupero tramite il provider ufficiale, senza elencare passaggi non documentati. Non applicare procedure Microsoft 365 o regole dell’organizzazione, non collegare la password al PC e non chiedere dati, credenziali o recapiti in questa chat.'
