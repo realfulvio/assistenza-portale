@@ -97,7 +97,7 @@
   function avvia() {
     const stato = { aperta: false, accesso: null, errore: false,
       csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '' };
-    const BATTUTE = ['non si può fare', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
+    const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, prossimaBattuta = 0;
 
     const radiceEl = h('div', { className: 'mascotte', id: 'mascotte' });
@@ -315,7 +315,7 @@
           h('span', { className: 'msc-benvenuto-icona' }, icona('M8 10h.01M12 10h.01M16 10h.01M21 11a8 8 0 0 1-8 8H7l-4 3V11a9 9 0 0 1 18 0z')),
           h('h3', { textContent: 'Come posso aiutarti?' }),
           h('p', { textContent: 'Descrivi un problema informatico o chiedimi il numero di una persona o di un ufficio.' }),
-          h('div', { className: 'msc-esempi' }, esempio('Ho un problema informatico', 'Ho un problema con '), esempio('Cerco un numero di telefono', 'Cerco il numero di '))));
+          h('div', { className: 'msc-esempi' }, esempio('Ho un problema informatico', 'Ho un problema con '), esempio('Cerco un numero di telefono', 'Cerco il numero di '), esempio('Una barzelletta', 'Raccontami una barzelletta'), esempio('Una freddura', 'Dimmi una freddura'))));
       }
       if (stato.attesa) {
         const attesa = h('p', { className: 'msc-attesa', textContent: 'Sto cercando una risposta…' });
