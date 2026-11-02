@@ -2,6 +2,14 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.6.1] - 2026-11-02
+
+### Novità per gli utenti
+
+- Le domande colloquiali arrivano a Qwen anche senza le parole chiave previste o una guida abbinata.
+- Saluti e richieste iniziali poco chiare ricevono un chiarimento senza guide fuori tema; migliorata la continuità nelle domande sulle foto dello schermo.
+- La nuvoletta dell’assistente compare ogni 15–20 secondi, mantenendo 6 secondi di visibilità.
+
 ## [2.6.0] - 2026-11-02
 
 ### Novità per gli utenti
