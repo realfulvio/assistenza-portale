@@ -183,10 +183,6 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
   async function chat(s, domanda) {
     const storia = triage.storiaPertinente(domanda, s.messaggi);
     const recenti = storia.filter((m) => m.ruolo === 'utente').slice(-2).map((m) => m.testo);
-    const specifico = /stamp|toner|ricambio|\bpc\b|computer|posta|mail|outlook|account|password|rete|internet|file|cartell|audio|monitor|programma|aggiorn|gestional|halley|protocol|firma|pdf|vpn|access|word|excel|teams|errore|portale|richiesta|ticket|servizio|firmware|bios|telefon|cornetta|x.?desk|unimoney|sito/i;
-    if (!specifico.test(domanda) && !triage.dominio(domanda) && !recenti.some((m) => specifico.test(m))) {
-      return { risposta: 'Che cosa non funziona: il computer, un programma, la posta o una stampante? Dimmi anche che cosa vedi a schermo.', tipo: 'chat', fonti: [] };
-    }
     if (occupato) throw errore('Sto rispondendo a un’altra domanda. Riprova tra poco: la ricerca nelle guide resta disponibile.', 429);
     occupato = true;
     try {
@@ -217,7 +213,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       }
       const scheda = scelti.find(x => x.d.tipo === 'scheda');
       osservaRicerca?.({selezionati: scelti.map(({d, score}) => ({id: d.id, tipo: d.tipo, score})), primi: graduatoria.slice(0, 5).map(({d, score}) => ({id: d.id, score}))});
-      if (!scelti.length && !analisi.tema && !piano) return { risposta: 'Non trovo una guida abbastanza pertinente. Puoi descrivere meglio il problema oppure preparare una richiesta con il pulsante qui sotto.', tipo: 'chat', fonti: [] };
+      const senzaFonti = !scelti.length && !analisi.tema && !piano;
       const fonti = scelti.filter(({d}) => d.url).map(({ d }) => ({ titolo: d.titolo, url: d.url }));
       const dettagli = usaGuidate && scheda && conoscenza.raccogliDettagli(scheda.d.id, domanda, storia);
       if (dettagli) {
@@ -252,6 +248,8 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         { role: 'user', content: `MESSAGGI REALI DELL'UTENTE:\n${analisi.messaggi.join('\n')}\n\nFATTI GIA NOTI (non richiederli):\n${JSON.stringify(analisi.fatti)}\n\nGUIDE CORRENTI E SCHEDE:\n${scelti.map(({ d }) => `[${d.id}] ${fonte(d)}`).join('\n\n') || 'Nessuna procedura documentata per questa domanda.'}\n\n${formatoDialogo ? '' : esempi.contesto(sceltiEsempi, analisi.fatti)}\n\nFATTI ATTUALI CONFERMATI (prevalgono sulle domande degli esempi): ${JSON.stringify(analisi.fatti)}\n\nVINCOLI DEL CASO ATTUALE:\n${analisi.regole.join('\n')}\nDETTAGLI ANCORA CHIEDIBILI: ${analisi.domande.join('; ') || 'Non aggiungere domande generiche; indica il prossimo passo documentato o la segnalazione al CED.'}\n\nDOMANDA ATTUALE:\n${domanda}\n\nScrivi direttamente all’utente la risposta, non istruzioni per un altro operatore.` }];
       if (analisi.compito) messages.push({role:'user',content:`FASE ATTUALE: ${analisi.fase}\nCOMPITO: ${analisi.compito}\nDETTAGLI MANCANTI: ${analisi.domande.join('; ') || 'nessuno'}\n${analisi.tema === 'posta' && analisi.fase === 'chiarimento' ? 'Scrivi soltanto le domande mancanti. Termina con il punto interrogativo, senza proporre controlli o passi successivi.' : 'Rispondi in al massimo due frasi dirette.'} Usa solo i messaggi reali per i fatti attuali.`});
       if (!analisi.compito) messages = generazione.messaggi({istruzioni: system, analisi, fonti: scelti.map(({d}) => fonte(d)), piano});
+      messages[0].content += '\nPrima identifica la richiesta attuale: una guida recuperata non dimostra che l utente abbia quel problema. Se il messaggio e soltanto un saluto o esprime incertezza senza descrivere un problema o una domanda, chiedi brevemente che cosa desidera fare o che cosa osserva, senza proporre procedure, menu o invio di ticket. Non inventare sintomi mancanti.';
+      if (senzaFonti) messages[0].content += '\nNessuna guida pertinente e stata trovata per questa domanda. Comprendi anche saluti, sinonimi e frasi colloquiali usando i messaggi reali. Se la richiesta e ambigua, chiedi un solo dettaglio utile per capire che cosa vuole fare l utente. Non inventare procedure, diagnosi, azioni eseguite o configurazioni locali. Non proporre subito un ticket solo perche manca una guida. Se la domanda e estranea all assistenza informatica, richiama brevemente il tuo ambito.';
       for (let tentativo = 0; tentativo < 2; tentativo++) {
         const contestoBreve = piano && messages.reduce((n,m) => n + m.content.length,0) < 4500;
         const r = await ai('/api/chat', { model: MODELLO, messages, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m', options: { temperature: .1, num_ctx: contestoBreve ? 2048 : 4096, num_predict: 240, num_thread: 4 } });
