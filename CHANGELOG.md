@@ -2,6 +2,14 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.6.0] - 2026-11-02
+
+### Novità per gli utenti
+
+- Una pausa con l’assistente: 60 freddure e 97 mini-barzellette, con risposte immediate e senza ripetizioni fino a esaurire il genere.
+- Nuovo invito nella nuvoletta e pulsanti per chiedere una barzelletta, una freddura o un’altra battuta.
+- La pausa conserva la descrizione del ticket in preparazione; le richieste di assistenza restano distinte dalle battute.
+
 ## [2.5.7] - 2026-11-02
 
 ### Novità per gli utenti
