@@ -461,8 +461,9 @@
     async function inviaChat(dati) {
       if (stato.attesa) return;
       if((!dati.azione||dati.azione==='messaggio')&&window.SpotAssistente?.richiestaSpot(dati.testo)){
-        if(window.SpotAssistente.avviaCasuale()){stato.testo='';stato.erroreChat='';}
-        else stato.erroreChat='Non ci sono spot disponibili al momento. Riprova tra poco.';
+        const id=window.SpotAssistente.idSpotRichiesto(dati.testo);
+        if(window.SpotAssistente.avviaSpot(id)){stato.testo='';stato.erroreChat='';}
+        else stato.erroreChat=id?'Lo spot richiesto non è disponibile al momento.':'Non ci sono spot disponibili al momento. Riprova tra poco.';
         aggiornaChat();return;
       }
       const inline=(!dati.azione||dati.azione==='messaggio')?testoDaRichiesta(dati.testo||''):null;
