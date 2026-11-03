@@ -99,6 +99,10 @@
       csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '' };
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, prossimaBattuta = 0;
+    let notaMeteo = null, timerMeteo = null, timerChiudiMeteo = null, ultimoInput = 0, meteoInCorso = false;
+    const CHIAVE_METEO = 'portale.assistente.meteo';
+    const leggiMeteo = (k) => { try { return localStorage.getItem(CHIAVE_METEO + k); } catch { return null; } };
+    const salvaMeteo = (k, v) => { try { localStorage.setItem(CHIAVE_METEO + k, v); } catch { /* archivio non disponibile */ } };
 
     const radiceEl = h('div', { className: 'mascotte', id: 'mascotte' });
     radiceEl.dataset.aperta = 'false';
@@ -137,6 +141,11 @@
       spunta = h('input', { type: 'checkbox', id: 'aspetto-assistente', checked: !leggi() });
       controlli.append(h('label', { className: 'appearance-check', htmlFor: 'aspetto-assistente' }, spunta, ' Mostra l’assistente in basso a destra'));
       spunta.addEventListener('change', () => imposta(!spunta.checked));
+      if (document.body.dataset.meteoAttivo === '1') {
+        const spuntaMeteo = h('input', { type: 'checkbox', id: 'aspetto-meteo', checked: leggiMeteo('.silenzioso') !== '1' });
+        controlli.append(h('label', { className: 'appearance-check', htmlFor: 'aspetto-meteo' }, spuntaMeteo, ' Mostra ogni tanto il meteo locale'));
+        spuntaMeteo.addEventListener('change', () => { salvaMeteo('.silenzioso', spuntaMeteo.checked ? '0' : '1'); togliMeteo(); programmaMeteo(); });
+      }
     }
     function imposta(nascosta) {
       scrivi(nascosta);
@@ -146,6 +155,8 @@
       if (spunta) spunta.checked = !nascosta;
       if (nascosta) { togliNota(); if (stato.aperta) chiudiFumetto(false); }
       programmaBattuta();
+      if (nascosta) togliMeteo();
+      programmaMeteo();
     }
     mostra.addEventListener('click', () => { imposta(false); bottone.focus(); });
 
@@ -153,11 +164,11 @@
     function togliNota() { clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } }
     function programmaBattuta(ritardo = 15000 + Math.random() * 5000) {
       clearTimeout(timerBattuta);
-      if (document.hidden || radiceEl.hidden || stato.aperta) return;
+      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo) return;
       timerBattuta = setTimeout(mostraNota, ritardo);
     }
     function mostraNota() {
-      if (document.hidden || radiceEl.hidden || stato.aperta) return;
+      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo) return;
       togliNota();
       nota = h('p', { className: 'msc-nota', textContent: BATTUTE[prossimaBattuta] });
       prossimaBattuta = (prossimaBattuta + 1) % BATTUTE.length;
@@ -167,6 +178,75 @@
       programmaBattuta();
     }
     document.addEventListener('visibilitychange', () => { togliNota(); programmaBattuta(); });
+
+    // ---- meteo spontaneo, separato dalla conversazione e dalla bozza del ticket
+    function togliMeteo() {
+      clearTimeout(timerChiudiMeteo);
+      if (notaMeteo) { notaMeteo.remove(); notaMeteo = null; }
+    }
+    function occupatoMeteo() {
+      const focus = document.activeElement;
+      const scrive = focus && /^(INPUT|TEXTAREA|SELECT)$/.test(focus.tagName);
+      const bozza = [...document.querySelectorAll('#v-nuova textarea, #v-nuova input:not([type=file]):not([type=checkbox]):not([type=radio]):not([type=hidden])')].some(e => e.value.trim());
+      return document.hidden || radiceEl.hidden || stato.aperta || scrive || bozza || Date.now() - ultimoInput < 30000;
+    }
+    function programmaMeteo() {
+      clearTimeout(timerMeteo);
+      if (document.body.dataset.meteoAttivo !== '1') return;
+      if (document.hidden || radiceEl.hidden || leggiMeteo('.silenzioso') === '1') return;
+      const prossimo = Number(leggiMeteo('.prossimo')) || 0;
+      timerMeteo = setTimeout(() => mostraMeteo(false), Math.max(60000, prossimo - Date.now()));
+    }
+    function schedaMeteo(m) {
+      const simbolo = h('span', { className: 'msc-meteo-icona', textContent: m.icona });
+      simbolo.setAttribute('aria-hidden', 'true');
+      const intestazione = h('div', { className: 'msc-meteo-riga' }, simbolo,
+        h('div', {}, h('b', { textContent: m.giorno + ' a ' + m.localita }), h('span', { className: 'msc-meteo-condizione', textContent: m.descrizione })),
+        h('strong', { className: 'msc-meteo-gradi', textContent: m.temperatura === null ? m.massima + '°' : m.temperatura + '°' }));
+      const fonte = h('a', { className: 'msc-meteo-fonte', href: 'https://open-meteo.com/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Open-Meteo · ' + m.aggiornato.slice(8, 10) + '/' + m.aggiornato.slice(5, 7) + ' ore ' + m.aggiornato.slice(11, 16) });
+      return h('div', { className: 'msc-meteo-scheda' }, intestazione,
+        m.battuta ? h('p', { className: 'msc-meteo-battuta', textContent: m.battuta + '!' }) : null,
+        h('p', { className: 'msc-meteo-dati', textContent: `Min ${m.minima}° · Max ${m.massima}° · Pioggia ${m.pioggia}%` }), fonte);
+    }
+    async function mostraMeteo(manuale) {
+      if (!manuale && Number(leggiMeteo('.prossimo')) > Date.now()) { programmaMeteo(); return; }
+      if (meteoInCorso || occupatoMeteo() || (!manuale && leggiMeteo('.silenzioso') === '1')) { programmaMeteo(); return; }
+      meteoInCorso = true;
+      try {
+        const out = await prendi('/meteo');
+        if (!out.dati?.meteo || occupatoMeteo()) return;
+        togliNota(); togliMeteo(); clearTimeout(timerBattuta);
+        notaMeteo = h('section', { className: 'msc-nota msc-meteo', id: 'msc-meteo', tabIndex: 0 });
+        notaMeteo.setAttribute('aria-label', 'Meteo di ' + out.dati.meteo.localita);
+        const chiudiMeteo = h('button', { type: 'button', className: 'msc-meteo-chiudi', textContent: '×', title: 'Chiudi il meteo' });
+        chiudiMeteo.setAttribute('aria-label', 'Chiudi il meteo');
+        chiudiMeteo.addEventListener('click', () => { togliMeteo(); programmaBattuta(); });
+        const silenzia = h('button', { type: 'button', className: 'msc-meteo-silenzia', textContent: 'Silenzia meteo' });
+        silenzia.addEventListener('click', () => {
+          salvaMeteo('.silenzioso', '1');
+          const spunta = document.getElementById('aspetto-meteo'); if (spunta) spunta.checked = false;
+          togliMeteo(); clearTimeout(timerMeteo); programmaBattuta();
+        });
+        notaMeteo.append(chiudiMeteo, schedaMeteo(out.dati.meteo), silenzia);
+        notaMeteo.addEventListener('keydown', e => { if(e.key === 'Escape') { togliMeteo(); bottone.focus(); } });
+        radiceEl.append(notaMeteo);
+        salvaMeteo('.prossimo', String(Date.now() + 50 * 60000));
+        const chiudiAutomatico = () => {
+          if (notaMeteo?.matches(':hover') || notaMeteo?.contains(document.activeElement)) { timerChiudiMeteo = setTimeout(chiudiAutomatico, 5000); return; }
+          togliMeteo(); programmaBattuta();
+        };
+        timerChiudiMeteo = setTimeout(chiudiAutomatico, 18000);
+      } catch { /* Il fumetto resta silenzioso se il meteo non è disponibile. */ }
+      finally { meteoInCorso = false; programmaMeteo(); }
+    }
+    document.addEventListener('input', () => { ultimoInput = Date.now(); togliMeteo(); });
+    document.addEventListener('visibilitychange', () => { togliMeteo(); programmaMeteo(); });
+    window.addEventListener('hashchange', () => { togliMeteo(); programmaMeteo(); });
+    if (document.body.dataset.anteprimaMeteo === '1') {
+      const prova = h('button', { type: 'button', className: 'msc-meteo-prova', id: 'anteprima-meteo', textContent: 'Anteprima · Mostra fumetto meteo' });
+      prova.addEventListener('click', () => { ultimoInput = 0; mostraMeteo(true); });
+      document.body.append(prova);
+    }
 
     // ---- dati
     async function prendi(percorso) {
@@ -252,6 +332,7 @@
     function dettagliRisposta(out, corrente) {
       const extra = h('div', { className: 'msc-chat-extra' });
       if (!out) return extra;
+      if (out.meteo) extra.append(schedaMeteo(out.meteo));
       if (out.contatti?.length) extra.append(lista('Contatti trovati', out.contatti.map(vNumero)));
       if (out.richieste?.length) extra.append(lista('Le tue richieste', out.richieste.map((r) => h('li', { className: 'msc-ticket-card' },
         collega(r.url.slice((BASE + '/').length), `#${r.id} · ${r.titolo}`, 'msc-fonte'),
@@ -301,7 +382,7 @@
       for (let i = 0; i < stato.messaggi.length; i++) {
         const m = stato.messaggi[i], assistente = m.ruolo === 'assistente';
         const bolla = h('article', { className: 'msc-messaggio ' + (assistente ? 'msc-risposta' : 'msc-utente') },
-          h('b', { className: 'msc-autore', textContent: assistente ? 'Assistente' : 'Tu' }), h('p', { className: 'msc-messaggio-testo', textContent: m.testo }));
+          h('b', { className: 'msc-autore', textContent: assistente ? 'Assistente' : 'Tu' }), m.dettagli?.meteo ? null : h('p', { className: 'msc-messaggio-testo', textContent: m.testo }));
         if (assistente) { bolla.append(dettagliRisposta(m.dettagli, i === stato.messaggi.length - 1)); ultimaRisposta = bolla; }
         messaggi.append(bolla);
       }
@@ -357,6 +438,7 @@
     }
 
     async function apriFumetto() {
+      togliMeteo();
       clearTimeout(timerBattuta);
       togliNota();
       stato.aperta = true;
