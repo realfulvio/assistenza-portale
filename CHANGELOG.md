@@ -2,6 +2,15 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.10.0] - 2026-11-03
+
+### Novità per gli utenti
+
+- Spot video nella nuvoletta dell'assistente: comparsa casuale dopo il primo minuto, con pausa minima di cinque minuti e senza ripetizioni immediate. Il meteo rimane il primo fumetto.
+- Gli spot spontanei partono muti; scrivendo «spot» o «pubblicità» parte subito un video casuale con audio, senza attendere il modello AI.
+- Video dentro il fumetto, controlli di riproduzione, chiusura con Esc e ritorno alla chat senza perdere messaggi o bozza. La nuvoletta rimane durante la riproduzione.
+- Spot silenziabili da Aspetto; battute dell'assistente scelte casualmente. Nessuna interruzione durante chat o compilazione della richiesta.
+
 ## [2.9.0] - 2026-11-03
 
 ### Novità per gli utenti

@@ -33,7 +33,11 @@
 
   const telefono = (numero) => 'tel:' + String(numero).replace(/[^\d+]/g, '');
 
-  const api = { cerca, frequenti, saluto, telefono, SALUTI, MIN_CARATTERI, MAX_GUIDE, MAX_NUMERI };
+  function scegliBattuta(frasi,ultima,casuale=Math.random) {
+    const candidati=frasi.length>1?frasi.filter(f=>f!==ultima):frasi;
+    return candidati[Math.floor(casuale()*candidati.length)]||'';
+  }
+  const api = { cerca, frequenti, saluto, telefono, scegliBattuta, SALUTI, MIN_CARATTERI, MAX_GUIDE, MAX_NUMERI };
   if (typeof document === 'undefined') return api;
 
   // ---------------------------------------------------------------- disegno
@@ -98,7 +102,7 @@
     const stato = { aperta: false, accesso: null, errore: false,
       csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '', modo:'chat', testoRiassunto:'', risultatoRiassunto:'', attesaRiassunto:false, erroreRiassunto:'', controllerRiassunto:null };
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
-    let nota = null, timerNota = null, timerBattuta = null, prossimaBattuta = 0;
+    let nota = null, timerNota = null, timerBattuta = null, ultimaBattuta = null;
     let notaMeteo = null, timerMeteo = null, timerChiudiMeteo = null, ultimoInput = 0, meteoInCorso = false;
     let meteoIniziale = true;
     const CHIAVE_METEO = 'portale.assistente.meteo';
@@ -212,17 +216,20 @@
     mostra.addEventListener('click', () => { imposta(false); bottone.focus(); });
 
     // ---- battute dell'ufficio, solo con assistente visibile e chat chiusa
-    function togliNota() { clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } }
+    function togliNota() { clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } radiceEl.dispatchEvent(new Event('assistente:chiudi-note')); }
     function programmaBattuta(ritardo = 12000 + Math.random() * 4000) {
       clearTimeout(timerBattuta);
-      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso) return;
+      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso || radiceEl.dataset.spotVisibile || radiceEl.dataset.spotVideo) return;
       timerBattuta = setTimeout(mostraNota, ritardo);
     }
+    radiceEl.addEventListener('assistente:prepara-spot', togliNota);
+    radiceEl.addEventListener('assistente:riprendi-note', () => programmaBattuta());
     function mostraNota() {
-      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso) return;
+      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso || radiceEl.dataset.spotVisibile || radiceEl.dataset.spotVideo) return;
+      if (!radiceEl.dispatchEvent(new CustomEvent('assistente:turno', {cancelable:true,detail:{occupato:occupatoMeteo(),attesaMeteo:meteoIniziale && document.body.dataset.meteoAttivo==='1' && leggiMeteo('.silenzioso')!=='1'}}))) return;
       togliNota();
-      nota = h('p', { className: 'msc-nota', textContent: BATTUTE[prossimaBattuta] });
-      prossimaBattuta = (prossimaBattuta + 1) % BATTUTE.length;
+      ultimaBattuta = scegliBattuta(BATTUTE,ultimaBattuta);
+      nota = h('p', { className: 'msc-nota', textContent: ultimaBattuta });
       nota.setAttribute('aria-hidden', 'true');
       radiceEl.append(nota);
       timerNota = setTimeout(togliNota, 6000);
@@ -238,8 +245,8 @@
     function occupatoMeteo() {
       const focus = document.activeElement;
       const scrive = focus && /^(INPUT|TEXTAREA|SELECT)$/.test(focus.tagName);
-      const bozza = [...document.querySelectorAll('#v-nuova textarea, #v-nuova input:not([type=file]):not([type=checkbox]):not([type=radio]):not([type=hidden])')].some(e => e.value.trim());
-      return document.hidden || radiceEl.hidden || stato.aperta || scrive || bozza || Date.now() - ultimoInput < 30000;
+      const bozza = [...document.querySelectorAll('#v-nuova textarea, #v-nuova input:not(#telefono):not([type=file]):not([type=checkbox]):not([type=radio]):not([type=hidden])')].some(e => e.value.trim());
+      return document.hidden || radiceEl.hidden || stato.aperta || !!radiceEl.dataset.spotVideo || scrive || bozza || Date.now() - ultimoInput < 30000;
     }
     function programmaMeteo(ritardoMinimo = 0) {
       clearTimeout(timerMeteo);
@@ -453,6 +460,11 @@
     }
     async function inviaChat(dati) {
       if (stato.attesa) return;
+      if((!dati.azione||dati.azione==='messaggio')&&window.SpotAssistente?.richiestaSpot(dati.testo)){
+        if(window.SpotAssistente.avviaCasuale()){stato.testo='';stato.erroreChat='';}
+        else stato.erroreChat='Non ci sono spot disponibili al momento. Riprova tra poco.';
+        aggiornaChat();return;
+      }
       const inline=(!dati.azione||dati.azione==='messaggio')?testoDaRichiesta(dati.testo||''):null;
       if(inline!==null){
         stato.testo='';stato.testoRiassunto=inline;stato.risultatoRiassunto='';apriRiassunto();
@@ -636,6 +648,8 @@
       if (rendiFocus) bottone.focus();
       programmaBattuta();
     }
+    radiceEl.addEventListener('assistente:chiudi-chat-spot', () => chiudiFumetto(false));
+    radiceEl.addEventListener('assistente:torna-chat', async () => {await apriFumetto();corpo.querySelector('#msc-domanda')?.focus({preventScroll:true});});
     bottone.addEventListener('click', () => (stato.aperta ? chiudiFumetto(true) : apriFumetto()));
     chiudi.addEventListener('click', () => chiudiFumetto(true));
     radiceEl.addEventListener('keydown', (e) => { if (e.key === 'Escape' && stato.aperta) { e.stopPropagation(); chiudiFumetto(true); } });

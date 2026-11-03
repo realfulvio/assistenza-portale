@@ -1,0 +1,36 @@
+{
+  "spot": [
+    {
+      "id": "cedro",
+      "titolo": "Cedro",
+      "testo": "Un file da convertire? Con Cedro lo fai sul tuo PC, senza caricarlo online. Shift + clic destro… e scegli il formato.",
+      "url": "https://github.com/realfulvio/cedro",
+      "video": "/media/spot/cedro.mp4",
+      "poster": "/media/spot/cedro-poster.png",
+      "descrizioneVideo": "Cedro: cambia formato, non le tue abitudini. Shift + clic destro, scegli il formato. I tuoi file restano sul tuo dispositivo. Video di dodici secondi, gratuito e open source.",
+      "attivo": false
+    },
+    {
+      "id": "dipendentin",
+      "titolo": "Dipendentin Pubblico",
+      "battuta": "Scadenze? Un attimo di calma… amministrativa.",
+      "parodia": true,
+      "testo": "Una pausa ironica dalla vita d’ufficio: arriva Dipendentin Pubblico 500 mg. Solo fantasia, nessuna ricetta.",
+      "video": "/media/spot/dipendentin-nuovo.mp4",
+      "poster": "/media/spot/dipendentin-nuovo.png",
+      "descrizioneVideo": "Spot animato di circa dieci secondi sulla vita in ufficio e la tranquillità amministrativa, con la confezione di Dipendentin Pubblico. Parodia: non è un farmaco reale.",
+      "attivo": false
+    },
+    {
+      "id": "rimbalzoff",
+      "titolo": "Rimbalzoff",
+      "battuta": "Da un ufficio all’altro? Arriva Rimbalzoff.",
+      "parodia": true,
+      "testo": "Una pausa pubblicitaria dai rimbalzi d’ufficio. Rimbalzoff è un prodotto inventato: qui si vende soltanto ironia.",
+      "video": "/media/spot/rimbalzoff.mp4",
+      "poster": "/media/spot/rimbalzoff-poster.png",
+      "descrizioneVideo": "Spot comico di circa venti secondi ambientato in ufficio, con un presentatore e la confezione di Rimbalzoff. Parodia: prodotto inventato.",
+      "attivo": false
+    }
+  ]
+}

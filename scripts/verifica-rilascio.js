@@ -1,6 +1,6 @@
 // Controlla i file effettivamente serviti (anche dopo un porting), senza login né scritture.
-const stili = ['theme.css', 'ente.css', 'style.css', 'readability.css', 'appearance.css', 'stats-bar.css', 'avatar.css', 'temi.css', 'mascotte.css', 'remota.css', 'link-utili.css', 'assistente-link.css', 'footer.css', 'theme-fonts.css', 'allerte-meteo.css', 'riassunto.css'];
-const script = ['appearance-model.js', 'temi.js', 'appearance.js', 'faq.js', 'numeri-interni.js', 'app.js', 'stats-bar.js', 'avatar.js', 'numeri-interni.js', 'mascotte.js', 'risorse-hover.js', 'link-utili.js'];
+const stili = ['theme.css', 'ente.css', 'style.css', 'readability.css', 'appearance.css', 'stats-bar.css', 'avatar.css', 'temi.css', 'mascotte.css', 'remota.css', 'link-utili.css', 'assistente-link.css', 'footer.css', 'theme-fonts.css', 'allerte-meteo.css', 'riassunto.css', 'spot-assistente.css'];
+const script = ['appearance-model.js', 'temi.js', 'appearance.js', 'faq.js', 'numeri-interni.js', 'app.js', 'stats-bar.js', 'avatar.js', 'numeri-interni.js', 'mascotte.js', 'risorse-hover.js', 'link-utili.js', 'spot-assistente.js'];
 function risorse(html, tag, attribute) {
   return [...html.replace(/<!--[\s\S]*?-->/g, '').matchAll(new RegExp('<' + tag + '\\b[^>]*>', 'gi'))].flatMap(([markup]) => {
     if (tag === 'link' && !/\brel\s*=\s*["']stylesheet["']/i.test(markup)) return [];

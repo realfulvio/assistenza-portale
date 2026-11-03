@@ -1,0 +1,2 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');const {richiestaSpot}=require('../public/spot-assistente');
+test('comandi spot espliciti, con o senza accento, senza intercettare domande di assistenza',()=>{for(const q of ['spot','Pubblicità',' PUBBLICITA! ','mostrami uno spot','fammi vedere una pubblicità','spot casuale'])assert.equal(richiestaSpot(q),true,q);for(const q of ['Come tolgo la pubblicità?','Non voglio spot','riassumi: spot e pubblicità','Il sito mostra pubblicità invasive',null])assert.equal(richiestaSpot(q),false,q);});
