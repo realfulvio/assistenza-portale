@@ -1,6 +1,6 @@
 {
   "name": "assistenza-portale",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Portale web per aprire e seguire richieste di assistenza informatica su GLPI, con accesso OpenID Connect (es. Microsoft Entra ID). Pensato per Comuni ed Enti pubblici.",
   "author": "Servizio Sistemi Informativi",
   "license": "EUPL-1.2",
@@ -25,7 +25,7 @@
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
     "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js test/rilascio.test.js test/glpi-client.test.js test/pdf-layout.test.js test/accesso.test.js test/numeri-interni.test.js test/assistente.test.js test/link-utili.test.js test/assistente-contesto.test.js test/assistente-residui.test.js test/admin-panel.test.js test/assistente-contatti.test.js test/assistente-svago.test.js test/assistente-domande.test.js test/meteo.test.js",
-    "test:aspetto": "node scripts/test-aspetto-browser.js",
+    "test:aspetto": "node scripts/test-aspetto-browser.js && node scripts/test-meteo-browser.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js",
     "verifica:rilascio": "node scripts/verifica-rilascio.js",

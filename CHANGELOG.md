@@ -2,6 +2,13 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.7.1] - 2026-11-03
+
+### Novità per gli utenti
+
+- Il meteo è il primo fumetto a ogni apertura o ricaricamento della pagina, appena disponibili i dati; silenziamento e attività in corso restano rispettati.
+- Battute più ravvicinate: intervallo casuale di 12–16 secondi, con durata di 6 secondi invariata.
+
 ## [2.7.0] - 2026-11-03
 
 ### Novità per gli utenti
