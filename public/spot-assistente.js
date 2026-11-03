@@ -27,11 +27,16 @@
     const candidati=attivi.length>1?attivi.filter(v=>v.id!==s.ultimoId):attivi;
     return candidati[Math.floor(casuale()*candidati.length)];
   }
+  function idSpotRichiesto(testo){
+    const q=String(testo||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/[.!?]+$/,'').trim();
+    const m=/^(?:(?:mostra(?:mi)?|fammi vedere|fammi partire)\s+)?(?:(?:lo spot|la pubblicita|spot|pubblicita)(?:\s+di)?\s+)?(cedro|dipendentin(?: pubblico)?|rimbalzoff)$/.exec(q);
+    return m?m[1].replace(' pubblico',''):null;
+  }
   function richiestaSpot(testo){
     const q=String(testo||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
-    return /^(?:(?:mostra(?:mi)?|fammi(?: vedere| partire)?)\s+)?(?:(?:uno|una|un)\s+)?(?:spot|pubblicita)(?:\s+casuale)?[.!?]*$/.test(q);
+    return idSpotRichiesto(testo)!==null||/^(?:(?:mostra(?:mi)?|fammi(?: vedere| partire)?)\s+)?(?:(?:uno|una|un)\s+)?(?:spot|pubblicita)(?:\s+casuale)?[.!?]*$/.test(q);
   }
-  const api={normalizza,scegli,richiestaSpot,PRIMO_RITARDO,INTERVALLO};if(typeof document==='undefined')return api;
+  const api={normalizza,scegli,richiestaSpot,idSpotRichiesto,PRIMO_RITARDO,INTERVALLO};if(typeof document==='undefined')return api;
   function avvia(){
     const mascotte=document.getElementById('mascotte');if(!mascotte)return;
     const BASE=document.querySelector('meta[name=base]')?.content||'',CHIAVE='portale.assistente.spot';
@@ -93,17 +98,19 @@
     if(controlli){spunta=h('input',{type:'checkbox',checked:leggi('.silenzioso')!=='1',id:'aspetto-spot'});controlli.append(h('label',{className:'appearance-check',htmlFor:'aspetto-spot'},spunta,' Mostra ogni tanto gli spot dell’assistente'));spunta.addEventListener('change',()=>{salva('.silenzioso',spunta.checked?'0':'1');chiudiNota();});}
     api.disponibili=()=>lista.length;
     api.prova=id=>mostra(lista.find(v=>v.id===id)||lista[0],true,{richiesto:true});
-    api.avviaCasuale=()=>{
+    api.avviaSpot=(id=null)=>{
       if(document.hidden||mascotte.hidden)return false;
       const ora=Date.now(),attivi=lista.filter(v=>v.video&&(v.dal==null||ora>=v.dal)&&(v.al==null||ora<v.al));
       if(!attivi.length)return false;
-      const candidati=attivi.length>1?attivi.filter(v=>v.id!==leggi('.ultimo')):attivi;
+      const candidati=id?attivi.filter(v=>v.id===id):attivi.length>1?attivi.filter(v=>v.id!==leggi('.ultimo')):attivi;
+      if(!candidati.length)return false;
       const voce=candidati[Math.floor(Math.random()*candidati.length)];
       salva('.ultimo',voce.id);salva('.prossimo',String(ora+INTERVALLO+Math.floor(Math.random()*30000)));
       const tornaAllaChat=mascotte.dataset.aperta==='true';
       if(tornaAllaChat)mascotte.dispatchEvent(new Event('assistente:chiudi-chat-spot'));
       return mostra(voce,true,{richiesto:true,tornaAllaChat});
     };
+    api.avviaCasuale=()=>api.avviaSpot();
     fetch(BASE+'/api/spot-assistente',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():{}).then(d=>{lista=normalizza(d);document.dispatchEvent(new Event('assistente:spot-pronti'));}).catch(()=>{});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',avvia);else avvia();return api;

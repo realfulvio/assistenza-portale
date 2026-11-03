@@ -2,6 +2,12 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.10.1] - 2026-11-03
+
+### Novità per gli utenti
+
+- Scrivendo Cedro, Dipendentin o Rimbalzoff nella chat parte direttamente lo spot corrispondente nella nuvoletta, anche ripetendo lo stesso nome. Spot e pubblicità continuano a scegliere un video casuale.
+
 ## [2.10.0] - 2026-11-03
 
 ### Novità per gli utenti
