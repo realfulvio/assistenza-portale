@@ -59,7 +59,8 @@ app.use(helmet({
 const router = express.Router();
 router.use(session({
   name: 'portale.sid', secret: config.sessionSecret, resave: false, saveUninitialized: false, rolling: true,
-  store: new MemoryStore({ checkPeriod: 10 * 60 * 1000 }),
+  // max: oltre questo numero di sessioni si scartano le meno recenti, cosi' la memoria resta limitata
+  store: new MemoryStore({ checkPeriod: 10 * 60 * 1000, max: 5000 }),
   cookie: { httpOnly: true, sameSite: 'lax', secure: config.prod, maxAge: config.sessionHours * 3600 * 1000, path: config.base || '/' }
 }));
 
@@ -102,7 +103,6 @@ api.get('/me', (req, res) => {
   avatar.registraEmail(req.session.user);
   res.json({ nome: name, email, csrf: csrfToken(req), demo: config.demo, versione: versione.numero, appearance: preferences.read(req.session.user), feedbackAdmin: config.admin.emails.includes(String(email||'').toLowerCase()), adminUrl: config.admin.url && config.admin.emails.includes(email) ? config.admin.url : null, limiti: { maxFiles: config.limits.maxFiles, maxFileBytes: config.limits.maxFileBytes }, categorie: config.categorie.categorie.map(({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi }) => ({ id, nome, icona, sotto, titolo, colore, temaColore, placeholder, rapidi: Array.isArray(rapidi) ? rapidi.map(String).slice(0, 8) : [] })) });
 });
-api.get('/csrf', (req, res) => res.json({ csrf: csrfToken(req) }));
 api.get('/preferenze', serveLogin, (req, res) => {
   res.set('Cache-Control', 'no-store').json(preferences.read(req.session.user));
 });
@@ -318,19 +318,22 @@ api.get('/spot-assistente', (req, res) => {
 });
 const meteo = require('./meteo').creaMeteo(config.ente.meteo);
 const allerteMeteo = require('./allerte-meteo').createAllerteMeteo(config.ente.allerteMeteo);
-api.get('/allerte-meteo', serveLogin, async (req, res) => {
-  res.set('Cache-Control', 'no-store').json(await allerteMeteo.getStato());
+// Express 4 non intercetta le promesse rifiutate: senza try/catch un errore fermerebbe il processo
+api.get('/allerte-meteo', serveLogin, async (req, res, next) => {
+  try { res.set('Cache-Control', 'no-store').json(await allerteMeteo.getStato()); } catch (e) { next(e); }
 });
-api.get('/meteo', serveLogin, async (req, res) => {
-  const out = await meteo.rispondi();
-  res.set('Cache-Control', 'no-store').status(out.meteo ? 200 : 503).json(out);
+api.get('/meteo', serveLogin, async (req, res, next) => {
+  try {
+    const out = await meteo.rispondi();
+    res.set('Cache-Control', 'no-store').status(out.meteo ? 200 : 503).json(out);
+  } catch (e) { next(e); }
 });
 require('./assistente').collega(api, { config, numeriInterni, glpi, utenteGlpi, serveLogin, csrf, meteo });
 router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato
 // __V__ = versione dei file (data di modifica): cambia a ogni rilascio e forza il browser a ricaricare CSS e JS
-const versioneFile = versione.numero + ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'halloween-scena.svg', 'halloween-fila.svg', 'halloween-cimitero.svg', 'halloween-fantasma.svg', 'halloween-pipistrello.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js', 'theme.css', 'temi.css', 'temi.js'].map((f) => Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36)).join('')
+const versioneFile = versione.numero + ['style.css', 'app.js', 'appearance.css', 'readability.css', 'appearance.js', 'appearance-model.js', 'theme-icons.svg', 'theme-landscapes.svg', 'stats-bar.css', 'stats-bar.js', 'avatar.css', 'avatar.js', 'theme.css', 'temi.css', 'temi.js'].map((f) => { try { return Math.floor(fs.statSync(path.join(config.root, 'public', f)).mtimeMs / 1000).toString(36); } catch { return '0'; } }).join('')
   + Math.floor(fs.statSync(config.enteFile).mtimeMs / 1000).toString(36);
 const indice = personalizza(fs.readFileSync(path.join(config.root, 'public', 'index.html'), 'utf8'))
   .replaceAll('__BASE__', config.base).replaceAll('__V__', versioneFile).replace('__LINK_UTILI__', require('./link-utili').html(config.root, config.base));
@@ -367,8 +370,13 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   const msg = 'Qualcosa non ha funzionato. Riprova tra poco; se il problema continua chiamaci.';
   if (err.utente) return res.status(400).json({ errore: err.message });
   if (req.path.includes('/api/')) return res.status(err.status >= 400 && err.status < 500 ? err.status : 500).json({ errore: msg });
+  // Se fallisce proprio la pagina di errore non si reindirizza di nuovo: niente ciclo infinito
+  if (req.path === '/errore') return res.status(500).type('text').send(msg);
   res.redirect(config.base + '/errore');
 });
+
+// Un errore asincrono sfuggito ai gestori resta nei log invece di fermare il servizio (e chiudere tutte le sessioni)
+process.on('unhandledRejection', (e) => log('errore asincrono non gestito', e?.message || e));
 
 function avvia() {
   return app.listen(config.port, config.host, () => {

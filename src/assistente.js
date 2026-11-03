@@ -17,7 +17,7 @@ const norm = (s) => String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0
 const STOP = new Set('a al alla alle anche che chi ci come con da dal dalla dei del della di e gli ho il in io la le lo ma mi nel non o per qual quale quali quanto se si sono su sul un una uno vorrei devo posso mio mia dimmi trovare sapere serve numero numeri telefono telefonico contatto contatti ufficio chiamare interno interni quello quella della dell dellufficio favore grazie potresti darmi dai dammi cerco cercando'.split(' '));
 const parole = (s) => norm(s).match(/[a-z0-9]+/g)?.filter((p) => p.length > 1 && !STOP.has(p)) || [];
 const hash = (s) => crypto.createHash('sha256').update(s).digest('hex');
-const proprietario = (req) => `${req.session.user?.tid || ''}:${req.session.user?.oid || req.session.user?.email || req.sessionID}`;
+const proprietario = (req) => `${req.session.user?.tenant || ''}:${req.session.user?.oid || req.session.user?.email || req.sessionID}`;
 const testo = (s, n = 1500) => String(s ?? '').replace(/<[^>]*>/g, '').slice(0, n);
 const errore = (messaggio, status = 400) => Object.assign(new Error(messaggio), { status });
 const coseno = (a, b) => {
@@ -356,7 +356,7 @@ function collega(api, deps) {
       const owner = proprietario(req), out = await servizio.gestisci(req,{signal:controller.signal});
       if(res.destroyed || controller.signal.aborted)return;
       const ancora = await new Promise((resolve, reject) => req.sessionStore.get(req.sessionID, (e, s) => e ? reject(e) : resolve(s)));
-      if (!ancora?.user || `${ancora.user.tid || ''}:${ancora.user.oid || ancora.user.email || req.sessionID}` !== owner) {
+      if (!ancora?.user || `${ancora.user.tenant || ''}:${ancora.user.oid || ancora.user.email || req.sessionID}` !== owner) {
         req.session = null;
         return res.status(401).json({ errore: 'Sessione terminata. Accedi nuovamente.' });
       }
