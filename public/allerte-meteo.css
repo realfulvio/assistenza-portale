@@ -1,0 +1,8 @@
+.msc-allerta{margin:3px 0 12px;padding:12px;border:1px solid #b78c0b;border-left:5px solid #b78c0b;border-radius:10px;background:#fff8db;color:#382800;font-size:14px;line-height:1.45}
+.msc-allerta[data-colore=arancione]{background:#fff0df;border-color:#b55600;color:#4f2400}
+.msc-allerta[data-colore=rossa]{background:#ffe8ec;border-color:#b61936;color:#61091c}
+.msc-allerta strong{display:block;font-size:17px;padding-right:8px}.msc-allerta p{margin:8px 0}.msc-allerta small{display:block;font-size:12px}
+.msc-allerta a{display:inline-block;color:inherit;text-decoration:underline;min-height:24px;padding-top:6px}.msc-allerta a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.msc-allerta-simulazione{font-size:11px!important;letter-spacing:.04em;margin-bottom:8px;font-weight:700}
+.msc-allerta-stato{font-size:12px;line-height:1.4;margin:8px 0}.msc-allerta-stato a{color:inherit;text-decoration:underline}
+.msc-nota.msc-meteo{max-height:calc(100dvh - 230px);overflow:auto}

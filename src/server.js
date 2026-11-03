@@ -311,6 +311,10 @@ api.post('/richieste/:id/esito', serveLogin, csrf, idTicket, async (req, res, ne
 });
 // Assistente separato dal modulo ticket: sola consultazione e suggerimenti in chat.
 const meteo = require('./meteo').creaMeteo(config.ente.meteo);
+const allerteMeteo = require('./allerte-meteo').createAllerteMeteo(config.ente.allerteMeteo);
+api.get('/allerte-meteo', serveLogin, async (req, res) => {
+  res.set('Cache-Control', 'no-store').json(await allerteMeteo.getStato());
+});
 api.get('/meteo', serveLogin, async (req, res) => {
   const out = await meteo.rispondi();
   res.set('Cache-Control', 'no-store').status(out.meteo ? 200 : 503).json(out);

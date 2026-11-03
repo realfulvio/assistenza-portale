@@ -8,6 +8,7 @@ const esempi = require('./assistente-esempi');
 const contesto = require('./assistente-contesto');
 const generazione = require('./assistente-generazione');
 const svago = require('./assistente-svago');
+const {creaRiassuntore,estraiRichiesta}=require('./assistente-riassunto');
 const { richiesta: richiestaMeteo, creaMeteo } = require('./meteo');
 
 const MODELLO_PREDEFINITO = 'qwen3.5:4b-q4_K_M';
@@ -43,13 +44,14 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
   const esempiPath = config.assistenteEsempiPath || contenuto('assistente-esempi.json');
   let indice = null, preparazione = null, occupato = false;
   const sessioniOccupate = new Set();
-  const ai = chiamaAI || (async (endpoint, body) => {
+  const ai = chiamaAI || (async (endpoint, body, signal) => {
     const r = await fetch((config.assistenteAiUrl || 'http://127.0.0.1:11435').replace(/\/$/, '') + endpoint, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(60_000)
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: signal ? AbortSignal.any([signal,AbortSignal.timeout(60_000)]) : AbortSignal.timeout(60_000)
     });
     if (!r.ok) throw errore('L’assistente è momentaneamente occupato. Puoi usare la ricerca nelle guide.', 503);
     return r.json();
   });
+  const riassuntore=creaRiassuntore({ai,modello:MODELLO,keepAlive:config.assistenteKeepAlive ?? '5m'});
   const categorie = () => config.categorie.categorie.map((c) => ({ id: c.id, nome: c.titolo || c.nome }));
   const contatti = () => numeriInterni.carica({ file: config.numeriInterniPath, esempio: config.numeriInterniEsempio, demo: config.demo }).sezioni;
   function documenti() {
@@ -265,14 +267,23 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       return {risposta: 'Non riesco a formulare una risposta coerente con le informazioni fornite. Usa «Aiutami a descrivere il problema» per preparare una richiesta al CED.', tipo: 'chat', fonti};
     } finally { occupato = false; }
   }
-  async function gestisci(req) {
+  async function gestisci(req, {signal} = {}) {
     if (sessioniOccupate.has(req.sessionID)) throw errore('Attendi la risposta precedente.', 429);
     sessioniOccupate.add(req.sessionID);
     try {
       const body = req.body || {}, azione = body.azione || 'messaggio';
-      if (!['messaggio', 'nuova', 'ticket', 'categoria'].includes(azione)) throw errore('Azione non valida.');
+      if (!['messaggio', 'nuova', 'ticket', 'categoria', 'riassunto'].includes(azione)) throw errore('Azione non valida.');
       if (typeof body.testo !== 'undefined' && typeof body.testo !== 'string') throw errore('Scrivi un messaggio di testo.');
-      const domanda = (body.testo || '').trim();
+      const originale = body.testo || '';
+      const testoRiassunto = azione === 'riassunto' ? originale : azione === 'messaggio' ? estraiRichiesta(originale) : null;
+      if(testoRiassunto !== null) {
+        if(!testoRiassunto.trim()) return {tipo:'riassunto',richiediTesto:true,risposta:'Incolla il testo da riassumere.'};
+        if(occupato) throw errore('Sto rispondendo a un’altra domanda. Riprova tra poco.',429);
+        occupato=true;
+        try{return await riassuntore.riassumi(testoRiassunto,{signal});}
+        finally{occupato=false;}
+      }
+      const domanda = originale.trim();
       if (domanda.length > 1500 || (azione === 'messaggio' && domanda.length < 2)) throw errore('Scrivi un messaggio tra 2 e 1500 caratteri.');
       let s = stato(req);
       if (azione === 'nuova') { req.session.assistente = null; s = stato(req); return { risposta: 'Nuova conversazione. Come posso aiutarti?', tipo: 'chat' }; }
@@ -316,7 +327,10 @@ function collega(api, deps) {
   api.post('/assistente', deps.serveLogin, deps.csrf, limite, async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {
-      const owner = proprietario(req), out = await servizio.gestisci(req);
+      const controller=new AbortController();
+      res.once('close',()=>{if(!res.writableEnded)controller.abort();});
+      const owner = proprietario(req), out = await servizio.gestisci(req,{signal:controller.signal});
+      if(res.destroyed || controller.signal.aborted)return;
       const ancora = await new Promise((resolve, reject) => req.sessionStore.get(req.sessionID, (e, s) => e ? reject(e) : resolve(s)));
       if (!ancora?.user || `${ancora.user.tid || ''}:${ancora.user.oid || ancora.user.email || req.sessionID}` !== owner) {
         req.session = null;

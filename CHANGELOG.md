@@ -2,6 +2,16 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.9.0] - 2026-11-03
+
+### Novità per gli utenti
+
+- Riassunti di testi incollati fino a 6.000 caratteri con il modello locale: area dedicata, copia risultato e annullamento, senza inserire il documento nella cronologia della chat o nella bozza della richiesta.
+- Pannello dell'assistente ampliabile e ridimensionabile: pulsante Allarga/Ripristina, trascinamento e tastiera su desktop, espansione sul telefono.
+- Font locali coordinati con i temi Giardino, Autunno, Scuro, Contrasto elevato e Montagna; Classico conserva il carattere originale.
+- Avvisi delle allerte meteo regionali per il Comune configurato, con colore, rischi, validità e collegamento alla fonte ufficiale. Gli avvisi arancioni e rossi usano un tono diretto.
+- Il fumetto meteo ordinario si chiude dopo 13 secondi; la lettura con mouse o tastiera ne prolunga la permanenza.
+
 ## [2.8.1] - 2026-11-03
 
 ### Novità per gli utenti

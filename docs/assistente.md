@@ -28,3 +28,14 @@ La cache viene aggiornata quando cambiano le guide. Se cambi il modello di embed
 ## Verifica
 
 `node --test test/assistente.test.js` verifica contatti senza modello, preparazione del testo, isolamento dei ticket, CSRF, logout durante una risposta e aggiornamento delle fonti con un backend AI simulato. Queste prove non misurano la qualità delle risposte di un modello reale.
+
+
+## Riassumere un testo
+
+Il pulsante «Riassumi un testo» apre un'area separata dalla chat. Sono ammessi fino a 6.000 caratteri e 12.000 byte UTF-8; l'incolla troppo lungo viene rifiutato esplicitamente, senza tagli. Anche «riassumi: testo…» apre lo strumento. Il documento e la sintesi restano nella memoria della pagina e non entrano nella cronologia chat o nella bozza della richiesta. Il pulsante Copia richiede un gesto dell'utente; Annulla interrompe la chiamata al modello. Uscendo dall'account i dati dello strumento vengono cancellati.
+
+Il testo viene inviato solo all'endpoint AI già configurato. Il servizio suddivide il documento in blocchi, li sintetizza e unisce le sintesi senza troncare l'originale. Usa il modello configurato, contesto 4096, quattro thread e un limite complessivo di 120 secondi, condividendo il blocco delle chiamate AI della chat. Non cerca guide e non consulta GLPI o il meteo. Rifiuta alcuni formati evidenti di credenziali; questo controllo non sostituisce la verifica del contenuto da parte di chi lo incolla. Verificare sempre date, cifre e passaggi essenziali del risultato.
+
+## Dimensione del pannello
+
+Il pulsante Allarga/Ripristina aumenta lo spazio disponibile. Sul desktop si può trascinare l'angolo superiore sinistro o, mettendo a fuoco la maniglia, usare le frecce (Maiusc per passi maggiori) e Home per ripristinare. Sul telefono il pulsante espande il pannello quasi a tutto schermo. Le dimensioni restano entro la finestra e durano per la pagina corrente; ridimensionare non modifica i messaggi o la bozza.

@@ -96,7 +96,7 @@
 
   function avvia() {
     const stato = { aperta: false, accesso: null, errore: false,
-      csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '' };
+      csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '', modo:'chat', testoRiassunto:'', risultatoRiassunto:'', attesaRiassunto:false, erroreRiassunto:'', controllerRiassunto:null };
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, prossimaBattuta = 0;
     let notaMeteo = null, timerMeteo = null, timerChiudiMeteo = null, ultimoInput = 0, meteoInCorso = false;
@@ -122,12 +122,62 @@
     const nuovaChatHeader = h('button', { type: 'button', className: 'msc-nuova', title: 'Nuova chat' }, icona('M20 7v5h-5M4 17v-5h5M6.1 8a7 7 0 0 1 11.5-2L20 9M4 15l2.4 3A7 7 0 0 0 17.9 16'));
     nuovaChatHeader.setAttribute('aria-label', 'Nuova chat');
     nuovaChatHeader.addEventListener('click', () => inviaChat({ azione: 'nuova' }));
+    const allarga = h('button', { type: 'button', className: 'msc-allarga' }, icona('M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5'));
+    const maniglia = h('button', { type: 'button', className: 'msc-ridimensiona' }, icona('M4 16V4h12M4 4l12 12'));
+    maniglia.setAttribute('aria-label', 'Ridimensiona l’assistente');
+    maniglia.title = 'Trascina questo angolo. Con la tastiera usa le frecce; Home ripristina.';
+    let ampliato = false, misura = null, trascinamento = null;
+    function aggiornaMisura() {
+      fumetto.removeAttribute('style');
+      const mobile = window.innerWidth <= 600;
+      if (ampliato || (misura && !mobile)) {
+        const destra = ampliato ? (mobile ? 8 : 16) : Math.min(misura.destra, Math.max(8, window.innerWidth - 376));
+        const basso = ampliato ? (mobile ? 8 : 16) : Math.min(misura.basso, Math.max(8, window.innerHeight - 368));
+        const maxW = window.innerWidth - destra - 8, maxH = window.innerHeight - basso - 8;
+        const w = ampliato ? Math.min(900, window.innerWidth - destra * 2) : Math.min(maxW, Math.max(Math.min(360, maxW), misura.larghezza));
+        const ht = ampliato ? window.innerHeight - basso * 2 : Math.min(maxH, Math.max(Math.min(360, maxH), misura.altezza));
+        Object.assign(fumetto.style, { position: 'fixed', left: 'auto', right: destra + 'px', bottom: basso + 'px', width: w + 'px', height: ht + 'px' });
+      }
+      allarga.setAttribute('aria-label', ampliato || (misura && !mobile) ? 'Ripristina dimensioni assistente' : 'Allarga l’assistente');
+      allarga.title = allarga.getAttribute('aria-label');
+      allarga.setAttribute('aria-pressed', String(ampliato || !!(misura && !mobile)));
+    }
+    function ripristinaMisura() { ampliato = false; misura = null; aggiornaMisura(); }
+    allarga.addEventListener('click', () => {
+      if (ampliato || (misura && window.innerWidth > 600)) ripristinaMisura();
+      else { ampliato = true; aggiornaMisura(); }
+    });
+    maniglia.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      const r = fumetto.getBoundingClientRect();
+      trascinamento = { x: e.clientX, y: e.clientY, larghezza: r.width, altezza: r.height, destra: window.innerWidth - r.right, basso: window.innerHeight - r.bottom };
+      maniglia.setPointerCapture(e.pointerId); e.preventDefault();
+    });
+    maniglia.addEventListener('pointermove', (e) => {
+      if (!trascinamento) return;
+      ampliato = false;
+      misura = { ...trascinamento, larghezza: trascinamento.larghezza + trascinamento.x - e.clientX, altezza: trascinamento.altezza + trascinamento.y - e.clientY };
+      aggiornaMisura();
+    });
+    maniglia.addEventListener('pointerup', () => { trascinamento = null; });
+    maniglia.addEventListener('pointercancel', () => { trascinamento = null; });
+    maniglia.addEventListener('lostpointercapture', () => { trascinamento = null; });
+    maniglia.addEventListener('keydown', (e) => {
+      if (e.key === 'Home') { e.preventDefault(); ripristinaMisura(); return; }
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+      e.preventDefault(); const r = fumetto.getBoundingClientRect(), passo = e.shiftKey ? 64 : 24;
+      ampliato = false;
+      misura = { larghezza: r.width + (e.key === 'ArrowLeft' ? passo : e.key === 'ArrowRight' ? -passo : 0), altezza: r.height + (e.key === 'ArrowUp' ? passo : e.key === 'ArrowDown' ? -passo : 0), destra: window.innerWidth - r.right, basso: window.innerHeight - r.bottom };
+      aggiornaMisura();
+    });
+    window.addEventListener('resize', () => { trascinamento = null; aggiornaMisura(); });
+    aggiornaMisura();
     const testata = h('div', { className: 'msc-testata' },
       h('span', { className: 'msc-testata-icona' }, icona('M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z')),
       h('div', { className: 'msc-testata-testo' }, titolo, h('span', { textContent: 'Guide, contatti e suggerimenti' })),
-      h('span', { className: 'msc-badge', textContent: 'AI' }), nuovaChatHeader, chiudi);
+      h('span', { className: 'msc-badge', textContent: 'AI' }), nuovaChatHeader, allarga, chiudi);
     const corpo = h('div', { className: 'msc-in' });
-    fumetto.append(testata, corpo);
+    fumetto.append(testata, corpo, maniglia);
     radiceEl.append(fumetto, bottone);
     document.body.append(radiceEl);
     document.documentElement.classList.add('msc-attiva');
@@ -211,6 +261,22 @@
         h('p', { className: 'msc-meteo-dati', textContent: `Min ${m.minima}° · Max ${m.massima}° · Pioggia ${m.pioggia}%` }), fonte,
         m.paese ? h('a', { className: 'msc-meteo-fonte msc-meteo-zona', href: 'https://www.geonames.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Località: GeoNames' }) : null);
     }
+    let allertaVista='';
+    function schedaAllerta(a) {
+      const data=iso=>new Intl.DateTimeFormat('it-IT',{timeZone:'Europe/Rome',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(iso));
+      const box=h('section',{className:'msc-allerta'});box.dataset.colore=a.colore;box.setAttribute('role',a.colore==='rossa'?'alert':'status');
+      if(a.simulazione)box.append(h('small',{className:'msc-allerta-simulazione',textContent:'SIMULAZIONE · NON È UN’ALLERTA ATTUALE'}));
+      box.append(h('strong',{textContent:'⚠ Allerta '+a.colore+' '+(a.stato==='prevista'?'prevista':'a '+a.comune)}),h('p',{textContent:a.messaggio}),h('small',{textContent:'Dal '+data(a.validaDa)+' al '+data(a.validaFino)+' · ora italiana'}),h('small',{textContent:'Zona '+a.zona+' · avviso '+a.numeroDocumento}),h('a',{href:a.urlDocumento||a.urlFonte,target:'_blank',rel:'noopener noreferrer',textContent:'Leggi la fonte ufficiale regionale'}));
+      return box;
+    }
+    setInterval(async()=>{
+      if(document.hidden||radiceEl.hidden||leggiMeteo('.silenzioso')==='1')return;
+      try {
+        const r=await prendi('/allerte-meteo'),a=r.dati;
+        const id=a?[a.numeroDocumento,a.colore,a.validaDa,a.validaFino].join(':'):'';
+        if(a&&['attiva','prevista'].includes(a.stato)&&['gialla','arancione','rossa'].includes(a.colore)&&id!==allertaVista&&!occupatoMeteo())await mostraMeteo(true);
+      }catch{}
+    },300000);
     function schedaPrevisioni(previsioni) {
       const primo = previsioni[0];
       const box = h('div', { className: 'msc-previsioni' }, h('b', { className: 'msc-previsioni-titolo', textContent: 'Previsioni a ' + primo.localita }));
@@ -232,11 +298,13 @@
       meteoIniziale = false;
       meteoInCorso = true;
       try {
-        const out = await prendi('/meteo');
-        if (!out.dati?.meteo || occupatoMeteo()) return;
+        const [out, avviso] = await Promise.all([prendi('/meteo').catch(()=>({})),prendi('/allerte-meteo').catch(()=>({}))]);
+        const allerta=avviso.dati;
+        const segnala=allerta && ['attiva','prevista'].includes(allerta.stato) && ['gialla','arancione','rossa'].includes(allerta.colore);
+        if ((!out.dati?.meteo && !segnala) || occupatoMeteo()) return;
         togliNota(); togliMeteo(); clearTimeout(timerBattuta);
         notaMeteo = h('section', { className: 'msc-nota msc-meteo', id: 'msc-meteo', tabIndex: 0 });
-        notaMeteo.setAttribute('aria-label', 'Meteo di ' + out.dati.meteo.localita);
+        notaMeteo.setAttribute('aria-label', segnala ? 'Allerta meteo per '+allerta.comune : 'Meteo di '+out.dati.meteo.localita);
         const chiudiMeteo = h('button', { type: 'button', className: 'msc-meteo-chiudi', textContent: '×', title: 'Chiudi il meteo' });
         chiudiMeteo.setAttribute('aria-label', 'Chiudi il meteo');
         chiudiMeteo.addEventListener('click', () => { togliMeteo(); programmaBattuta(); });
@@ -246,7 +314,14 @@
           const spunta = document.getElementById('aspetto-meteo'); if (spunta) spunta.checked = false;
           togliMeteo(); clearTimeout(timerMeteo); programmaBattuta();
         });
-        notaMeteo.append(chiudiMeteo, schedaMeteo(out.dati.meteo), silenzia);
+        notaMeteo.append(chiudiMeteo);
+        if(segnala) {
+          notaMeteo.append(schedaAllerta(allerta));
+          allertaVista=[allerta.numeroDocumento,allerta.colore,allerta.validaDa,allerta.validaFino].join(':');
+        }
+        if(out.dati?.meteo) notaMeteo.append(schedaMeteo(out.dati.meteo));
+        if(allerta?.stato==='non_verificabile')notaMeteo.append(h('p',{className:'msc-allerta-stato',textContent:allerta.messaggio}));
+        notaMeteo.append(silenzia);
         notaMeteo.addEventListener('keydown', e => { if(e.key === 'Escape') { togliMeteo(); bottone.focus(); } });
         radiceEl.append(notaMeteo);
         salvaMeteo('.prossimo', String(Date.now() + 50 * 60000));
@@ -254,7 +329,7 @@
           if (notaMeteo?.matches(':hover') || notaMeteo?.contains(document.activeElement)) { timerChiudiMeteo = setTimeout(chiudiAutomatico, 5000); return; }
           togliMeteo(); programmaBattuta();
         };
-        timerChiudiMeteo = setTimeout(chiudiAutomatico, 18000);
+        timerChiudiMeteo = setTimeout(chiudiAutomatico, segnala ? 30000 : 13000);
       } catch { /* Il fumetto resta silenzioso se il meteo non è disponibile. */ }
       finally { meteoInCorso = false; programmaMeteo(); if (!notaMeteo) programmaBattuta(iniziale ? 8000 : undefined); }
     }
@@ -279,8 +354,8 @@
       try {
         const me = await prendi('/me');
         stato.accesso = !me.nonAutenticato;
-        if (!stato.accesso) { stato.messaggi = []; stato.ultima = null; stato.testo = ''; stato.utente = ''; stato.csrf = ''; return; }
-        if (stato.utente !== me.dati.email) { stato.messaggi = []; stato.ultima = null; stato.testo = ''; }
+        if (!stato.accesso) { pulisciRiassunto(); stato.messaggi = []; stato.ultima = null; stato.testo = ''; stato.utente = ''; stato.csrf = ''; return; }
+        if (stato.utente !== me.dati.email) { pulisciRiassunto(); stato.messaggi = []; stato.ultima = null; stato.testo = ''; }
         stato.utente = me.dati.email;
         stato.csrf = me.dati.csrf;
         if (!stato.attesa) {
@@ -318,9 +393,74 @@
       return b;
     }
 
+    function pulisciRiassunto() {
+      stato.controllerRiassunto?.abort();stato.controllerRiassunto=null;stato.testoRiassunto='';stato.risultatoRiassunto='';stato.erroreRiassunto='';stato.modo='chat';
+    }
+    function testoDaRichiesta(testo) {
+      const m=String(testo||'').match(/^\s*(?:riassumi(?: questo testo)?|fammi un riassunto)(?:(?:[ \t]*:[ \t]*|[ \t]*\r?\n)[ \t\r\n]*([\s\S]*)|[ \t]*)$/i);
+      return m ? (m[1]||'') : null;
+    }
+    function apriRiassunto() {stato.modo='riassunto';stato.erroreRiassunto='';disegna();corpo.querySelector('#msc-testo-riassunto')?.focus({preventScroll:true});}
+    function disegnaRiassunto() {
+      nuovaChatHeader.hidden=true;
+      const indietro=h('button',{type:'button',className:'msc-riassunto-indietro',textContent:'← Torna alla chat'});
+      indietro.addEventListener('click',()=>{stato.controllerRiassunto?.abort();stato.modo='chat';disegna();});
+      const titolo=h('h3',{textContent:'Riassumi un testo'});
+      const nota=h('p',{className:'msc-riassunto-nota',textContent:'Incolla il testo da sintetizzare. Non inserire password, token o chiavi segrete.'});
+      const campo=h('textarea',{id:'msc-testo-riassunto',rows:6,value:stato.testoRiassunto,disabled:stato.attesaRiassunto,placeholder:'Incolla qui il testo…'});
+      const label=h('label',{htmlFor:'msc-testo-riassunto',textContent:'Testo da riassumere'});
+      const conta=h('small',{id:'msc-riassunto-conta',textContent:stato.testoRiassunto.length+' / 6000 caratteri'});
+      campo.setAttribute('aria-describedby','msc-riassunto-conta');
+      const troppoLungo=stato.testoRiassunto.length>6000||new TextEncoder().encode(stato.testoRiassunto).length>12000;
+      const status=h('p',{className:'msc-riassunto-status',textContent:stato.attesaRiassunto?'Sto preparando il riassunto… Per testi lunghi può richiedere qualche decina di secondi.':troppoLungo?'Il testo è troppo lungo: usa un estratto più breve.':stato.erroreRiassunto});status.setAttribute('role','status');
+      const invia=h('button',{type:'submit',className:'msc-invia',id:'msc-riassunto-invia',textContent:stato.attesaRiassunto?'Un momento…':'Riassumi',disabled:stato.attesaRiassunto||!stato.testoRiassunto.trim()||stato.testoRiassunto.length>6000||new TextEncoder().encode(stato.testoRiassunto).length>12000});
+      const annulla=h('button',{type:'button',className:'msc-chat-b',textContent:stato.attesaRiassunto?'Annulla':'Cancella testo'});
+      annulla.addEventListener('click',()=>{if(stato.attesaRiassunto)stato.controllerRiassunto?.abort();else{stato.testoRiassunto='';stato.risultatoRiassunto='';stato.erroreRiassunto='';disegnaRiassunto();}});
+      const valido=t=>t.trim().length>0&&t.length<=6000&&new TextEncoder().encode(t).length<=12000;
+      const aggiorna=()=>{stato.testoRiassunto=campo.value;conta.textContent=campo.value.length+' / 6000 caratteri';invia.disabled=stato.attesaRiassunto||!valido(campo.value);status.textContent=campo.value.length>6000||new TextEncoder().encode(campo.value).length>12000?'Il testo è troppo lungo: usa un estratto più breve.':'';};
+      campo.addEventListener('input',aggiorna);
+      campo.addEventListener('paste',e=>{
+        const t=e.clipboardData?.getData('text/plain');if(t===undefined)return;
+        const completo=campo.value.slice(0,campo.selectionStart)+t+campo.value.slice(campo.selectionEnd);
+        if(completo.length>6000||new TextEncoder().encode(completo).length>12000){e.preventDefault();status.textContent='Testo troppo lungo: non è stato incollato. Dividilo in parti più brevi.';}
+      });
+      const form=h('form',{className:'msc-riassunto-form'},label,campo,conta,h('div',{className:'msc-riassunto-azioni'},invia,annulla));
+      form.addEventListener('submit',e=>{e.preventDefault();if(valido(campo.value)&&!stato.attesaRiassunto)inviaRiassunto();});
+      const box=h('section',{className:'msc-riassunto'},indietro,titolo);
+      if(stato.risultatoRiassunto)box.append(h('details',{className:'msc-riassunto-originale'},h('summary',{textContent:'Testo originale · '+stato.testoRiassunto.length+' caratteri'}),nota,form));
+      else box.append(nota,form);
+      box.append(status);
+      box.append(h('small',{className:'msc-riassunto-privacy',textContent:'Testo e riassunto restano fuori dalla cronologia della chat. Nessun ticket viene modificato.'}));
+      if(stato.risultatoRiassunto){
+        const risultato=h('div',{className:'msc-riassunto-risultato',id:'msc-riassunto-risultato',tabIndex:-1,textContent:stato.risultatoRiassunto});
+        const copia=h('button',{type:'button',className:'msc-chat-b',textContent:'Copia riassunto',id:'msc-copia-riassunto'});
+        copia.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(stato.risultatoRiassunto);copia.textContent='Copiato ✓';}catch{const sel=window.getSelection(),r=document.createRange();r.selectNodeContents(risultato);sel.removeAllRanges();sel.addRange(r);copia.textContent='Selezionato: premi Ctrl+C';}});
+        box.append(h('h4',{textContent:'Riassunto'}),risultato,copia,h('small',{className:'msc-riassunto-privacy',textContent:'Sintesi generata da AI: verifica date, cifre e passaggi essenziali sul testo originale.'}));
+      }
+      corpo.replaceChildren(box);
+    }
+    async function inviaRiassunto() {
+      const utente=stato.utente;stato.attesaRiassunto=true;stato.erroreRiassunto='';stato.risultatoRiassunto='';
+      const controller=new AbortController();stato.controllerRiassunto=controller;disegnaRiassunto();
+      try{
+        const r=await fetch(BASE+'/api/assistente',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',Accept:'application/json','X-CSRF-Token':stato.csrf},body:JSON.stringify({azione:'riassunto',testo:stato.testoRiassunto}),signal:AbortSignal.any([controller.signal,AbortSignal.timeout(125000)])});
+        const out=await r.json();if(stato.utente!==utente)return;
+        if(r.status===401){pulisciRiassunto();stato.accesso=false;stato.utente='';stato.messaggi=[];disegna();return;}
+        if(!r.ok)throw new Error(out.errore||'Non riesco a preparare il riassunto. Riprova tra poco.');
+        stato.risultatoRiassunto=out.risposta;
+      }catch(e){if(stato.utente===utente)stato.erroreRiassunto=controller.signal.aborted?'Riassunto annullato.':e.name==='TimeoutError'?'Il riassunto richiede troppo tempo. Prova un testo più breve.':e.message;}
+      finally{stato.attesaRiassunto=false;stato.controllerRiassunto=null;if(stato.aperta&&stato.modo==='riassunto'){disegnaRiassunto();if(stato.risultatoRiassunto)corpo.querySelector('#msc-riassunto-risultato')?.focus({preventScroll:false});}}
+    }
     async function inviaChat(dati) {
       if (stato.attesa) return;
+      const inline=(!dati.azione||dati.azione==='messaggio')?testoDaRichiesta(dati.testo||''):null;
+      if(inline!==null){
+        stato.testo='';stato.testoRiassunto=inline;stato.risultatoRiassunto='';apriRiassunto();
+        if(inline.trim()&&inline.length<=6000&&new TextEncoder().encode(inline).length<=12000)await inviaRiassunto();
+        return;
+      }
       const utente = stato.utente;
+      const messaggiPrima=stato.messaggi.slice(),ultimaPrima=stato.ultima;
       stato.attesa = true; stato.erroreChat = '';
       const inviato = dati.testo || (dati.azione === 'ticket' ? 'Aiutami a descrivere il problema' : 'Nuova conversazione');
       if (dati.azione !== 'nuova') stato.messaggi.push({ ruolo: 'utente', testo: inviato });
@@ -331,8 +471,11 @@
           headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-Token': stato.csrf }, body: JSON.stringify(dati), signal: AbortSignal.timeout(70000) });
         const out = await r.json();
         if (stato.utente !== utente) return;
-        if (r.status === 401) { stato.accesso = false; stato.utente = ''; stato.messaggi = []; stato.ultima = null; stato.testo = ''; disegna(); return; }
+        if (r.status === 401) { pulisciRiassunto(); stato.accesso = false; stato.utente = ''; stato.messaggi = []; stato.ultima = null; stato.testo = ''; disegna(); return; }
         if (!r.ok) throw new Error(out.errore || 'L’assistente non è disponibile. Puoi consultare Guide e Contatti.');
+        if(out.tipo==='riassunto') {
+          stato.messaggi=messaggiPrima;stato.ultima=ultimaPrima;stato.modo='riassunto';stato.testoRiassunto=out.richiediTesto?'':testoDaRichiesta(dati.testo||'');stato.risultatoRiassunto=out.richiediTesto?'':out.risposta;stato.erroreRiassunto='';return;
+        }
         if (dati.azione === 'nuova') stato.messaggi = [];
         else stato.messaggi.push({ ruolo: 'assistente', testo: out.risposta, dettagli: out });
         stato.messaggi = stato.messaggi.slice(-12);
@@ -393,6 +536,7 @@
     }
 
     function aggiornaChat() {
+      if(stato.modo==='riassunto'){disegnaRiassunto();return;}
       const box = corpo.querySelector('#msc-chat');
       if (!box || stato.accesso !== true) return;
       nuovaChatHeader.disabled = stato.attesa;
@@ -424,6 +568,15 @@
       }
       const campo = h('textarea', { id: 'msc-domanda', rows: 2, maxLength: 1500, value: stato.testo, placeholder: 'Scrivi qui la tua domanda…', disabled: stato.attesa });
       campo.addEventListener('input', () => { stato.testo = campo.value; });
+      campo.addEventListener('paste',e=>{
+        const t=e.clipboardData?.getData('text/plain');if(t===undefined)return;
+        if(/^\s*(?:riassumi(?: questo testo)?|fammi un riassunto)(?:\s*:|[ \t]*\n)/i.test(t)){
+          e.preventDefault();const documento=testoDaRichiesta(t)||'';
+          if(documento.length>6000||new TextEncoder().encode(documento).length>12000){stato.erroreChat='Testo troppo lungo: non è stato incollato. Dividilo in parti più brevi.';aggiornaChat();return;}
+          stato.testoRiassunto=documento;stato.risultatoRiassunto='';apriRiassunto();return;
+        }
+        if(campo.value.length-(campo.selectionEnd-campo.selectionStart)+t.length>1500){e.preventDefault();stato.erroreChat='Il testo è troppo lungo per la chat. Usa «Riassumi un testo» per incollarlo senza tagli.';aggiornaChat();}
+      });
       const invia = h('button', { type: 'submit', className: 'msc-invia', disabled: stato.attesa, textContent: 'Chiedi' });
       const form = h('form', { className: 'msc-chat-form' }, h('label', { className: 'msc-vh', htmlFor: 'msc-domanda', textContent: 'Messaggio per l’assistente' }), campo, invia);
       form.addEventListener('submit', (e) => { e.preventDefault(); if (campo.value.trim().length >= 2) inviaChat({ testo: campo.value.trim() }); });
@@ -433,7 +586,10 @@
       aiuto.addEventListener('click', () => inviaChat({ azione: 'ticket' }));
       const status = h('p', { className: 'msc-chat-errore', textContent: stato.erroreChat });
       status.setAttribute('role', 'status');
-      const scrittura = h('div', { className: 'msc-scrittura' }, status, form, aiuto,
+      const riassumi=h('button',{type:'button',id:'msc-apri-riassunto',className:'msc-aiuto',disabled:stato.attesa,textContent:'Riassumi un testo'});
+      riassumi.addEventListener('click',apriRiassunto);
+      const strumenti=h('div',{className:'msc-strumenti'},riassumi,aiuto);
+      const scrittura = h('div', { className: 'msc-scrittura' }, status, form, strumenti,
         h('small', { className: 'msc-ai-avviso', textContent: 'Suggerimenti da verificare. Nessun campo compilato e nessun ticket inviato.' }));
       const piedi = h('div', { className: 'msc-chat-piedi' }, collega('#faq', 'Guide'), collega('#contatti', 'Contatti'), collega('#nuova', 'Apri una richiesta'));
       box.replaceChildren(messaggi, scrittura, piedi);
@@ -444,8 +600,10 @@
     }
 
     function disegna() {
-      nuovaChatHeader.disabled = stato.accesso !== true || stato.attesa;
+      nuovaChatHeader.disabled = stato.accesso !== true || stato.attesa || stato.attesaRiassunto;
+      nuovaChatHeader.hidden=stato.modo==='riassunto';
       if (stato.accesso === true) {
+        if(stato.modo==='riassunto'){disegnaRiassunto();return;}
         corpo.replaceChildren(h('div', { id: 'msc-chat', className: 'msc-chat' }));
         aggiornaChat();
         return;
