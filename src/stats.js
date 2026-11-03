@@ -132,9 +132,8 @@ async function aggiorna(o) {
   } catch (err) {
     console.log(new Date().toISOString(), 'statistiche non disponibili', err.message);
     cache = { dati: { ok: false }, scade: Date.now() + 60_000 };
-  } finally {
-    await glpi.killSession(); // sessione chiusa a ogni aggiornamento della cache
   }
+  // La sessione GLPI e' condivisa con le altre richieste: chiuderla qui farebbe fallire quelle in corso
   return cache;
 }
 

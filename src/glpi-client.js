@@ -39,11 +39,16 @@ async function raw(method, path, { body, headers = {}, session = true, timeoutMs
   return data;
 }
 
+// Una sola initSession alla volta: richieste contemporanee aspettano la stessa sessione invece di aprirne altre
+let sessionInCorso = null;
 async function getSession() {
   if (sessionToken && Date.now() - sessionAt < SESSION_TTL) return sessionToken;
-  const d = await raw('GET', '/initSession', { session: false, headers: { Authorization: 'user_token ' + config.glpi.userToken } });
-  sessionToken = d.session_token; sessionAt = Date.now();
-  return sessionToken;
+  if (!sessionInCorso) {
+    sessionInCorso = raw('GET', '/initSession', { session: false, headers: { Authorization: 'user_token ' + config.glpi.userToken } })
+      .then((d) => { sessionToken = d.session_token; sessionAt = Date.now(); return sessionToken; })
+      .finally(() => { sessionInCorso = null; });
+  }
+  return sessionInCorso;
 }
 
 // Chiamata con un solo retry: se la sessione e' scaduta la rinnova
