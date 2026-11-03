@@ -71,3 +71,6 @@ content/assistente-conoscenza.json
 content/assistente-esempi.json
 content/assistente-istruzioni.txt
 content/assistente-fonti.json
+
+# Catalogo spot attivo dell installazione
+content/spot-assistente.json

@@ -310,6 +310,12 @@ api.post('/richieste/:id/esito', serveLogin, csrf, idTicket, async (req, res, ne
   } catch (e) { next(e); }
 });
 // Assistente separato dal modulo ticket: sola consultazione e suggerimenti in chat.
+api.get('/spot-assistente', (req, res) => {
+  let dati;
+  try { dati = JSON.parse(fs.readFileSync(config.spotAssistentePath, 'utf8')); } catch { dati = {}; }
+  const spot = require('../public/spot-assistente').normalizza(dati).map(v => ({...v,dal:v.dal==null?null:new Date(v.dal).toISOString(),al:v.al==null?null:new Date(v.al).toISOString()}));
+  res.set('Cache-Control', 'no-store').json({spot});
+});
 const meteo = require('./meteo').creaMeteo(config.ente.meteo);
 const allerteMeteo = require('./allerte-meteo').createAllerteMeteo(config.ente.allerteMeteo);
 api.get('/allerte-meteo', serveLogin, async (req, res) => {

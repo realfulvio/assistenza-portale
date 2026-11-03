@@ -87,6 +87,7 @@ const config = {
   assistenteModello: e.ASSISTENTE_MODELLO || 'qwen3.5:4b-q4_K_M',
   assistenteEmbedding: e.ASSISTENTE_EMBEDDING || 'embeddinggemma-2:270m',
   faqPath: path.join(root, 'content', 'faq.json'),
+  spotAssistentePath: e.SPOT_ASSISTENTE_FILE || path.join(root, 'content', 'spot-assistente.json'),
   // Numeri interni dell'ente: file locale non versionato (se manca la sezione non compare; in DEMO si usa l'esempio)
   numeriInterniPath: e.NUMERI_INTERNI_FILE || path.join(root, 'content', 'numeri-interni.json'),
   numeriInterniEsempio: path.join(root, 'content', 'numeri-interni.example.json')
