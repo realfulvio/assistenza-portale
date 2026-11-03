@@ -47,5 +47,11 @@
   "crediti": {
     "testo": "Powered by",
     "autore": "Servizio Sistemi Informativi"
+  },
+  "allerteMeteo": {
+    "enabled": false,
+    "comune": "Comune di esempio",
+    "zona": "",
+    "frase": "Oggi non è il PC a fare i capricci."
   }
 }

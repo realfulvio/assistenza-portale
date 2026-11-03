@@ -31,6 +31,11 @@ async function verifica() {
     assert.equal(await page.locator('.msc-nota:not(.msc-meteo)').count(), 1, 'Con casualità minima la battuta compare dopo 12 secondi');
     await page.reload(); await page.clock.runFor(100);
     assert.equal(await page.locator('#msc-meteo').isVisible(), true, 'Ricaricando la pagina il meteo torna per primo');
+    await page.clock.runFor(12700);
+    assert.equal(await page.locator('#msc-meteo').isVisible(), true, 'Il meteo resta leggibile fino a 13 secondi');
+    await page.clock.runFor(400);
+    assert.equal(await page.locator('#msc-meteo').count(), 0, 'Il meteo ordinario si chiude dopo 13 secondi');
+    await page.reload(); await page.clock.runFor(100);
     await page.locator('.msc-meteo-silenzia').click();
     await page.reload(); await page.clock.runFor(60001);
     assert.equal(await page.locator('#msc-meteo').count(), 0, 'Il silenziamento resta valido anche al caricamento');

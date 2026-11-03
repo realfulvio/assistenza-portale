@@ -206,3 +206,13 @@ a.msc-n{text-decoration:underline}
 @media(max-height:650px){.msc-testata{min-height:56px;padding-top:6px;padding-bottom:6px}.msc-ai-avviso{display:none}.msc-benvenuto-icona{display:none}.msc-benvenuto{gap:7px}.msc-esempio{min-height:34px;padding:7px 10px}.msc-messaggi{padding-top:10px;padding-bottom:10px}.msc-chat-form textarea{height:52px;min-height:52px;max-height:52px}.msc-aiuto{min-height:30px;margin-top:5px}.msc-chat-piedi a{min-height:30px}}
 @media(forced-colors:active){.msc-disco{stroke:CanvasText;fill:Canvas}.msc-fumetto,.msc-messaggio,.msc-fonte{border-color:CanvasText}.msc-testata,.msc-utente,.msc-invia{background:Canvas;color:CanvasText}}
 @media print{.mascotte,.msc-mostra{display:none!important}html.msc-attiva .foot{padding-bottom:0}}
+
+/* Misure del pannello: controlli separati dalla chat e dalle sue richieste. */
+.msc-allarga{display:grid;place-items:center;flex:none;width:32px;height:36px;padding:5px;border:0;border-radius:8px;background:transparent;color:inherit;cursor:pointer}
+.msc-allarga:hover{background:#ffffff24}
+.msc-allarga:focus-visible,.msc-ridimensiona:focus-visible{outline:3px solid var(--focus,var(--primary));outline-offset:-3px}
+.msc-testata .msc-allarga:focus-visible{outline-color:currentColor}
+.msc-ridimensiona{position:absolute;z-index:3;top:0;left:0;display:grid;place-items:center;width:18px;height:18px;padding:2px;border:0;border-radius:16px 0 5px 0;background:transparent;color:var(--onprimary,#fff);cursor:nwse-resize;touch-action:none;user-select:none}
+.msc-ridimensiona svg{width:12px;height:12px;opacity:.8}
+@media(max-width:600px){.msc-ridimensiona{display:none}.msc-allarga{width:30px}.msc-testata{gap:6px}}
+.msc-fumetto{z-index:2}

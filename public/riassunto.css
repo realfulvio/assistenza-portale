@@ -1,0 +1,17 @@
+.msc-riassunto{box-sizing:border-box;display:flex;flex-direction:column;gap:10px;width:100%;min-height:0;overflow:auto;padding:12px 14px 16px;background:var(--card);color:var(--text)}
+.msc-riassunto h3,.msc-riassunto h4{margin:0;color:var(--primary);font-size:19px}.msc-riassunto h4{font-size:16px}
+.msc-riassunto-nota{margin:0;font-size:14px;line-height:1.45}
+.msc-riassunto-indietro{position:sticky;top:-12px;z-index:1;align-self:flex-start;border:0;background:var(--card);color:var(--primary);font:inherit;font-weight:600;font-size:14px;padding:8px 0;cursor:pointer}
+.msc-riassunto-form{display:flex;flex-direction:column;gap:7px;margin:0;padding:0;border:0;background:none;box-shadow:none}
+.msc-riassunto-form label{font-size:14px;font-weight:600}
+.msc-riassunto-form textarea{box-sizing:border-box;width:100%;height:150px;min-height:100px;resize:vertical;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:var(--card);color:var(--text);font:inherit;font-size:15px;line-height:1.45}
+.msc-riassunto-form textarea:focus-visible,.msc-riassunto-indietro:focus-visible{outline:3px solid var(--focus,var(--primary));outline-offset:2px}
+.msc-riassunto-form small,.msc-riassunto-privacy{font-size:12px;line-height:1.45;color:var(--muted)}
+.msc-riassunto-azioni{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.msc-riassunto-azioni .msc-invia{min-width:100px}
+.msc-riassunto-status{margin:0;white-space:pre-wrap;font-size:14px;font-weight:600;color:var(--text)}
+.msc-riassunto-risultato{padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--soft,var(--card));color:var(--text);white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.5}
+.msc-riassunto-risultato:focus{outline:2px solid var(--focus,var(--primary));outline-offset:2px}
+
+.msc-strumenti{display:flex;gap:8px;align-items:stretch}.msc-strumenti .msc-aiuto{width:50%;min-width:0;margin-top:8px}
+
+.msc-riassunto-indietro{align-self:stretch;text-align:left;width:100%}.msc-riassunto-originale summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--primary);padding:8px 0}.msc-riassunto-originale summary:focus-visible{outline:2px solid var(--focus,var(--primary));outline-offset:2px}.msc-riassunto-originale[open] summary{margin-bottom:8px}

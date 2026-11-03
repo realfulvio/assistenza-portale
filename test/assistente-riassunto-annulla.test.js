@@ -1,0 +1,10 @@
+const test=require('node:test'),assert=require('node:assert/strict'),express=require('express'),session=require('express-session');
+const {collega}=require('../src/assistente');
+test('annullamento HTTP interrompe il segnale AI e libera la sessione',async()=>{
+ const app=express();app.use(express.json({limit:'20kb'}));app.use(session({secret:require('node:crypto').randomBytes(32).toString('hex'),resave:false,saveUninitialized:false}));app.get('/login',(req,res)=>{req.session.user={oid:'demo'};res.json({ok:true});});
+ let iniziata,interrotta,prima=true;const partita=new Promise(r=>{iniziata=r}),annullata=new Promise(r=>{interrotta=r});
+ const servizio=collega(app,{config:{},serveLogin:(req,res,next)=>req.session.user?next():res.sendStatus(401),csrf:(req,res,next)=>next(),chiamaAI:async(endpoint,body,signal)=>{if(!prima)return {message:{content:'Sintesi completata.'},done_reason:'stop'};prima=false;return new Promise((resolve,reject)=>{signal.addEventListener('abort',()=>{interrotta();reject(new Error('annullata'));},{once:true});iniziata();});}});
+ const server=await new Promise(r=>{const s=app.listen(0,'127.0.0.1',()=>r(s));});
+ try{const base='http://127.0.0.1:'+server.address().port,login=await fetch(base+'/login'),cookie=login.headers.get('set-cookie').split(';')[0],controller=new AbortController();const lavoro=fetch(base+'/assistente',{method:'POST',headers:{Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify({azione:'riassunto',testo:'Documento di prova.'}),signal:controller.signal});await partita;controller.abort();await assert.rejects(lavoro);await Promise.race([annullata,new Promise((_,r)=>setTimeout(()=>r(Error('Il segnale AI non è stato annullato')),2000).unref())]);await new Promise(r=>setTimeout(r,50));const riprova=await fetch(base+'/assistente',{method:'POST',headers:{Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify({azione:'riassunto',testo:'Secondo documento.'})});assert.equal(riprova.status,200);assert.equal((await riprova.json()).tipo,'riassunto');}
+ finally{server.closeAllConnections();await new Promise(r=>server.close(r));}
+});

@@ -1,0 +1,57 @@
+/* Caratteri dei temi: caricare dopo gli altri CSS del portale.
+ * Font locali SIL OFL 1.1; provenienza e licenze in fonts/.
+ * Classico non viene selezionato da alcuna regola. */
+
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 400 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(fonts/nunito-sans-latin-ext-variable.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 400 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(fonts/nunito-sans-latin-variable.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(fonts/source-sans-3-latin-ext-variable.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(fonts/source-sans-3-latin-variable.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Una famiglia per la UI, una per i titoli: i controlli mantengono corpi e pesi originali. */
+html[data-theme=giardino]{--theme-font-ui:"Nunito Sans","Segoe UI",system-ui,sans-serif;--theme-font-heading:var(--theme-font-ui);--theme-font-reading:var(--theme-font-ui)}
+html[data-theme=autunno]{--theme-font-ui:"Source Sans 3","Segoe UI",system-ui,sans-serif;--theme-font-heading:Lora,Georgia,serif;--theme-font-reading:var(--theme-font-ui)}
+html[data-theme=dark],html[data-theme=contrast],html[data-theme=mountain]{--theme-font-ui:"Source Sans 3","Segoe UI",system-ui,sans-serif;--theme-font-heading:var(--theme-font-ui);--theme-font-reading:var(--theme-font-ui)}
+/* Montagna: titoli strutturati, senza introdurre un'altra famiglia da scaricare. */
+html[data-theme=mountain]{--theme-font-heading:Lora,Georgia,serif}
+html:is([data-theme=giardino],[data-theme=autunno],[data-theme=dark],[data-theme=contrast],[data-theme=mountain]) :is(body,button,input,select,textarea,.btn1,.btn2,.faq-vedi,.faq-link,.key,.faq-nota,.ver,.mascotte,.msc-mostra,.msc-meteo-prova,.pf-btn),
+html:is([data-theme=giardino],[data-theme=autunno],[data-theme=dark],[data-theme=contrast],[data-theme=mountain]) .faq-passi ol>li:before{font-family:var(--theme-font-ui)}
+html:is([data-theme=giardino],[data-theme=autunno],[data-theme=dark],[data-theme=contrast],[data-theme=mountain]) :is(.hsub,.lr-sub,.faq .faq-corpo p,.faq-blocco ul,.faq-passi ol>li,.box p){font-family:var(--theme-font-reading)}
+html:is([data-theme=giardino],[data-theme=autunno],[data-theme=dark],[data-theme=contrast],[data-theme=mountain]) :is(.htitle,.useful h2){font-family:var(--theme-font-heading)}
+/* Un titolo serif breve conserva l'identità editoriale; testi di servizio e FAQ restano sans. */
+html[data-theme=autunno] :is(.hsub,.lr-sub){font-family:Lora,Georgia,serif;font-weight:600}
+html[data-theme=mountain] :is(.htitle,.useful h2){font-weight:700}
+/* Contrasto elevato: nessuna spaziatura negativa o serif aggiuntiva. */
+html[data-theme=contrast] :is(.htitle,.useful h2){letter-spacing:normal}
