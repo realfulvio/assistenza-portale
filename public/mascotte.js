@@ -100,6 +100,7 @@
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, prossimaBattuta = 0;
     let notaMeteo = null, timerMeteo = null, timerChiudiMeteo = null, ultimoInput = 0, meteoInCorso = false;
+    let meteoIniziale = true;
     const CHIAVE_METEO = 'portale.assistente.meteo';
     const leggiMeteo = (k) => { try { return localStorage.getItem(CHIAVE_METEO + k); } catch { return null; } };
     const salvaMeteo = (k, v) => { try { localStorage.setItem(CHIAVE_METEO + k, v); } catch { /* archivio non disponibile */ } };
@@ -162,13 +163,13 @@
 
     // ---- battute dell'ufficio, solo con assistente visibile e chat chiusa
     function togliNota() { clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } }
-    function programmaBattuta(ritardo = 15000 + Math.random() * 5000) {
+    function programmaBattuta(ritardo = 12000 + Math.random() * 4000) {
       clearTimeout(timerBattuta);
-      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo) return;
+      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso) return;
       timerBattuta = setTimeout(mostraNota, ritardo);
     }
     function mostraNota() {
-      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo) return;
+      if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso) return;
       togliNota();
       nota = h('p', { className: 'msc-nota', textContent: BATTUTE[prossimaBattuta] });
       prossimaBattuta = (prossimaBattuta + 1) % BATTUTE.length;
@@ -190,12 +191,12 @@
       const bozza = [...document.querySelectorAll('#v-nuova textarea, #v-nuova input:not([type=file]):not([type=checkbox]):not([type=radio]):not([type=hidden])')].some(e => e.value.trim());
       return document.hidden || radiceEl.hidden || stato.aperta || scrive || bozza || Date.now() - ultimoInput < 30000;
     }
-    function programmaMeteo() {
+    function programmaMeteo(ritardoMinimo = 0) {
       clearTimeout(timerMeteo);
       if (document.body.dataset.meteoAttivo !== '1') return;
       if (document.hidden || radiceEl.hidden || leggiMeteo('.silenzioso') === '1') return;
       const prossimo = Number(leggiMeteo('.prossimo')) || 0;
-      timerMeteo = setTimeout(() => mostraMeteo(false), Math.max(60000, prossimo - Date.now()));
+      timerMeteo = setTimeout(() => mostraMeteo(false), meteoIniziale ? ritardoMinimo : Math.max(60000, prossimo - Date.now()));
     }
     function schedaMeteo(m) {
       const simbolo = h('span', { className: 'msc-meteo-icona', textContent: m.icona });
@@ -209,8 +210,10 @@
         h('p', { className: 'msc-meteo-dati', textContent: `Min ${m.minima}° · Max ${m.massima}° · Pioggia ${m.pioggia}%` }), fonte);
     }
     async function mostraMeteo(manuale) {
-      if (!manuale && Number(leggiMeteo('.prossimo')) > Date.now()) { programmaMeteo(); return; }
-      if (meteoInCorso || occupatoMeteo() || (!manuale && leggiMeteo('.silenzioso') === '1')) { programmaMeteo(); return; }
+      const iniziale = meteoIniziale;
+      if (!manuale && !iniziale && Number(leggiMeteo('.prossimo')) > Date.now()) { programmaMeteo(); return; }
+      if (meteoInCorso || occupatoMeteo() || (!manuale && leggiMeteo('.silenzioso') === '1')) { programmaMeteo(30000); return; }
+      meteoIniziale = false;
       meteoInCorso = true;
       try {
         const out = await prendi('/meteo');
@@ -237,7 +240,7 @@
         };
         timerChiudiMeteo = setTimeout(chiudiAutomatico, 18000);
       } catch { /* Il fumetto resta silenzioso se il meteo non è disponibile. */ }
-      finally { meteoInCorso = false; programmaMeteo(); }
+      finally { meteoInCorso = false; programmaMeteo(); if (!notaMeteo) programmaBattuta(iniziale ? 8000 : undefined); }
     }
     document.addEventListener('input', () => { ultimoInput = Date.now(); togliMeteo(); });
     document.addEventListener('visibilitychange', () => { togliMeteo(); programmaMeteo(); });

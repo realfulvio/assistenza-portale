@@ -4,7 +4,7 @@ La funzione è facoltativa e disattivata per impostazione predefinita. In `confi
 
 I dati provengono da [Open-Meteo](https://open-meteo.com/), con attribuzione e orario nel fumetto. Il server interroga il fornitore senza trasmettere conversazioni o dati degli utenti e riutilizza i risultati per 15 minuti. Una richiesta in corso viene condivisa; dopo un errore attende un minuto prima di riprovare. Se i dati mancano, la chat lo segnala e il fumetto spontaneo resta silenzioso.
 
-Il fumetto compare dopo almeno un minuto, poi al massimo ogni 50 minuti. Non apre la chat, non prende il focus e non compare quando si scrive o c’è una richiesta in compilazione. Si chiude dopo 18 secondi; resta disponibile se il puntatore o il focus sono sul riquadro. «Silenzia meteo» conserva la preferenza nel browser; si può riattivare da Aspetto. Nascondendo l’assistente si nasconde anche il meteo.
+Il meteo è il primo fumetto a ogni apertura o ricaricamento della pagina, appena disponibili i dati, anche se era già comparso poco prima. Durante la permanenza sulla pagina si ripete al massimo ogni 50 minuti. Le battute successive hanno un intervallo casuale di 12–16 secondi e restano visibili 6 secondi. Non apre la chat, non prende il focus e non compare quando si scrive o c’è una richiesta in compilazione. Si chiude dopo 18 secondi; resta disponibile se il puntatore o il focus sono sul riquadro. «Silenzia meteo» conserva la preferenza nel browser; si può riattivare da Aspetto. Nascondendo l’assistente si nasconde anche il meteo.
 
 La chat riconosce domande sul tempo di oggi, domani e dopodomani e i seguiti come «E domani?». Località diverse o giorni non coperti ricevono un chiarimento. Le richieste esplicite di barzellette conservano la loro funzione.
 
