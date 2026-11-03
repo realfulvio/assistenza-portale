@@ -2,6 +2,14 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.11.0] - 2026-11-03
+
+### Novità per gli utenti
+
+- Risposte di assistenza con pulsanti contestuali per aprire la guida, indicare che il problema continua e preparare il testo della richiesta con i dettagli già forniti.
+- Segnalazione delle risposte tramite pollice verso, con motivo e nota facoltativa; elenco riservato agli amministratori per verificarle. Nessun addestramento automatico del modello.
+- La mascotte sorride e ride dopo battute e freddure, senza audio e rispettando le preferenze di movimento ridotto.
+
 ## [2.10.1] - 2026-11-03
 
 ### Novità per gli utenti

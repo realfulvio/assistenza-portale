@@ -63,6 +63,7 @@
     $('app').hidden = true; $('schermata').hidden = false;
     for (const id of ['nav', 'slim-richieste', 'slim-utente', 'esci']) $(id).hidden = true;
     $('slim-admin').hidden = true;
+    $('slim-feedback').hidden = true;
     $('schermata-titolo').textContent = titolo;
     $('schermata-testo').replaceChildren(el('p', { textContent: testo }));
     $('schermata-azioni').replaceChildren(...azioni);
@@ -86,7 +87,7 @@
   }
 
   // ---------- viste ----------
-  const VISTE = ['nuova', 'richieste', 'dettaglio', 'faq', 'remota', 'link-utili', 'contatti', 'profilo'];
+  const VISTE = ['nuova', 'richieste', 'dettaglio', 'faq', 'remota', 'link-utili', 'contatti', 'profilo', 'feedback-assistente'];
   function vai(v, navId) {
     VISTE.forEach((x) => { $('v-' + x).hidden = x !== v; });
     document.querySelectorAll('#nav a[href^="#"]').forEach((a) => a.removeAttribute('aria-current'));
@@ -106,8 +107,36 @@
     else if (h === 'remota') { vai('remota'); }
     else if (h === 'link-utili') { vai('link-utili'); }
     else if (h === 'contatti') { vai('contatti'); await caricaNumeri(); }
+    else if(h==='feedback-assistente'&&me.feedbackAdmin){vai('feedback-assistente');await caricaFeedback();}
     else if (h === 'profilo') { vai('profilo'); }
     else location.hash = '#nuova';
+  }
+
+  let paginaFeedback=0,filtroFeedback='nuovo';
+  async function caricaFeedback(){
+    const box=$('feedback-contenuto');box.replaceChildren(el('p',{textContent:'Caricamento…'}));
+    try{
+      const dati=await api('/assistente/feedback?stato='+filtroFeedback+'&pagina='+paginaFeedback);
+      const filtro=el('select',{});filtro.setAttribute('aria-label','Filtra le segnalazioni');
+      for(const [value,textContent] of [['nuovo','Da verificare'],['verificato','Verificate'],['','Tutte']])filtro.append(el('option',{value,textContent,selected:value===filtroFeedback}));
+      filtro.addEventListener('change',()=>{filtroFeedback=filtro.value;paginaFeedback=0;caricaFeedback();});
+      box.replaceChildren(filtro,el('p',{textContent:dati.totale+' segnalazioni'}));
+      for(const f of dati.feedback){
+        const motivi={sbagliata:'Risposta sbagliata','non-pertinente':'Non pertinente','poco-chiara':'Poco chiara'};
+        const card=el('article',{className:'feedback-scheda'},el('h2',{textContent:motivi[f.motivo]||f.motivo}),el('p',{textContent:new Date(f.data).toLocaleString('it-IT')+' · '+f.stato}),el('h3',{textContent:'Domanda'}),el('p',{textContent:f.domanda}),el('h3',{textContent:'Risposta'}),el('p',{textContent:f.risposta}));
+        if(f.nota)card.append(el('h3',{textContent:'Nota del collega'}),el('p',{textContent:f.nota}));
+        if(f.fonti?.length)card.append(el('p',{textContent:'Fonti: '+f.fonti.map(x=>x.titolo).join(', ')}));
+        if(f.stato==='nuovo'){
+          const verifica=el('button',{type:'button',textContent:'Segna come verificata'}),esito=el('p',{});esito.setAttribute('role','status');
+          verifica.addEventListener('click',async()=>{verifica.disabled=true;try{await api('/assistente/feedback/'+f.id,{method:'PATCH'});await caricaFeedback();}catch(e){esito.textContent=e.message;verifica.disabled=false;}});card.append(verifica,esito);
+        }box.append(card);
+      }
+      if(!dati.feedback.length)box.append(el('p',{textContent:'Nessuna segnalazione da mostrare.'}));
+      const nav=el('div',{className:'feedback-pagine'});
+      for(const [label,delta,disabled] of [['Precedenti',-1,paginaFeedback===0],['Successive',1,(paginaFeedback+1)*25>=dati.totale]]){
+        const b=el('button',{type:'button',textContent:label,disabled});b.addEventListener('click',()=>{paginaFeedback+=delta;caricaFeedback();});nav.append(b);
+      }box.append(nav);
+    }catch(e){box.replaceChildren(el('p',{textContent:e.message}));}
   }
 
   // ---------- nuova richiesta ----------
@@ -759,6 +788,7 @@
     if (!me) return;
     $('schermata').hidden = true; $('app').hidden = false;
     for (const id of ['nav', 'slim-richieste', 'slim-utente', 'esci']) $(id).hidden = false;
+    $('slim-feedback').hidden=!me.feedbackAdmin;
     if (me.adminUrl) { $('slim-admin').href = me.adminUrl; $('slim-admin').hidden = false; }
     $('slim-utente').textContent = me.nome; $('slim-utente').title = me.email;
     $('aspetto').hidden = false;
