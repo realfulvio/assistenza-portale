@@ -2,6 +2,21 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.11.1] - 2026-11-03
+
+### Novità per gli utenti
+
+- Portale più stabile: un errore nel meteo o nelle allerte non interrompe più il servizio e non fa perdere l’accesso agli altri colleghi.
+- Invio delle richieste più affidabile: la barra Live non chiude più la sessione con GLPI mentre una richiesta è in corso.
+
+### Correzioni
+
+- Il servizio non si interrompe più se il meteo o le allerte non rispondono: gli errori asincroni vengono gestiti senza far cadere le sessioni.
+- Una sola sessione GLPI condivisa anche con molte richieste contemporanee; le statistiche non la chiudono più a metà.
+- Sessioni in memoria limitate e ripulite periodicamente; rimosso l'endpoint /api/csrf inutilizzato che creava sessioni anonime.
+- La pagina di errore non va più in loop di reindirizzamenti.
+- Lo storico dell'assistente usa il tenant corretto per riconoscere il proprietario della conversazione.
+
 ## [2.11.0] - 2026-11-03
 
 ### Novità per gli utenti
