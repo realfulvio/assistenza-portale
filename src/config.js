@@ -51,6 +51,8 @@ const config = {
     allowedDomain: (e.OIDC_ALLOWED_EMAIL_DOMAIN || '').toLowerCase()
   },
 
+  assistenteFeedbackFile: e.ASSISTENTE_FEEDBACK_FILE || '',
+
   // Voce «Admin panel»: visibile solo agli amministratori elencati (email, separate da virgola) e solo se c'e' l'indirizzo
   admin: {
     emails: (e.ADMIN_EMAILS || '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean),

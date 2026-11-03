@@ -75,6 +75,7 @@
     '<g class="msc-occhiali"><rect x="39.500" y="38" width="19" height="17" rx="5.500"/><rect x="61.500" y="38" width="19" height="17" rx="5.500"/><path d="M58.500 45h3"/></g>' +
     '<path class="msc-sopracciglia" d="M42 38l14 1.500M64 39.500l14 -1.500"/><path class="msc-naso" d="M60 49q-3 8 1.500 9.500"/>' +
     '<path class="msc-baffi" d="M49 62q11 -5 22 0q-4 5 -11 2q-7 3 -11 -2z"/><path class="msc-bocca" d="M53 70q7 -3 14 0"/>' +
+    '<g class="msc-risata-bocca"><path d="M52 68q8 4 16 0c0 13 -16 13 -16 0" fill="#71352e"/><path d="M54 70q6 2 12 0l-1 3h-10z" fill="#fff"/><path d="M56 77q4 -3 8 0" fill="#ed948e"/></g>' +
     COSTUMI.halloween + COSTUMI.giardino + COSTUMI.dark + COSTUMI.mountain + '</g>' +
     FUORI.halloween + FUORI.autunno + FUORI.dark +
     '<g class="msc-zzz"><path d="M88 34h9l-9 11h9"/><path d="M101 17h7l-7 8h7"/></g>' +
@@ -103,6 +104,7 @@
       csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '', modo:'chat', testoRiassunto:'', risultatoRiassunto:'', attesaRiassunto:false, erroreRiassunto:'', controllerRiassunto:null };
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, ultimaBattuta = null;
+    let timerRisata=null,timerFineRisata=null;
     let notaMeteo = null, timerMeteo = null, timerChiudiMeteo = null, ultimoInput = 0, meteoInCorso = false;
     let meteoIniziale = true;
     const CHIAVE_METEO = 'portale.assistente.meteo';
@@ -216,7 +218,16 @@
     mostra.addEventListener('click', () => { imposta(false); bottone.focus(); });
 
     // ---- battute dell'ufficio, solo con assistente visibile e chat chiusa
-    function togliNota() { clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } radiceEl.dispatchEvent(new Event('assistente:chiudi-note')); }
+    function fermaRisata(){clearTimeout(timerRisata);clearTimeout(timerFineRisata);radiceEl.classList.remove('msc-ride');}
+    function ridi(){
+      fermaRisata();
+      timerRisata=setTimeout(()=>{
+        if(document.hidden||radiceEl.hidden||notaMeteo||radiceEl.dataset.spotVisibile)return;
+        radiceEl.classList.add('msc-ride');timerFineRisata=setTimeout(fermaRisata,2200);
+      },700);
+    }
+    window.addEventListener('pagehide',fermaRisata);
+    function togliNota() { fermaRisata(); clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } radiceEl.dispatchEvent(new Event('assistente:chiudi-note')); }
     function programmaBattuta(ritardo = 12000 + Math.random() * 4000) {
       clearTimeout(timerBattuta);
       if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso || radiceEl.dataset.spotVisibile || radiceEl.dataset.spotVideo) return;
@@ -231,7 +242,7 @@
       ultimaBattuta = scegliBattuta(BATTUTE,ultimaBattuta);
       nota = h('p', { className: 'msc-nota', textContent: ultimaBattuta });
       nota.setAttribute('aria-hidden', 'true');
-      radiceEl.append(nota);
+      radiceEl.append(nota);ridi();
       timerNota = setTimeout(togliNota, 6000);
       programmaBattuta();
     }
@@ -472,6 +483,7 @@
         if(inline.trim()&&inline.length<=6000&&new TextEncoder().encode(inline).length<=12000)await inviaRiassunto();
         return;
       }
+      fermaRisata();
       const utente = stato.utente;
       const messaggiPrima=stato.messaggi.slice(),ultimaPrima=stato.ultima;
       stato.attesa = true; stato.erroreChat = '';
@@ -493,6 +505,7 @@
         else stato.messaggi.push({ ruolo: 'assistente', testo: out.risposta, dettagli: out });
         stato.messaggi = stato.messaggi.slice(-12);
         stato.ultima = out;
+        if(out.tipo==='svago')ridi();
       } catch (e) {
         if (stato.utente === utente) {
           stato.erroreChat = e.name === 'TimeoutError' ? 'La risposta sta impiegando troppo tempo. Riprova oppure consulta le guide.' : e.message;
@@ -518,7 +531,7 @@
         const fonti = h('div', { className: 'msc-fonti' });
         for (const f of out.fonti) if (f.url.startsWith(BASE + '/#')) {
           fonti.append(collega(f.url.slice((BASE + '/').length), '', 'msc-fonte',
-            icona('M4 4h6a3 3 0 0 1 3 3v13a4 4 0 0 0-4-2H4zM13 7a3 3 0 0 1 3-3h5v14h-4a4 4 0 0 0-4 2'), h('span', { textContent: f.titolo })));
+            icona('M4 4h6a3 3 0 0 1 3 3v13a4 4 0 0 0-4-2H4zM13 7a3 3 0 0 1 3-3h5v14h-4a4 4 0 0 0-4 2'), h('span', { textContent: f.url.includes('/#faq/') ? 'Mostrami la guida: '+f.titolo : f.titolo })));
         }
         extra.append(fonti);
       }
@@ -526,7 +539,7 @@
         const opzioni = h('div', { className: 'msc-opzioni' });
         for (const o of out.opzioni) {
           const b = h('button', { type: 'button', className: 'msc-chat-b', textContent: o.testo, disabled: stato.attesa || !corrente });
-          b.addEventListener('click', () => inviaChat({ azione: o.azione, categoria: o.categoria, testo: o.testo })); opzioni.append(b);
+          b.addEventListener('click', () => inviaChat({ azione: o.azione, categoria: o.categoria, testo: o.testo, riferimento: out.feedbackId })); opzioni.append(b);
         }
         extra.append(opzioni);
       }
@@ -545,7 +558,37 @@
         });
         extra.append(descrizione, copia);
       }
+      if(out.feedbackId)extra.append(controlloFeedback(out));
       return extra;
+    }
+
+    function controlloFeedback(out){
+      const box=h('div',{className:'msc-feedback'});
+      if(out.feedbackInviato){box.append(h('p',{textContent:'Segnalazione ricevuta, grazie.'}));return box;}
+      const apri=h('button',{type:'button',className:'msc-chat-b',textContent:'👎 Segnala risposta'});
+      apri.setAttribute('aria-expanded','false');
+      apri.addEventListener('click',()=>{
+        apri.hidden=true;
+        const motivo=h('select',{required:true});motivo.setAttribute('aria-label','Motivo della segnalazione');
+        for(const [value,textContent] of [['','Scegli un motivo'],['sbagliata','Risposta sbagliata'],['non-pertinente','Non pertinente'],['poco-chiara','Poco chiara']])motivo.append(h('option',{value,textContent}));
+        const nota=h('textarea',{rows:2,maxLength:500,placeholder:'Aggiungi un dettaglio (facoltativo)'});nota.setAttribute('aria-label','Nota facoltativa, massimo 500 caratteri');
+        const invia=h('button',{type:'submit',className:'msc-chat-b',textContent:'Invia segnalazione'}),annulla=h('button',{type:'button',className:'msc-chat-b',textContent:'Annulla'});
+        const statoInvio=h('p',{});statoInvio.setAttribute('role','status');
+        const form=h('form',{className:'msc-feedback-form'},h('p',{textContent:'Saranno salvate questa domanda, la risposta e il motivo, visibili solo agli amministratori. Non inserire password o dati riservati nella nota.'}),motivo,nota,h('div',{},invia,annulla),statoInvio);
+        annulla.addEventListener('click',()=>{form.remove();apri.hidden=false;apri.focus();});
+        form.addEventListener('submit',async e=>{
+          e.preventDefault();invia.disabled=true;annulla.disabled=true;statoInvio.textContent='Invio in corso…';
+          const utente=stato.utente;
+          try{
+            const r=await fetch(BASE+'/api/assistente/feedback',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-CSRF-Token':stato.csrf},body:JSON.stringify({id:out.feedbackId,motivo:motivo.value,nota:nota.value}),signal:AbortSignal.timeout(15000)});
+            const dati=await r.json();if(!r.ok)throw Error(dati.errore||'Invio non riuscito. Riprova.');
+            if(stato.utente!==utente)return;
+            out.feedbackInviato=true;form.remove();apri.hidden=false;apri.textContent='Segnalazione ricevuta, grazie.';apri.disabled=true;
+            box.setAttribute('role','status');
+          }catch(e){statoInvio.textContent=e.name==='TimeoutError'?'Invio lento. Puoi riprovare senza duplicare la segnalazione.':e.message;invia.disabled=false;annulla.disabled=false;}
+        });
+        box.append(form);motivo.focus();
+      });box.append(apri);return box;
     }
 
     function aggiornaChat() {

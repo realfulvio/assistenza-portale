@@ -216,3 +216,21 @@ a.msc-n{text-decoration:underline}
 .msc-ridimensiona svg{width:12px;height:12px;opacity:.8}
 @media(max-width:600px){.msc-ridimensiona{display:none}.msc-allarga{width:30px}.msc-testata{gap:6px}}
 .msc-fumetto{z-index:2}
+
+.msc-feedback{margin-top:.7rem;border-top:1px solid var(--line,#d7e1ea);padding-top:.5rem}.msc-feedback-form{display:grid;gap:.5rem}.msc-feedback-form p{font-size:.8rem}.msc-feedback-form select,.msc-feedback-form textarea{width:100%;max-width:100%;font:inherit;color:inherit;background:var(--card,#fff);border:1px solid var(--line,#9cabb5);border-radius:.5rem;padding:.5rem}.msc-feedback-form button{margin:.2rem}.feedback-scheda{padding:1rem;margin:1rem 0;border:1px solid var(--line,#9cabb5);border-radius:.8rem;background:var(--card,#fff)}.feedback-scheda p{white-space:pre-wrap;overflow-wrap:anywhere}.feedback-scheda h2{font-size:1.2rem}.feedback-scheda h3{font-size:1rem;margin-bottom:.3rem}.feedback-pagine{display:flex;gap:1rem}
+
+/* Una risatina breve dopo battute e freddure; il fumetto e i suoi controlli restano fermi. */
+.msc-risata-bocca{display:none}
+.mascotte.msc-ride .msc-risata-bocca{display:block}
+.mascotte.msc-ride .msc-bocca{display:none}
+.mascotte.msc-ride .msc-testa{animation:msc-risata-testa .28s ease-in-out 7;transform-origin:60px 80px}
+.mascotte.msc-ride .msc-busto{animation:msc-risata-spalle .28s ease-in-out 7}
+.mascotte.msc-ride .msc-tazza{animation:msc-risata-tazza .28s ease-in-out 7}
+.mascotte.msc-ride .msc-chiude{animation:none;transform:scaleY(1)}
+@keyframes msc-risata-testa{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(3deg) translateY(-2px)}}
+@keyframes msc-risata-spalle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px) scaleY(1.025)}}
+@keyframes msc-risata-tazza{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-2deg)}}
+html[data-motion=reduce] .mascotte.msc-ride :is(.msc-testa,.msc-busto,.msc-tazza){animation:none!important;transform:none}
+@media(prefers-reduced-motion:reduce){html[data-motion=system] .mascotte.msc-ride :is(.msc-testa,.msc-busto,.msc-tazza){animation:none!important;transform:none}}
+
+#feedback-contenuto select,#feedback-contenuto button{min-height:44px;font:inherit;padding:.5rem .8rem;border:1px solid var(--line);border-radius:.5rem;color:var(--text);background:var(--card)}#feedback-contenuto button:not(:disabled){cursor:pointer}#feedback-contenuto button:disabled{opacity:.55}#feedback-contenuto :is(select,button):focus-visible{outline:3px solid var(--focus,var(--primary));outline-offset:3px}

@@ -108,7 +108,9 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     return req.session.assistente;
   }
   function risposta(s, domanda, out) {
-    s.messaggi.push({ ruolo: 'utente', testo: domanda }, { ruolo: 'assistente', testo: out.risposta });
+    require('./assistente-azioni').aggiungiAzioni(out,base);
+    out.feedbackId=crypto.randomUUID();
+    s.messaggi.push({ ruolo: 'utente', testo: domanda }, { ruolo: 'assistente', testo: out.risposta, dettagli: out });
     s.messaggi = s.messaggi.slice(-12);
     s.ultima = out;
     return out;
@@ -272,7 +274,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     sessioniOccupate.add(req.sessionID);
     try {
       const body = req.body || {}, azione = body.azione || 'messaggio';
-      if (!['messaggio', 'nuova', 'ticket', 'categoria', 'riassunto'].includes(azione)) throw errore('Azione non valida.');
+      if (!['messaggio', 'nuova', 'ticket', 'categoria', 'riassunto', 'ticket_contesto', 'non_risolto'].includes(azione)) throw errore('Azione non valida.');
       if (typeof body.testo !== 'undefined' && typeof body.testo !== 'string') throw errore('Scrivi un messaggio di testo.');
       const originale = body.testo || '';
       const testoRiassunto = azione === 'riassunto' ? originale : azione === 'messaggio' ? estraiRichiesta(originale) : null;
@@ -287,8 +289,21 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (domanda.length > 1500 || (azione === 'messaggio' && domanda.length < 2)) throw errore('Scrivi un messaggio tra 2 e 1500 caratteri.');
       let s = stato(req);
       if (azione === 'nuova') { req.session.assistente = null; s = stato(req); return { risposta: 'Nuova conversazione. Come posso aiutarti?', tipo: 'chat' }; }
+      if(azione==='non_risolto'){
+        if(!s.ultima?.opzioni?.some(o=>o.azione==='non_risolto')||body.riferimento!==s.ultima.feedbackId)throw errore('Questa risposta non è più quella attuale.');
+        s.verifica={fonti:s.ultima.fonti,tema:s.messaggi.filter(m=>m.ruolo==='utente').map(m=>triage.dominio(m.testo)).filter(Boolean).at(-1)};
+        return risposta(s,'Non ho risolto',{tipo:'verifica',risposta:'Le indicazioni non hanno risolto. Che cosa è successo dopo la prova? Puoi descrivere il risultato oppure preparare la richiesta con i dati già forniti.',fonti:s.ultima.fonti,opzioni:[{testo:'Prepara la richiesta',azione:'ticket_contesto'}]});
+      }
+      if(azione==='ticket_contesto'){
+        if(!s.ultima?.opzioni?.some(o=>o.azione==='ticket_contesto')||req.body.riferimento!==s.ultima.feedbackId)throw errore('Questa risposta non è più quella attuale.');
+        delete s.verifica;
+        const reali=triage.storiaPertinente('',s.messaggi).filter(m=>m.ruolo==='utente'&&!/^Non ho risolto[.!]?$/i.test(m.testo)).map(m=>m.testo);
+        s.bozza={passo:'categoria',problema:reali.join('\n')};
+        return risposta(s,'Prepara la richiesta',{risposta:'Uso quanto hai già descritto come punto di partenza. Scegli la categoria; potrai controllare il testo prima di copiarlo.',tipo:'bozza',opzioni:opzioniCategorie()});
+      }
       const domandaMeteo = azione === 'messaggio' ? richiestaMeteo(domanda, s, meteo.localita) : null;
       if (domandaMeteo) {
+        delete s.verifica;
         const out = await meteo.rispondi(domandaMeteo, s);
         s.ultimoTipo = out.tipo;
         return risposta(s, domanda, out);
@@ -296,6 +311,14 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       let out;
       const genereSvago = azione === 'messaggio' ? svago.richiesta(domanda, s) : null;
       let controllata = azione === 'messaggio' ? conoscenza.rispostaControllata(domanda, triage.storiaPertinente(domanda, s.messaggi), base) : null;
+      if(s.verifica&&azione==='messaggio'){
+        const verifica=s.verifica,tema=triage.dominio(domanda);delete s.verifica;
+        const sicurezza=controllata&&['firmware-in-corso','richiesta-segreti','non-inviare-password','non-disattivare-protezioni','intervento-non-documentato'].includes(controllata.regola);
+        if(!sicurezza&&!genereSvago&&!conoscenza.cercaNumero(domanda)&&(!tema||!verifica.tema||tema===verifica.tema)){
+          const risolto=/\b(?:risolto|ora va|ora funziona|adesso funziona)\b/i.test(domanda)&&! /\bnon\b/i.test(domanda);
+          return risposta(s,domanda,risolto?{tipo:'verifica',risposta:'Bene, il problema risulta risolto in base a quanto mi hai riferito. Se ricapita puoi riprendere da qui.'}:{tipo:'verifica',risposta:'Ho aggiunto l’esito della prova. Puoi preparare la richiesta con i dettagli già forniti, senza ripetere la stessa procedura.',fonti:verifica.fonti,opzioni:[{testo:'Prepara la richiesta',azione:'ticket_contesto'}]});
+        }
+      }
       if (!usaGuidate && controllata && !['firmware-in-corso', 'richiesta-segreti', 'non-inviare-password', 'non-disattivare-protezioni', 'intervento-non-documentato'].includes(controllata.regola)) controllata = null;
       if (controllata) {
         osservaRicerca?.({regola: controllata.regola, selezionati: []});
@@ -316,6 +339,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
 
 function collega(api, deps) {
   const servizio = creaServizio(deps);
+  require('./assistente-feedback').collega(api,{...deps,stato:servizio.stato});
   const { rateLimit } = require('express-rate-limit');
   const limite = rateLimit({ windowMs: 60_000, limit: 25, standardHeaders: true, legacyHeaders: false,
     keyGenerator: (req) => req.sessionID,

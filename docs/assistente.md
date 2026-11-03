@@ -39,3 +39,13 @@ Il testo viene inviato solo all'endpoint AI già configurato. Il servizio suddiv
 ## Dimensione del pannello
 
 Il pulsante Allarga/Ripristina aumenta lo spazio disponibile. Sul desktop si può trascinare l'angolo superiore sinistro o, mettendo a fuoco la maniglia, usare le frecce (Maiusc per passi maggiori) e Home per ripristinare. Sul telefono il pulsante espande il pannello quasi a tutto schermo. Le dimensioni restano entro la finestra e durano per la pagina corrente; ridimensionare non modifica i messaggi o la bozza.
+
+I pulsanti contestuali sono determinati dal portale, senza chiedere al modello di inventare azioni. Le risposte di assistenza con una guida collegata offrono «Non ho risolto» e «Prepara la richiesta». Il primo raccoglie l'esito della prova senza ripetere automaticamente la procedura; il secondo riprende i messaggi dell'utente pertinenti e avvia la preparazione guidata del testo, da controllare e copiare manualmente. Nessun ticket viene inviato da questi pulsanti.
+
+«Segnala risposta» consente di scegliere un motivo e aggiungere una nota di massimo 500 caratteri. Solo lo scambio segnalato e le relative fonti vengono salvati sul server, senza nome, email o intera cronologia. L'avviso nel modulo chiarisce cosa verrà conservato. I feedback non addestrano automaticamente il modello.
+
+La pagina «Feedback assistente» è riservata agli account in ADMIN_EMAILS, anche senza ADMIN_PANEL_URL, e consente di filtrare e segnare le segnalazioni come verificate. Le API richiedono autenticazione, autorizzazione amministrativa per la lettura/verifica e CSRF sulle scritture. Gli invii sono limitati e deduplicati per scambio e identità di sessione.
+
+ASSISTENTE_FEEDBACK_FILE permette di scegliere un percorso fuori dalla directory pubblica e scrivibile dal servizio. Predefinito Linux non demo: /var/lib/portale-assistenza/assistente/feedback.json, compatibile con StateDirectory del servizio distribuito. In demo/Windows: data/feedback-assistente[-demo].json. Archivio con scrittura atomica e permessi600, massimo1000 segnalazioni; conservazione90 giorni, con rimozione degli elementi scaduti al successivo accesso. Includerlo nei backup riservati, mai nei sorgenti pubblici. Gli amministratori vedono i dati dello scambio segnalato: evitare credenziali e dati non necessari anche nella domanda.
+
+Dopo una battuta spontanea o una nuova risposta di tipo svago la mascotte sorride e ride per circa due secondi, senza audio. Non si riattiva leggendo una vecchia conversazione. Le preferenze di movimento ridotto mantengono soltanto il sorriso statico.
