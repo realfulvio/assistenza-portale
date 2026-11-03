@@ -69,6 +69,7 @@ async function go(page, url, hash) {
     page.on('response', r => { if (/\.(css|js|woff2|svg)(\?|$)/.test(r.url()) && r.status() >= 400) report.assets.push({ url: r.url(), status: r.status() }); });
     await page.goto(url + '/auth/login'); await page.locator('#aspetto').waitFor();
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'classic');
+    assert.equal(await page.locator('[data-tema="halloween"]').count(), 0);
     assert.ok(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--card').trim()));
     await page.locator('.tile[data-id="computer"]').click();
     const description = 'Prova grafica: il computer non risponde da questa mattina. Riferimento: https://esempio.it/' + 'a'.repeat(120);
@@ -109,8 +110,8 @@ async function go(page, url, hash) {
     report.checks.push('Preferenze persistenti dopo reload e accesso da un altro browser.');
     await open(page);
     await page.route('**/api/preferenze', route => route.request().method() === 'PUT' ? route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ errore: 'Salvataggio non disponibile.' }) }) : route.continue());
-    await page.locator('[data-tema="halloween"]').click(); await page.locator('#aspetto-riprova').waitFor();
-    assert.equal(await page.locator('html').getAttribute('data-theme'), 'halloween');
+    await page.locator('[data-tema="giardino"]').click(); await page.locator('#aspetto-riprova').waitFor();
+    assert.equal(await page.locator('html').getAttribute('data-theme'), 'giardino');
     await page.unroute('**/api/preferenze'); await page.locator('#aspetto-riprova').click(); await saved(page);
     await page.locator('#aspetto-reset').evaluate(el => { el.closest('details').open = true; });
     await page.locator('#aspetto-reset').click(); await saved(page); await close(page);
@@ -141,7 +142,7 @@ async function go(page, url, hash) {
         await open(page); await dimensions(page, true); await theme(page, themeId); await close(page);
         for (const hash of ['richieste', 'richiesta/' + id, 'richiesta/101', 'faq', 'contatti', 'profilo']) {
           await go(page, url, hash); await noOverflow(page, `${width}-${themeId}-${hash}`); await accessibility(page, `${width}-${themeId}-${hash}`);
-          if (width === 390 && ['classic', 'halloween', 'autunno'].includes(themeId) && ['richiesta/101', 'profilo'].includes(hash)) await page.screenshot({ path: path.join(output, `${width}-${themeId}-${hash.replace('/', '-')}.png`), fullPage: true });
+          if (width === 390 && ['classic', 'giardino', 'autunno'].includes(themeId) && ['richiesta/101', 'profilo'].includes(hash)) await page.screenshot({ path: path.join(output, `${width}-${themeId}-${hash.replace('/', '-')}.png`), fullPage: true });
         }
         console.log('QA pagine', width, themeId);
       }

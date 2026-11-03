@@ -204,10 +204,12 @@
       const intestazione = h('div', { className: 'msc-meteo-riga' }, simbolo,
         h('div', {}, h('b', { textContent: m.giorno + ' a ' + m.localita }), h('span', { className: 'msc-meteo-condizione', textContent: m.descrizione })),
         h('strong', { className: 'msc-meteo-gradi', textContent: m.temperatura === null ? m.massima + '°' : m.temperatura + '°' }));
-      const fonte = h('a', { className: 'msc-meteo-fonte', href: 'https://open-meteo.com/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Open-Meteo · ' + m.aggiornato.slice(8, 10) + '/' + m.aggiornato.slice(5, 7) + ' ore ' + m.aggiornato.slice(11, 16) });
+      const fonte = h('a', { className: 'msc-meteo-fonte', href: 'https://open-meteo.com/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Open-Meteo · ' + m.aggiornato.slice(8, 10) + '/' + m.aggiornato.slice(5, 7) + ' ore ' + m.aggiornato.slice(11, 16) + (m.fuso ? ' · ' + m.fuso : '') });
       return h('div', { className: 'msc-meteo-scheda' }, intestazione,
+        m.paese ? h('small', { className: 'msc-meteo-zona', textContent: [m.regione, m.paese].filter(Boolean).join(' · ') }) : null,
         m.battuta ? h('p', { className: 'msc-meteo-battuta', textContent: m.battuta + '!' }) : null,
-        h('p', { className: 'msc-meteo-dati', textContent: `Min ${m.minima}° · Max ${m.massima}° · Pioggia ${m.pioggia}%` }), fonte);
+        h('p', { className: 'msc-meteo-dati', textContent: `Min ${m.minima}° · Max ${m.massima}° · Pioggia ${m.pioggia}%` }), fonte,
+        m.paese ? h('a', { className: 'msc-meteo-fonte msc-meteo-zona', href: 'https://www.geonames.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Località: GeoNames' }) : null);
     }
     async function mostraMeteo(manuale) {
       const iniziale = meteoIniziale;

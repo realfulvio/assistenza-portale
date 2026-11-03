@@ -278,7 +278,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (azione === 'nuova') { req.session.assistente = null; s = stato(req); return { risposta: 'Nuova conversazione. Come posso aiutarti?', tipo: 'chat' }; }
       const domandaMeteo = azione === 'messaggio' ? richiestaMeteo(domanda, s, meteo.localita) : null;
       if (domandaMeteo) {
-        const out = await meteo.rispondi(domandaMeteo);
+        const out = await meteo.rispondi(domandaMeteo, s);
         s.ultimoTipo = out.tipo;
         return risposta(s, domanda, out);
       }

@@ -30,6 +30,15 @@ test('tema tolto dal selettore: le preferenze salvate ricadono sul Classico', ()
   fs.writeFileSync(path.join(directory, store.key(userB) + '.json'), JSON.stringify({ ...model.defaults(), theme: 'cyber', text: 120 }));
   assert.deepEqual(store.read(userB), { preferences: { ...model.defaults(), text: 120 }, available: true });
 });
+test('Halloween ritirato: fallback Classico senza perdere leggibilità e movimento', () => {
+  const legacy = { ...model.defaults(), theme: 'halloween', text: 130, icon: 120, roomy: true, size: 'l', density: 'a', motion: true };
+  const expected = { ...legacy, theme: 'classic' };
+  assert.equal(model.themes.some(([id]) => id === 'halloween'), false);
+  assert.deepEqual(model.validate(legacy), expected);
+  fs.writeFileSync(path.join(directory, store.key(userB) + '.json'), JSON.stringify(legacy));
+  assert.deepEqual(store.read(userB), { preferences: expected, available: true });
+});
+
 test('corruzione o archivio non disponibile: fallback senza bloccare il portale', () => {
   fs.writeFileSync(path.join(directory, store.key(userB) + '.json'), '{');
   assert.deepEqual(store.read(userB), { preferences: model.defaults(), available: false });
@@ -55,7 +64,7 @@ test('API: login, CSRF, valori ammessi, HTML iniziale, nuova sessione e logout',
   const initial = await request('/');
   assert.equal(initial.headers.get('cache-control'), 'no-store');
   const html = await initial.text();
-  assert.match(html, /data-theme="halloween" data-text="150" data-icon="80" data-roomy="true" data-size="m" data-density="a" data-motion="full"/);
+  assert.match(html, /data-theme="classic" data-text="150" data-icon="80" data-roomy="true" data-size="m" data-density="a" data-motion="full"/);
   assert.doesNotMatch(html, /__APPEARANCE__/);
   cookie = ''; // altro browser, stesso account
   await request('/auth/login'); me = await (await request('/api/me')).json();

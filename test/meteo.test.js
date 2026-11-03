@@ -16,10 +16,10 @@ test('riconosce meteo colloquiale senza catturare problemi informatici', () => {
   for(const q of ['che tempo fa a esempiopoli','Meteo','Oggi piove?','Domani serve l’ombrello?','Quanti gradi ci sono?','Le previsioni per Esempiopoli']) assert.ok(richiesta(q),q);
   for(const q of ['Quanto tempo ci vuole per aprire Outlook?','Il PC è lento','La mail contiene la parola meteo','Non funziona il sito del meteo']) assert.equal(richiesta(q),null,q);
   assert.equal(richiesta('Domani piove a Esempiopoli?').giorno,1);
-  assert.equal(richiesta('Che tempo fa a Roma?').fuoriZona,true);
-  assert.equal(richiesta('Che tempo fa a Roma domani?').fuoriZona,true);
-  assert.equal(richiesta('Domani che tempo fa a Ferrara?').fuoriZona,true);
-  assert.equal(richiesta('Qual è la probabilità di pioggia a Esempiopoli?').fuoriZona,false);
+  assert.equal(richiesta('Che tempo fa a Roma?').luogo,'roma');
+  assert.equal(richiesta('Che tempo fa a Roma domani?').luogo,'roma');
+  assert.equal(richiesta('Domani che tempo fa a Ferrara?').luogo,'ferrara');
+  assert.equal(richiesta('Qual è la probabilità di pioggia a Esempiopoli?').luogo,'esempiopoli');
   assert.equal(richiesta('Raccontami una barzelletta sul meteo'),null);
   assert.ok(richiesta('Che tempo c’è a Esempiopoli?'));
   assert.ok(richiesta('Come sarà il tempo domani?'));
@@ -45,9 +45,8 @@ test('rifiuta dati incompleti o non numerici',async()=>{
   const m=creaMeteo({scarica:async()=>({ok:true,json:async()=>d})});
   await assert.rejects(m.leggi());
 });
-test('non spaccia Esempiopoli per altre città o giorni non coperti',async()=>{
+test('giorni non coperti: chiarimento senza interrogare il fornitore',async()=>{
   const m=creaMeteo({scarica:async()=>{throw Error('Non deve chiamare il fornitore');}});
-  assert.match((await m.rispondi(richiesta('Che tempo fa a Roma?'))).risposta,/solo.*Esempiopoli/i);
   assert.match((await m.rispondi(richiesta('Meteo settimana prossima'))).risposta,/oggi.*domani/i);
 });
 test('la domanda sul tempo passa dal servizio meteo prima delle guide e del modello',async()=>{

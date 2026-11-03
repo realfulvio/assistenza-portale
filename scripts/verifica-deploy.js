@@ -5,12 +5,12 @@
 // per ogni tema, nessun errore in console né richieste fallite o esterne, accesso servito. Con --accesso-demo anche le pagine
 // Nuova richiesta, Dettaglio, Riepilogo/Stampa, PDF e Profilo, e gli screenshot dei temi su desktop (1440x900) e telefono (390x844).
 // Non invia richieste di assistenza e non scrive dati, salvo la preferenza del tema dell'utente di prova (ripristinata alla fine).
-// Opzioni: --temi classic,spazio,...  --chromium /percorso/chrome (o CHROMIUM_PATH)  --browser chrome|msedge  --timeout 20000
+// Opzioni: --temi classic,giardino,...  --chromium /percorso/chrome (o CHROMIUM_PATH)  --browser chrome|msedge  --timeout 20000
 const fs = require('fs');
 const path = require('path');
 const { verificaUrl } = require('./verifica-rilascio');
 
-const TEMI = ['classic', 'halloween', 'giardino', 'autunno'];
+const TEMI = ['classic', 'giardino', 'autunno'];
 const VARIABILI = ['--primary', '--bg', '--card', '--text', '--muted', '--line', '--accent', '--top', '--head', '--bar', '--foot', '--hero', '--herotext', '--soft', '--dk'];
 const VISTE = { desktop: { width: 1440, height: 900 }, telefono: { width: 390, height: 844 } };
 

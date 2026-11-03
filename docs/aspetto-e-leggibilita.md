@@ -1,6 +1,6 @@
 # Aspetto personale e leggibilità
 
-Il tema predefinito è **Classico**. I temi disponibili sono Classico, Halloween, Giardino, Autunno, Scuro, Contrasto elevato e Montagna; un'eventuale preferenza salvata con un tema rimosso (Spazio, Cyberpunk, Terminale, Retro, Hawaii, Nebbia padana) viene letta come Classico (`retired` in `public/appearance-model.js`). Conserva i font locali Titillium Web e Lora, le categorie configurate e le preferenze esistenti. Le skin aggiuntive sono in `public/appearance.css`; non duplicano le pagine. Le icone delle skin sono centralizzate in `public/theme-icons.svg`, adattate dall'HTML di riferimento fornito per il progetto. Il laboratorio non viene distribuito.
+Il tema predefinito è **Classico**. I temi disponibili sono Classico, Giardino, Autunno, Scuro, Contrasto elevato e Montagna; un'eventuale preferenza salvata con un tema rimosso (Halloween, Spazio, Cyberpunk, Terminale, Retro, Hawaii, Nebbia padana) viene letta come Classico (`retired` in `public/appearance-model.js`). Conserva i font locali Titillium Web e Lora, le categorie configurate e le preferenze esistenti. Le skin aggiuntive sono in `public/appearance.css`; non duplicano le pagine. Le icone delle skin sono centralizzate in `public/theme-icons.svg`, adattate dall'HTML di riferimento fornito per il progetto. Il laboratorio non viene distribuito.
 
 Il nome utente nella barra apre **Il mio profilo**. Il pulsante **Aa · Aspetto** apre lo stesso pannello anche durante la compilazione. Cambiare aspetto aggiorna attributi CSS e riferimenti SVG: il modulo e gli allegati non vengono ricreati. Il pannello si usa con Tab, Invio e Spazio sui temi, frecce sui cursori e Spazio per le caselle, Esc per chiudere. Il focus torna al pulsante di apertura.
 
@@ -50,7 +50,7 @@ Per usare Chrome o Edge già installato, impostare `QA_BROWSER=chrome` o `msedge
 Il controllo avvia solo un server su loopback con `DEMO=1`, GLPI simulato e archivi
 temporanei. Le identità di test sono iniettate soltanto nel processo di prova.
 Schermate e rapporto vengono salvati in `artifacts/v2-browser/`, escluso da Git.
-La matrice copre tutti i 7 temi a 1440, 390 e 320 px, dimensioni normali e
+La matrice copre tutti i 6 temi a 1440, 390 e 320 px, dimensioni normali e
 massime, pagine del portale, invio, messaggio, PDF, foto, persistenza e logout.
 Le violazioni axe WCAG AA causano il fallimento del controllo.
 

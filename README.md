@@ -33,7 +33,7 @@ Pensato per organizzazioni ed enti pubblici. Nome, logo, categorie, contatti e c
 | Guide e contatti | FAQ ricercabili e rubrica locale, con esempio sintetico incluso. |
 | Link utili | Pagina di accesso ai servizi, configurabile in un JSON locale. |
 | Assistenza remota | Istruzioni generiche per concordare un intervento con il tecnico. |
-| Aspetto | Sette temi, dimensioni, spaziatura e movimento ridotto; preferenze legate all’account. |
+| Aspetto | Sei temi, dimensioni, spaziatura e movimento ridotto; preferenze legate all’account. |
 | Profilo, PDF e statistiche | Foto personale, riepilogo stampabile e contatori aggregati. |
 | Accesso | OpenID Connect, con guida per Microsoft Entra ID. |
 

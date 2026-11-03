@@ -38,12 +38,12 @@ test('VERSION, CHANGELOG e footer sono coerenti', async () => {
   assert.ok(!/__VERSIONE__|__DATA_VERSIONE__/.test(html));
 });
 
-test('temi: 7 temi, id invariati, temi tolti ricadono sul Classico, nessuna richiesta esterna', () => {
+test('temi: 6 temi, id invariati, temi tolti ricadono sul Classico, nessuna richiesta esterna', () => {
   const ids = model.themes.map((t) => t[0]);
-  assert.deepEqual(ids.slice().sort(), ['autunno', 'classic', 'contrast', 'dark', 'giardino', 'halloween', 'mountain']);
+  assert.deepEqual(ids.slice().sort(), ['autunno', 'classic', 'contrast', 'dark', 'giardino', 'mountain']);
   const vecchie = { theme: 'dark', text: 120, icon: 100, roomy: true, motion: null };
   assert.deepEqual(model.validate(vecchie), { ...vecchie, size: 'm', density: 'a' });
-  for (const theme of ['cyber', 'terminal', 'retro', 'hawaii', 'fog']) assert.equal(model.validate({ ...vecchie, theme }).theme, 'classic', theme);
+  for (const theme of ['halloween', 'spazio', 'cyber', 'terminal', 'retro', 'hawaii', 'fog']) assert.equal(model.validate({ ...vecchie, theme }).theme, 'classic', theme);
   assert.throws(() => model.validate({ ...vecchie, theme: 'sconosciuto' }));
   assert.throws(() => model.validate({ ...vecchie, size: 'xl' }));
   for (const f of ['style.css', 'temi.css', 'appearance.css', 'theme.css', 'avatar.css', 'stats-bar.css']) {
