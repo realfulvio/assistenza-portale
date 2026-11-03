@@ -211,6 +211,20 @@
         h('p', { className: 'msc-meteo-dati', textContent: `Min ${m.minima}° · Max ${m.massima}° · Pioggia ${m.pioggia}%` }), fonte,
         m.paese ? h('a', { className: 'msc-meteo-fonte msc-meteo-zona', href: 'https://www.geonames.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Località: GeoNames' }) : null);
     }
+    function schedaPrevisioni(previsioni) {
+      const primo = previsioni[0];
+      const box = h('div', { className: 'msc-previsioni' }, h('b', { className: 'msc-previsioni-titolo', textContent: 'Previsioni a ' + primo.localita }));
+      if (primo.paese) box.append(h('small', { className: 'msc-meteo-zona', textContent: [primo.regione, primo.paese].filter(Boolean).join(' · ') }));
+      for (const m of previsioni) {
+        const simbolo = h('span', { className: 'msc-previsioni-icona', textContent: m.icona }); simbolo.setAttribute('aria-hidden', 'true');
+        box.append(h('div', { className: 'msc-previsioni-giorno' }, simbolo,
+          h('div', {}, h('b', { textContent: m.giorno + ' · ' + m.data.slice(8,10) + '/' + m.data.slice(5,7) }), h('span', { textContent: m.descrizione }), m.battuta ? h('small', { textContent: m.battuta + '!' }) : null),
+          h('div', { className: 'msc-previsioni-valori' }, h('b', { textContent: m.minima + '° / ' + m.massima + '°' }), h('small', { textContent: 'min / max' }), h('small', { textContent: 'Pioggia ' + m.pioggia + '%' }))));
+      }
+      box.append(h('a', { className: 'msc-meteo-fonte', href: 'https://open-meteo.com/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Open-Meteo · ' + primo.aggiornato.slice(8,10) + '/' + primo.aggiornato.slice(5,7) + ' ore ' + primo.aggiornato.slice(11,16) + ' · ' + primo.fuso }));
+      if (primo.paese) box.append(h('a', { className: 'msc-meteo-fonte msc-meteo-zona', href: 'https://www.geonames.org/', target: '_blank', rel: 'noopener noreferrer', textContent: 'Località: GeoNames' }));
+      return box;
+    }
     async function mostraMeteo(manuale) {
       const iniziale = meteoIniziale;
       if (!manuale && !iniziale && Number(leggiMeteo('.prossimo')) > Date.now()) { programmaMeteo(); return; }
@@ -338,6 +352,7 @@
       const extra = h('div', { className: 'msc-chat-extra' });
       if (!out) return extra;
       if (out.meteo) extra.append(schedaMeteo(out.meteo));
+      if (out.previsioni?.length) extra.append(schedaPrevisioni(out.previsioni));
       if (out.contatti?.length) extra.append(lista('Contatti trovati', out.contatti.map(vNumero)));
       if (out.richieste?.length) extra.append(lista('Le tue richieste', out.richieste.map((r) => h('li', { className: 'msc-ticket-card' },
         collega(r.url.slice((BASE + '/').length), `#${r.id} · ${r.titolo}`, 'msc-fonte'),
@@ -387,7 +402,7 @@
       for (let i = 0; i < stato.messaggi.length; i++) {
         const m = stato.messaggi[i], assistente = m.ruolo === 'assistente';
         const bolla = h('article', { className: 'msc-messaggio ' + (assistente ? 'msc-risposta' : 'msc-utente') },
-          h('b', { className: 'msc-autore', textContent: assistente ? 'Assistente' : 'Tu' }), m.dettagli?.meteo ? null : h('p', { className: 'msc-messaggio-testo', textContent: m.testo }));
+          h('b', { className: 'msc-autore', textContent: assistente ? 'Assistente' : 'Tu' }), m.dettagli?.meteo || m.dettagli?.previsioni?.length ? null : h('p', { className: 'msc-messaggio-testo', textContent: m.testo }));
         if (assistente) { bolla.append(dettagliRisposta(m.dettagli, i === stato.messaggi.length - 1)); ultimaRisposta = bolla; }
         messaggi.append(bolla);
       }
