@@ -2,6 +2,15 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.8.0] - 2026-11-03
+
+### Novità per gli utenti
+
+- Il meteo su richiesta supporta le città del mondo: ricerca della località, Paese, fuso orario e previsioni per oggi, domani e dopodomani.
+- Se una città è ambigua si può scegliere tra le località proposte. I seguiti come «E domani?» conservano la città appena richiesta.
+- Il fumetto automatico continua a mostrare esclusivamente la località configurata, indipendentemente dalle domande nella chat.
+- Rimosso il tema Halloween da Aspetto. Chi lo aveva selezionato torna al Classico conservando le altre preferenze.
+
 ## [2.7.1] - 2026-11-03
 
 ### Novità per gli utenti
