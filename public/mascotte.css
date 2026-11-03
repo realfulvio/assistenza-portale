@@ -76,6 +76,23 @@ html.msc-attiva .foot{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)
 @keyframes msc-nota{from{opacity:0;transform:translateY(8px) scale(.9)}}
 .mascotte[data-aperta=true] .msc-nota{display:none}
 
+/* Meteo: icone locali Unicode, colori coerenti con il tema del portale. */
+.msc-nota.msc-meteo{width:310px;max-width:calc(100vw - 48px);right:12px;pointer-events:auto;background:var(--card,#fff);color:var(--text,#1b2433);border:1px solid var(--line,#d7e1ed);padding:20px 16px 12px;border-radius:18px;box-shadow:0 12px 38px #001a4d26;font-weight:400}
+.msc-nota.msc-meteo:after{background:var(--card,#fff);border-right:1px solid var(--line,#d7e1ed);border-bottom:1px solid var(--line,#d7e1ed)}
+.msc-meteo-riga{display:flex;align-items:center;gap:10px;padding-top:4px}
+.msc-meteo-riga b{display:block;font-size:16px;color:var(--primary)}
+.msc-meteo-condizione{display:block;font-size:14px}
+.msc-meteo-icona{font-size:38px;line-height:1.2;flex-shrink:0}
+.msc-meteo-gradi{font-size:36px;line-height:1;margin-left:auto;font-weight:700;color:var(--primary)}
+.msc-meteo-dati{margin:12px 0 8px;font-size:14px;line-height:1.5}
+.msc-meteo-battuta{margin:10px 0 0;color:var(--primary);font-weight:700;font-size:17px}
+.msc-meteo-fonte{display:inline-block;font-size:12px;color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.msc-meteo-chiudi{position:absolute;right:5px;top:2px;min-width:32px;min-height:32px;border:0;background:transparent;color:var(--text);font-size:24px;cursor:pointer;border-radius:6px}
+.msc-meteo-silenzia{display:block;padding:6px 0 0;margin-top:8px;background:none;border:0;border-top:1px solid var(--line,#d7e1ed);width:100%;text-align:left;color:var(--primary);font:inherit;font-size:13px;cursor:pointer;min-height:32px}
+.msc-meteo-prova{position:fixed;bottom:16px;left:16px;z-index:49;padding:10px 15px;border:1px solid var(--primary);border-radius:12px;background:var(--card);color:var(--primary);font:600 14px 'Titillium Web',sans-serif;box-shadow:0 4px 20px #001a4d18;cursor:pointer;max-width:calc(100vw - 150px)}
+.msc-meteo button:focus-visible,.msc-meteo-prova:focus-visible,.msc-meteo:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.msc-nota.msc-meteo{animation:none}}
+
 /* ---- Finestra chat: una sola area scorrevole, scrittura sempre visibile. */
 .msc-fumetto{position:absolute;right:0;bottom:calc(100% + 8px);display:flex;flex-direction:column;width:min(440px,calc(100vw - 32px));height:min(660px,calc(100dvh - 215px));box-sizing:border-box;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 55px #00000038,0 3px 12px #00000014;overflow:hidden;animation:msc-apri .2s ease-out;transform-origin:calc(100% - 75px) 100%;isolation:isolate}
 .msc-fumetto[hidden]{display:none}

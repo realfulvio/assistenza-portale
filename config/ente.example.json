@@ -1,4 +1,15 @@
 {
+  "meteo": {
+    "_nota": "Facoltativo: attivare con località e coordinate; i messaggi per freddo/caldo sono personalizzabili. Dati Open-Meteo, nessuna geolocalizzazione del dipendente.",
+    "attivo": false,
+    "localita": "Città di Esempio",
+    "latitudine": 0,
+    "longitudine": 0,
+    "sogliaFreddo": 8,
+    "sogliaCaldo": 30,
+    "battutaFreddo": "",
+    "battutaCaldo": ""
+  },
   "_nota": "Copia questo file in config/ente.json e personalizzalo. Dopo una modifica riavvia il servizio (sudo systemctl restart portale-assistenza).",
   "ente": {
     "nome": "Comune di Esempio",

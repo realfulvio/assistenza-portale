@@ -42,7 +42,7 @@ function personalizza(html) {
     _emailHtml: s.email ? `<p>Posta elettronica: <a href="mailto:${escHtml(s.email)}">${escHtml(s.email)}</a></p>` : '',
     _telefonoHtml: s.telefonoUrgenze ? `<p>Telefono per le urgenze: <a href="tel:${escHtml(String(s.telefonoUrgenze).replace(/\s+/g, ''))}">${escHtml(s.telefonoUrgenze)}</a></p>` : ''
   };
-  return html.replace(/\{\{([\w.]+)\}\}/g, (m, k) => (k in extra ? extra[k] : escHtml(valoreEnte(k) ?? '')));
+  return html.replace('<body ', '<body data-meteo-attivo="' + (config.ente.meteo?.attivo === true ? '1' : '0') + '" ' + (config.demo && config.ente.meteo?.attivo === true ? 'data-anteprima-meteo="1" ' : '')).replace(/\{\{([\w.]+)\}\}/g, (m, k) => (k in extra ? extra[k] : escHtml(valoreEnte(k) ?? '')));
 }
 
 let origineIssuer = [];
@@ -310,7 +310,12 @@ api.post('/richieste/:id/esito', serveLogin, csrf, idTicket, async (req, res, ne
   } catch (e) { next(e); }
 });
 // Assistente separato dal modulo ticket: sola consultazione e suggerimenti in chat.
-require('./assistente').collega(api, { config, numeriInterni, glpi, utenteGlpi, serveLogin, csrf });
+const meteo = require('./meteo').creaMeteo(config.ente.meteo);
+api.get('/meteo', serveLogin, async (req, res) => {
+  const out = await meteo.rispondi();
+  res.set('Cache-Control', 'no-store').status(out.meteo ? 200 : 503).json(out);
+});
+require('./assistente').collega(api, { config, numeriInterni, glpi, utenteGlpi, serveLogin, csrf, meteo });
 router.use('/api', api);
 
 // --- Pagine (single page app): index con percorso base iniettato

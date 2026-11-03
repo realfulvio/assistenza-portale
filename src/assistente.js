@@ -8,6 +8,7 @@ const esempi = require('./assistente-esempi');
 const contesto = require('./assistente-contesto');
 const generazione = require('./assistente-generazione');
 const svago = require('./assistente-svago');
+const { richiesta: richiestaMeteo, creaMeteo } = require('./meteo');
 
 const MODELLO_PREDEFINITO = 'qwen3.5:4b-q4_K_M';
 const EMBEDDING_PREDEFINITO = 'embeddinggemma-2:270m';
@@ -25,7 +26,7 @@ const coseno = (a, b) => {
   return ab / Math.max(1e-12, Math.sqrt(aa * bb));
 };
 
-function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cacheFile, osservaRicerca }) {
+function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cacheFile, osservaRicerca, meteo = creaMeteo(config.ente?.meteo) }) {
   const base = config.base || '';
   const MODELLO = config.assistenteModello || MODELLO_PREDEFINITO;
   const EMBEDDING = config.assistenteEmbedding || EMBEDDING_PREDEFINITO;
@@ -275,6 +276,12 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (domanda.length > 1500 || (azione === 'messaggio' && domanda.length < 2)) throw errore('Scrivi un messaggio tra 2 e 1500 caratteri.');
       let s = stato(req);
       if (azione === 'nuova') { req.session.assistente = null; s = stato(req); return { risposta: 'Nuova conversazione. Come posso aiutarti?', tipo: 'chat' }; }
+      const domandaMeteo = azione === 'messaggio' ? richiestaMeteo(domanda, s, meteo.localita) : null;
+      if (domandaMeteo) {
+        const out = await meteo.rispondi(domandaMeteo);
+        s.ultimoTipo = out.tipo;
+        return risposta(s, domanda, out);
+      }
       let out;
       const genereSvago = azione === 'messaggio' ? svago.richiesta(domanda, s) : null;
       let controllata = azione === 'messaggio' ? conoscenza.rispostaControllata(domanda, triage.storiaPertinente(domanda, s.messaggi), base) : null;

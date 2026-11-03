@@ -2,6 +2,15 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.7.0] - 2026-11-03
+
+### Novità per gli utenti
+
+- Meteo locale nell’assistente, con icone, temperatura, minime e massime e probabilità di pioggia per oggi, domani e dopodomani.
+- Un fumetto discreto mostra il meteo dopo un minuto, poi al massimo ogni 50 minuti; si può silenziare e non interrompe chat o richieste in compilazione.
+- Esclamazioni facoltative per freddo e caldo, configurabili dall’ente insieme alla località.
+- Dati aggiornati da Open-Meteo, con fonte e orario; nessuna previsione inventata quando il servizio non risponde.
+
 ## [2.6.1] - 2026-11-02
 
 ### Novità per gli utenti
