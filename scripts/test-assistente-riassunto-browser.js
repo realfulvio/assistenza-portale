@@ -29,7 +29,7 @@ const sintetico='- Riunione il 18 novembre 2026 alle 10:30, sala A.\n- Documenti
  await p.unroute('**/api/assistente');
  await p.route('**/api/assistente',r=>r.request().method()==='POST'?r.fulfill({status:503,json:{errore:'Errore di prova del modello'}}):r.continue());
  await p.locator('.msc-riassunto-indietro').click();await p.locator('#msc-domanda').fill('riassumi: Documento fittizio che deve restare fuori dalla chat');await p.locator('.msc-invia').click();
- await p.waitForSelector('.msc-riassunto-status',{timeout:3000});assert.match(await p.locator('.msc-riassunto-status').innerText(),/Errore di prova/);
+ await p.locator('.msc-riassunto-status').filter({hasText:'Errore di prova'}).waitFor({state:'visible',timeout:5000});assert.match(await p.locator('.msc-riassunto-status').innerText(),/Errore di prova/);
  await p.locator('.msc-riassunto-indietro').click();assert.doesNotMatch(await p.locator('#msc-messaggi').innerText(),/Documento fittizio/);
  await p.locator('#msc-domanda').fill('');const grande='riassumi: '+ 'q'.repeat(6001);
  await p.locator('#msc-domanda').evaluate((e,t)=>{const d=new DataTransfer();d.setData('text/plain',t);e.dispatchEvent(new ClipboardEvent('paste',{clipboardData:d,cancelable:true,bubbles:true}));},grande);
