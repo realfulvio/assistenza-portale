@@ -87,6 +87,12 @@ html.msc-attiva .foot{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px)
 .msc-meteo-dati{margin:12px 0 8px;font-size:14px;line-height:1.5}
 .msc-meteo-battuta{margin:10px 0 0;color:var(--primary);font-weight:700;font-size:17px}
 .msc-meteo-zona{display:block;margin-top:5px;font-size:12px;line-height:1.4}
+.msc-previsioni-titolo{display:block;color:var(--primary);font-size:17px;margin:5px 0 8px}
+.msc-previsioni-giorno{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.msc-previsioni-icona{font-size:27px;line-height:1.2}
+.msc-previsioni-giorno b,.msc-previsioni-giorno span:not(.msc-previsioni-icona),.msc-previsioni-giorno small{display:block}
+.msc-previsioni-giorno b{font-size:14px}.msc-previsioni-giorno span:not(.msc-previsioni-icona){font-size:13px}.msc-previsioni-giorno small{font-size:12px;line-height:1.4}
+.msc-previsioni-valori{text-align:right}.msc-previsioni-giorno small{color:var(--text)}
 .msc-meteo-fonte{display:inline-block;font-size:12px;color:var(--text);text-decoration:underline;text-underline-offset:3px}
 .msc-meteo-chiudi{position:absolute;right:5px;top:2px;min-width:32px;min-height:32px;border:0;background:transparent;color:var(--text);font-size:24px;cursor:pointer;border-radius:6px}
 .msc-meteo-silenzia{display:block;padding:6px 0 0;margin-top:8px;background:none;border:0;border-top:1px solid var(--line,#d7e1ed);width:100%;text-align:left;color:var(--primary);font:inherit;font-size:13px;cursor:pointer;min-height:32px}

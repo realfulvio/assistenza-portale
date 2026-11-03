@@ -2,6 +2,14 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.8.1] - 2026-11-03
+
+### Novità per gli utenti
+
+- «Prossimi giorni» mostra un riepilogo di oggi, domani e dopodomani, con date, icone, minime, massime e probabilità di pioggia.
+- Il periodo viene separato dal nome della città anche in frasi come «meteo per i prossimi giorni a…», senza ricerche errate o risposte limitate a oggi.
+- Corrette le richieste di più giorni, i seguiti e la scelta tra località omonime; giorni fuori dalla finestra disponibile ricevono un chiarimento.
+
 ## [2.8.0] - 2026-11-03
 
 ### Novità per gli utenti

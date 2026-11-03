@@ -28,7 +28,7 @@ const app=require('../src/server');
     await page.goto(url+'/auth/login');await page.waitForSelector('#msc-meteo');
     assert.match(await page.locator('#msc-meteo').innerText(),/Esempiopoli/);
     await page.locator('#mascotte-btn').click();
-    async function chiedi(q,attesa){await page.locator('#msc-domanda').fill(q);await page.locator('.msc-invia').click();await page.waitForFunction(t=>[...document.querySelectorAll('.msc-risposta')].at(-1)?.innerText.includes(t),attesa);}
+    async function chiedi(q,attesa){await page.locator('#msc-domanda').fill(q);const risposta=page.waitForResponse(r=>r.url().endsWith('/api/assistente')&&r.request().method()==='POST');await page.locator('.msc-invia').click();await risposta;await page.waitForSelector('.msc-invia:not([disabled])');await page.waitForFunction(t=>[...document.querySelectorAll('.msc-risposta')].at(-1)?.innerText.includes(t),attesa);}
     await chiedi('Che tempo fa a Milano?','Oggi a Milano');
     await chiedi('E domani?','Domani a Milano');
     const output=path.resolve(process.env.QA_OUTPUT||path.join(__dirname,'..','artifacts','meteo-citta'));fs.mkdirSync(output,{recursive:true});
@@ -36,6 +36,13 @@ const app=require('../src/server');
     await chiedi('Meteo a Tokyo','Oggi a Tokyo');assert.match(await page.locator('.msc-risposta').last().innerText(),/Asia\/Tokyo/);
     assert.deepEqual((await new AxeBuilder({page}).include('.msc-meteo-scheda').analyze()).violations.map(v=>v.id),[]);
     await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(output,'tokyo-mobile.png')});
+    await chiedi('meteo esempiopoli prossimi giorni','Previsioni a Esempiopoli');
+    assert.equal(await page.locator('.msc-risposta').last().locator('.msc-previsioni-giorno').count(),3);
+    await chiedi('meteo per i prossimi giorni a esempiopoli','Previsioni a Esempiopoli');
+    const riepilogo=page.locator('.msc-risposta').last();assert.equal(await riepilogo.locator('.msc-previsioni-giorno').count(),3);
+    assert.match(await riepilogo.innerText(),/Domani · 04\/11/);assert.match(await riepilogo.innerText(),/Dopodomani · 05\/11/);
+    assert.deepEqual((await new AxeBuilder({page}).include('.msc-previsioni').analyze()).violations.map(v=>v.id),[]);
+    await page.screenshot({path:path.join(output,'prossimi-giorni-mobile.png')});
     await chiedi('Meteo a Newcastle','Quale intendi');await page.getByRole('button',{name:'Newcastle (Inghilterra, Regno Unito)',exact:true}).click();
     await page.waitForFunction(()=>[...document.querySelectorAll('.msc-risposta')].at(-1)?.innerText.includes('Europe/London'));
     await page.locator('#msc-chiudi').click();await page.reload();await page.waitForSelector('#msc-meteo');
