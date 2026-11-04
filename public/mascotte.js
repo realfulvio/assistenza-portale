@@ -571,8 +571,20 @@
           fonti.append(collega(f.url.slice((BASE + '/').length), '', 'msc-fonte',
             icona('M4 4h6a3 3 0 0 1 3 3v13a4 4 0 0 0-4-2H4zM13 7a3 3 0 0 1 3-3h5v14h-4a4 4 0 0 0-4 2'), h('span', { textContent: f.url.includes('/#faq/') ? 'Mostrami la guida: '+f.titolo : f.titolo })));
         }
-        extra.append(fonti);
+        if (fonti.childElementCount) extra.append(fonti);
       }
+      if (out.web && out.fonti?.length) {
+        const fonti = h('div', { className: 'msc-fonti' });
+        for (const f of out.fonti) if (/^https?:\/\//.test(f.url)) {
+          const a = h('a', { href: f.url, className: 'msc-fonte msc-fonte-web', target: '_blank', rel: 'noopener noreferrer nofollow' },
+            icona('M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18'), h('span', { className: 'msc-fonte-t' }, h('span', { textContent: f.titolo }), h('small', { textContent: f.dominio || '' })),
+            icona('M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'));
+          a.setAttribute('aria-label', f.titolo + ' (' + (f.dominio || 'sito esterno') + ', si apre in una nuova scheda)');
+          fonti.append(a);
+        }
+        extra.append(h('p', { className: 'msc-web-fonti-t', textContent: 'Fonti consultate' }), fonti);
+      }
+      if (out.avvisoWeb) extra.append(h('p', { className: 'msc-web-avviso' }, icona(out.web ? 'M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z' : 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18'), h('span', { textContent: out.avvisoWeb })));
       if (out.opzioni?.length) {
         const opzioni = h('div', { className: 'msc-opzioni' });
         for (const o of out.opzioni) {
@@ -596,7 +608,8 @@
         });
         extra.append(descrizione, copia);
       }
-      if(out.feedbackId)extra.append(controlloFeedback(out));
+      if (out.notaWeb) extra.append(h('p', { className: 'msc-noweb' }, icona('M7 11h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2zM8 11V7a4 4 0 0 1 8 0v4'), h('span', { textContent: out.notaWeb })));
+      if(out.feedbackId&&out.tipo!=='web-proposta')extra.append(controlloFeedback(out));
       return extra;
     }
 
@@ -641,6 +654,7 @@
         const m = stato.messaggi[i], assistente = m.ruolo === 'assistente';
         const bolla = h('article', { className: 'msc-messaggio ' + (assistente ? 'msc-risposta' : 'msc-utente') },
           h('b', { className: 'msc-autore', textContent: assistente ? 'Assistente' : 'Tu' }), m.dettagli?.meteo || m.dettagli?.previsioni?.length ? null : h('p', { className: 'msc-messaggio-testo', textContent: m.testo }));
+        if (assistente && m.dettagli?.web) bolla.querySelector('.msc-autore').after(h('span', { className: 'msc-web-badge' }, icona('M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18'), h('span', { textContent: 'Risposta dal web · da verificare' })));
         if (assistente) { bolla.append(dettagliRisposta(m.dettagli, i === stato.messaggi.length - 1)); ultimaRisposta = bolla; }
         messaggi.append(bolla);
       }

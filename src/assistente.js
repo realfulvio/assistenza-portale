@@ -11,6 +11,7 @@ const svago = require('./assistente-svago');
 const comandi = require('../public/assistente-comandi');
 const {creaRiassuntore,estraiRichiesta}=require('./assistente-riassunto');
 const { richiesta: richiestaMeteo, creaMeteo } = require('./meteo');
+const web = require('./assistente-web');
 
 const MODELLO_PREDEFINITO = 'qwen3.5:4b-q4_K_M';
 const EMBEDDING_PREDEFINITO = 'embeddinggemma-2:270m';
@@ -28,7 +29,7 @@ const coseno = (a, b) => {
   return ab / Math.max(1e-12, Math.sqrt(aa * bb));
 };
 
-function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cacheFile, osservaRicerca, meteo = creaMeteo(config.ente?.meteo) }) {
+function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cacheFile, osservaRicerca, meteo = creaMeteo(config.ente?.meteo), ricercaWeb = web.creaRicerca(config) }) {
   const base = config.base || '';
   const MODELLO = config.assistenteModello || MODELLO_PREDEFINITO;
   const EMBEDDING = config.assistenteEmbedding || EMBEDDING_PREDEFINITO;
@@ -155,7 +156,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
   }
   function cercaContatti(domanda) {
     const numeri = domanda.match(/\b\d{2,6}\b/g) || [];
-    const q = parole(domanda).filter((p) => !['cerco', 'cerca', 'puoi', 'potrei', 'sapere', 'tutti', 'tutte', 'elenco', 'del', 'dell', 'sai', 'hai', 'fai', 'vedere', 'mostrami', 'dirmi', 'daresti', 'dici', 'nr', 'num', 'cellulare', 'recapito', 'qualcuno'].includes(p));
+    const q = parole(domanda).filter((p) => !['cerco', 'cerca', 'puoi', 'potrei', 'sapere', 'tutti', 'tutte', 'elenco', 'del', 'dell', 'sai', 'hai', 'fai', 'vedere', 'mostrami', 'dirmi', 'daresti', 'dici', 'nr', 'num', 'tel', 'cell', 'cellulare', 'recapito', 'qualcuno'].includes(p));
     if (!q.length) return { risposta: 'Di quale persona o ufficio cerchi il numero?', tipo: 'contatti', contatti: [] };
     const voci = contatti().flatMap((sezione) => sezione.voci.map((v) => ({ ...v, sezione: sezione.titolo })));
     const trovati = voci.filter((v) => {
@@ -272,6 +273,16 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (!analisi.compito) messages = generazione.messaggi({istruzioni: system, analisi, fonti: scelti.map(({d}) => fonte(d)), piano});
       messages[0].content += '\nPrima identifica la richiesta attuale: una guida recuperata non dimostra che l utente abbia quel problema. Se il messaggio e soltanto un saluto o esprime incertezza senza descrivere un problema o una domanda, chiedi brevemente che cosa desidera fare o che cosa osserva, senza proporre procedure, menu o invio di ticket. Non inventare sintomi mancanti.';
       messages[0].content += '\nInterpreta refusi e frasi colloquiali dal contesto. Usa una guida soltanto se riguarda la domanda; se non capisci che cosa cerca la persona, chiedi un chiarimento breve.';
+      const conGuida = scelti.some(({d}) => ['guida', 'scheda'].includes(d.tipo) || d.url);
+      const esameWeb = ricercaWeb.attiva && !conGuida && (senzaFonti || web.informativa(domanda)) ? web.controlla(domanda) : null;
+      if (esameWeb?.ammessa) {
+        s.web = { domanda };
+        osservaRicerca?.({regola: 'proposta-ricerca-web', selezionati: []});
+        return {tipo: 'web-proposta', risposta: 'Non ho trovato una guida del CED su questo. Vuoi che cerchi la risposta sul web?',
+          avvisoWeb: 'La domanda verrà inviata a un motore di ricerca esterno, fuori dalla rete del Comune. Non scrivere nomi, dati personali o informazioni riservate.',
+          opzioni: [{testo: 'Sì, cerca sul web', azione: 'web'}, {testo: 'No, apri una richiesta', azione: 'ticket_contesto'}]};
+      }
+      const notaWeb = esameWeb && esameWeb.motivo !== 'vaga' ? 'Ricerca web non eseguita: la domanda riguarda dati personali o sistemi interni del Comune.' : undefined;
       if (senzaFonti) messages[0].content += '\nNessuna guida pertinente e stata trovata per questa domanda. Comprendi anche saluti, sinonimi e frasi colloquiali usando i messaggi reali. Se la richiesta e ambigua, chiedi un solo dettaglio utile per capire che cosa vuole fare l utente. Non inventare procedure, diagnosi, azioni eseguite o configurazioni locali. Non proporre subito un ticket solo perche manca una guida. Se la domanda e estranea all assistenza informatica, richiama brevemente il tuo ambito.';
       for (let tentativo = 0; tentativo < 2; tentativo++) {
         const contestoBreve = piano && messages.reduce((n,m) => n + m.content.length,0) < 4500;
@@ -280,11 +291,27 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         if (!raw) throw errore('Non riesco a formulare una risposta. Usa la guida indicata oppure riprova.', 503);
         const violazioni = [...contesto.verifica(raw, analisi), ...generazione.verifica(raw, piano)];
         osservaRicerca?.({generazione: tentativo + 1, testoGenerato: raw, violazioni, fatti: analisi.fatti, tema: analisi.tema});
-        if (!violazioni.length) return {risposta: raw.slice(0, 1800), tipo: 'chat', fonti};
+        if (!violazioni.length) return {risposta: raw.slice(0, 1800), tipo: 'chat', fonti, notaWeb};
         messages.push({role: 'assistant', content: raw}, {role: 'user', content: 'Correggi la risposta rispettando i fatti e le guide gia forniti. Errori: ' + violazioni.join(' ') + ' Non commentare la correzione: scrivi soltanto la nuova risposta.'});
       }
       osservaRicerca?.({regola: 'generazione-non-conforme', selezionati: []});
-      return {risposta: 'Non riesco a formulare una risposta coerente con le informazioni fornite. Usa «Aiutami a descrivere il problema» per preparare una richiesta al CED.', tipo: 'chat', fonti};
+      return {risposta: 'Non riesco a formulare una risposta coerente con le informazioni fornite. Usa «Aiutami a descrivere il problema» per preparare una richiesta al CED.', tipo: 'chat', fonti, notaWeb};
+    } finally { occupato = false; }
+  }
+  async function rispostaWeb(domanda, signal) {
+    if (occupato) throw errore('Sto rispondendo a un’altra domanda. Riprova tra poco.', 429);
+    occupato = true;
+    try {
+      const risultati = await ricercaWeb.cerca(domanda, {signal});
+      osservaRicerca?.({regola: 'ricerca-web', motore: ricercaWeb.motore, risultati: risultati.length});
+      const opzioni = [{testo: 'Apri una richiesta', azione: 'ticket_contesto'}];
+      if (!risultati.length) return {tipo: 'web', web: true, risposta: 'Sul web non ho trovato risultati utili per questa domanda. Se ti serve aiuto, apri una richiesta al CED.', fonti: [], opzioni};
+      const r = await ai('/api/chat', {model: MODELLO, messages: web.messaggi(domanda, risultati), stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m',
+        options: {temperature: .1, num_ctx: 4096, num_predict: 260, num_thread: 4}}, signal);
+      const raw = String(r.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '').split('<think>')[0].replace(/https?:\/\/\S+/g, '').trim();
+      if (!raw) throw errore('Non riesco a riassumere i risultati del web. Riprova oppure apri una richiesta.', 503);
+      return {tipo: 'web', web: true, risposta: raw.slice(0, 1200), fonti: risultati.slice(0, 3).map(({titolo, url, dominio}) => ({titolo, url, dominio})),
+        avvisoWeb: 'Non ho trovato una guida del CED su questo: è un riassunto automatico di pagine web, non verificato dai Sistemi Informativi. Controlla sulle fonti prima di usarlo.'};
     } finally { occupato = false; }
   }
   async function gestisci(req, {signal} = {}) {
@@ -292,7 +319,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     sessioniOccupate.add(req.sessionID);
     try {
       const body = req.body || {}, azione = body.azione || 'messaggio';
-      if (!['messaggio', 'nuova', 'ticket', 'categoria', 'riassunto', 'ticket_contesto', 'non_risolto'].includes(azione)) throw errore('Azione non valida.');
+      if (!['messaggio', 'nuova', 'ticket', 'categoria', 'riassunto', 'ticket_contesto', 'non_risolto', 'web'].includes(azione)) throw errore('Azione non valida.');
       if (typeof body.testo !== 'undefined' && typeof body.testo !== 'string') throw errore('Scrivi un messaggio di testo.');
       const originale = body.testo || '';
       const testoRiassunto = azione === 'riassunto' ? originale : azione === 'messaggio' ? estraiRichiesta(originale) : null;
@@ -307,6 +334,13 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (domanda.length > 1500 || (azione === 'messaggio' && domanda.length < 2)) throw errore('Scrivi un messaggio tra 2 e 1500 caratteri.');
       let s = stato(req);
       if (azione === 'nuova') { req.session.assistente = null; s = stato(req); return { risposta: 'Nuova conversazione. Come posso aiutarti?', tipo: 'chat' }; }
+      if(azione==='web'){
+        if(!s.web||!s.ultima?.opzioni?.some(o=>o.azione==='web')||body.riferimento!==s.ultima.feedbackId)throw errore('Questa risposta non è più quella attuale.');
+        const domandaWeb=s.web.domanda;delete s.web;
+        const out=await rispostaWeb(domandaWeb,signal);
+        s.ultimoTipo=out.tipo;
+        return risposta(s,'Sì, cerca sul web: '+domandaWeb,out);
+      }
       if(azione==='non_risolto'){
         if(!s.ultima?.opzioni?.some(o=>o.azione==='non_risolto')||body.riferimento!==s.ultima.feedbackId)throw errore('Questa risposta non è più quella attuale.');
         s.verifica={fonti:s.ultima.fonti,tema:s.messaggi.filter(m=>m.ruolo==='utente').map(m=>triage.dominio(m.testo)).filter(Boolean).at(-1)};
@@ -352,7 +386,11 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       else if (avviaBozza) out = procediBozza(s, domanda, 'ticket');
       else if (cercaTicket) out = await cercaRichieste(req, richiestaTicket, riferimentoTicket);
       else if (conoscenza.cercaNumero(domanda) || (s.ultimoTipo === 'contatti' && /^e\b|^anche\b/i.test(domanda))) out = cercaContatti(domanda);
-      else out = await chat(s, domanda);
+      else {
+        // Ricerca breve tipo «telefono carla» o «interno ragioneria»: se la rubrica trova qualcosa mostra i contatti, altrimenti prosegue con la chat.
+        const rubrica = /\b(?:telefon\w*|tel|cell\w*|intern[oi]|recapit\w*|chiamare)\b/.test(norm(domanda)) && parole(domanda).length && parole(domanda).length <= 3 ? cercaContatti(domanda) : null;
+        out = rubrica?.contatti?.length ? rubrica : await chat(s, domanda);
+      }
       s.ultimoTipo = out.tipo;
       return risposta(s, domanda || (azione === 'ticket' ? 'Aiutami a descrivere il problema' : body.categoria || azione), out);
     } finally { sessioniOccupate.delete(req.sessionID); }
