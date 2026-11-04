@@ -2,6 +2,20 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.14.0] - 2026-11-04
+
+### Novità per gli utenti
+
+- Se l’assistente non trova una guida del CED, può chiederti se cercare la risposta sul web: la ricerca parte solo se rispondi «Sì, cerca sul web».
+- Le risposte dal web sono segnate «Risposta dal web · da verificare» e mostrano le fonti consultate da aprire.
+- Le domande con dati personali o sui sistemi interni del Comune non vengono mai cercate sul web.
+
+### Note tecniche
+
+- Ricerca tramite SearXNG locale (127.0.0.1:8888) e riassunto con il modello locale; configurazione `ASSISTENTE_WEB` e `ASSISTENTE_WEB_URL` nel `.env`.
+- Rubrica: le domande brevi come «telefono carla» o «interno ragioneria» cercano subito nei numeri interni.
+- Filtri in `src/assistente-web.js`; interfaccia in `public/mascotte.js` e `public/mascotte.css`.
+
 ## [2.13.0] - 2026-11-04
 
 ### Novità per gli utenti

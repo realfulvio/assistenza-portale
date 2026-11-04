@@ -1,6 +1,6 @@
 {
   "name": "assistenza-portale",
-  "version": "2.13.0",
+  "version": "2.14.0",
   "description": "Portale web per aprire e seguire richieste di assistenza informatica su GLPI, con accesso OpenID Connect (es. Microsoft Entra ID). Pensato per Comuni ed Enti pubblici.",
   "author": "Servizio Sistemi Informativi",
   "license": "EUPL-1.2",
@@ -24,7 +24,7 @@
   "scripts": {
     "start": "node src/server.js",
     "demo": "node scripts/demo.js",
-    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js test/rilascio.test.js test/glpi-client.test.js test/pdf-layout.test.js test/accesso.test.js test/numeri-interni.test.js test/assistente.test.js test/link-utili.test.js test/assistente-contesto.test.js test/assistente-residui.test.js test/admin-panel.test.js test/assistente-contatti.test.js test/assistente-svago.test.js test/assistente-domande.test.js test/meteo.test.js test/meteo-citta.test.js test/meteo-periodo.test.js test/allerte-meteo.test.js test/assistente-riassunto.test.js test/assistente-riassunto-integrazione.test.js test/assistente-riassunto-annulla.test.js test/spot-assistente.test.js test/spot-comandi.test.js test/spot-nomi.test.js test/assistente-feedback.test.js test/assistente-feedback-api.test.js",
+    "test": "node --test test/e2e.test.js test/preferences.test.js test/faq.test.js test/faq-browser.test.js test/stats.test.js test/avatar.test.js test/v2.test.js test/rilascio.test.js test/glpi-client.test.js test/pdf-layout.test.js test/accesso.test.js test/numeri-interni.test.js test/assistente.test.js test/link-utili.test.js test/assistente-contesto.test.js test/assistente-residui.test.js test/admin-panel.test.js test/assistente-contatti.test.js test/assistente-svago.test.js test/assistente-domande.test.js test/meteo.test.js test/meteo-citta.test.js test/meteo-periodo.test.js test/allerte-meteo.test.js test/assistente-riassunto.test.js test/assistente-riassunto-integrazione.test.js test/assistente-riassunto-annulla.test.js test/spot-assistente.test.js test/spot-comandi.test.js test/spot-nomi.test.js test/assistente-feedback.test.js test/assistente-feedback-api.test.js test/assistente-web.test.js",
     "test:aspetto": "node scripts/test-aspetto-browser.js && node scripts/test-meteo-browser.js && node scripts/test-meteo-citta-browser.js && node scripts/test-assistente-dimensioni-browser.js && node scripts/test-assistente-riassunto-browser.js && node scripts/test-spot-browser.js && node scripts/test-assistente-feedback-browser.js",
     "lint": "node scripts/lint.js",
     "template-mail": "node scripts/genera-template-mail.js",
