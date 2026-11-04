@@ -31,11 +31,20 @@ async function main(){
  for(const theme of ['classic','giardino','autunno','dark','contrast','mountain']){
    await p.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);await scrivi('Una freddura');await p.waitForSelector('.msc-ride');assert.equal(await p.locator('.msc-testa').evaluate(e=>getComputedStyle(e).animationName),'msc-risata-testa');
  }
- const c2=await b.newContext(),p2=await c2.newPage();await p2.clock.install();
+ const c2=await b.newContext({timezoneId:'Europe/Rome'}),p2=await c2.newPage();await p2.clock.install({time:new Date('2026-11-04T09:00:00Z')});
  await p2.route('**/api/meteo',r=>r.fulfill({status:503,json:{}}));await p2.route('**/api/allerte-meteo',r=>r.fulfill({json:{stato:'disabilitato'}}));
- await p2.addInitScript(()=>{localStorage.setItem('portale.assistente.meteo.silenzioso','1');localStorage.setItem('portale.assistente.spot.silenzioso','1');});
+ await p2.addInitScript(()=>{Math.random=()=>.5;localStorage.setItem('portale.assistente.meteo.silenzioso','1');localStorage.setItem('portale.assistente.spot.silenzioso','1');});
  await p2.goto(base+'/auth/login');await p2.clock.runFor(9500);await p2.locator('.msc-ride').waitFor({timeout:2000});
- await p2.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));assert.equal(await p2.locator('.msc-ride').count(),0);await c2.close();
+ await p2.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));assert.equal(await p2.locator('.msc-ride').count(),0);
+ await p2.clock.setSystemTime(new Date('2026-11-04T10:00:00Z'));
+ await p2.clock.runFor(17000);
+ await p2.getByText('Le 11??? Non ho ancora fatto la pausa caffè!',{exact:true}).waitFor({timeout:2000});
+ assert.equal(await p2.locator('#mascotte').getAttribute('data-gesto-mascotte'),'sorpresa');
+ assert(await p2.locator('.msc-bocca-sorpresa').isVisible());
+ assert((await p2.locator('.msc-raccordo-collo').getAttribute('d')).startsWith('M'));
+ await p2.clock.runFor(17000);
+ assert.equal(await p2.getByText('Le 11??? Non ho ancora fatto la pausa caffè!',{exact:true}).count(),0);
+ await c2.close();
  assert.deepEqual(errors,[]);console.log('OK: risata e movimento ridotto, pulsanti contestuali, feedback reale persistito, nessun HTML eseguito, admin mobile/axe e verifica.');
  }finally{if(b)await b.close();server.closeAllConnections();ai.closeAllConnections();await new Promise(r=>server.close(r));await new Promise(r=>ai.close(r));}
 }
