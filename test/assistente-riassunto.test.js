@@ -9,6 +9,8 @@ test('riconosce soltanto richieste iniziali esplicite, anche con testo su nuova 
   for (const q of ['riassumi', 'Riassumi questo testo:', 'fammi un riassunto:\n']) assert.equal(estraiRichiesta(q), '');
   assert.equal(estraiRichiesta('riassumi:  Prova\ncon date 03/11/2026.  '), 'Prova\ncon date 03/11/2026.  ');
   assert.equal(estraiRichiesta('riassumi questo testo\nPrima riga\nSeconda'), 'Prima riga\nSeconda');
+  assert.equal(estraiRichiesta('Mi fai un riasunto?'), '');
+  assert.equal(estraiRichiesta('Puoi sintetizzare questo testo: Dato n. 4.\nRiga due.'), 'Dato n. 4.\nRiga due.');
   for (const q of ['non riassumi: prova', 'Non farmi un riassunto', 'Vorrei capire come riassumi: prova', 'riassumi il guasto della stampante', 'Un riassunto sarebbe utile', null]) assert.equal(estraiRichiesta(q), null);
 });
 

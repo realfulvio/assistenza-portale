@@ -101,6 +101,8 @@ function cercaNumero(q) {
   const s = norm(q);
   if (/(?:non riesco|non posso).{0,20}(?:chiam|telefon)/.test(s)) return false;
   if (/telefon[oa].{0,25}(?:non funzion|funzion.{0,8}male|sente|audio|cornetta)|(?:mio |il )telefono.{0,30}(?:male|guast|blocc)/.test(s)) return false;
+  if (/\b(?:numero|numeri) (?:di )?(?:riga|colonna|cella|pagina|errore|protocollo|fattura)\b/.test(s)) return false;
+  if (/^(?:(?:mi (?:dai|dici|fai vedere)|cerco|dammi|vorrei) )?(?:(?:il|un) )?(?:nr\.?|num\.?|recapito|cellulare)(?: (?:di|del|dell|della))?\s+\S/.test(s)) return true;
   return /^\s*\d{2,6}\s*[?!.]?\s*$/.test(s)
     || /\b(?:di chi|a chi)\b.{0,40}\b\d{2,6}\b/.test(s)
     || /\b\d{2,6}\b.{0,40}\b(?:di chi|a chi)\b/.test(s)

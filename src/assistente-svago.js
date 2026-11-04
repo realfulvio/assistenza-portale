@@ -8,12 +8,13 @@ const catalogo = [
 const normalizza = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
 function richiesta(testo, stato) {
-  const q = normalizza(testo);
+  const q = normalizza(testo).replace(/\b(?:barzeleta|barzeletta|barzelleta|barzelette)\b/g,'barzelletta')
+    .replace(/\b(?:fredura|fredurre|fredure)\b/g,'freddura');
   if (/\bnon\b.*(?:raccont|barzellett|freddur|ridere)/.test(q)) return null;
   const genere = /\bfreddur[ae]\b/.test(q) ? 'freddura' : /\bbarzellett[ae]\b/.test(q) ? 'barzelletta' : null;
-  if (genere && (/\b(?:raccont[a-z]*|dimmi|dici|dimmene|fammi|vorrei|voglio|conosci|hai|sparane)\s+(?:(?:una?|delle|qualche|altra|altre|bella|breve|corta|divertente|ancora|per|favore)\s+){0,6}(?:barzellett[ae]|freddur[ae])\b/.test(q)
+  if (genere && (/\b(?:raccont[a-z]*|dire|dirmi|diresti|racconteresti|dimmi|dici|dimmene|fammi|vorrei|voglio|conosci|hai|sparane)\s+(?:(?:una?|delle|qualche|altra|altre|bella|breve|corta|divertente|ancora|per|favore)\s+){0,6}(?:barzellett[ae]|freddur[ae])\b/.test(q)
     || /^(?:una? |un altra |un altro |altre |altra |ancora una? )?(?:barzellett[ae]|freddur[ae])(?: breve| corta| divertente)?$/.test(q))) return genere;
-  if (/^(?:fammi|facci|fateci) ridere$/.test(q)) return 'barzelletta';
+  if (/^(?:fammi|facci|fateci|mi fai|fai) ridere$/.test(q)) return 'barzelletta';
   if (stato.ultimoTipo === 'svago' && /^(?:ancora|un altra|un altro|altra|altre|continua|raccontamene un altra|dimmene un altra|una migliore|piu bella)$/.test(q)) return stato.svago?.tipo || 'barzelletta';
   return null;
 }

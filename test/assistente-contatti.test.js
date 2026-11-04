@@ -42,3 +42,11 @@ test('resta disponibile la ricerca per nome', async () => {
   const out = await servizio().gestisci({ sessionID: 'prova', session: {}, body: { testo: 'numero di Anna Verdi' } });
   assert.deepEqual(out.contatti.map(v => v.nome), ['Ufficio esempio']);
 });
+
+test('contatti in linguaggio naturale, senza inoltrare a Qwen', async () => {
+  for (const testo of ['Mi dici il recapito di Anna Verdi?', 'nr. Anna Verdi']) {
+    const out = await servizio().gestisci({sessionID:'prova',session:{},body:{testo}});
+    assert.equal(out.tipo,'contatti');
+    assert.equal(out.contatti[0]?.nome,'Ufficio esempio');
+  }
+});

@@ -27,16 +27,38 @@
     const candidati=attivi.length>1?attivi.filter(v=>v.id!==s.ultimoId):attivi;
     return candidati[Math.floor(casuale()*candidati.length)];
   }
+  function normalizzaRichiestaSpot(testo){
+    return String(testo||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toLowerCase().replace(/’/g,"'").trim().replace(/\s+/g,' ')
+      .replace(/^(?:ciao|per favore)[,!:]? +/,'')
+      .replace(/[.!?]+$/,'').replace(/[, ]+(?:per favore|grazie)$/,'')
+      .replace(/^(?:mi (?:fai|faresti|puoi|potresti)|puoi|potresti|vorrei|posso|potrei|fammi|fai|voglio) /,'')
+      .trim();
+  }
+  const azioneSpot=/^(?:far(?:mi)? )?(?:veder(?:e)?|guardare|partire|mostra(?:mi|re)?|riproduc(?:i|imi|ere)|avvia(?:mi|re)?|dammi) /;
   function idSpotRichiesto(testo){
-    const q=String(testo||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/[.!?]+$/,'').trim();
-    const m=/^(?:(?:mostra(?:mi)?|fammi vedere|fammi partire)\s+)?(?:(?:lo spot|la pubblicita|spot|pubblicita)(?:\s+di)?\s+)?(cedro|dipendentin(?: pubblico)?|rimbalzoff|ticketol)$/.exec(q);
-    return m?m[1].replace(' pubblico',''):null;
+    const q=normalizzaRichiestaSpot(testo).replace(azioneSpot,'');
+    const m=/^(?:(?:lo spot|la pubblicita|spot|pubblicita)(?: di)? )?(cedro|dipendentin(?: pubblico)?|rimbalzoff|ticketol|rebootol(?: 1000 mg)?)$/.exec(q);
+    return m?m[1].replace(/ (?:pubblico|1000 mg)$/,''):null;
   }
   function richiestaSpot(testo){
-    const q=String(testo||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
-    return idSpotRichiesto(testo)!==null||/^(?:(?:mostra(?:mi)?|fammi(?: vedere| partire)?)\s+)?(?:(?:uno|una|un)\s+)?(?:spot|pubblicita)(?:\s+casuale)?[.!?]*$/.test(q);
+    const q=normalizzaRichiestaSpot(testo).replace(azioneSpot,'');
+    return idSpotRichiesto(testo)!==null||/^(?:(?:uno|una|un|lo|la) )?(?:spot|pubblicita)(?: (?:a caso|casuale|qualsiasi))?$/.test(q);
   }
-  const api={normalizza,scegli,richiestaSpot,idSpotRichiesto,PRIMO_RITARDO,INTERVALLO};if(typeof document==='undefined')return api;
+  function richiestaElencoSpot(testo){
+    const q=normalizzaRichiestaSpot(testo).replace(azioneSpot,'');
+    const oggetto='(?:spot(?: pubblicitari)?|pubblicita)(?: (?:disponibili|attivi|attive))?';
+    const plurale='(?:tutti gli |tutte le |gli |le )';
+    const indice="(?:(?:la |il |un |l')?(?:lista|elenco|catalogo)(?: di)? |elenca(?:mi|re)? )";
+    return new RegExp('^(?:'+[
+      indice+'(?:'+plurale+'|degli |delle )?'+oggetto,
+      plurale+oggetto+'(?: che avete| che ci sono)?',
+      '(?:(?:sapere|dirmi|dire) )?(?:quali|che) (?:sono )?(?:gli |le )?'+oggetto+'(?: ci sono| avete| hai| sono disponibili)?',
+      '(?:spot|pubblicita) disponibili'
+    ].join('|')+')$').test(q);
+  }
+  const spotRiproducibili=(lista,ora)=>lista.filter(v=>v.video&&(v.dal==null||ora>=v.dal)&&(v.al==null||ora<v.al));
+  const api={normalizza,scegli,richiestaSpot,idSpotRichiesto,richiestaElencoSpot,PRIMO_RITARDO,INTERVALLO};if(typeof document==='undefined')return api;
   function avvia(){
     const mascotte=document.getElementById('mascotte');if(!mascotte)return;
     const BASE=document.querySelector('meta[name=base]')?.content||'',CHIAVE='portale.assistente.spot';
@@ -100,7 +122,7 @@
     api.prova=id=>mostra(lista.find(v=>v.id===id)||lista[0],true,{richiesto:true});
     api.avviaSpot=(id=null)=>{
       if(document.hidden||mascotte.hidden)return false;
-      const ora=Date.now(),attivi=lista.filter(v=>v.video&&(v.dal==null||ora>=v.dal)&&(v.al==null||ora<v.al));
+      const ora=Date.now(),attivi=spotRiproducibili(lista,ora);
       if(!attivi.length)return false;
       const candidati=id?attivi.filter(v=>v.id===id):attivi.length>1?attivi.filter(v=>v.id!==leggi('.ultimo')):attivi;
       if(!candidati.length)return false;
@@ -111,7 +133,10 @@
       return mostra(voce,true,{richiesto:true,tornaAllaChat});
     };
     api.avviaCasuale=()=>api.avviaSpot();
-    fetch(BASE+'/api/spot-assistente',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():{}).then(d=>{lista=normalizza(d);document.dispatchEvent(new Event('assistente:spot-pronti'));}).catch(()=>{});
+    const caricamento=fetch(BASE+'/api/spot-assistente',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(10000)})
+      .then(async r=>{if(!r.ok)return false;lista=normalizza(await r.json());document.dispatchEvent(new Event('assistente:spot-pronti'));return true;})
+      .catch(()=>false);
+    api.elencoSpot=async()=>await caricamento ? spotRiproducibili(lista,Date.now()).map(({id,titolo})=>({id,titolo})) : null;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',avvia);else avvia();return api;
 });

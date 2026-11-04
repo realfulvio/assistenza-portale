@@ -59,3 +59,13 @@ test('la domanda sul tempo passa dal servizio meteo prima delle guide e del mode
   req.body={testo:'Raccontami una barzelletta sul meteo'};
   assert.equal((await servizio.gestisci(req)).tipo,'svago');
 });
+
+test('meteo colloquiale, refusi e città senza preposizione', () => {
+  const {richiesta}=require('../src/meteo');
+  for(const testo of ['meto domnai Ferrara','che temppo fa domani Ferrara','Mi dici il metteo a Ferrara domani?']){
+    const out=richiesta(testo);
+    assert.equal(out?.luogo,'ferrara',testo);
+    assert.equal(out?.giorno,1,testo);
+  }
+  assert.equal(richiesta('Il metteo non si apre sul computer'),null);
+});

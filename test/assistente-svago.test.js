@@ -8,7 +8,7 @@ function ambiente() {
   return {servizio, req, invia: async testo => {req.body={testo};return servizio.gestisci(req);}};
 }
 
-for (const testo of ['Raccontami una barzelletta', 'Mi dici una freddura?', 'Fammi ridere', 'Una barzelletta', 'Un’altra freddura']) {
+for (const testo of ['Raccontami una barzelletta', 'Mi dici una freddura?', 'Fammi ridere', 'Una barzelletta', 'Un’altra freddura', 'mi racconti una barzeleta?', 'Mi diresti una fredura?', 'Mi fai ridere?']) {
   test(`richiesta di svago: ${testo}`, async () => {
     const out = await ambiente().invia(testo);
     assert.equal(out.tipo, 'svago');

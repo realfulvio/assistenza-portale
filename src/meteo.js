@@ -2,7 +2,12 @@
 const FONTE = 'https://open-meteo.com/';
 const normalizza = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’']/g, ' ').trim();
 function richiesta(testo, stato = {}, localita = '') {
-  const originale = String(testo || '').toLowerCase().trim().replace(/[?!.]+$/, '').trim();
+  const originale = String(testo || '').toLowerCase().trim().replace(/[?!.]+$/, '').trim()
+    .replace(/\b(?:meto|metteo|meteo[o]+)\b/g,'meteo')
+    .replace(/\b(?:previsionne|previzioni|previsoni)\b/g,'previsioni')
+    .replace(/\b(?:domnai|domanni)\b/g,'domani')
+    .replace(/\b(?:dopodmani|dopodomanni)\b/g,'dopodomani')
+    .replace(/\bche temppo\b/g,'che tempo');
   const q = normalizza(originale);
   const numeri = {un:1,uno:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7};
   const prossimi = q.match(/\bprossim[ioe]\s+(?:(\d+|due|tre|quattro|cinque|sei|sette)\s+)?giorni\b|\bgiorni\s+prossim[ioe]\b/);
@@ -18,10 +23,10 @@ function richiesta(testo, stato = {}, localita = '') {
   if (/\b(?:barzellett[ae]|freddur[ae])\b/.test(q)) return null;
   if (/\b(mail|email|outlook|computer|stampante|ticket|sito|link|allegato|password|token|credenziali|segreto)\b|non funziona|non si apre/.test(q)) return null;
   const seguito = stato.ultimoTipo === 'meteo' && /^(?:(?:e\s+)?(?:oggi|domani|dopodomani)$|(?:e\s+)?(?:a|in)\s+\S|(?:e\s+)?(?:(?:nei|per i)\s+)?(?:prossim[ioe]\b|tra\b|fra\b))/.test(q);
-  if (!seguito && !/\b(meteo|previsioni|piove|pioggia|piovera|piovere|nevica|nevichera|ombrello)\b|che tempo (?:fa|fara|c e)|com e (?:il )?tempo|come sara (?:il )?tempo|quanti gradi|(?:temperatura|vento|sole|nebbia).*(?:oggi|domani)|(?:oggi|domani).*(?:temperatura|vento|sole|nebbia)/.test(q)) return null;
+  if (!seguito && !/\b(meteo|previsioni|piove|pioggia|piovera|piovere|nevica|nevichera|ombrello)\b|che tempo (?:fa|fara|c\s*e|ce)|come (?:va|si mette) (?:il )?meteo|che meteo|com e (?:il )?tempo|come sara (?:il )?tempo|quanti gradi|(?:temperatura|vento|sole|nebbia).*(?:oggi|domani)|(?:oggi|domani).*(?:temperatura|vento|sole|nebbia)/.test(q)) return null;
   const nonLuogo = /^(?:(?:la|il|le|i)\s+)?(?:oggi|domani|dopodomani|pioggia|neve|sole|vento|nebbia|giorno|notte|favore|piacere|che|quanto|pranzo|cena|mia|mio|miei|mie|tua|tuo|nostro|nostra|visita|viaggio|appuntamento|medico|ospedale|casa|ufficio|azienda)\b/;
   const candidati = [...originale.matchAll(/(?=(?:^|\s)(?:a|ad|in|per|di)\s+(.+))/gu)].map(m => m[1]);
-  const breve = originale.replace(/^(?:il\s+)?(?:meteo|previsioni(?:\s+meteo)?)\s+/, '');
+  const breve = originale.replace(/^(?:(?:mi (?:dici|puoi dire)|puoi dirmi|vorrei sapere)\s+)?(?:(?:il\s+)?(?:meteo|previsioni(?:\s+meteo)?)|che tempo (?:fa|farà|fara|c[’']è|ce)|come sarà il tempo)\s+/, '');
   if (breve !== originale) candidati.push(breve);
   let luogo, chiediLuogo = false;
   for (let nome of candidati) {
