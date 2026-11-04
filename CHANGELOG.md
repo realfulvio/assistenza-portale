@@ -2,6 +2,12 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.11.2] - 2026-11-04
+
+### Novità per gli utenti
+
+- Aggiunto lo spot parodia Ticketol. Scrivi «Ticketol» per riprodurlo nella nuvoletta oppure usa «spot» per sceglierne uno casuale.
+
 ## [2.11.1] - 2026-11-03
 
 ### Novità per gli utenti
