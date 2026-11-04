@@ -34,13 +34,15 @@ final class Assistente
         'timeout'    => '150',
         'interventi' => '4',
         'num_thread' => '4',
+        // embeddinggemma dà ~0,75-0,80 anche a chiamate senza nulla in comune (prova del 04/11 sul ticket 89):
+        // sotto 0,82 erano solo falsi positivi. Stessa soglia calibrata per le guide del portale.
+        'soglia_simili' => '0.82',
     ];
 
     private const MAX_DESCRIZIONE = 1500;
     private const MAX_INTERVENTO  = 600;
     private const MAX_CANDIDATI   = 400;
     private const NUOVI_PER_GIRO  = 64;
-    private const SOGLIA_SIMILI   = 0.55;
 
     /** @return array<string, string> */
     public static function config(): array
@@ -504,9 +506,10 @@ TXT;
         }
         arsort($punteggi);
 
+        $soglia = (float) $cfg['soglia_simili'];
         $risultati = [];
         foreach ($punteggi as $id => $s) {
-            if ($s < self::SOGLIA_SIMILI || count($risultati) >= 3) {
+            if ($s < $soglia || count($risultati) >= 3) {
                 break;
             }
             $altro = new Ticket();
