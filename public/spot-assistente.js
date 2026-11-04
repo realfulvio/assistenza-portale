@@ -29,7 +29,7 @@
   }
   function idSpotRichiesto(testo){
     const q=String(testo||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/[.!?]+$/,'').trim();
-    const m=/^(?:(?:mostra(?:mi)?|fammi vedere|fammi partire)\s+)?(?:(?:lo spot|la pubblicita|spot|pubblicita)(?:\s+di)?\s+)?(cedro|dipendentin(?: pubblico)?|rimbalzoff)$/.exec(q);
+    const m=/^(?:(?:mostra(?:mi)?|fammi vedere|fammi partire)\s+)?(?:(?:lo spot|la pubblicita|spot|pubblicita)(?:\s+di)?\s+)?(cedro|dipendentin(?: pubblico)?|rimbalzoff|ticketol)$/.exec(q);
     return m?m[1].replace(' pubblico',''):null;
   }
   function richiestaSpot(testo){

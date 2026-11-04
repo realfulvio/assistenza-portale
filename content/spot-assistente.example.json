@@ -31,6 +31,16 @@
       "poster": "/media/spot/rimbalzoff-poster.png",
       "descrizioneVideo": "Spot comico di circa venti secondi ambientato in ufficio, con un presentatore e la confezione di Rimbalzoff. Parodia: prodotto inventato.",
       "attivo": false
+    },
+    {
+      "id": "ticketol",
+      "titolo": "Ticketol",
+      "parodia": true,
+      "testo": "Ticketol. Una parodia sui ticket di assistenza.",
+      "video": "/media/spot/ticketol.mp4",
+      "poster": "/media/spot/ticketol-poster.png",
+      "descrizioneVideo": "Spot animato di dieci secondi con la confezione del prodotto immaginario Ticketol.",
+      "attivo": false
     }
   ]
 }
