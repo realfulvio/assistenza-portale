@@ -66,7 +66,7 @@ function creaRiassuntore({ ai, modello, keepAlive, now = Date.now }) {
         model: modello, stream: false, think: false,
         ...(keepAlive === undefined ? {} : { keep_alive: keepAlive }),
         messages: [{ role: 'system', content: SISTEMA + (finale ? ' Sintesi finale: massimo 5 punti e 140 parole.' : ' Sintesi del frammento: massimo 3 punti e 60 parole.') }, { role: 'user', content: `<documento>\n${documento}\n</documento>` }],
-        options: { num_ctx: 4096, num_thread: 4, num_predict: finale ? 512 : 256, temperature: 0.1 }
+        options: { num_ctx: 4096, num_thread: 4, num_predict: finale ? 512 : 256, temperature: 0.1, presence_penalty: 0 }
       };
       let interrompi;
       const interrotto = new Promise((_, reject) => {
