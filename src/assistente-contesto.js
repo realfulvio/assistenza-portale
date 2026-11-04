@@ -146,13 +146,14 @@ function analizza(domanda, storia = []) {
   }
   return {tema, fatti, messaggi, guide: guide[tema], scheda: schede[tema] && 'scheda-' + schede[tema], regole, domande: domande.slice(0, 2), compito, fase};
 }
+const SOGLIA_GUIDE = Number(process.env.ASSISTENTE_SOGLIA_GUIDE) || 0.82; // calibrata 2026-11-04: pertinenti >= 0.878, estranee <= 0.817
 function seleziona(graduatoria, a) {
   if (a.guide !== undefined) {
     const ids = new Set([...a.guide, a.scheda].filter(Boolean));
     return graduatoria.filter(x => ids.has(x.d.id)).sort((x,y) => (y.d.tipo === 'guida') - (x.d.tipo === 'guida')).slice(0, 3);
   }
   // Una scheda non deve escludere una guida pertinente solo perche non collegata.
-  return graduatoria.filter(x => x.d.tipo !== 'esempio' && x.score >= .4).slice(0, 2);
+  return graduatoria.filter(x => x.d.tipo !== 'esempio' && x.score >= SOGLIA_GUIDE).slice(0, 2);
 }
 function verifica(testo, a) {
   const q = norm(testo), errori = [];

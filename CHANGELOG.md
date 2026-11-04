@@ -2,6 +2,17 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [Non rilasciato]
+
+### Assistente
+
+- Soglia di pertinenza delle guide portata da 0,4 a 0,82 (`ASSISTENTE_SOGLIA_GUIDE`): le domande estranee non ricevono più una guida a caso.
+- `presence_penalty: 0` nelle chiamate di chat e del riassunto, al posto dell'1,5 del Modelfile di qwen.
+
+### GLPI
+
+- Nuovo plugin `deploy/glpi/plugins/assistenteai` per GLPI 11.0.x: riquadro «Assistente» in fondo al pannello destro della chiamata con riassunto, bozza di risposta nell'editor, chiamate simili risolte e proposta di categoria e urgenza. Usa l'Ollama locale del portale e i permessi del tecnico collegato.
+
 ## [2.13.0] - 2026-11-04
 
 ### Novità per gli utenti
