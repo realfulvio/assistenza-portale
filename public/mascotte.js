@@ -104,7 +104,7 @@
       csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '', modo:'chat', testoRiassunto:'', risultatoRiassunto:'', attesaRiassunto:false, erroreRiassunto:'', controllerRiassunto:null };
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, ultimaBattuta = null;
-    let timerRisata=null,timerFineRisata=null;
+    let timerRisata=null,timerFineRisata=null,timerGesto=null,giornoPausa='';
     let notaMeteo = null, timerMeteo = null, timerChiudiMeteo = null, ultimoInput = 0, meteoInCorso = false;
     let meteoIniziale = true;
     const CHIAVE_METEO = 'portale.assistente.meteo';
@@ -186,6 +186,7 @@
     fumetto.append(testata, corpo, maniglia);
     radiceEl.append(fumetto, bottone);
     document.body.append(radiceEl);
+    window.MovimentoMascotte?.(radiceEl);
     document.documentElement.classList.add('msc-attiva');
 
     // «Mostra l'assistente» nel piè di pagina e in «Aspetto»: l'unico modo per riaverlo dopo averlo nascosto
@@ -223,11 +224,34 @@
       fermaRisata();
       timerRisata=setTimeout(()=>{
         if(document.hidden||radiceEl.hidden||notaMeteo||radiceEl.dataset.spotVisibile)return;
+        fermaGesto();
         radiceEl.classList.add('msc-ride');timerFineRisata=setTimeout(fermaRisata,2200);
       },700);
     }
     window.addEventListener('pagehide',fermaRisata);
-    function togliNota() { fermaRisata(); clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } radiceEl.dispatchEvent(new Event('assistente:chiudi-note')); }
+    function fermaGesto(){
+      clearTimeout(timerGesto);
+      delete radiceEl.dataset.gestoMascotte;
+    }
+    function gesto(tipo,durata){
+      fermaGesto();
+      radiceEl.dataset.gestoMascotte=tipo;
+      timerGesto=setTimeout(fermaGesto,durata);
+    }
+    function oraDellaPausa(){
+      const ora=new Date();
+      if(ora.getHours()!==11||occupatoMeteo())return false;
+      const giorno=[ora.getFullYear(),ora.getMonth()+1,ora.getDate()].join('-');
+      const chiave=CHIAVE+'.pausa-caffe';
+      if(giornoPausa===giorno)return false;
+      try{
+        if(localStorage.getItem(chiave)===giorno)return false;
+        localStorage.setItem(chiave,giorno);
+      }catch{ /* una volta per pagina se la memoria del browser non è disponibile */ }
+      giornoPausa=giorno;
+      return true;
+    }
+    function togliNota() { fermaRisata(); fermaGesto(); clearTimeout(timerNota); if (nota) { nota.remove(); nota = null; } radiceEl.dispatchEvent(new Event('assistente:chiudi-note')); }
     function programmaBattuta(ritardo = 12000 + Math.random() * 4000) {
       clearTimeout(timerBattuta);
       if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso || radiceEl.dataset.spotVisibile || radiceEl.dataset.spotVideo) return;
@@ -239,10 +263,13 @@
       if (document.hidden || radiceEl.hidden || stato.aperta || notaMeteo || meteoInCorso || radiceEl.dataset.spotVisibile || radiceEl.dataset.spotVideo) return;
       if (!radiceEl.dispatchEvent(new CustomEvent('assistente:turno', {cancelable:true,detail:{occupato:occupatoMeteo(),attesaMeteo:meteoIniziale && document.body.dataset.meteoAttivo==='1' && leggiMeteo('.silenzioso')!=='1'}}))) return;
       togliNota();
-      ultimaBattuta = scegliBattuta(BATTUTE,ultimaBattuta);
-      nota = h('p', { className: 'msc-nota', textContent: ultimaBattuta });
-      nota.setAttribute('aria-hidden', 'true');
-      radiceEl.append(nota);ridi();
+      const pausa=oraDellaPausa();
+      if(!pausa)ultimaBattuta=scegliBattuta(BATTUTE,ultimaBattuta);
+      nota=h('p',{className:'msc-nota',textContent:pausa?'Le 11??? Non ho ancora fatto la pausa caffè!':ultimaBattuta});
+      if(pausa)nota.setAttribute('role','status');
+      else nota.setAttribute('aria-hidden','true');
+      radiceEl.append(nota);
+      if(pausa)gesto('sorpresa',4600);else ridi();
       timerNota = setTimeout(togliNota, 6000);
       programmaBattuta();
     }
@@ -711,6 +738,7 @@
       clearTimeout(timerBattuta);
       togliNota();
       stato.aperta = true;
+      gesto('saluto',1900);
       radiceEl.dataset.aperta = 'true';
       bottone.setAttribute('aria-expanded', 'true');
       fumetto.hidden = false;

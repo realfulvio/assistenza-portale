@@ -2,6 +2,13 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.13.0] - 2026-11-04
+
+### Novità per gli utenti
+
+- Mascotte originale rifinita con movimenti più espressivi, collo raccordato, mano sul manico e tazza davanti al viso durante il sorso.
+- Tra le 11 e mezzogiorno la mascotte può sobbalzare e dire «Le 11??? Non ho ancora fatto la pausa caffè!», una volta al giorno nel browser.
+
 ## [2.12.0] - 2026-11-04
 
 ### Novità per gli utenti

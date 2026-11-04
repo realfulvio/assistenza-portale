@@ -234,3 +234,92 @@ html[data-motion=reduce] .mascotte.msc-ride :is(.msc-testa,.msc-busto,.msc-tazza
 @media(prefers-reduced-motion:reduce){html[data-motion=system] .mascotte.msc-ride :is(.msc-testa,.msc-busto,.msc-tazza){animation:none!important;transform:none}}
 
 #feedback-contenuto select,#feedback-contenuto button{min-height:44px;font:inherit;padding:.5rem .8rem;border:1px solid var(--line);border-radius:.5rem;color:var(--text);background:var(--card)}#feedback-contenuto button:not(:disabled){cursor:pointer}#feedback-contenuto button:disabled{opacity:.55}#feedback-contenuto :is(select,button):focus-visible{outline:3px solid var(--focus,var(--primary));outline-offset:3px}
+
+
+/* Disegno rifinito e movimenti della mascotte. */
+.mascotte.msc-rifinita {--ciclo:7.6s}
+.mascotte.msc-rifinita .msc-testa {animation:msc-movimento-testa var(--ciclo) ease-in-out infinite}
+.mascotte.msc-rifinita .msc-busto {translate:0 -1.6px;animation:msc-movimento-spalle var(--ciclo) ease-in-out infinite}
+.mascotte.msc-rifinita .msc-tazza {
+  transform-origin:84px 84px; animation:msc-movimento-tazza var(--ciclo) ease-in-out infinite;
+}
+.mascotte.msc-rifinita[data-aperta=true] .msc-testa {animation:msc-movimento-ascolta 3.4s ease-in-out infinite}
+.mascotte.msc-rifinita[data-aperta=true] .msc-tazza {animation:none}
+.mascotte.msc-rifinita[data-gesto-mascotte=saluto] .msc-testa {animation:msc-movimento-saluto 1.9s ease-in-out both}
+.mascotte.msc-rifinita.msc-ride .msc-testa {animation:msc-risata-testa .34s ease-in-out 6}
+.mascotte.msc-rifinita.msc-ride .msc-busto {animation:msc-risata-spalle .34s ease-in-out 6}
+.mascotte.msc-rifinita.msc-ride .msc-tazza {animation:msc-risata-tazza .34s ease-in-out 6}
+@keyframes msc-movimento-testa {
+  0%,100%{transform:none}
+  12%{transform:translate(-2px,-2px) rotate(-8deg)}
+  25%{transform:translate(2px,1px) rotate(5deg)}
+  39%,51%{transform:translate(3px,1px) rotate(6deg)}
+  65%{transform:translate(-1px,-3px) rotate(-5deg)}
+  81%{transform:none}
+}
+@keyframes msc-movimento-spalle {0%,100%{transform:none}24%,50%{transform:translateY(-2px) rotate(-2deg)}64%{transform:translateY(-3px) rotate(2deg)}}
+@keyframes msc-movimento-tazza {
+  0%,22%,74%,100%{transform:none}
+  37%,51%{transform:translate(-18px,-12px) rotate(-8deg)}
+  59%{transform:translate(-6px,-6px) rotate(-4deg)}
+}
+@keyframes msc-movimento-ascolta {
+  0%,100%{transform:none}
+  28%{transform:translate(-2px,-3px) rotate(-7deg)}
+  46%{transform:translate(1px,2px) rotate(6deg)}
+  63%{transform:translateY(1px) rotate(-2deg)}
+  78%{transform:translateY(-1px) rotate(3deg)}
+}
+@keyframes msc-movimento-saluto {0%,100%{transform:none}22%{transform:translateY(-4px) rotate(-10deg)}48%{transform:translateY(3px) rotate(8deg)}73%{transform:translateY(-3px) rotate(-6deg)}}
+@keyframes msc-risata-testa {0%,100%{transform:rotate(-6deg)}50%{transform:translateY(-5px) rotate(7deg)}}
+@keyframes msc-risata-spalle {0%,100%{transform:none}50%{transform:translateY(-4px) scaleY(1.04)}}
+@keyframes msc-risata-tazza {0%,100%{transform:rotate(3deg)}50%{transform:translateY(-4px) rotate(-7deg)}}
+
+/* Raccordi disegnati dietro gli elementi che collegano. */
+.mascotte.msc-rifinita .msc-testa .msc-collo {display:none}
+.msc-raccordo-collo {fill:#efbd94;stroke:#d49d76;stroke-width:.7}
+.msc-ombra-collo {fill:#d8a27c}
+.msc-raccordo-manica {fill:none;stroke:#c7d2df;stroke-width:13;stroke-linecap:round}
+.msc-raccordo-tessuto {fill:none;stroke:#f8fafc;stroke-width:10.5;stroke-linecap:round}
+.msc-raccordo-cuffia {fill:none;stroke:#dbe5ed;stroke-width:9;stroke-linecap:round}
+[data-theme=contrast] .msc-raccordo-collo {stroke:#000;stroke-width:1.6}
+[data-theme=contrast] .msc-raccordo-manica {stroke:#000}
+
+
+/* La tazza, il manico e la presa ruotano come un unico oggetto. */
+.msc-tazza-rifinita {display:none}
+.mascotte.msc-rifinita .msc-tazza-rifinita {display:inline}
+.mascotte.msc-rifinita .msc-tazza > :is(rect.msc-mug,path.msc-manico,circle.msc-pelle) {display:none}
+.msc-corpo-tazza {stroke:#bf8b28;stroke-width:.6}
+.msc-bordo-tazza {fill:#ffe5a3;stroke:#b57b24;stroke-width:.65}
+.msc-caffe {fill:#79502c}
+.msc-riflesso-tazza {fill:none;stroke:#fff4d5;stroke-width:1.05;stroke-linecap:round;opacity:.7}
+.msc-presa-pelle {fill:#f1c497;stroke:#bd8968;stroke-width:.62;stroke-linejoin:round}
+.msc-presa-dettagli {fill:none;stroke:#c99574;stroke-width:.55;stroke-linecap:round}
+[data-theme=contrast] .msc-presa-pelle {stroke:#000;stroke-width:1.2}
+
+
+.msc-occhi-risata,.msc-sorriso {display:none}
+.mascotte.msc-rifinita.msc-ride .msc-occhi-risata,
+.mascotte.msc-rifinita[data-gesto-mascotte=saluto] .msc-sorriso {display:inline}
+.mascotte.msc-rifinita.msc-ride :is(.msc-palpebra,.msc-sorriso,.msc-zzz),
+.mascotte.msc-rifinita[data-gesto-mascotte=saluto] .msc-bocca {display:none}
+.msc-linea-occhi,.msc-linea-sorriso {fill:none;stroke:#6e4733;stroke-width:1.8;stroke-linecap:round}
+.mascotte.msc-rifinita:not([data-aperta=true]) .msc-vapore-raccordato {animation:msc-movimento-vapore var(--ciclo) linear infinite}
+@keyframes msc-movimento-vapore {0%,21%,70%,100%{opacity:1}29%,63%{opacity:0}}
+
+/* Sorpresa: occhi aperti, sopracciglia alte e scatto coordinato di busto e tazza. */
+.msc-bocca-sorpresa {display:none}
+.msc-bocca-sorpresa-interno {fill:#71352e}
+.msc-bocca-sorpresa-luce {fill:#ed948e}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-testa {animation:msc-movimento-sorpresa-testa 4.6s ease-out both}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-busto {animation:msc-movimento-sorpresa-spalle 4.6s ease-out both}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-tazza {animation:msc-movimento-sorpresa-tazza 4.6s ease-out both}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] :is(.msc-palpebra,.msc-chiude,.msc-bocca,.msc-risata-bocca,.msc-occhi-risata,.msc-zzz) {display:none}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-bocca-sorpresa {display:inline}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-bianco {transform-box:fill-box;transform-origin:center;transform:translateY(-1.1px) scaleY(1.30)}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-pupilla {transform-box:fill-box;transform-origin:center;transform:translateY(-2.1px) scale(.73)}
+.mascotte.msc-rifinita[data-gesto-mascotte=sorpresa] .msc-sopracciglia {transform:translateY(-4px)}
+@keyframes msc-movimento-sorpresa-testa {0%,100%{transform:none}5%{transform:translateY(-7px) rotate(-6deg)}11%,76%{transform:translateY(-3px) rotate(-2deg)}90%{transform:none}}
+@keyframes msc-movimento-sorpresa-spalle {0%,100%{transform:none}6%{transform:translateY(-4px)}15%,76%{transform:translateY(-1px)}90%{transform:none}}
+@keyframes msc-movimento-sorpresa-tazza {0%,100%{transform:none}4%{transform:translate(2px,-7px) rotate(10deg)}8%{transform:translate(0,-4px) rotate(-6deg)}12%{transform:translate(2px,-4px) rotate(6deg)}18%,76%{transform:translate(1px,-3px) rotate(3deg)}90%{transform:none}}
