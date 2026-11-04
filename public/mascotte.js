@@ -100,7 +100,7 @@
   const scrivi = (nascosta) => { try { if (nascosta) localStorage.setItem(CHIAVE, 'nascosta'); else localStorage.removeItem(CHIAVE); } catch { /* memoria del browser non disponibile */ } };
 
   function avvia() {
-    const stato = { aperta: false, accesso: null, errore: false,
+    const stato = { catalogoSpot:null, aperta: false, accesso: null, errore: false,
       csrf: '', utente: '', messaggi: [], ultima: null, testo: '', attesa: false, erroreChat: '', modo:'chat', testoRiassunto:'', risultatoRiassunto:'', attesaRiassunto:false, erroreRiassunto:'', controllerRiassunto:null };
     const BATTUTE = ['non si può fare', 'Chiedimi una barzelletta o una freddura', 'non subito', '...e non gratis', 'cinque minuti e arrivo', 'caffè?', 'hai aperto il ticket?'];
     let nota = null, timerNota = null, timerBattuta = null, ultimaBattuta = null;
@@ -372,8 +372,8 @@
       try {
         const me = await prendi('/me');
         stato.accesso = !me.nonAutenticato;
-        if (!stato.accesso) { pulisciRiassunto(); stato.messaggi = []; stato.ultima = null; stato.testo = ''; stato.utente = ''; stato.csrf = ''; return; }
-        if (stato.utente !== me.dati.email) { pulisciRiassunto(); stato.messaggi = []; stato.ultima = null; stato.testo = ''; }
+        if (!stato.accesso) { stato.catalogoSpot=null; pulisciRiassunto(); stato.messaggi = []; stato.ultima = null; stato.testo = ''; stato.utente = ''; stato.csrf = ''; return; }
+        if (stato.utente !== me.dati.email) { stato.catalogoSpot=null; pulisciRiassunto(); stato.messaggi = []; stato.ultima = null; stato.testo = ''; }
         stato.utente = me.dati.email;
         stato.csrf = me.dati.csrf;
         if (!stato.attesa) {
@@ -415,8 +415,7 @@
       stato.controllerRiassunto?.abort();stato.controllerRiassunto=null;stato.testoRiassunto='';stato.risultatoRiassunto='';stato.erroreRiassunto='';stato.modo='chat';
     }
     function testoDaRichiesta(testo) {
-      const m=String(testo||'').match(/^\s*(?:riassumi(?: questo testo)?|fammi un riassunto)(?:(?:[ \t]*:[ \t]*|[ \t]*\r?\n)[ \t\r\n]*([\s\S]*)|[ \t]*)$/i);
-      return m ? (m[1]||'') : null;
+      return window.ComandiAssistente?.estraiRiassunto(testo) ?? null;
     }
     function apriRiassunto() {stato.modo='riassunto';stato.erroreRiassunto='';disegna();corpo.querySelector('#msc-testo-riassunto')?.focus({preventScroll:true});}
     function disegnaRiassunto() {
@@ -471,12 +470,24 @@
     }
     async function inviaChat(dati) {
       if (stato.attesa) return;
+      const spot=window.SpotAssistente;
+      if((!dati.azione||dati.azione==='messaggio')&&spot?.richiestaElencoSpot?.(dati.testo)){
+        const catalogo={caricamento:true,elenco:null};
+        stato.catalogoSpot=catalogo;
+        stato.testo='';stato.erroreChat='';
+        aggiornaChat();
+        catalogo.elenco=await spot.elencoSpot();
+        catalogo.caricamento=false;
+        if(stato.aperta&&stato.catalogoSpot===catalogo)aggiornaChat();
+        return;
+      }
       if((!dati.azione||dati.azione==='messaggio')&&window.SpotAssistente?.richiestaSpot(dati.testo)){
         const id=window.SpotAssistente.idSpotRichiesto(dati.testo);
         if(window.SpotAssistente.avviaSpot(id)){stato.testo='';stato.erroreChat='';}
         else stato.erroreChat=id?'Lo spot richiesto non è disponibile al momento.':'Non ci sono spot disponibili al momento. Riprova tra poco.';
         aggiornaChat();return;
       }
+      stato.catalogoSpot=null;
       const inline=(!dati.azione||dati.azione==='messaggio')?testoDaRichiesta(dati.testo||''):null;
       if(inline!==null){
         stato.testo='';stato.testoRiassunto=inline;stato.risultatoRiassunto='';apriRiassunto();
@@ -606,7 +617,30 @@
         if (assistente) { bolla.append(dettagliRisposta(m.dettagli, i === stato.messaggi.length - 1)); ultimaRisposta = bolla; }
         messaggi.append(bolla);
       }
-      if (!stato.messaggi.length) {
+      if(stato.catalogoSpot){
+        const {caricamento,elenco}=stato.catalogoSpot;
+        const testo=caricamento?'Carico gli spot…':!elenco?'Non riesco a caricare il catalogo degli spot.':elenco.length?'Scegli uno spot da riprodurre.':'Non ci sono spot disponibili al momento.';
+        const bolla=h('article',{className:'msc-messaggio msc-risposta'},
+          h('b',{className:'msc-autore',textContent:'Assistente'}),
+          h('h3',{textContent:'Spot disponibili'}),
+          h('p',{className:'msc-messaggio-testo',textContent:testo}));
+        if(elenco?.length){
+          const azioni=h('div',{className:'msc-opzioni'});
+          for(const {id,titolo} of elenco){
+            const b=h('button',{type:'button',className:'msc-chat-b',textContent:titolo});
+            b.addEventListener('click',()=>{
+              if(!window.SpotAssistente.avviaSpot(id)){
+                stato.erroreChat='Lo spot richiesto non è disponibile al momento.';
+                aggiornaChat();
+              }
+            });
+            azioni.append(b);
+          }
+          bolla.append(azioni);
+        }
+        messaggi.append(bolla);ultimaRisposta=bolla;
+      }
+      if (!stato.messaggi.length && !stato.catalogoSpot) {
         const esempio = (label, domanda) => {
           const b = h('button', { type: 'button', className: 'msc-esempio', textContent: label });
           b.addEventListener('click', () => { stato.testo = domanda; aggiornaChat(); corpo.querySelector('#msc-domanda').focus({ preventScroll: true }); });
@@ -626,8 +660,9 @@
       campo.addEventListener('input', () => { stato.testo = campo.value; });
       campo.addEventListener('paste',e=>{
         const t=e.clipboardData?.getData('text/plain');if(t===undefined)return;
-        if(/^\s*(?:riassumi(?: questo testo)?|fammi un riassunto)(?:\s*:|[ \t]*\n)/i.test(t)){
-          e.preventDefault();const documento=testoDaRichiesta(t)||'';
+        const documento=testoDaRichiesta(t);
+        if(documento!==null&&/[:\r\n]/.test(t)){
+          e.preventDefault();
           if(documento.length>6000||new TextEncoder().encode(documento).length>12000){stato.erroreChat='Testo troppo lungo: non è stato incollato. Dividilo in parti più brevi.';aggiornaChat();return;}
           stato.testoRiassunto=documento;stato.risultatoRiassunto='';apriRiassunto();return;
         }

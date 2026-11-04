@@ -41,6 +41,16 @@
       "poster": "/media/spot/ticketol-poster.png",
       "descrizioneVideo": "Spot animato di dieci secondi con la confezione del prodotto immaginario Ticketol.",
       "attivo": false
+    },
+    {
+      "id": "rebootol",
+      "titolo": "Rebootol",
+      "parodia": true,
+      "testo": "Rebootol 1000 mg. Una parodia sui riavvii dei computer in ufficio.",
+      "video": "/media/spot/rebootol.mp4",
+      "poster": "/media/spot/rebootol-poster.png",
+      "descrizioneVideo": "Spot animato di dieci secondi. In ufficio un presentatore mostra la confezione immaginaria Rebootol accanto a un computer.",
+      "attivo": false
     }
   ]
 }
