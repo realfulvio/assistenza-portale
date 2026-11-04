@@ -244,3 +244,42 @@ test('API: autenticazione, CSRF e logout mentre il modello risponde', async () =
     assert.equal((await fetch(base + '/api/assistente', { headers: { Cookie: cookie } })).status, 401);
   } finally { server.closeAllConnections(); await new Promise((r) => server.close(r)); a.pulisci(); }
 });
+
+test('richieste colloquiali e refusi instradano ticket e bozza', async () => {
+  const app=ambiente();
+  try {
+    const req=app.req();
+    const out=await invia(app.servizio,req,{testo:'A che punto è il tiket 1?'});
+    assert.equal(out.tipo,'richieste');
+    assert.equal(out.richieste[0]?.id,1);
+    const b=await invia(app.servizio,req,{testo:'Mi aiuti a scrivere una richesta?'});
+    assert.equal(b.tipo,'bozza');
+    assert.equal(app.calls.length,1);
+  } finally {app.pulisci();}
+});
+
+test('risposta al mio ticket: dettaglio se univoco, scelta se più richieste',async()=>{
+  const app=ambiente();
+  try {
+    const req=app.req();
+    for(const testo of ['Hanno risposto al mio ticket?', 'Il mio ticket?', 'Mi anno rispoto al tiket?', 'E hanno risposto?']){
+      const out=await invia(app.servizio,req,{testo});
+      assert.equal(out.tipo,'richieste');
+      assert.equal(out.richieste[0]?.id,1);
+      assert.equal(out.richieste[0]?.titolo,'Visibile');
+    }
+    const senza=await invia(app.servizio,req,{testo:'Hanno risposto al mio ticket?'});
+    assert.match(senza.risposta,/non risulta una risposta pubblica/);
+    app.deps.glpi.dettaglio=async()=>({titolo:'Visibile',stato:'In lavorazione',persone:{1:{ruolo:'tu'},2:{ruolo:'tecnico'}},eventi:[
+      {tipo:'messaggio',chi:1,testo:'Messaggio del collega'},
+      {tipo:'messaggio',chi:2,testo:'Risposta del CED'}
+    ]});
+    const con=await invia(app.servizio,req,{testo:'E hanno risposto?'});
+    assert.match(con.risposta,/Sì, sul ticket/);
+    assert.deepEqual(con.richieste[0].eventi.map(e=>e.testo),['Risposta del CED']);
+    app.deps.glpi.elencoTicket=async()=>[{id:1,titolo:'Uno'},{id:2,titolo:'Due'}];
+    const out=await invia(app.servizio,req,{testo:'Ci sono novità sulla mia richiesta?'});
+    assert.equal(out.richieste.length,2);
+    assert.match(out.risposta,/Quale richiesta/);
+  }finally{app.pulisci();}
+});

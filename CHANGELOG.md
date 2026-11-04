@@ -2,6 +2,14 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.12.0] - 2026-11-04
+
+### Novità per gli utenti
+
+- L’assistente riconosce più frasi colloquiali e refusi nei comandi per meteo, riassunti, contatti, ticket e svago.
+- Domande come «Hanno risposto al mio ticket?» mostrano le risposte pubbliche della richiesta o fanno scegliere quale consultare.
+- «Lista spot» e domande equivalenti mostrano il catalogo con i video cliccabili. Aggiunto lo spot parodia Rebootol.
+
 ## [2.11.2] - 2026-11-04
 
 ### Novità per gli utenti

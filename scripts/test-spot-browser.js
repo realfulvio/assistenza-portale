@@ -20,15 +20,26 @@ async function main(){
   await p.route('**/api/allerte-meteo',r=>r.fulfill({json:{stato:'disabilitato'}}));
   await p.route('**/api/assistente',r=>r.request().method()==='POST'?(invii++,r.fulfill({status:503,json:{errore:'Il comando spot non deve usare AI'}})):r.continue());
   await p.addInitScript(()=>{localStorage.setItem('portale.assistente.spot.silenzioso','1');localStorage.setItem('portale.assistente.spot.prossimo',String(Date.now()+3600000));});
-  await p.goto(base+'/auth/login');await p.waitForFunction(()=>window.SpotAssistente?.disponibili?.()===4);
+  await p.goto(base+'/auth/login');await p.waitForFunction(n=>window.SpotAssistente?.disponibili?.()===n,catalogo.spot.length);
   const risposta=await c.request.get(base+'/api/spot-assistente');assert.equal(risposta.status(),200);assert.equal(risposta.headers()['cache-control'],'no-store');
   const range=await c.request.get(base+'/media/spot/rimbalzoff.mp4',{headers:{Range:'bytes=0-1023'}});assert.equal(range.status(),206);assert.equal((await range.body()).length,1024);assert.match(range.headers()['content-type'],/^video\/mp4/);
   await p.evaluate(()=>{document.getElementById('descrizione').value='Bozza fittizia da conservare';});
   await p.locator('#mascotte-btn').click();await p.waitForSelector('#msc-domanda');const prima=await(await c.request.get(base+'/api/assistente')).json();let ultimo=null;
-  for(const comando of ['Cedro','Dipendentin','Rimbalzoff','Ticketol','Cedro','Cedro','spot','pubblicità']){
+  for(const domanda of ['lista di tutti gli spot','lista spot','Mi fai vedere tutte le pubblicità?','Mi fai vedere tutti gli spot?','Vorrei sapere quali pubblicità avete','Puoi farmi vedere gli spot pubblicitari?']){
+   await p.locator('#msc-domanda').fill(domanda);
+   await p.locator('.msc-invia').click();
+   await p.getByRole('heading',{name:'Spot disponibili'}).waitFor();
+   for(const titolo of catalogo.spot.map(v=>v.titolo))await p.getByRole('button',{name:titolo,exact:true}).waitFor();
+  }
+  assert.equal(await p.locator('#msc-spot video').count(),0);
+  await p.getByRole('button',{name:'Rebootol',exact:true}).click();
+  await p.waitForFunction(()=>{const v=document.querySelector('#msc-spot video');return v?.getAttribute('src')?.endsWith('/rebootol.mp4')&&!v.paused&&v.readyState>=2;});
+  await p.getByRole('button',{name:'Chiudi lo spot',exact:true}).click();
+  await p.getByRole('heading',{name:'Spot disponibili'}).waitFor();
+  for(const comando of ['Cedro','Dipendentin','Rimbalzoff','Ticketol','Rebootol','Cedro','Cedro','spot','pubblicità']){
    await p.locator('#msc-domanda').fill(comando);await p.locator('.msc-invia').click();await p.locator('#msc-spot video').waitFor({timeout:5000});
    assert.equal(await p.locator('dialog[open]').count(),0);assert.equal(await p.locator('#mascotte-fumetto').isVisible(),false);
-   const titolo=await p.locator('#msc-spot').getAttribute('aria-label');const richiesto={Cedro:'cedro.mp4',Dipendentin:'dipendentin-nuovo.mp4',Rimbalzoff:'rimbalzoff.mp4',Ticketol:'ticketol.mp4'}[comando];if(richiesto)assert((await p.locator('#msc-spot video').getAttribute('src')).endsWith('/'+richiesto));else assert.notEqual(titolo,ultimo);ultimo=titolo;
+   const titolo=await p.locator('#msc-spot').getAttribute('aria-label');const richiesto={Cedro:'cedro.mp4',Dipendentin:'dipendentin-nuovo.mp4',Rimbalzoff:'rimbalzoff.mp4',Ticketol:'ticketol.mp4',Rebootol:'rebootol.mp4'}[comando];if(richiesto)assert((await p.locator('#msc-spot video').getAttribute('src')).endsWith('/'+richiesto));else assert.notEqual(titolo,ultimo);ultimo=titolo;
    await p.waitForFunction(()=>{const v=document.querySelector('#msc-spot video');return v&&!v.paused&&v.readyState>=2;});
    assert.equal(await p.locator('#msc-spot video').evaluate(v=>v.muted),false);
    await p.getByRole('button',{name:'Chiudi lo spot',exact:true}).click();await p.waitForSelector('#msc-spot',{state:'detached'});

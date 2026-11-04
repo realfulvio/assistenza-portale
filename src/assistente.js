@@ -8,6 +8,7 @@ const esempi = require('./assistente-esempi');
 const contesto = require('./assistente-contesto');
 const generazione = require('./assistente-generazione');
 const svago = require('./assistente-svago');
+const comandi = require('../public/assistente-comandi');
 const {creaRiassuntore,estraiRichiesta}=require('./assistente-riassunto');
 const { richiesta: richiestaMeteo, creaMeteo } = require('./meteo');
 
@@ -154,7 +155,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
   }
   function cercaContatti(domanda) {
     const numeri = domanda.match(/\b\d{2,6}\b/g) || [];
-    const q = parole(domanda).filter((p) => !['cerco', 'cerca', 'puoi', 'potrei', 'sapere', 'tutti', 'tutte', 'elenco', 'del', 'dell'].includes(p));
+    const q = parole(domanda).filter((p) => !['cerco', 'cerca', 'puoi', 'potrei', 'sapere', 'tutti', 'tutte', 'elenco', 'del', 'dell', 'sai', 'hai', 'fai', 'vedere', 'mostrami', 'dirmi', 'daresti', 'dici', 'nr', 'num', 'cellulare', 'recapito', 'qualcuno'].includes(p));
     if (!q.length) return { risposta: 'Di quale persona o ufficio cerchi il numero?', tipo: 'contatti', contatti: [] };
     const voci = contatti().flatMap((sezione) => sezione.voci.map((v) => ({ ...v, sezione: sezione.titolo })));
     const trovati = voci.filter((v) => {
@@ -169,20 +170,36 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     return { risposta: numeri.length ? rispostaNumero : trovati.length ? `Ho trovato ${trovati.length === 1 ? 'questo contatto' : 'questi contatti'} nell’elenco del portale.` : 'Non trovo una corrispondenza precisa. Prova con il nome della persona o dell’ufficio.',
       tipo: 'contatti', contatti: trovati.slice(0, 12), fonti: [{ titolo: 'Tutti i numeri interni', url: `${base}/#contatti` }] };
   }
-  async function cercaRichieste(req, domanda) {
+  async function cercaRichieste(req, domanda, riferimento = null) {
     const userId = await utenteGlpi(req);
-    const id = /(?:ticket|richiesta|segnalazione|#)\s*#?\s*(\d{1,9})\b/i.exec(domanda)?.[1];
+    let id = /(?:ticket|richiesta|segnalazione|#)\s*#?\s*(\d{1,9})\b/i.exec(domanda)?.[1] || riferimento;
+    const singola = comandi.domandaSulMioTicket(domanda) || comandi.seguitoRisposta(domanda);
+    let righe;
+    if (!id && singola) {
+      righe = await glpi.elencoTicket(userId);
+      const aperte = righe.filter(r => !r.chiusa);
+      const candidate = aperte.length ? aperte : righe;
+      if (candidate.length === 1) id = candidate[0].id;
+    }
     if (id) {
       const d = await glpi.dettaglio(userId, Number(id));
       if (!d) return { risposta: 'Questa richiesta non è disponibile tra quelle che puoi consultare.', tipo: 'richieste', richieste: [] };
-      const eventi = (d.eventi || []).filter((e) => e.testo).slice(-3).map((e) => ({ tipo: testo(e.tipo, 40), testo: testo(e.testo, 1200), data: e.data }));
-      return { risposta: 'Questi sono i dati aggiornati della richiesta visibile nel tuo portale.', tipo: 'richieste',
+      const chiedeRisposta = /\b(?:risposto|rispost[ae])\b/.test(domanda);
+      const conversazione = (d.eventi || []).filter(e => e.testo && e.tipo !== 'apertura');
+      const risposte = conversazione.filter(e => ['messaggio', 'soluzione'].includes(e.tipo) && d.persone?.[e.chi]?.ruolo === 'tecnico');
+      const eventi = (chiedeRisposta ? risposte : conversazione).slice(-3)
+        .map(e => ({tipo:testo(e.tipo,40),testo:testo(e.testo,1200),data:e.data}));
+      let messaggio = 'Questi sono i dati aggiornati della richiesta visibile nel tuo portale.';
+      if (chiedeRisposta) messaggio = risposte.length
+        ? 'Sì, sul ticket risulta una risposta pubblica del CED. La trovi qui sotto.'
+        : 'Al momento sul ticket non risulta una risposta pubblica del CED.';
+      return { risposta: messaggio, tipo: 'richieste',
         richieste: [{ id: Number(id), titolo: testo(d.titolo, 250), stato: testo(d.stato, 100), descrizione: testo(d.descrizione, 1600), eventi, url: `${base}/#richiesta/${id}` }] };
     }
-    let righe = await glpi.elencoTicket(userId);
+    righe ||= await glpi.elencoTicket(userId);
     righe = righe.slice().sort((a, b) => String(b.aperta || '').localeCompare(String(a.aperta || '')));
     if (/ultima|ultimo|recente/i.test(domanda)) righe = righe.slice(0, 1);
-    return { risposta: righe.length ? 'Ecco le tue richieste più recenti. Gli stati arrivano dal portale, senza interpretazioni del modello.' : 'Non risultano richieste da mostrare per il tuo utente.',
+    return { risposta: righe.length ? singola ? 'Quale richiesta vuoi controllare? Scrivi il numero del ticket o aprilo dall’elenco.' : 'Ecco le tue richieste più recenti. Gli stati arrivano dal portale, senza interpretazioni del modello.' : 'Non risultano richieste da mostrare per il tuo utente.',
       tipo: 'richieste', richieste: righe.slice(0, 6).map((r) => ({ id: r.id, titolo: testo(r.titolo, 250), stato: testo(r.stato, 100), url: `${base}/#richiesta/${r.id}` })) };
   }
   async function chat(s, domanda) {
@@ -254,6 +271,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (analisi.compito) messages.push({role:'user',content:`FASE ATTUALE: ${analisi.fase}\nCOMPITO: ${analisi.compito}\nDETTAGLI MANCANTI: ${analisi.domande.join('; ') || 'nessuno'}\n${analisi.tema === 'posta' && analisi.fase === 'chiarimento' ? 'Scrivi soltanto le domande mancanti. Termina con il punto interrogativo, senza proporre controlli o passi successivi.' : 'Rispondi in al massimo due frasi dirette.'} Usa solo i messaggi reali per i fatti attuali.`});
       if (!analisi.compito) messages = generazione.messaggi({istruzioni: system, analisi, fonti: scelti.map(({d}) => fonte(d)), piano});
       messages[0].content += '\nPrima identifica la richiesta attuale: una guida recuperata non dimostra che l utente abbia quel problema. Se il messaggio e soltanto un saluto o esprime incertezza senza descrivere un problema o una domanda, chiedi brevemente che cosa desidera fare o che cosa osserva, senza proporre procedure, menu o invio di ticket. Non inventare sintomi mancanti.';
+      messages[0].content += '\nInterpreta refusi e frasi colloquiali dal contesto. Usa una guida soltanto se riguarda la domanda; se non capisci che cosa cerca la persona, chiedi un chiarimento breve.';
       if (senzaFonti) messages[0].content += '\nNessuna guida pertinente e stata trovata per questa domanda. Comprendi anche saluti, sinonimi e frasi colloquiali usando i messaggi reali. Se la richiesta e ambigua, chiedi un solo dettaglio utile per capire che cosa vuole fare l utente. Non inventare procedure, diagnosi, azioni eseguite o configurazioni locali. Non proporre subito un ticket solo perche manca una guida. Se la domanda e estranea all assistenza informatica, richiama brevemente il tuo ambito.';
       for (let tentativo = 0; tentativo < 2; tentativo++) {
         const contestoBreve = piano && messages.reduce((n,m) => n + m.content.length,0) < 4500;
@@ -309,12 +327,17 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
         return risposta(s, domanda, out);
       }
       let out;
+      const richiestaTicket = comandi.testoTicket(domanda);
+      const avviaBozza = azione === 'messaggio' && comandi.richiestaBozza(richiestaTicket);
+      const seguitoTicket = s.ultimoTipo === 'richieste' && comandi.seguitoRisposta(richiestaTicket);
+      const cercaTicket = azione === 'messaggio' && (comandi.richiestaStato(richiestaTicket) || seguitoTicket);
+      const riferimentoTicket = seguitoTicket && s.ultima?.richieste?.length === 1 ? s.ultima.richieste[0].id : null;
       const genereSvago = azione === 'messaggio' ? svago.richiesta(domanda, s) : null;
       let controllata = azione === 'messaggio' ? conoscenza.rispostaControllata(domanda, triage.storiaPertinente(domanda, s.messaggi), base) : null;
       if(s.verifica&&azione==='messaggio'){
         const verifica=s.verifica,tema=triage.dominio(domanda);delete s.verifica;
         const sicurezza=controllata&&['firmware-in-corso','richiesta-segreti','non-inviare-password','non-disattivare-protezioni','intervento-non-documentato'].includes(controllata.regola);
-        if(!sicurezza&&!genereSvago&&!conoscenza.cercaNumero(domanda)&&(!tema||!verifica.tema||tema===verifica.tema)){
+        if(!sicurezza&&!genereSvago&&!avviaBozza&&!cercaTicket&&!conoscenza.cercaNumero(domanda)&&(!tema||!verifica.tema||tema===verifica.tema)){
           const risolto=/\b(?:risolto|ora va|ora funziona|adesso funziona)\b/i.test(domanda)&&! /\bnon\b/i.test(domanda);
           return risposta(s,domanda,risolto?{tipo:'verifica',risposta:'Bene, il problema risulta risolto in base a quanto mi hai riferito. Se ricapita puoi riprendere da qui.'}:{tipo:'verifica',risposta:'Ho aggiunto l’esito della prova. Puoi preparare la richiesta con i dettagli già forniti, senza ripetere la stessa procedura.',fonti:verifica.fonti,opzioni:[{testo:'Prepara la richiesta',azione:'ticket_contesto'}]});
         }
@@ -326,8 +349,8 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       }
       else if (genereSvago) out = svago.rispondi(s, genereSvago);
       else if (azione === 'ticket' || azione === 'categoria' || (s.bozza && s.bozza.passo !== 'pronta')) out = procediBozza(s, domanda, azione, body.categoria);
-      else if (/(prepara|compila|apri|crea|scrivi|segnalare).{0,45}(ticket|richiesta|segnalazione)/i.test(domanda)) out = procediBozza(s, domanda, 'ticket');
-      else if (/(?:stato|numero|ultima|ultimo|ultime|ultimi|mie|miei).{0,35}(?:ticket|richiest|segnalaz)|(?:ticket|richiest|segnalaz).{0,35}(?:stato|numero|risolt|chius|tecnico)|(?:ticket|richiesta|segnalazione)\s*#?\d|#\d{1,9}\b/i.test(domanda)) out = await cercaRichieste(req, domanda);
+      else if (avviaBozza) out = procediBozza(s, domanda, 'ticket');
+      else if (cercaTicket) out = await cercaRichieste(req, richiestaTicket, riferimentoTicket);
       else if (conoscenza.cercaNumero(domanda) || (s.ultimoTipo === 'contatti' && /^e\b|^anche\b/i.test(domanda))) out = cercaContatti(domanda);
       else out = await chat(s, domanda);
       s.ultimoTipo = out.tipo;
