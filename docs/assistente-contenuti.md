@@ -12,6 +12,10 @@ La generazione usa un contesto compatto per le domande generiche: fonti pertinen
 
 Il valore predefinito di `ASSISTENTE_KEEP_ALIVE` è `5m`: mantiene il modello disponibile per domande vicine, a costo di conservarne l'occupazione RAM durante quel periodo. `0` lo scarica dopo la risposta. Non aumentare i limiti di memoria per compensare questa scelta: misurare consumo e picco sull'installazione, mantenere margine per gli altri servizi e distinguere primo caricamento dalle richieste successive.
 
+`ASSISTENTE_SOGLIA_GUIDE` (predefinito `0.82`) è il punteggio minimo perché una guida trovata con la ricerca semantica entri nel contesto. Il valore è stato calibrato il 4 novembre 2026 sul modello di embedding in produzione: 24 domande pertinenti hanno ottenuto da 0,878 in su, 15 domande estranee al massimo 0,817. Con la soglia precedente (0,4) passavano tutte e l'assistente rispondeva con guide non pertinenti. Se si cambia modello di embedding la soglia va ricalibrata.
+
+In chat e nel riassunto della bozza il portale passa `presence_penalty: 0`: il Modelfile predefinito di qwen usa 1,5, che penalizza la ripetizione di nomi di programmi e termini delle guide.
+
 `ASSISTENTE_PASSWORD_PC_M365_CONDIVISA=1` aggiunge al contesto di recupero della posta di lavoro una relazione fra credenziali PC e Microsoft 365, soltanto se confermata per l'organizzazione. È disattivata per default e non si applica agli account personali né ad altri gestionali. Il valore dell'installazione resta nel suo `.env` privato: non pubblicare dati sull'identità, tenant o configurazioni operative. L'assistente non legge né richiede la password; la relazione serve solo a formulare indicazioni corrette.
 
 Le fonti del modello non vanno esposte come risorse statiche. Il rilascio conserva i quattro file locali; il backup deve includere anche la cache dell'indice se si desidera un ripristino immediato. L'indice si aggiorna automaticamente quando cambiano i contenuti. I riferimenti a prodotti nei moduli sono riconoscitori di argomenti, non procedure amministrative: il comportamento operativo dipende dalle FAQ correnti dell'installazione.

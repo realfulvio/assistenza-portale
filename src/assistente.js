@@ -275,7 +275,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       if (senzaFonti) messages[0].content += '\nNessuna guida pertinente e stata trovata per questa domanda. Comprendi anche saluti, sinonimi e frasi colloquiali usando i messaggi reali. Se la richiesta e ambigua, chiedi un solo dettaglio utile per capire che cosa vuole fare l utente. Non inventare procedure, diagnosi, azioni eseguite o configurazioni locali. Non proporre subito un ticket solo perche manca una guida. Se la domanda e estranea all assistenza informatica, richiama brevemente il tuo ambito.';
       for (let tentativo = 0; tentativo < 2; tentativo++) {
         const contestoBreve = piano && messages.reduce((n,m) => n + m.content.length,0) < 4500;
-        const r = await ai('/api/chat', { model: MODELLO, messages, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m', options: { temperature: .1, num_ctx: contestoBreve ? 2048 : 4096, num_predict: 240, num_thread: 4 } });
+        const r = await ai('/api/chat', { model: MODELLO, messages, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m', options: { temperature: .1, presence_penalty: 0, num_ctx: contestoBreve ? 2048 : 4096, num_predict: 240, num_thread: 4 } });
         const raw = String(r.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '').split('<think>')[0].replace(/\[[a-z0-9-]+\]/g, '').trim();
         if (!raw) throw errore('Non riesco a formulare una risposta. Usa la guida indicata oppure riprova.', 503);
         const violazioni = [...contesto.verifica(raw, analisi), ...generazione.verifica(raw, piano)];
