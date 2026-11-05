@@ -16,7 +16,16 @@ test('giorni espliciti e date fuori finestra non diventano oggi',()=>{
  assert.deepEqual(richiesta('Meteo Milano oggi e domani').giorni,[0,1]);
  assert.deepEqual(richiesta('Meteo Milano domani e dopodomani').giorni,[1,2]);
  assert.equal(richiesta('Meteo Milano fra due giorni').giorno,2);
- for(const s of ['Meteo Milano tra 5 giorni','Meteo Milano prossimi sette giorni','Meteo Milano settimana prossima']) assert.equal(richiesta(s).oltre,true,s);
+ // Finestra di previsione: oggi più i sette giorni successivi.
+ assert.equal(richiesta('Meteo Milano tra 5 giorni').giorno,5);
+ for(const s of ['Meteo Milano tra 9 giorni','Meteo Milano prossimi 10 giorni','Meteo Milano settimana prossima']) assert.equal(richiesta(s).oltre,true,s);
+});
+test('weekend e giorni della settimana dentro la finestra di otto giorni',()=>{
+ const mercoledi=Date.UTC(2026,10,4,10);
+ assert.deepEqual(richiesta('meteo Milano weekend',{},'',mercoledi).giorni,[3,4]);
+ assert.equal(richiesta('che tempo fa sabato a Ferrara?',{},'',mercoledi).giorno,3);
+ assert.equal(richiesta('meteo Milano lunedì prossimo',{},'',mercoledi).giorno,5);
+ assert.equal(richiesta('meteo Milano sabato',{},'',mercoledi).oltre,false);
 });
 test('riepilogo reale di tre giorni, con tre date e dati diversi, senza geocodificare il periodo',async()=>{
  let n=0;const m=creaMeteo({attivo:true,localita:'Esempiopoli',latitudine:1,longitudine:2,scarica:async u=>{assert.equal(new URL(u).hostname,'api.open-meteo.com');n++;return {ok:true,json:async()=>dati()};}});

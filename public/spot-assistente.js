@@ -38,8 +38,8 @@
   const azioneSpot=/^(?:far(?:mi)? )?(?:veder(?:e)?|guardare|partire|mostra(?:mi|re)?|riproduc(?:i|imi|ere)|avvia(?:mi|re)?|dammi) /;
   function idSpotRichiesto(testo){
     const q=normalizzaRichiestaSpot(testo).replace(azioneSpot,'');
-    const m=/^(?:(?:lo spot|la pubblicita|spot|pubblicita)(?: di)? )?(cedro|dipendentin(?: pubblico)?|rimbalzoff|ticketol|rebootol(?: 1000 mg)?)$/.exec(q);
-    return m?m[1].replace(/ (?:pubblico|1000 mg)$/,''):null;
+    const m=/^(?:(?:lo spot|la pubblicita|spot|pubblicita)(?: di)? )?(cedro|dipendentin(?: pubblico)?|rimbalzoff|ticketol|rebootol(?: 1000 mg)?|caps[- ]?lockin(?: forte)?(?: 500 mg)?)$/.exec(q);
+    return m?/^caps/.test(m[1])?'capslockin':m[1].replace(/ (?:pubblico|1000 mg)$/,''):null;
   }
   function richiestaSpot(testo){
     const q=normalizzaRichiestaSpot(testo).replace(azioneSpot,'');
