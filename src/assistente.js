@@ -154,6 +154,32 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     }
     return { risposta: domande[b.passo], tipo: 'bozza', ...(b.passo === 'categoria' ? { opzioni: opzioniCategorie() } : {}) };
   }
+  // Solo nome della persona («mario», «mario rossi», «teleono mario»): cerca soltanto nel campo nome della rubrica.
+  // Le parole generiche dei nomi (scuola, ufficio, protocollo...) non contano: per quelle resta la chat.
+  const GENERICHE_NOME = new Set('fax scuola ufficio sala centrale centralino operativa centro distaccamento polo socio sanitario asilo nido istituto elementare statale servizi servizio sociali materna parrocchiale protocollo ragioneria segreteria sindaco urp biblioteca tecnico anagrafe tributi polizia locale comando magazzino sportello'.split(' '));
+  const PAROLE_TELEFONO = ['telefono', 'telefoni', 'tel', 'cell', 'cellulare', 'numero', 'interno', 'recapito'];
+  const distanza = (a, b) => {
+    const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+    for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length];
+  };
+  function cercaPerNome(domanda) {
+    const tutte = norm(domanda).match(/[a-z0-9]+/g) || [];
+    if (!tutte.length || tutte.length > 3) return null;
+    const voci = contatti().flatMap((sezione) => sezione.voci.map((v) => ({ ...v, sezione: sezione.titolo })));
+    const nomeDi = (v) => norm(v.nome).match(/[a-z]{3,}/g) || [];
+    const nomi = new Set(voci.flatMap(nomeDi).filter((w) => !GENERICHE_NOME.has(w)));
+    const q = tutte.filter((w) => w.length >= 3 && nomi.has(w));
+    if (!q.length) return null;
+    // Le altre parole devono essere piccole (di, il...) o somigliare a «telefono», «numero»... anche con un refuso.
+    const resto = tutte.filter((w) => !q.includes(w) && w.length > 2 && !STOP.has(w));
+    if (!resto.every((w) => PAROLE_TELEFONO.some((t) => distanza(w, t) <= (t.length > 4 ? 2 : 1)))) return null;
+    const trovati = voci.filter((v) => q.every((w) => nomeDi(v).includes(w)));
+    if (!trovati.length) return null;
+    return { risposta: `Ho trovato ${trovati.length === 1 ? 'questo contatto' : 'questi contatti'} nell’elenco del portale.`,
+      tipo: 'contatti', contatti: trovati.slice(0, 12), fonti: [{ titolo: 'Tutti i numeri interni', url: `${base}/#contatti` }] };
+  }
   function cercaContatti(domanda) {
     const numeri = domanda.match(/\b\d{2,6}\b/g) || [];
     const q = parole(domanda).filter((p) => !['cerco', 'cerca', 'puoi', 'potrei', 'sapere', 'tutti', 'tutte', 'elenco', 'del', 'dell', 'sai', 'hai', 'fai', 'vedere', 'mostrami', 'dirmi', 'daresti', 'dici', 'nr', 'num', 'tel', 'cell', 'cellulare', 'recapito', 'qualcuno'].includes(p));
@@ -387,9 +413,9 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       else if (cercaTicket) out = await cercaRichieste(req, richiestaTicket, riferimentoTicket);
       else if (conoscenza.cercaNumero(domanda) || (s.ultimoTipo === 'contatti' && /^e\b|^anche\b/i.test(domanda))) out = cercaContatti(domanda);
       else {
-        // Ricerca breve tipo «telefono carla» o «interno ragioneria»: se la rubrica trova qualcosa mostra i contatti, altrimenti prosegue con la chat.
+        // Ricerca breve tipo «telefono mario» o «interno ragioneria»: se la rubrica trova qualcosa mostra i contatti, altrimenti prosegue con la chat.
         const rubrica = /\b(?:telefon\w*|tel|cell\w*|intern[oi]|recapit\w*|chiamare)\b/.test(norm(domanda)) && parole(domanda).length && parole(domanda).length <= 3 ? cercaContatti(domanda) : null;
-        out = rubrica?.contatti?.length ? rubrica : await chat(s, domanda);
+        out = rubrica?.contatti?.length ? rubrica : cercaPerNome(domanda) || await chat(s, domanda);
       }
       s.ultimoTipo = out.tipo;
       return risposta(s, domanda || (azione === 'ticket' ? 'Aiutami a descrivere il problema' : body.categoria || azione), out);

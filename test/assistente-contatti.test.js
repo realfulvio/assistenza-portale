@@ -50,3 +50,19 @@ test('contatti in linguaggio naturale, senza inoltrare a Qwen', async () => {
     assert.equal(out.contatti[0]?.nome,'Ufficio esempio');
   }
 });
+
+test('solo nome della persona o nome con refuso: risponde la rubrica', async () => {
+  const s = creaServizio({
+    config: { base: '/assistenza' },
+    numeriInterni: { carica: () => ({ sezioni: [{ titolo: 'Sede di esempio', voci: [
+      { nome: 'Mario Rossi', numero: '241' },
+      { nome: 'Ufficio esempio', numero: '230' }
+    ] }] }) },
+    chiamaAI: async () => { throw new Error('La rubrica non richiede il modello AI'); }
+  });
+  for (const testo of ['mario', 'Mario Rossi', 'teleono mario', 'numero di mario']) {
+    const out = await s.gestisci({ sessionID: 'prova', session: {}, body: { testo } });
+    assert.equal(out.tipo, 'contatti', testo);
+    assert.deepEqual(out.contatti.map(v => v.nome), ['Mario Rossi'], testo);
+  }
+});
