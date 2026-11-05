@@ -40,7 +40,7 @@ const app=require('../src/server');
     assert.equal(await page.locator('.msc-risposta').last().locator('.msc-previsioni-giorno').count(),3);
     await chiedi('meteo per i prossimi giorni a esempiopoli','Previsioni a Esempiopoli');
     const riepilogo=page.locator('.msc-risposta').last();assert.equal(await riepilogo.locator('.msc-previsioni-giorno').count(),3);
-    assert.match(await riepilogo.innerText(),/Domani · 04\/11/);assert.match(await riepilogo.innerText(),/Dopodomani · 05\/11/);
+    assert.match(await riepilogo.innerText(),/Domani · 04\/11/);assert.match(await riepilogo.innerText(),/Giovedì · 05\/11/);
     assert.deepEqual((await new AxeBuilder({page}).include('.msc-previsioni').analyze()).violations.map(v=>v.id),[]);
     await page.screenshot({path:path.join(output,'prossimi-giorni-mobile.png')});
     await chiedi('Meteo a Newcastle','Quale intendi');await page.getByRole('button',{name:'Newcastle (Inghilterra, Regno Unito)',exact:true}).click();
