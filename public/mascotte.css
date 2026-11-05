@@ -323,3 +323,17 @@ html[data-motion=reduce] .mascotte.msc-ride :is(.msc-testa,.msc-busto,.msc-tazza
 @keyframes msc-movimento-sorpresa-testa {0%,100%{transform:none}5%{transform:translateY(-7px) rotate(-6deg)}11%,76%{transform:translateY(-3px) rotate(-2deg)}90%{transform:none}}
 @keyframes msc-movimento-sorpresa-spalle {0%,100%{transform:none}6%{transform:translateY(-4px)}15%,76%{transform:translateY(-1px)}90%{transform:none}}
 @keyframes msc-movimento-sorpresa-tazza {0%,100%{transform:none}4%{transform:translate(2px,-7px) rotate(10deg)}8%{transform:translate(0,-4px) rotate(-6deg)}12%{transform:translate(2px,-4px) rotate(6deg)}18%,76%{transform:translate(1px,-3px) rotate(3deg)}90%{transform:none}}
+
+/* Ricerca web di ripiego */
+.msc-web-badge{display:flex;width:fit-content;align-items:center;gap:6px;margin:2px 0 8px;padding:3px 9px;border-radius:999px;background:#c9a22722;color:#6f5400;border:1px solid #c9a22766;font-size:.74em;font-weight:700}
+.msc-web-badge svg{width:14px;height:14px}
+.msc-web-fonti-t{margin:12px 0 0;font-size:.78em;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.msc-fonte-web{justify-content:space-between}.msc-fonte-web>svg:last-child{margin-left:auto}
+.msc-fonte-t{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.msc-fonte-t small{font-weight:500;color:var(--muted);font-size:.9em}
+.msc-web-avviso{display:flex;gap:8px;margin:10px 0 0;padding:8px 10px;border-radius:9px;background:var(--soft,#eef1f7);color:var(--text);font-size:.8em;line-height:1.4}
+.msc-web-avviso svg{flex:none;width:16px;height:16px;margin-top:1px;color:#8a6a00}
+.msc-web-avviso+.msc-opzioni{margin-top:10px}
+.msc-noweb{display:flex;gap:7px;margin:10px 0 0;color:var(--muted);font-size:.78em;line-height:1.4}
+.msc-noweb svg{flex:none;width:15px;height:15px;margin-top:1px}
+@media(forced-colors:active){.msc-web-badge,.msc-web-avviso{border:1px solid CanvasText}}

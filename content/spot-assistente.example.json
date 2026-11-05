@@ -51,6 +51,17 @@
       "poster": "/media/spot/rebootol-poster.png",
       "descrizioneVideo": "Spot animato di dieci secondi. In ufficio un presentatore mostra la confezione immaginaria Rebootol accanto a un computer.",
       "attivo": false
+    },
+    {
+      "id": "capslockin",
+      "titolo": "Caps-Lockin Forte",
+      "battuta": "Scrivi tutto in MAIUSCOLO? C’è Caps-Lockin Forte.",
+      "parodia": true,
+      "testo": "Caps-Lockin Forte 500 mg. Una parodia su chi scrive le mail tutte in maiuscolo.",
+      "video": "/media/spot/capslockin.mp4",
+      "poster": "/media/spot/capslockin-poster.png",
+      "descrizioneVideo": "Spot animato di dieci secondi: un impiegato urla «Non funziona niente!» davanti al computer, poi arriva la confezione immaginaria di Caps-Lockin Forte 500 mg. Smetti di urlare. Parodia: non è un farmaco reale.",
+      "attivo": false
     }
   ]
 }

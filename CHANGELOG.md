@@ -2,6 +2,34 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.14.0] - 2026-11-04
+
+### Novità per gli utenti
+
+- Se l’assistente non trova una guida del CED, può chiederti se cercare la risposta sul web: la ricerca parte solo se rispondi «Sì, cerca sul web».
+- Le risposte dal web sono segnate «Risposta dal web · da verificare» e mostrano le fonti consultate da aprire.
+- Le domande con dati personali o sui sistemi interni del Comune non vengono mai cercate sul web.
+
+### Note tecniche
+
+- Ricerca tramite SearXNG locale (127.0.0.1:8888) e riassunto con il modello locale; configurazione `ASSISTENTE_WEB` e `ASSISTENTE_WEB_URL` nel `.env`.
+- Rubrica: le domande brevi come «telefono mario» o «interno ragioneria» cercano subito nei numeri interni, anche col solo nome («mario») o con un refuso («teleono mario»).
+- Filtri in `src/assistente-web.js`; interfaccia in `public/mascotte.js` e `public/mascotte.css`.
+
+## [2.13.1] - 2026-11-04
+
+### Novità per gli utenti
+
+- La finestra dell’assistente si apre più alta sugli schermi grandi: parte subito sotto la testata e arriva fino alla mascotte.
+- Meteo anche per il weekend e per i prossimi giorni fino a una settimana, pure per altre città: prova «che tempo fa sabato a Ferrara?».
+- Nuovo spot parodia «Caps-Lockin Forte»: scrivi il nome o «spot» per vederlo nella nuvoletta.
+- Assistente più preciso: propone le guide solo quando sono davvero pertinenti e risponde più in fretta anche dopo una pausa.
+
+### Note tecniche
+
+- Altezza predefinita della nuvoletta in `public/assistente-link.css`: fino a 900px, mai meno del limite precedente (660px); mobile e schermi bassi invariati.
+- Assistente: soglia guide 0,82, `presence_penalty` 0, `keep_alive` 8h.
+
 ## [2.13.0] - 2026-11-04
 
 ### Novità per gli utenti
