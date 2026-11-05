@@ -13,7 +13,7 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e i
 ### Note tecniche
 
 - Ricerca tramite SearXNG locale (127.0.0.1:8888) e riassunto con il modello locale; configurazione `ASSISTENTE_WEB` e `ASSISTENTE_WEB_URL` nel `.env`.
-- Rubrica: le domande brevi come «telefono carla» o «interno ragioneria» cercano subito nei numeri interni.
+- Rubrica: le domande brevi come «telefono mario» o «interno ragioneria» cercano subito nei numeri interni, anche col solo nome («mario») o con un refuso («teleono mario»).
 - Filtri in `src/assistente-web.js`; interfaccia in `public/mascotte.js` e `public/mascotte.css`.
 
 ## [2.13.0] - 2026-11-04
