@@ -92,6 +92,8 @@ const config = {
   assistenteWeb: e.ASSISTENTE_WEB || '',
   assistenteWebUrl: e.ASSISTENTE_WEB_URL || 'http://127.0.0.1:8888',
   assistenteWebChiave: e.ASSISTENTE_WEB_CHIAVE || '',
+  // Pagine del sito del Comune indicizzate di notte (scripts/scarica-sito-comune.js): '' = spento
+  assistenteSitoFile: e.ASSISTENTE_SITO_FILE || '',
   faqPath: path.join(root, 'content', 'faq.json'),
   spotAssistentePath: e.SPOT_ASSISTENTE_FILE || path.join(root, 'content', 'spot-assistente.json'),
   // Numeri interni dell'ente: file locale non versionato (se manca la sezione non compare; in DEMO si usa l'esempio)
