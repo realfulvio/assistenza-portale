@@ -1,0 +1,2 @@
+# Indice notturno del sito del Comune per l'assistente del portale. Copiare in /etc/cron.d/portale-sito-comune.
+15 3 * * * portale cd /opt/portale-assistenza && /usr/bin/node scripts/scarica-sito-comune.js --uscita /var/lib/portale-assistenza/assistente/sito-comune.json >> /var/lib/portale-assistenza/assistente/sito-comune.log 2>&1
