@@ -12,6 +12,7 @@ const comandi = require('../public/assistente-comandi');
 const {creaRiassuntore,estraiRichiesta}=require('./assistente-riassunto');
 const { richiesta: richiestaMeteo, creaMeteo } = require('./meteo');
 const web = require('./assistente-web');
+const { creaSito } = require('./assistente-sito');
 
 const MODELLO_PREDEFINITO = 'qwen3.5:4b-q4_K_M';
 const EMBEDDING_PREDEFINITO = 'embeddinggemma-2:270m';
@@ -53,6 +54,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     if (!r.ok) throw errore('L’assistente è momentaneamente occupato. Puoi usare la ricerca nelle guide.', 503);
     return r.json();
   });
+  const sitoComune = creaSito({ config, ai, embed: (input) => embed(input) });
   const riassuntore=creaRiassuntore({ai,modello:MODELLO,keepAlive:config.assistenteKeepAlive ?? '5m'});
   const categorie = () => config.categorie.categorie.map((c) => ({ id: c.id, nome: c.titolo || c.nome }));
   const contatti = () => numeriInterni.carica({ file: config.numeriInterniPath, esempio: config.numeriInterniEsempio, demo: config.demo }).sezioni;
@@ -164,8 +166,36 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
     for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
     return d[a.length][b.length];
   };
+  // «cosa fa mario rossi», «chi è rossi», «di cosa si occupa mario»: domanda su una persona, si toglie la parte interrogativa.
+  const DOMANDA_PERSONA = /^(?:(?:mi )?(?:sai |puoi )?dir(?:mi|e) )?(?:chi e|chi sarebbe|cosa fa|che cosa fa|che fa|di cosa si occupa|di che cosa si occupa|che lavoro fa|che ruolo ha|che incarico ha|in (?:che|quale) ufficio (?:e|lavora|sta)|dove lavora)\b\s*/;
+  const senzaDomandaPersona = (domanda) => {
+    const n = norm(domanda).replace(/[’'?!.,;:]/g, ' ').replace(/\s+/g, ' ').trim();
+    const testo = n.replace(DOMANDA_PERSONA, '');
+    return { testo, persona: testo !== n && !!testo };
+  };
+  const vociRubrica = () => contatti().flatMap((sezione) => sezione.voci.map((v) => ({ ...v, sezione: sezione.titolo })));
+  const paroleNome = (nome) => (norm(nome).match(/[a-z]{3,}/g) || []).filter((w) => !GENERICHE_NOME.has(w));
+  // Domanda su una persona presente sul sito del Comune: scheda copiata dalla pagina più l'interno della rubrica.
+  function cercaPersona(domanda) {
+    const dp = senzaDomandaPersona(domanda);
+    if (!dp.persona || !sitoComune.attivo() || parole(dp.testo).length > 3) return null;
+    const out = sitoComune.rispondiPersona(dp.testo, { parziale: true });
+    if (!out) return null;
+    const nomi = out.persone.map((n) => new Set(paroleNome(n)));
+    delete out.persone;
+    const voci = vociRubrica().filter((v) => { const w = paroleNome(v.nome); return w.length >= 2 && nomi.some((n) => w.every((x) => n.has(x))); });
+    if (voci.length) out.contatti = voci.slice(0, 12);
+    return out;
+  }
+  // Nome e cognome di un collega (rubrica o sito): la domanda non deve uscire verso il motore di ricerca esterno.
+  function personaNominata(domanda) {
+    const q = new Set(norm(domanda).match(/[a-z]{3,}/g) || []);
+    if (vociRubrica().some((v) => { const w = paroleNome(v.nome); return w.length >= 2 && w.every((x) => q.has(x)); })) return true;
+    return sitoComune.attivo() && sitoComune.persone(domanda).length > 0;
+  }
+  const controllaWeb = (domanda) => personaNominata(domanda) ? { ammessa: false, motivo: 'dati' } : web.controlla(domanda);
   function cercaPerNome(domanda) {
-    const tutte = norm(domanda).match(/[a-z0-9]+/g) || [];
+    const tutte = senzaDomandaPersona(domanda).testo.match(/[a-z0-9]+/g) || [];
     if (!tutte.length || tutte.length > 3) return null;
     const voci = contatti().flatMap((sezione) => sezione.voci.map((v) => ({ ...v, sezione: sezione.titolo })));
     const nomeDi = (v) => norm(v.nome).match(/[a-z]{3,}/g) || [];
@@ -300,14 +330,8 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       messages[0].content += '\nPrima identifica la richiesta attuale: una guida recuperata non dimostra che l utente abbia quel problema. Se il messaggio e soltanto un saluto o esprime incertezza senza descrivere un problema o una domanda, chiedi brevemente che cosa desidera fare o che cosa osserva, senza proporre procedure, menu o invio di ticket. Non inventare sintomi mancanti.';
       messages[0].content += '\nInterpreta refusi e frasi colloquiali dal contesto. Usa una guida soltanto se riguarda la domanda; se non capisci che cosa cerca la persona, chiedi un chiarimento breve.';
       const conGuida = scelti.some(({d}) => ['guida', 'scheda'].includes(d.tipo) || d.url);
-      const esameWeb = ricercaWeb.attiva && !conGuida && (senzaFonti || web.informativa(domanda)) ? web.controlla(domanda) : null;
-      if (esameWeb?.ammessa) {
-        s.web = { domanda };
-        osservaRicerca?.({regola: 'proposta-ricerca-web', selezionati: []});
-        return {tipo: 'web-proposta', risposta: 'Non ho trovato una guida del CED su questo. Vuoi che cerchi la risposta sul web?',
-          avvisoWeb: 'La domanda verrà inviata a un motore di ricerca esterno, fuori dalla rete del Comune. Non scrivere nomi, dati personali o informazioni riservate.',
-          opzioni: [{testo: 'Sì, cerca sul web', azione: 'web'}, {testo: 'No, apri una richiesta', azione: 'ticket_contesto'}]};
-      }
+      const esameWeb = ricercaWeb.attiva && !conGuida && (senzaFonti || web.informativa(domanda)) ? controllaWeb(domanda) : null;
+      if (esameWeb?.ammessa) return propostaWeb(s, domanda);
       const notaWeb = esameWeb && esameWeb.motivo !== 'vaga' ? 'Ricerca web non eseguita: la domanda riguarda dati personali o sistemi interni del Comune.' : undefined;
       if (senzaFonti) messages[0].content += '\nNessuna guida pertinente e stata trovata per questa domanda. Comprendi anche saluti, sinonimi e frasi colloquiali usando i messaggi reali. Se la richiesta e ambigua, chiedi un solo dettaglio utile per capire che cosa vuole fare l utente. Non inventare procedure, diagnosi, azioni eseguite o configurazioni locali. Non proporre subito un ticket solo perche manca una guida. Se la domanda e estranea all assistenza informatica, richiama brevemente il tuo ambito.';
       for (let tentativo = 0; tentativo < 2; tentativo++) {
@@ -322,6 +346,35 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       }
       osservaRicerca?.({regola: 'generazione-non-conforme', selezionati: []});
       return {risposta: 'Non riesco a formulare una risposta coerente con le informazioni fornite. Usa «Aiutami a descrivere il problema» per preparare una richiesta al CED.', tipo: 'chat', fonti, notaWeb};
+    } finally { occupato = false; }
+  }
+  // Instradamento guidato: per le domande che le regole non riconoscono, qwen sceglie l'azione e il codice la esegue.
+  // Solo sito del Comune, novità e rubrica sono nuove; per tutto il resto si prosegue con la chat di sempre.
+  function propostaWeb(s, domanda) {
+    s.web = { domanda };
+    osservaRicerca?.({regola: 'proposta-ricerca-web', selezionati: []});
+    return {tipo: 'web-proposta', risposta: 'Non ho trovato una guida del CED su questo. Vuoi che cerchi la risposta sul web?',
+      avvisoWeb: 'La domanda verrà inviata a un motore di ricerca esterno, fuori dalla rete del Comune. Non scrivere nomi, dati personali o informazioni riservate.',
+      opzioni: [{testo: 'Sì, cerca sul web', azione: 'web'}, {testo: 'No, apri una richiesta', azione: 'ticket_contesto'}]};
+  }
+  async function instrada(s, domanda, signal) {
+    if (!sitoComune.attivo() || domanda.length < 12) return null;
+    const tema = triage.dominio(domanda);
+    if (tema && tema !== 'web') return null;
+    if (occupato) throw errore('Sto rispondendo a un’altra domanda. Riprova tra poco.', 429);
+    occupato = true;
+    try {
+      const rotta = await sitoComune.instrada(domanda, signal);
+      osservaRicerca?.({regola: 'instradamento', azione: rotta?.azione || 'nessuna'});
+      if (rotta?.azione === 'novita') return sitoComune.novita();
+      if (rotta?.azione === 'rubrica') { const c = cercaContatti(domanda); return c?.contatti?.length ? c : null; }
+      if (rotta?.azione === 'sito_comune') return await sitoComune.rispondi(domanda, rotta.ricerca, signal);
+      if (rotta?.azione === 'web' && ricercaWeb.attiva && controllaWeb(domanda)?.ammessa) return propostaWeb(s, domanda);
+      return null;
+    } catch (e) {
+      if (signal?.aborted) throw e;
+      osservaRicerca?.({regola: 'instradamento-errore', errore: e.message});
+      return null;
     } finally { occupato = false; }
   }
   async function rispostaWeb(domanda, signal) {
@@ -415,7 +468,7 @@ function creaServizio({ config, numeriInterni, glpi, utenteGlpi, chiamaAI, cache
       else {
         // Ricerca breve tipo «telefono mario» o «interno ragioneria»: se la rubrica trova qualcosa mostra i contatti, altrimenti prosegue con la chat.
         const rubrica = /\b(?:telefon\w*|tel|cell\w*|intern[oi]|recapit\w*|chiamare)\b/.test(norm(domanda)) && parole(domanda).length && parole(domanda).length <= 3 ? cercaContatti(domanda) : null;
-        out = rubrica?.contatti?.length ? rubrica : cercaPerNome(domanda) || await chat(s, domanda);
+        out = rubrica?.contatti?.length ? rubrica : cercaPersona(domanda) || cercaPerNome(domanda) || await instrada(s, domanda, signal) || await chat(s, domanda);
       }
       s.ultimoTipo = out.tipo;
       return risposta(s, domanda || (azione === 'ticket' ? 'Aiutami a descrivere il problema' : body.categoria || azione), out);

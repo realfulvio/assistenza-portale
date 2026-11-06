@@ -2,6 +2,20 @@
 
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
 
+## [2.15.0] - 2026-11-06
+
+### Novità per gli utenti
+
+- L’assistente risponde anche con le pagine del sito del Comune: uffici, orari, servizi e ultime notizie («quali sono le novità?»). Gli orari sono copiati dalla pagina, mai riformulati.
+- Domande su un collega («cosa fa mario rossi», «chi è rossi», «in che ufficio lavora mario rossi»): incarico, telefono ed email dalla scheda del sito, più l’interno della rubrica.
+- Le domande che contengono il nome di un collega (rubrica o sito) non vengono mai proposte per la ricerca web.
+
+### Note tecniche
+
+- Indice del sito preparato di notte da `scripts/scarica-sito-comune.js` (testo + vettori embeddinggemma), cron in `deploy/portale-sito-comune.cron`; il portale lo legge da `ASSISTENTE_SITO_FILE` (vuoto = spento).
+- Instradamento delle domande non riconosciute dalle regole: qwen sceglie l’azione (sito, novità, rubrica, web) e la esegue il codice (`src/assistente-sito.js`).
+- Schede `persona_pubblica` lette senza modello; test in `test/assistente-sito.test.js` e `test/assistente-persone.test.js`.
+
 ## [2.14.0] - 2026-11-04
 
 ### Novità per gli utenti
