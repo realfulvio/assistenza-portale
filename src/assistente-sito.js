@@ -14,7 +14,7 @@ const coseno = (a, b) => { let s = 0, x = 0, y = 0; for (let i = 0; i < a.length
 const AZIONI = {
   guida_it: 'problema o domanda su PC, stampanti, programmi, posta, rete, password, telefoni del Comune (guide del CED)',
   rubrica: 'numero di telefono interno o cellulare di un collega (non chi è responsabile di un ufficio)',
-  sito_comune: 'informazioni sul Comune di Bondeno: uffici, orari, chi è responsabile, servizi ai cittadini, moduli, tributi, persone, luoghi',
+  sito_comune: 'informazioni sull\'ente: uffici, orari, chi è responsabile, servizi ai cittadini, moduli, tributi, persone, luoghi',
   novita: 'ultime notizie o novità pubblicate sul sito del Comune',
   meteo: 'tempo atmosferico, previsioni, allerte meteo',
   ticket: 'aprire una richiesta di assistenza o chiedere lo stato di una richiesta già aperta',
@@ -22,9 +22,9 @@ const AZIONI = {
   web: 'qualunque altra informazione generale che si trova solo su internet',
 };
 
-const SISTEMA = `Sei l'assistente del portale interno dei dipendenti del Comune di Bondeno.
+const SISTEMA = (ente) => `Sei l'assistente del portale interno dei dipendenti di ${ente}.
 Rispondi in italiano, tono informale (dai del tu), al massimo 60 parole.
-Usa SOLO le informazioni delle pagine del sito del Comune qui sotto. Non inventare orari, numeri, nomi, date o importi.
+Usa SOLO le informazioni delle pagine del sito dell'ente qui sotto. Non inventare orari, numeri, nomi, date o importi.
 Se le pagine non contengono la risposta, dillo in una frase e suggerisci di guardare la pagina indicata o chiedere all'ufficio.
 Non aggiungere avvisi sull'aggiornamento delle pagine. Non scrivere link: li mostra il portale.`;
 
@@ -48,6 +48,9 @@ function periodoScaduto(riga, oggi = new Date()) {
 
 function creaSito({ config, ai, embed, file = config.assistenteSitoFile }) {
   const MODELLO = config.assistenteModello || 'qwen3.5:4b-q4_K_M';
+  const ENTE = config.ente?.ente?.nome || 'un ente pubblico';
+  const nomeEnte = config.ente?.ente?.nome ? new RegExp(config.ente.ente.nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig') : null;
+  const senzaEnte = (t) => nomeEnte ? t.replace(nomeEnte, ' ') : t;
   let cache = { mtime: 0, dati: null, pezzi: [] };
 
   // Rilegge il file solo se il job notturno l'ha cambiato.
@@ -66,9 +69,9 @@ function creaSito({ config, ai, embed, file = config.assistenteSitoFile }) {
   const attivo = () => !!dati() && cache.pezzi.length > 0;
 
   async function instrada(domanda, signal) {
-    const sistema = 'Classifica la domanda di un dipendente del Comune di Bondeno. Scegli UNA azione:\n' +
+    const sistema = `Classifica la domanda di un dipendente di ${ENTE}. Scegli UNA azione:\n` +
       Object.entries(AZIONI).map(([k, v]) => `- ${k}: ${v}`).join('\n') +
-      '\nIn "ricerca" scrivi solo le parole chiave essenziali della domanda, senza il nome del Comune.';
+      '\nIn "ricerca" scrivi solo le parole chiave essenziali della domanda, senza il nome dell\'ente.';
     const r = await ai('/api/chat', { model: MODELLO, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m',
       format: { type: 'object', properties: { azione: { type: 'string', enum: Object.keys(AZIONI) }, ricerca: { type: 'string' } }, required: ['azione', 'ricerca'] },
       messages: [{ role: 'system', content: sistema }, { role: 'user', content: domanda.slice(0, 600) }],
@@ -95,7 +98,7 @@ function creaSito({ config, ai, embed, file = config.assistenteSitoFile }) {
 
   async function rispondi(domanda, ricerca = '', signal) {
     if (!attivo()) return null;
-    const testoRicerca = `${domanda} ${ricerca.replace(/comune( di)? bondeno/ig, '')}`.trim();
+    const testoRicerca = `${domanda} ${senzaEnte(ricerca)}`.trim();
     // Orari: copiati dalla sola pagina più pertinente, mai riformulati dal modello.
     if (/\b(orari\w*|aperto|aperta|apertura|ricevimento|chiuso|chiusa)\b/i.test(domanda)) {
       const [primo] = await cerca(testoRicerca, (z) => ['unita_organizzativa', 'luogo'].includes(z.tipo));
@@ -114,7 +117,7 @@ function creaSito({ config, ai, embed, file = config.assistenteSitoFile }) {
     for (const x of g) { if ((perPagina[x.z.url] = (perPagina[x.z.url] || 0) + 1) <= 2) scelti.push(x); if (scelti.length === 4) break; }
     const pagine = scelti.map(({ z }, i) => `[${i + 1}] ${z.titolo}\n${z.testo}`).join('\n\n');
     const r = await ai('/api/chat', { model: MODELLO, stream: false, think: false, keep_alive: config.assistenteKeepAlive ?? '5m',
-      messages: [{ role: 'system', content: SISTEMA }, { role: 'user', content: `Pagine del sito del Comune:\n${pagine}\n\nDomanda: ${domanda}` }],
+      messages: [{ role: 'system', content: SISTEMA(ENTE) }, { role: 'user', content: `Pagine del sito del Comune:\n${pagine}\n\nDomanda: ${domanda}` }],
       options: { temperature: .1, num_ctx: 4096, num_predict: 200, num_thread: 4 } }, signal);
     const testo = pulisci(r).replace(/https?:\/\/\S+/g, '').replace(/\[\d\]/g, '').trim();
     if (!testo) return null;

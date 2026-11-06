@@ -7,8 +7,11 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const SITO = (process.env.SITO_COMUNE_URL || 'https://www.comune.bondeno.fe.it').replace(/\/$/, '');
-const UA = 'PortaleAssistenzaBondeno/1.0 (Sistemi Informativi; indice interno)';
+// Ente: nome e sito da config/ente.json (o dall'esempio); SITO_COMUNE_URL ha la precedenza.
+const ENTE = (() => { for (const f of ['ente.json', 'ente.example.json']) { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config', f), 'utf8')).ente || {}; } catch { /* prossimo */ } } return {}; })();
+const SITO = String(process.env.SITO_COMUNE_URL || ENTE.sito || '').replace(/\/$/, '');
+const NOME_ENTE = String(ENTE.nome || '').trim();
+const UA = 'PortaleAssistenza/1.0 (Sistemi Informativi; indice interno)';
 const PAUSA_MS = Number(process.env.SITO_COMUNE_PAUSA_MS || 1000);
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : d; };
 const USCITA = arg('--uscita', process.env.SITO_COMUNE_FILE || '/var/lib/portale-assistenza/assistente/sito-comune.json');
@@ -51,7 +54,7 @@ function decodifica(s) {
 function estrai(html) {
   let t = html.match(/<main[\s\S]*?<\/main>/i)?.[0] || '';
   const og = html.match(/<meta property="og:title" content="([^"]*)"/i)?.[1];
-  const titolo = decodifica((t.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || og || html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '').replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').replace(/\s*[-–|]\s*Comune di Bondeno\s*$/i, '').trim();
+  const titolo = decodifica((t.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || og || html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '').replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').replace(NOME_ENTE ? new RegExp(`\\s*[-–|]\\s*${NOME_ENTE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i') : /$^/, '').trim();
   t = t.replace(/<(script|style|svg|nav|form|button|noscript|template)\b[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<(h[1-6])[^>]*>/gi, '\n## ').replace(/<\/(h[1-6])>/gi, '\n')
@@ -101,6 +104,7 @@ async function leggiSitemap() {
 }
 
 async function main() {
+  if (!/^https?:\/\//.test(SITO)) throw new Error("Sito dell'ente mancante: imposta ente.sito in config/ente.json o SITO_COMUNE_URL.");
   let vecchio = { pagine: [] };
   try { vecchio = JSON.parse(fs.readFileSync(USCITA, 'utf8')); } catch { /* primo giro */ }
   const cache = new Map(vecchio.pagine.map((p) => [p.url, p]));
