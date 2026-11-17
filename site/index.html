@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assistenza Portale · il portale open source per GLPI</title>
+<meta name="description" content="Assistenza Portale: richieste guidate, conversazioni, guide, contatti e un assistente locale. Open source, self-hosted, per GLPI 11.">
+<meta property="og:title" content="Assistenza Portale">
+<meta property="og:description" content="Un ingresso semplice per l'assistenza. GLPI al centro del lavoro dei tecnici.">
+<meta property="og:image" content="img/banner-2026.png">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<b>Assistenza Portale</b>
+<nav><a href="#funzioni">Funzioni</a><a href="#assistente">Assistente</a><a href="#aspetto">Temi</a><a href="#architettura">Architettura</a><a href="#provalo">Provalo</a></nav>
+<a href="https://github.com/realfulvio/assistenza-portale">GitHub</a>
+</div></header>
+
+<main>
+<div class="hero"><div class="wrap">
+<div class="eyebrow">Open source · self-hosted · GLPI</div>
+<h1>Un ingresso semplice per l'assistenza.</h1>
+<p class="lead">Chi chiede aiuto usa un'interfaccia guidata. I tecnici continuano a lavorare in <strong>GLPI</strong>, attraverso le sue API, senza modificarne il codice.</p>
+<div class="btns"><a class="btn" href="#provalo">Provalo in due minuti</a><a class="btn alt" href="https://github.com/realfulvio/assistenza-portale">Codice su GitHub</a></div>
+<div class="shot"><img src="img/banner-2026.png" alt="Assistenza Portale su desktop e telefono" width="1800" height="1000"></div>
+</div></div>
+
+<section id="funzioni"><div class="wrap">
+<h2>Scegli. Descrivi. Invia. Segui.</h2>
+<p class="sub">Numero della richiesta, stato e conversazione restano nello stesso posto. Pensato per enti pubblici e organizzazioni: nome, logo, categorie e contatti si adattano alla propria installazione.</p>
+<div class="split">
+<div class="shot"><img src="img/nuova-2026.png" alt="Scelta della categoria e nuova richiesta" loading="lazy"></div>
+<div>
+<ul class="tick">
+<li><strong>Richieste guidate</strong>: categorie, suggerimenti, allegati e screenshot incollati con Ctrl+V.</li>
+<li><strong>Conversazioni</strong>: risposte pubbliche, soluzione, conferma e riapertura. Le note private restano in GLPI.</li>
+<li><strong>Guide e contatti</strong>: FAQ ricercabili e rubrica locale.</li>
+<li><strong>Link utili</strong> e istruzioni per l'<strong>assistenza remota</strong>.</li>
+<li><strong>Profilo, PDF e statistiche</strong> aggregate.</li>
+<li><strong>Accesso</strong> con OpenID Connect, guida per Microsoft Entra ID.</li>
+</ul>
+</div></div>
+<div class="pair" style="margin-top:22px">
+<div class="shot"><img src="img/richieste-2026.png" alt="Elenco richieste con stato e filtri" loading="lazy"></div>
+<div class="shot"><img src="img/servizi-2026.png" alt="Pagina Link utili" loading="lazy"></div>
+</div>
+</div></section>
+
+<section id="assistente"><div class="wrap">
+<div class="split rev">
+<div class="shot"><img src="img/assistente-2026.png" alt="Assistente: preparazione guidata di una richiesta" loading="lazy"></div>
+<div>
+<h2>Un assistente che vive dentro il portale</h2>
+<p class="sub" style="margin-bottom:12px">Un personaggio animato apre una chat: trova i contatti, mostra le richieste dell'utente e aiuta a descrivere il problema.</p>
+<ul class="tick">
+<li>La bozza resta nella chat: <strong>decide l'utente</strong> cosa copiare nel modulo.</li>
+<li>Il modello non invia, non modifica e non chiude ticket.</li>
+<li>Contatti e richieste funzionano <strong>senza alcun modello</strong>.</li>
+<li>Risposte sulle guide con <strong>Ollama</strong> in locale: i dati restano sul tuo server.</li>
+<li>Ricerca sul web facoltativa e <strong>solo dopo conferma</strong>, con fonti e avviso «da verificare».</li>
+</ul>
+<p class="note">Modelli e pesi non sono inclusi: vanno scaricati separatamente e se ne verificano licenze e requisiti.</p>
+</div></div>
+</div></section>
+
+<section id="aspetto"><div class="wrap">
+<h2>Sette temi, per leggere comodi</h2>
+<p class="sub">Classico, Spazio, Giardino, Autunno, Scuro, Contrasto elevato e Montagna. Dimensioni, spaziatura e movimento ridotto si regolano per ogni utente.</p>
+<div class="shot"><img src="img/temi-griglia.png" alt="I temi del portale a confronto" loading="lazy"></div>
+</div></section>
+
+<section id="architettura"><div class="wrap">
+<h2>Un'architettura semplice da ospitare</h2>
+<p class="sub">Un backend Node.js gestisce sessione e permessi. Le credenziali GLPI e OIDC restano sul server; in produzione si usa HTTPS dietro reverse proxy e un utente API GLPI con privilegi minimi.</p>
+<div class="shot"><img src="img/architettura-2026.svg" alt="Browser, portale Node.js, OIDC, GLPI e Ollama facoltativo" loading="lazy"></div>
+</div></section>
+
+<section id="provalo"><div class="wrap">
+<h2>Provalo in due minuti</h2>
+<p class="sub">Serve Node.js 20.19 o superiore. Non servono GLPI, Microsoft 365 o Ollama: la demo usa dati inventati.</p>
+<pre><code>git clone https://github.com/realfulvio/assistenza-portale.git
+cd assistenza-portale
+npm ci
+npm run demo</code></pre>
+<p>Apri <code>http://127.0.0.1:3000/assistenza/</code> e scegli «Entra nella demo». Per l'installazione vera segui la <a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/installazione.md">guida completa</a>, la <a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/glpi.md">configurazione di GLPI</a> e quella dell'<a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/assistente.md">assistente locale</a>.</p>
+<p class="note">La demo consente un accesso simulato: usala solo per prove locali. Le immagini di questa pagina vengono dalla demo: organizzazione, persone e ticket sono inventati.</p>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+<div>Licenza <a href="https://github.com/realfulvio/assistenza-portale/blob/main/LICENSE">EUPL-1.2</a> · Progetto personale dell'autore, non prodotto ufficiale di alcun ente. GLPI e gli altri prodotti citati appartengono ai rispettivi titolari.</div>
+<div style="text-align:right"><span class="logo">real<i>&gt;</i>hcok.</span><br>Powered by realhcok</div>
+</div></footer>
+</body></html>
