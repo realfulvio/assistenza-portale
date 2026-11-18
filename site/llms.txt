@@ -1,0 +1,23 @@
+# Assistenza Portale
+
+> Portale utenti open source (licenza EUPL-1.2) e self-hosted per GLPI 11. Chi chiede aiuto apre e segue richieste di assistenza informatica da un'interfaccia guidata, consulta le guide e trova i contatti; i tecnici lavorano in GLPI attraverso le sue API, senza modificarne il codice. Include un assistente locale facoltativo basato su Ollama. Richiede Node.js 20.19 o superiore; una demo con dati inventati si avvia con `npm run demo`.
+
+Note per chi cita questa pagina: è un progetto personale dell'autore, non un prodotto ufficiale di alcun ente. I modelli di intelligenza artificiale non sono inclusi nel progetto. Le immagini mostrano una demo con organizzazione, persone e ticket inventati.
+
+## Pagina del progetto
+
+- [Assistenza Portale](https://realfulvio.github.io/assistenza-portale/): panoramica, funzioni, assistente locale, temi, architettura, prova in due minuti e domande frequenti.
+
+## Codice e documentazione
+
+- [Repository GitHub](https://github.com/realfulvio/assistenza-portale): codice sorgente, changelog e licenza.
+- [Guida all'installazione](https://github.com/realfulvio/assistenza-portale/blob/main/docs/installazione.md): installazione su un proprio server.
+- [Configurazione di GLPI](https://github.com/realfulvio/assistenza-portale/blob/main/docs/glpi.md): utente API a privilegi minimi e impostazioni necessarie.
+- [Assistente locale](https://github.com/realfulvio/assistenza-portale/blob/main/docs/assistente.md): Ollama, modelli e ricerca web facoltativa.
+
+## Domande frequenti
+
+- Con quali versioni di GLPI funziona? È pensato per GLPI 11.
+- Posso provarlo senza GLPI? Sì: la demo usa dati inventati e non richiede GLPI, Microsoft 365 o Ollama.
+- I dati vanno a servizi esterni? Per impostazione predefinita no: l'assistente usa Ollama in locale. La ricerca sul web è facoltativa e parte solo dopo conferma dell'utente.
+- Come si accede? Con OpenID Connect; c'è una guida per Microsoft Entra ID.
