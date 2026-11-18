@@ -3,35 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Assistenza Portale · il portale open source per GLPI</title>
-<meta name="description" content="Assistenza Portale: richieste guidate, conversazioni, guide, contatti e un assistente locale. Open source, self-hosted, per GLPI 11.">
-<meta property="og:title" content="Assistenza Portale">
-<meta property="og:description" content="Un ingresso semplice per l'assistenza. GLPI al centro del lavoro dei tecnici.">
-<meta property="og:image" content="img/banner-2026.png">
-<link rel="icon" href="favicon.ico">
+<title>Assistenza Portale: portale utenti open source per GLPI</title>
+<meta name="description" content="Portale di assistenza open source e self-hosted per GLPI 11: richieste guidate, guide, contatti e assistente AI locale con Ollama. Demo in due minuti.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="realfulvio">
+<meta name="theme-color" content="#07172f">
+<link rel="canonical" href="https://realfulvio.github.io/assistenza-portale/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Assistenza Portale">
+<meta property="og:locale" content="it_IT">
+<meta property="og:url" content="https://realfulvio.github.io/assistenza-portale/">
+<meta property="og:title" content="Assistenza Portale: portale utenti open source per GLPI">
+<meta property="og:description" content="Un ingresso semplice per l'assistenza, con GLPI al centro del lavoro dei tecnici. Richieste guidate, guide, contatti e assistente locale. Open source e self-hosted.">
+<meta property="og:image" content="https://realfulvio.github.io/assistenza-portale/img/og-assistenza-portale.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Assistenza Portale su desktop e telefono">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Assistenza Portale: portale utenti open source per GLPI">
+<meta name="twitter:description" content="Richieste guidate, guide, contatti e assistente locale. Open source, self-hosted, per GLPI 11.">
+<meta name="twitter:image" content="https://realfulvio.github.io/assistenza-portale/img/og-assistenza-portale.jpg">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="preload" as="image" href="img/banner-2026.webp" type="image/webp" fetchpriority="high">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","@id":"https://realfulvio.github.io/assistenza-portale/#sito","url":"https://realfulvio.github.io/assistenza-portale/","name":"Assistenza Portale","inLanguage":"it-IT","description":"Pagina del progetto open source Assistenza Portale, il portale utenti per GLPI."},
+{"@type":"WebPage","@id":"https://realfulvio.github.io/assistenza-portale/#pagina","url":"https://realfulvio.github.io/assistenza-portale/","name":"Assistenza Portale: portale utenti open source per GLPI","isPartOf":{"@id":"https://realfulvio.github.io/assistenza-portale/#sito"},"about":{"@id":"https://realfulvio.github.io/assistenza-portale/#software"},"primaryImageOfPage":{"@type":"ImageObject","url":"https://realfulvio.github.io/assistenza-portale/img/og-assistenza-portale.jpg","width":1200,"height":630},"inLanguage":"it-IT","dateModified":"2026-11-18"},
+{"@type":"SoftwareApplication","@id":"https://realfulvio.github.io/assistenza-portale/#software","name":"Assistenza Portale","alternateName":"assistenza-portale","description":"Portale web open source e self-hosted per aprire e seguire richieste di assistenza informatica, consultare guide e trovare i contatti giusti. I tecnici lavorano in GLPI attraverso le sue API, senza modificarne il codice. Include un assistente locale facoltativo basato su Ollama.","url":"https://realfulvio.github.io/assistenza-portale/","applicationCategory":"BusinessApplication","applicationSubCategory":"Helpdesk","operatingSystem":"Linux, Windows, macOS (Node.js 20.19 o superiore)","softwareRequirements":"Node.js 20.19+, GLPI 11","softwareVersion":"2.15.0","inLanguage":"it-IT","license":"https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"image":"https://realfulvio.github.io/assistenza-portale/img/og-assistenza-portale.jpg","codeRepository":"https://github.com/realfulvio/assistenza-portale","sameAs":["https://github.com/realfulvio/assistenza-portale"],"author":{"@type":"Person","name":"realfulvio","url":"https://github.com/realfulvio"},"keywords":"GLPI, portale utenti, helpdesk, ticket, open source, self-hosted, Ollama, assistente locale, Node.js, enti pubblici"},
+{"@type":"FAQPage","@id":"https://realfulvio.github.io/assistenza-portale/#faq","mainEntity":[
+{"@type":"Question","name":"Che cos'è Assistenza Portale?","acceptedAnswer":{"@type":"Answer","text":"È un portale web open source per GLPI. Chi chiede aiuto usa un'interfaccia guidata per aprire e seguire le richieste, consultare le guide e trovare i contatti; i tecnici continuano a lavorare in GLPI attraverso le sue API, senza che il codice di GLPI venga modificato."}},
+{"@type":"Question","name":"Con quali versioni di GLPI funziona?","acceptedAnswer":{"@type":"Answer","text":"È pensato per GLPI 11. Il portale usa le API di GLPI con un utente API a privilegi minimi, quindi non richiede modifiche al codice di GLPI."}},
+{"@type":"Question","name":"Posso provarlo senza installare GLPI?","acceptedAnswer":{"@type":"Answer","text":"Sì. Con Node.js 20.19 o superiore bastano quattro comandi (git clone, cd, npm ci, npm run demo): la demo usa dati inventati e non richiede GLPI, Microsoft 365 o Ollama."}},
+{"@type":"Question","name":"L'assistente AI invia i miei dati a servizi esterni?","acceptedAnswer":{"@type":"Answer","text":"No, per impostazione predefinita. Le risposte sulle guide usano Ollama in locale, quindi i dati restano sul proprio server. La ricerca sul web è facoltativa e parte solo dopo la conferma dell'utente, con fonti e avviso «da verificare»."}},
+{"@type":"Question","name":"Con quale licenza è distribuito?","acceptedAnswer":{"@type":"Answer","text":"Con licenza EUPL-1.2. I modelli di intelligenza artificiale non sono inclusi: vanno scaricati separatamente verificandone licenze e requisiti."}},
+{"@type":"Question","name":"Come si accede al portale?","acceptedAnswer":{"@type":"Answer","text":"Con OpenID Connect; nella documentazione c'è una guida per Microsoft Entra ID. Le credenziali GLPI e OIDC restano sul server."}}
+]}
+]}
+</script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip" href="#contenuto">Vai al contenuto</a>
 <header class="top"><div class="wrap">
-<b>Assistenza Portale</b>
-<nav><a href="#funzioni">Funzioni</a><a href="#assistente">Assistente</a><a href="#aspetto">Temi</a><a href="#architettura">Architettura</a><a href="#provalo">Provalo</a></nav>
+<a class="brand" href="./">Assistenza Portale</a>
+<nav><a href="#funzioni">Funzioni</a><a href="#assistente">Assistente</a><a href="#aspetto">Temi</a><a href="#architettura">Architettura</a><a href="#provalo">Provalo</a><a href="#faq">FAQ</a></nav>
 <a href="https://github.com/realfulvio/assistenza-portale">GitHub</a>
 </div></header>
 
-<main>
+<main id="contenuto">
 <div class="hero"><div class="wrap">
 <div class="eyebrow">Open source · self-hosted · GLPI</div>
-<h1>Un ingresso semplice per l'assistenza.</h1>
-<p class="lead">Chi chiede aiuto usa un'interfaccia guidata. I tecnici continuano a lavorare in <strong>GLPI</strong>, attraverso le sue API, senza modificarne il codice.</p>
+<h1>Il portale di assistenza open source per GLPI.</h1>
+<p class="lead">Un ingresso semplice per l'assistenza. Chi chiede aiuto usa un'interfaccia guidata. I tecnici continuano a lavorare in <strong>GLPI</strong>, attraverso le sue API, senza modificarne il codice.</p>
+<p class="short"><strong>In breve:</strong> Assistenza Portale è un portale utenti open source (licenza EUPL-1.2) e self-hosted per <strong>GLPI 11</strong>. Offre richieste guidate, conversazioni, guide, rubrica dei contatti e un assistente AI locale basato su Ollama. Funziona con Node.js 20.19 o superiore e si prova in due minuti con una demo a dati inventati.</p>
 <div class="btns"><a class="btn" href="#provalo">Provalo in due minuti</a><a class="btn alt" href="https://github.com/realfulvio/assistenza-portale">Codice su GitHub</a></div>
-<div class="shot"><img src="img/banner-2026.png" alt="Assistenza Portale su desktop e telefono" width="1800" height="1000"></div>
+<div class="shot"><picture><source srcset="img/banner-2026.webp" type="image/webp"><img src="img/banner-2026.png" alt="Assistenza Portale, il portale utenti open source per GLPI, su desktop e telefono" width="1800" height="1000" fetchpriority="high" decoding="async"></picture></div>
 </div></div>
 
 <section id="funzioni"><div class="wrap">
-<h2>Scegli. Descrivi. Invia. Segui.</h2>
+<h2>Richieste guidate: scegli, descrivi, invia, segui</h2>
 <p class="sub">Numero della richiesta, stato e conversazione restano nello stesso posto. Pensato per enti pubblici e organizzazioni: nome, logo, categorie e contatti si adattano alla propria installazione.</p>
 <div class="split">
-<div class="shot"><img src="img/nuova-2026.png" alt="Scelta della categoria e nuova richiesta" loading="lazy"></div>
+<div class="shot"><picture><source srcset="img/nuova-2026.webp" type="image/webp"><img src="img/nuova-2026.png" alt="Scelta della categoria e nuova richiesta" width="1440" height="1050" loading="lazy" decoding="async"></picture></div>
 <div>
 <ul class="tick">
 <li><strong>Richieste guidate</strong>: categorie, suggerimenti, allegati e screenshot incollati con Ctrl+V.</li>
@@ -43,14 +77,14 @@
 </ul>
 </div></div>
 <div class="pair" style="margin-top:22px">
-<div class="shot"><img src="img/richieste-2026.png" alt="Elenco richieste con stato e filtri" loading="lazy"></div>
-<div class="shot"><img src="img/servizi-2026.png" alt="Pagina Link utili" loading="lazy"></div>
+<div class="shot"><picture><source srcset="img/richieste-2026.webp" type="image/webp"><img src="img/richieste-2026.png" alt="Elenco richieste con stato e filtri" width="1440" height="1050" loading="lazy" decoding="async"></picture></div>
+<div class="shot"><picture><source srcset="img/servizi-2026.webp" type="image/webp"><img src="img/servizi-2026.png" alt="Pagina Link utili" width="1440" height="1050" loading="lazy" decoding="async"></picture></div>
 </div>
 </div></section>
 
 <section id="assistente"><div class="wrap">
 <div class="split rev">
-<div class="shot"><img src="img/assistente-2026.png" alt="Assistente: preparazione guidata di una richiesta" loading="lazy"></div>
+<div class="shot"><picture><source srcset="img/assistente-2026.webp" type="image/webp"><img src="img/assistente-2026.png" alt="Assistente: preparazione guidata di una richiesta" width="1440" height="1050" loading="lazy" decoding="async"></picture></div>
 <div>
 <h2>Un assistente che vive dentro il portale</h2>
 <p class="sub" style="margin-bottom:12px">Un personaggio animato apre una chat: trova i contatti, mostra le richieste dell'utente e aiuta a descrivere il problema.</p>
@@ -68,13 +102,13 @@
 <section id="aspetto"><div class="wrap">
 <h2>Sette temi, per leggere comodi</h2>
 <p class="sub">Classico, Spazio, Giardino, Autunno, Scuro, Contrasto elevato e Montagna. Dimensioni, spaziatura e movimento ridotto si regolano per ogni utente.</p>
-<div class="shot"><img src="img/temi-griglia.png" alt="I temi del portale a confronto" loading="lazy"></div>
+<div class="shot"><picture><source srcset="img/temi-griglia.webp" type="image/webp"><img src="img/temi-griglia.png" alt="I temi del portale a confronto" width="2000" height="716" loading="lazy" decoding="async"></picture></div>
 </div></section>
 
 <section id="architettura"><div class="wrap">
 <h2>Un'architettura semplice da ospitare</h2>
 <p class="sub">Un backend Node.js gestisce sessione e permessi. Le credenziali GLPI e OIDC restano sul server; in produzione si usa HTTPS dietro reverse proxy e un utente API GLPI con privilegi minimi.</p>
-<div class="shot"><img src="img/architettura-2026.svg" alt="Browser, portale Node.js, OIDC, GLPI e Ollama facoltativo" loading="lazy"></div>
+<div class="shot"><img src="img/architettura-2026.svg" alt="Schema: il browser dell'utente parla con il portale Node.js, che usa le API di GLPI, OpenID Connect per l'accesso e Ollama facoltativo per l'assistente" width="1400" height="480" loading="lazy" decoding="async"></div>
 </div></section>
 
 <section id="provalo"><div class="wrap">
@@ -84,8 +118,19 @@
 cd assistenza-portale
 npm ci
 npm run demo</code></pre>
-<p>Apri <code>http://127.0.0.1:3000/assistenza/</code> e scegli «Entra nella demo». Per l'installazione vera segui la <a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/installazione.md">guida completa</a>, la <a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/glpi.md">configurazione di GLPI</a> e quella dell'<a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/assistente.md">assistente locale</a>.</p>
+<p>Apri <code>http://127.0.0.1:3000/assistenza/</code> e scegli «Entra nella demo». Per l'installazione vera segui la <a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/installazione.md">guida all'installazione</a>, la <a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/glpi.md">configurazione di GLPI</a> e quella dell'<a href="https://github.com/realfulvio/assistenza-portale/blob/main/docs/assistente.md">assistente locale</a>.</p>
 <p class="note">La demo consente un accesso simulato: usala solo per prove locali. Le immagini di questa pagina vengono dalla demo: organizzazione, persone e ticket sono inventati.</p>
+</div></section>
+<section id="faq"><div class="wrap">
+<h2>Domande frequenti</h2>
+<div class="faq">
+<details><summary>Che cos'è Assistenza Portale?</summary><p>È un portale web open source per GLPI. Chi chiede aiuto usa un'interfaccia guidata per aprire e seguire le richieste, consultare le guide e trovare i contatti; i tecnici continuano a lavorare in GLPI attraverso le sue API, senza che il codice di GLPI venga modificato.</p></details>
+<details><summary>Con quali versioni di GLPI funziona?</summary><p>È pensato per GLPI 11. Il portale usa le API di GLPI con un utente API a privilegi minimi, quindi non richiede modifiche al codice di GLPI.</p></details>
+<details><summary>Posso provarlo senza installare GLPI?</summary><p>Sì. Con Node.js 20.19 o superiore bastano quattro comandi (<code>git clone</code>, <code>cd</code>, <code>npm ci</code>, <code>npm run demo</code>): la demo usa dati inventati e non richiede GLPI, Microsoft 365 o Ollama.</p></details>
+<details><summary>L'assistente AI invia i miei dati a servizi esterni?</summary><p>No, per impostazione predefinita. Le risposte sulle guide usano Ollama in locale, quindi i dati restano sul proprio server. La ricerca sul web è facoltativa e parte solo dopo la conferma dell'utente, con fonti e avviso «da verificare».</p></details>
+<details><summary>Con quale licenza è distribuito?</summary><p>Con licenza EUPL-1.2. I modelli di intelligenza artificiale non sono inclusi: vanno scaricati separatamente verificandone licenze e requisiti.</p></details>
+<details><summary>Come si accede al portale?</summary><p>Con OpenID Connect; nella documentazione c'è una guida per Microsoft Entra ID. Le credenziali GLPI e OIDC restano sul server.</p></details>
+</div>
 </div></section>
 </main>
 
