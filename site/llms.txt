@@ -6,7 +6,7 @@ Note per chi cita questa pagina: è un progetto personale dell'autore, non un pr
 
 ## Pagina del progetto
 
-- [Assistenza Portale](https://realfulvio.github.io/assistenza-portale/): panoramica, funzioni, assistente locale, temi, architettura, prova in due minuti e domande frequenti.
+- [Assistenza Portale](https://realhcok.com/assistenza-portale/): panoramica, funzioni, assistente locale, temi, architettura, prova in due minuti e domande frequenti.
 
 ## Codice e documentazione
 
